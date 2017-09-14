@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+
+    <link rel="stylesheet" href="">
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/peer.js"></script>
+    <script src="/static/js/app1.js"></script>
+
+</head>
+<body>
+
+    <div>
+        <p>127.0.0.1</p>
+        <p>dev.levellab.ru</p>
+        Your server<input id="server" value="127.0.0.1">
+    </div>
+    <div>
+        <p>123456</p>
+        <p>654321</p>
+        Your key<input id="key" value="123456">
+        <button id="make-key">Run</button>
+    </div>
+    <div>
+        Peer:<input id="peer-id" readonly="" >
+    </div>
+    <div>
+        <input type="text" placeholder="Call user id..." id="callto-id">
+        <button id="make-call">Call</button>
+        <button id="end-call">Stop</button>
+    </div>
+    <div>
+        <video id="remote-video" autoplay="" style="border:2px solid red"></video>
+    </div>
+    <div>
+        <video id="local-video" muted="true" autoplay="" style="border:2px solid green"></video>
+    </div>
+
+      <script>
+        /*
+        console.log('!!!!');
+        var socket = new WebSocket('wss://' + window.location.host + '/users/');
+
+        socket.onmessage = function(e) {
+            console.log(e.data);
+        }
+        socket.onopen = function open() {
+            console.log('WebSockets connection created.');
+            socket.send(JSON.stringify({
+                type: "TEST"
+            }))
+        };
+
+        if (socket.readyState == WebSocket.OPEN) {
+            socket.onopen();
+        }
+        */
+        
+      </script>
+
+</body>
+</html>
