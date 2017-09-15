@@ -39,28 +39,28 @@ def ws_connect(message):
 
 @channel_session_user_from_http
 def ws_message(message):
-    print "ws_message"
+    #print "ws_message"
 
     data = message.content.get('text')
     data = json.loads(data)
     print "data:"
     pprint(data)
-    print "clients:"
-    pprint(get_clients())
+    #print "clients:"
+    #pprint(get_clients())
     
     client_key = message.channel_session['client_key']
     # print "client_key", client_key
 
-    print "get_key_by_id id: ", data['dst']
+    #print "get_key_by_id id: ", data['dst']
     dst_key = get_key_by_id(data['dst'])
-    print "dst_key", dst_key
+    #print "dst_key", dst_key
     if not dst_key:
-        print "client not find"
+        #print "client not find"
         return
     src_id = get_id_by_key(client_key)
 
     if data['type'] in ['LEAVE', 'CANDIDATE', 'OFFER', 'ANSWER']:
-        print "message send %s" % data['dst']
+        #print "message send %s" % data['dst']
         Group("client-%s" % dst_key).send({
             "text": json.dumps({
                 "type": data['type'],
