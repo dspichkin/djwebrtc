@@ -43,13 +43,15 @@ def ws_message(message):
 
     data = message.content.get('text')
     data = json.loads(data)
-    # pprint(data)
+    print "data:"
+    pprint(data)
+    print "clients:"
     pprint(get_clients())
+    
     client_key = message.channel_session['client_key']
     # print "client_key", client_key
 
     print "get_key_by_id id: ", data['dst']
-    print "clients:", get_clients()
     dst_key = get_key_by_id(data['dst'])
     print "dst_key", dst_key
     if not dst_key:
