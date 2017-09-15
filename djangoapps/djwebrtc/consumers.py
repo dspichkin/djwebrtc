@@ -24,6 +24,7 @@ def ws_connect(message):
     # message.channel_session['rooms'] = list(set(message.channel_session['rooms']).union([room.id]))
     message.channel_session['client_key'] = key
     Group("client-%s" % key).add(message.reply_channel)
+
     clients = get_clients()
 
     pprint(clients)
@@ -43,8 +44,8 @@ def ws_message(message):
 
     data = message.content.get('text')
     data = json.loads(data)
-    print "data:"
-    pprint(data)
+    #print "data:"
+    #pprint(data)
     #print "clients:"
     #pprint(get_clients())
     
@@ -58,6 +59,8 @@ def ws_message(message):
     if not dst_key:
         #print "client not find"
         return
+    print "clients:"
+    pprint(get_clients())
     src_id = get_id_by_key(client_key)
     print "src_id", src_id
     if data['type'] in ['LEAVE', 'CANDIDATE', 'OFFER', 'ANSWER']:
@@ -77,7 +80,7 @@ def ws_message(message):
 
 @channel_session_user_from_http
 def ws_disconnect(message):
-    print "ws_disconnect", message.content
+    # print "ws_disconnect", message.content
     # print message.channel_session.get("clients", set())
     # params = urlparse.parse_qs(message.content)
     client_key = message.channel_session['client_key']
