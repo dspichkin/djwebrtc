@@ -28,10 +28,10 @@ function prepareCall(call) {
 
     call.on('stream', function(stream) {
         console.log('stream', stream)
-        console.log("$('#remote-video')", $('#remote-video'))
         // get call stream from remote host
         $('#remote-video').prop('src', URL.createObjectURL(stream));
         // turn on local video for answer
+        console.log('call.pee', call.peer)
         startLocalVideo(function() {
             window.peer.call(call.peer, window.localStream);
         });

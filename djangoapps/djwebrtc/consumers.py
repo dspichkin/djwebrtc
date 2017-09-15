@@ -58,7 +58,7 @@ def ws_message(message):
         #print "client not find"
         return
     src_id = get_id_by_key(client_key)
-
+    print "src_id", src_id
     if data['type'] in ['LEAVE', 'CANDIDATE', 'OFFER', 'ANSWER']:
         #print "message send %s" % data['dst']
         Group("client-%s" % dst_key).send({
