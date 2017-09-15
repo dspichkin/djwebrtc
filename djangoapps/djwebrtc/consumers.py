@@ -119,6 +119,7 @@ def ws_disconnect_call(message):
 
 def get_clients():
     clients = r.get("clients")
+    print "0000 clients", clients
     if not clients:
         print "no clients"
         clients = {}
