@@ -49,7 +49,7 @@ def ws_message(message):
     # print "client_key", client_key
 
     print "get_key_by_id id: ", data['dst']
-    print "clients:", get_clients
+    print "clients:", get_clients()
     dst_key = get_key_by_id(data['dst'])
     print "dst_key", dst_key
     if not dst_key:

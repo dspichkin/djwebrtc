@@ -117,7 +117,7 @@ function disableCall() {
 $(document).ready(function() {
 
     disableCall();
-
+    /*
     window.ws = new WebSocket("wss://127.0.0.1:8000/call");
         window.ws.onopen = function() {
             console.log('CONNECT to WS');
@@ -128,7 +128,7 @@ $(document).ready(function() {
             console.log("Ошибка WS" + error.message);
         };
         
-
+    */
 
     
     $('#end-call').click(function() {
