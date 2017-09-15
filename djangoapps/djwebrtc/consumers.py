@@ -26,14 +26,14 @@ def ws_connect(message):
     Group("client-%s" % key).add(message.reply_channel)
 
     clients = get_clients()
-
+    print "clients 11", clients
     pprint(clients)
 
     clients[key] = {}
     clients[key][id] = {
         "token": token,
     }
-    r.set("clients", json.dumps(clients))
+    set_clients(clients)
 
     print "ws_connect"
 
@@ -120,10 +120,15 @@ def ws_disconnect_call(message):
 def get_clients():
     clients = r.get("clients")
     if not clients:
+        print "no clients"
         clients = {}
     else:
         clients = json.loads(clients)
     return clients
+
+
+def set_clients(_clients):
+    r.set("clients", json.dumps(_clients))
 
 
 def get_client(key, id):
