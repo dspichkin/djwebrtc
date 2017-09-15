@@ -49,6 +49,7 @@ def ws_message(message):
     #pprint(get_clients())
     
     client_key = message.channel_session['client_key']
+    print "!!! client_key", client_key
     # print "client_key", client_key
 
     #print "get_key_by_id id: ", data['dst']
