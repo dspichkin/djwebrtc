@@ -33,9 +33,11 @@ def set_streaming(request, key, id, token):
                 "token": token,
                 "ip": ip
             }
-        start_streaming(clients, key, id, token)
+        set_clients(clients)
+        # start_streaming(clients, key, id, token)
     else:
-        start_streaming(clients, key, id, token)
+        set_clients(clients)
+        # start_streaming(clients, key, id, token)
 
     pad = '00'
     for i in range(0, 10):
@@ -53,19 +55,25 @@ def set_streaming(request, key, id, token):
 def get_clients():
     clients = r.get("clients")
     if not clients:
+        print "not XXXXXX"
         clients = {}
     else:
         try:
-            clients = json.load(clients)
+            clients = json.loads(clients)
         except:
+            print "except in getting clients"
             clients = {}
     return clients
+
+
+def set_clients(clients):
+    r.set("clients", json.dumps(clients))
 
 
 def start_streaming(clients, key, id, token):
 
     # client = clients[key][id]
-    r.set("clients", json.dumps(clients))
+    pass
 
 
 

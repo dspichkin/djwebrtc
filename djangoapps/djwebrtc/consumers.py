@@ -7,7 +7,7 @@ from pprint import pprint
 from channels import Group
 from channels.auth import channel_session_user_from_http
 
-r = redis.StrictRedis(host='localhost', port=6379, db=0)
+r = redis.Redis(host='localhost', port=6379, db=0)
 
 
 @channel_session_user_from_http
@@ -26,8 +26,6 @@ def ws_connect(message):
     Group("client-%s" % key).add(message.reply_channel)
 
     clients = get_clients()
-    print "clients 11", clients
-    pprint(clients)
 
     clients[key] = {}
     clients[key][id] = {
@@ -122,7 +120,7 @@ def get_clients():
     print "0000 clients", clients
     if not clients:
         print "no clients"
-        clients = {}
+        # clients = {}
     else:
         clients = json.loads(clients)
     return clients
