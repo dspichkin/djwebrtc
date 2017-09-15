@@ -6,6 +6,8 @@ import json
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
 
+from djwebrtc.redis_utils import set_clients, get_clients
+
 # from rest_framework.decorators import api_view, permission_classes
 # from rest_framework.response import Response
 # from rest_framework import status
@@ -27,12 +29,11 @@ def set_streaming(request, key, id, token):
 
     clients = get_clients()
     if key not in clients:
-        clients[key] = {}
-        if id not in clients[key]:
-            clients[key][id] = {
-                "token": token,
-                "ip": ip
-            }
+        clients[key] = {
+            "id": id,
+            "ip": ip,
+            "token": token,
+        }
         set_clients(clients)
         # start_streaming(clients, key, id, token)
     else:
@@ -50,24 +51,6 @@ def set_streaming(request, key, id, token):
     content += '\n'
 
     return HttpResponse(content, content_type='application/octet-stream')
-
-
-def get_clients():
-    clients = r.get("clients")
-    if not clients:
-        print "not XXXXXX"
-        clients = {}
-    else:
-        try:
-            clients = json.loads(clients)
-        except:
-            print "except in getting clients"
-            clients = {}
-    return clients
-
-
-def set_clients(clients):
-    r.set("clients", json.dumps(clients))
 
 
 def start_streaming(clients, key, id, token):

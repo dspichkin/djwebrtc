@@ -1,13 +1,15 @@
 # -*- coding: utf-8 -*-
 import json
-import redis
+
 import urlparse
 
 from pprint import pprint
 from channels import Group
 from channels.auth import channel_session_user_from_http
 
-r = redis.Redis(host='localhost', port=6379, db=0)
+
+from djwebrtc.redis_utils import (
+    set_clients, get_clients, get_key_by_id, get_id_by_key)
 
 
 @channel_session_user_from_http
@@ -27,42 +29,30 @@ def ws_connect(message):
 
     clients = get_clients()
 
-    clients[key] = {}
-    clients[key][id] = {
-        "token": token,
-    }
+    if key not in clients:
+        clients[key] = {
+            "id": id,
+            "token": token,
+        }
     set_clients(clients)
-
+    pprint(get_clients())
     print "ws_connect"
 
 
 @channel_session_user_from_http
 def ws_message(message):
-    #print "ws_message"
 
     data = message.content.get('text')
     data = json.loads(data)
-    #print "data:"
-    #pprint(data)
-    #print "clients:"
-    #pprint(get_clients())
-    
     client_key = message.channel_session['client_key']
-    print "!!! client_key", client_key
-    # print "client_key", client_key
 
-    #print "get_key_by_id id: ", data['dst']
     dst_key = get_key_by_id(data['dst'])
-    #print "dst_key", dst_key
+    print "dst_key", dst_key
     if not dst_key:
-        #print "client not find"
+        print "client not find"
         return
-    print "clients:"
-    pprint(get_clients())
     src_id = get_id_by_key(client_key)
-    print "src_id", src_id
     if data['type'] in ['LEAVE', 'CANDIDATE', 'OFFER', 'ANSWER']:
-        #print "message send %s" % data['dst']
         Group("client-%s" % dst_key).send({
             "text": json.dumps({
                 "type": data['type'],
@@ -86,7 +76,7 @@ def ws_disconnect(message):
     clients = get_clients()
     if client_key in clients:
         del clients[client_key]
-        r.set("clients", clients)
+        set_clients(clients)
 
 
 
@@ -115,39 +105,16 @@ def ws_disconnect_call(message):
 # ================================
 
 
-def get_clients():
-    clients = r.get("clients")
-    print "0000 clients", clients
-    if not clients:
-        print "no clients"
-        # clients = {}
-    else:
-        clients = json.loads(clients)
-    return clients
 
 
-def set_clients(_clients):
-    r.set("clients", json.dumps(_clients))
-
-
-def get_client(key, id):
+def get_client1(key, id):
     _clients = get_clients()
     if key in _clients:
         if id in _clients[key]:
             return _clients[key][id]
 
 
-def get_key_by_id(id):
-    _clients = get_clients()
-    for key in _clients:
-        for i in _clients[key]:
-            if i == id:
-                return key
 
 
-def get_id_by_key(key):
-    _clients = get_clients()
-    for k in _clients:
-        if k == key:
-            for i in _clients[key]:
-                return i
+
+
