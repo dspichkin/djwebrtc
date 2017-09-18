@@ -3,6 +3,7 @@ navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia 
 
 
 window.call_src = null;
+window.stop_call = false;
 
 function startLocalVideo(callback) {
     // Get audio/video stream
@@ -55,6 +56,8 @@ function prepareCall(call) {
             $('#remote-video').src = "";
         }
 
+        window.stop_call = true;
+
         disableCall();
     });
 }
@@ -65,7 +68,7 @@ function start_app(callback) {
         key: $('#key').val(),
         host: $('#server').val(),
         path: '/peerjs',
-        debug: 3,
+        debug: 0,
         secure: true,
         port: 8000
     });
@@ -84,6 +87,7 @@ function start_app(callback) {
         console.log("ERROR:", err.message);
         $('#take-call').hide();
         show_clients([]); 
+        window.stop_call = true;
     });
 
     // Receiving a call
@@ -134,6 +138,7 @@ function start_call_app(callback) {
         console.log("Ошибка WS" + error.message);
         show_clients([]);
         $('#take-call').hide();
+        window.stop_call = true;
     };
     window.ws.onmessage = function(event) {
         var message = JSON.parse(event.data);
@@ -168,7 +173,7 @@ function get_clients() {
 }   
 
 function run_hearbeat() {
-    if (window.ws  && window.ws.readyState == 1) {
+    if (window.ws  && window.ws.readyState == 1 && !window.stop_call) {
         //console.log('run_hearbeat')
         call_send_command({
             type: "HEARBEAT",
