@@ -41,13 +41,12 @@ def ws_message(message):
 
     text = message.content.get('text')
     data = json.loads(text)
-    print "data:"
-    pprint(data)
+    # print "data:"
+    # pprint(data)
 
     Presence.objects.touch(message.reply_channel.name)
 
     src_id = message.channel_session['client_id']
-    print "src_id", src_id
     src_obj = Presence.objects.filter(room__channel_name='Clients', user__key_id=src_id).order_by('last_seen').first()
     if not src_obj:
         Group("client-%s" % src_id).send({

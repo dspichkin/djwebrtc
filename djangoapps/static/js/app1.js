@@ -81,7 +81,7 @@ function start_app(callback) {
         }
     });
     window.peer.on('error', function(err) {
-        console.log(err.message);
+        console.log("ERROR:", err.message);
         $('#take-call').hide();
         show_clients([]); 
     });
