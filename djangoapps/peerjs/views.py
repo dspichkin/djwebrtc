@@ -59,12 +59,7 @@ def set_streaming(request, key, id, token):
     return HttpResponse(content, content_type='application/octet-stream')
 
 
-def start_streaming(clients, key, id, token):
-
-    # client = clients[key][id]
-    pass
-
-
+@csrf_exempt
 def handle(request, key, id, token):
     raw_data = request.body
     data = json.loads(raw_data)
