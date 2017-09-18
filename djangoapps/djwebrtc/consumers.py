@@ -125,7 +125,7 @@ def ws_message_call(message):
 
     Presence.objects.touch(message.reply_channel.name)
     for p in Presence.objects.filter(channel_name=message.reply_channel.name):
-        last_client = Presence.objects.filter(room="Clients", user=p.user).order_by('last_seen').last()
+        last_client = Presence.objects.filter(room__channel_name="Clients", user=p.user).order_by('last_seen').last()
         if last_client:
             last_client.last_seen = timezone.now()
             last_client.save()
