@@ -30,8 +30,6 @@ class Presence(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.CASCADE)
     last_seen = models.DateTimeField(default=now)
 
-    max_age = models.IntegerField(default=0)
-
     objects = PresenceManager()
 
     def __str__(self):
@@ -42,9 +40,9 @@ class Presence(models.Model):
 
 
 class RoomManager(models.Manager):
-    def add(self, room_channel_name, user_channel_name, user=None, max_age=None):
+    def add(self, room_channel_name, user_channel_name, user=None):
         room, created = Room.objects.get_or_create(channel_name=room_channel_name)
-        room.add_presence(user_channel_name, user, max_age=max_age)
+        room.add_presence(user_channel_name, user)
         return room
 
     def remove(self, room_channel_name, user_channel_name):
@@ -71,12 +69,11 @@ class Room(models.Model):
     def __str__(self):
         return self.channel_name
 
-    def add_presence(self, channel_name, user=None, max_age=None):
+    def add_presence(self, channel_name, user=None):
         presence, created = Presence.objects.get_or_create(
             room=self,
             channel_name=channel_name,
-            user=user if (user and user.is_authenticated()) else None,
-            max_age=max_age if max_age else 0
+            user=user if (user and user.is_authenticated()) else None
         )
         if created:
             Group(self.channel_name).add(channel_name)
@@ -97,11 +94,9 @@ class Room(models.Model):
             age_in_seconds = getattr(settings, "CHANNELS_PRESENCE_MAX_AGE", 60)
 
         num_deleted, num_per_type = Presence.objects.filter(
-            max_age=0,
             room=self,
             last_seen__lt=now() - timedelta(seconds=age_in_seconds)
         ).delete()
-        print "XXXX num_deleted", num_deleted
         if num_deleted > 0:
             self.broadcast_changed(bulk_change=True)
 

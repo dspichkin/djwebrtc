@@ -6,7 +6,7 @@ from channels_presence.models import Presence, Room
 
 
 class PresenceAdmin(admin.ModelAdmin):
-    list_display = ('room', 'channel_name', 'user', 'last_seen', 'max_age', )
+    list_display = ('room', 'channel_name', 'user', 'last_seen', )
 
 
 class RoomAdmin(admin.ModelAdmin):

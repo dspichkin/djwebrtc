@@ -24,7 +24,7 @@ def ws_connect(message):
     client_id = id_list[0]
     # token_list = params.get('token')
     # token = token_list[0]
-    Room.objects.add("Clients", message.reply_channel.name, message.user, max_age=600)
+    Room.objects.add("Clients", message.reply_channel.name, message.user)
 
     #for p in Presence.objects.filter(room__channel_name='Clients', user__key=client_key):
     #    p.user.key_id = client_id
