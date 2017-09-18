@@ -65,7 +65,7 @@ function start_app(callback) {
         key: $('#key').val(),
         host: $('#server').val(),
         path: '/peerjs',
-        debug: 0,
+        debug: 3,
         secure: true,
         port: 8000
     });
@@ -121,7 +121,7 @@ function disableCall() {
 function start_call_app(callback) {
     window.ws = new WebSocket('wss://' + $('#server').val() + ":8000/call?key=" + $('#key').val() + "&id=" + $('#peer-id').val());
     window.ws.onopen = function() {
-        console.log('CONNECT to WS');
+        //console.log('CONNECT to WS');
         call_send_command({
             type: "CLIENTS",
             command: "GET"
@@ -137,7 +137,7 @@ function start_call_app(callback) {
     };
     window.ws.onmessage = function(event) {
         var message = JSON.parse(event.data);
-        console.log('onmessage call',message);
+        //console.log('onmessage call',message);
         if (message.type == 'CLIENTS') {
             show_clients(message.clients);
         }
