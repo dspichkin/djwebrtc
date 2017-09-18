@@ -266,6 +266,6 @@ $(document).ready(function() {
         }));
     });
 
-    get_key();
+    //get_key();
 });
 
