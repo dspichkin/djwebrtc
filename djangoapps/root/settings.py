@@ -161,7 +161,7 @@ CELERY_SEND_EVENTS = True
 CELERYBEAT_SCHEDULER = "djcelery.schedulers.DatabaseScheduler"
 
 
-CHANNELS_PRESENCE_MAX_AGE = 12
+CHANNELS_PRESENCE_MAX_AGE = 20
 
 from datetime import timedelta
 
