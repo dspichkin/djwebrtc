@@ -186,6 +186,7 @@ def ws_message_call(message):
                 })
 
 
+@channel_session_user_from_http
 def ws_disconnect_call(message):
     print "ws_disconnect_call"
     Room.objects.remove("CallClients", message.reply_channel.name)
