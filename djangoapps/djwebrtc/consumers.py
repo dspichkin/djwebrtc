@@ -66,7 +66,7 @@ def ws_message(message):
             })
         })
         return
-
+    print "src_id - ", src_id
     if data['type'] in ['LEAVE', 'CANDIDATE', 'OFFER', 'ANSWER']:
         Group(src_obj.room.channel_name).send({
             "text": json.dumps({
