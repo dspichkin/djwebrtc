@@ -47,6 +47,7 @@ def ws_message(message):
     Presence.objects.touch(message.reply_channel.name)
 
     src_id = message.channel_session['client_id']
+    print "src_id", src_id
     src_obj = Presence.objects.filter(room__channel_name='Clients', user__key_id=src_id).order_by('last_seen').first()
     if not src_obj:
         Group("client-%s" % src_id).send({
@@ -83,7 +84,7 @@ def ws_message(message):
 
 @channel_session_user_from_http
 def ws_disconnect(message):
-    print "ws_disconnect"
+    print "XXXXX ws_disconnect"
 
     client_id = message.channel_session['client_id']
     Room.objects.remove("Clients", message.reply_channel.name)
@@ -189,7 +190,8 @@ def ws_disconnect_call(message):
     print "ws_disconnect_call"
     Room.objects.remove("CallClients", message.reply_channel.name)
 
-    client_id = message.channel_session['client_id']
+    if 'client_id' in message.channel_session:
+        client_id = message.channel_session['client_id']
     Group("call-client-%s" % client_id).discard(message.reply_channel)
 
 

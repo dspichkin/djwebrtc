@@ -101,6 +101,7 @@ class Room(models.Model):
             room=self,
             last_seen__lt=now() - timedelta(seconds=age_in_seconds)
         ).delete()
+        print "XXXX num_deleted", num_deleted
         if num_deleted > 0:
             self.broadcast_changed(bulk_change=True)
 
