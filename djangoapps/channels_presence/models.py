@@ -26,11 +26,11 @@ class PresenceManager(models.Manager):
 @python_2_unicode_compatible
 class Presence(models.Model):
     room = models.ForeignKey('Room', on_delete=models.CASCADE)
-    channel_name = models.CharField(max_length=255,
-            help_text="Reply channel for connection that is present")
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True,
-            on_delete=models.CASCADE)
+    channel_name = models.CharField(max_length=255, help_text="Reply channel for connection that is present")
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, on_delete=models.CASCADE)
     last_seen = models.DateTimeField(default=now)
+
+    max_age = models.IntegerField(default=0)
 
     objects = PresenceManager()
 
@@ -42,9 +42,9 @@ class Presence(models.Model):
 
 
 class RoomManager(models.Manager):
-    def add(self, room_channel_name, user_channel_name, user=None):
+    def add(self, room_channel_name, user_channel_name, user=None, max_age=None):
         room, created = Room.objects.get_or_create(channel_name=room_channel_name)
-        room.add_presence(user_channel_name, user)
+        room.add_presence(user_channel_name, user, max_age=max_age)
         return room
 
     def remove(self, room_channel_name, user_channel_name):
@@ -64,19 +64,19 @@ class RoomManager(models.Manager):
 
 @python_2_unicode_compatible
 class Room(models.Model):
-    channel_name = models.CharField(max_length=255, unique=True,
-            help_text="Group channel name for this room")
+    channel_name = models.CharField(max_length=255, unique=True, help_text="Group channel name for this room")
 
     objects = RoomManager()
 
     def __str__(self):
         return self.channel_name
 
-    def add_presence(self, channel_name, user=None):
+    def add_presence(self, channel_name, user=None, max_age=None):
         presence, created = Presence.objects.get_or_create(
             room=self,
             channel_name=channel_name,
-            user=user if (user and user.is_authenticated()) else None
+            user=user if (user and user.is_authenticated()) else None,
+            max_age=max_age if max_age else 0
         )
         if created:
             Group(self.channel_name).add(channel_name)
@@ -97,6 +97,7 @@ class Room(models.Model):
             age_in_seconds = getattr(settings, "CHANNELS_PRESENCE_MAX_AGE", 60)
 
         num_deleted, num_per_type = Presence.objects.filter(
+            max_age=0,
             room=self,
             last_seen__lt=now() - timedelta(seconds=age_in_seconds)
         ).delete()

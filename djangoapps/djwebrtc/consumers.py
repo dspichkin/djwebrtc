@@ -22,7 +22,7 @@ def ws_connect(message):
     client_id = id_list[0]
     # token_list = params.get('token')
     # token = token_list[0]
-    Room.objects.add("Clients", message.reply_channel.name, message.user)
+    Room.objects.add("Clients", message.reply_channel.name, message.user, max_age=600)
 
     #for p in Presence.objects.filter(room__channel_name='Clients', user__key=client_key):
     #    p.user.key_id = client_id
@@ -41,6 +41,8 @@ def ws_message(message):
 
     text = message.content.get('text')
     data = json.loads(text)
+    print "data:"
+    pprint(data)
 
     Presence.objects.touch(message.reply_channel.name)
 
@@ -84,9 +86,7 @@ def ws_disconnect(message):
     print "ws_disconnect"
 
     client_id = message.channel_session['client_id']
-
     Room.objects.remove("Clients", message.reply_channel.name)
-    message.channel_session['client_id'] = client_id
     Group("client-%s" % client_id).discard(message.reply_channel)
 
 
