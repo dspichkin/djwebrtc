@@ -121,7 +121,8 @@ def ws_message_call(message):
 
     src_client_id = message.channel_session['client_id']
 
-    for p in Presence.objects.touch(message.reply_channel.name):
+    # Presence.objects.touch(message.reply_channel.name)
+    for p in Presence.objects.filter(user__key_id=src_client_id):
         print "XXXX", p.user.key_id
 
     # print "",  data["type"]
