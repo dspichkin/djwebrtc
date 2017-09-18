@@ -123,15 +123,12 @@ def ws_message_call(message):
 
     Presence.objects.touch(message.reply_channel.name)
 
-    print "",  data["type"]
+    # print "",  data["type"]
 
     if data["type"] in ['CALL', 'CLIENTS', 'HEARBEAT']:
         if 'command' in data:
             if data['command'] == 'GET':
                 run_broadcast_clients()
-
-        #if data['type'] == 'HEARBEAT':
-        
 
         if data['type'] == 'CALL':
             dst = data['dst']
