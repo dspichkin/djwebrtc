@@ -21,14 +21,13 @@ function startLocalVideo(callback) {
 }
 
 function prepareCall(call) {
-    console.log('prepareCall')
     if (window.callingCall) {
         window.callingCall.close();
     }
     window.callingCall = call;
 
     call.on('stream', function(stream) {
-        console.log('stream', stream)
+        console.log('got stream')
         // get call stream from remote host
         $('#remote-video').prop('src', URL.createObjectURL(stream));
         // turn on local video for answer
@@ -89,12 +88,12 @@ function start_app(callback) {
 
     // Receiving a call
     window.peer.on('call', function(call) {
-        console.log('Receiving a call')
+        
         if (call.peer != $('#callto-id').val()) {
             call.answer(window.localStream);
             prepareCall(call);
-        
         } else {
+            console.log('Receiving a call')
             // ответный звонок на вызов
             if (window.answeringCall) {
                 window.answeringCall.close();

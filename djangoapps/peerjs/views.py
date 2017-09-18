@@ -64,6 +64,6 @@ def handle(request, key, id, token):
     raw_data = request.body
     data = json.loads(raw_data)
     data["src"] = id
-    return HttpResponse(json.dumps(data), content_type='text/html')
+    return HttpResponse(json.dumps(data), content_type='application/json')
 
 
