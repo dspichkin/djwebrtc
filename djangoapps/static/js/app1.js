@@ -137,8 +137,8 @@ function start_call_app(callback) {
         $('#take-call').hide();
     };
     window.ws.onmessage = function(event) {
-        console.log('onmessage call', event.data);
         var message = JSON.parse(event.data);
+        console.log('onmessage call',message);
         if (message.type == 'CLIENTS') {
             show_clients(message.clients);
         }

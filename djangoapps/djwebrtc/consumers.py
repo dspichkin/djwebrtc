@@ -101,12 +101,13 @@ def ws_connect_call(message):
 
 @channel_session_user_from_http
 def ws_message_call(message):
-    print "ws_message call"
 
     data = message.content.get('text')
     data = json.loads(data)
 
     src_client_id = message.channel_session['client_id']
+
+    print "",  data["type"]
 
     if data["type"] in ['CALL', 'CLIENTS', 'HEARBEAT']:
         if 'command' in data:
