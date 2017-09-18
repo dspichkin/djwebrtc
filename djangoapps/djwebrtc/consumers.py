@@ -8,6 +8,8 @@ from channels import Group
 from channels.auth import channel_session_user_from_http
 from channels.sessions import channel_session
 
+from django.utils import timezone
+
 from channels_presence.models import Room, Presence
 
 
@@ -44,7 +46,7 @@ def ws_message(message):
     # print "data:"
     # pprint(data)
 
-    Presence.objects.touch(message.reply_channel.name)
+    # Presence.objects.touch(message.reply_channel.name)
 
     src_id = message.channel_session['client_id']
     src_obj = Presence.objects.filter(room__channel_name='Clients', user__key_id=src_id).order_by('last_seen').first()
@@ -122,8 +124,7 @@ def ws_message_call(message):
     src_client_id = message.channel_session['client_id']
 
     # Presence.objects.touch(message.reply_channel.name)
-    for p in Presence.objects.filter(user__key_id=src_client_id):
-        print "XXXX", p.user.key_id
+    Presence.objects.filter(user__key_id=src_client_id).update(last_seen=timezone.now())
 
     # print "",  data["type"]
 
