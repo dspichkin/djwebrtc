@@ -70,7 +70,7 @@ def ws_message(message):
     print "data['dst'] ", data['dst']
 
     if data['type'] in ['LEAVE', 'CANDIDATE', 'OFFER', 'ANSWER']:
-        Group(src_obj.room.channel_name).send({
+        Group("client-%s" % dst_obj.user.key_id).send({
             "text": json.dumps({
                 "type": data['type'],
                 "src": src_obj.user.key_id,
