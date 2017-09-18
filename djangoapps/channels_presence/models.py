@@ -15,7 +15,7 @@ from channels_presence.signals import presence_changed
 
 class PresenceManager(models.Manager):
     def touch(self, channel_name):
-        self.filter(channel_name=channel_name).update(last_seen=now())
+        return self.filter(channel_name=channel_name).update(last_seen=now())
 
     def leave_all(self, channel_name):
         for presence in self.select_related('room').filter(channel_name=channel_name):
