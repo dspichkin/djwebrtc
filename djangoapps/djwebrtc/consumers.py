@@ -44,7 +44,7 @@ def ws_message(message):
     # print "data:"
     # pprint(data)
 
-    Presence.objects.touch(message.reply_channel.name)
+    # Presence.objects.touch(message.reply_channel.name)
 
     src_id = message.channel_session['client_id']
     src_obj = Presence.objects.filter(room__channel_name='Clients', user__key_id=src_id).order_by('last_seen').first()
@@ -67,6 +67,8 @@ def ws_message(message):
         })
         return
     print "src_id - ", src_id
+    print "data['dst'] ", data['dst']
+
     if data['type'] in ['LEAVE', 'CANDIDATE', 'OFFER', 'ANSWER']:
         Group(src_obj.room.channel_name).send({
             "text": json.dumps({
