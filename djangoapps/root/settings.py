@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 Django settings for djwebrtc project.
 
@@ -38,10 +39,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'channels',
+    'channels_presence',
+    'djcelery',
     'sslchannels',
     'rest_framework',
+    'accounts',
     'djwebrtc',
-    'peerjs'
+    'peerjs',
 ]
 
 MIDDLEWARE = [
@@ -85,6 +89,8 @@ DATABASES = {
     }
 }
 
+AUTH_USER_MODEL = 'accounts.Account'
+
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
@@ -108,9 +114,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ru-ru'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Moscow'
 
 USE_I18N = True
 
@@ -135,7 +141,62 @@ MEDIA_URL = '/media/'
 
 CHANNEL_LAYERS = {
     'default': {
-        'BACKEND': 'asgiref.inmemory.ChannelLayer',
+        'BACKEND': 'asgiref.inmemory.ChannelLayer',  # 'asgi_redis.RedisChannelLayer',
         'ROUTING': 'djwebrtc.routing.channel_routing',
+        #"CONFIG": {
+        #    "hosts": [("127.0.0.1", 6379), ],
+        #},
     },
+}
+
+# адрес redis сервера
+BROKER_URL = 'redis://localhost:6379/0'
+# храним результаты выполнения задач так же в redis
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+# в течение какого срока храним результаты, после чего они удаляются
+CELERY_TASK_RESULT_EXPIRES = 7*86400  # 7 days
+# это нужно для мониторинга наших воркеров
+CELERY_SEND_EVENTS = True
+# место хранения периодических задач (данные для планировщика)
+CELERYBEAT_SCHEDULER = "djcelery.schedulers.DatabaseScheduler"
+
+
+CHANNELS_PRESENCE_MAX_AGE = 12
+
+from datetime import timedelta
+
+CELERYBEAT_SCHEDULE = {
+    'prune-presence': {
+        'task': 'channels_presence.tasks.prune_presence',
+        'schedule': timedelta(seconds=60)
+    },
+    'prune-rooms': {
+        'task': 'channels_presence.tasks.prune_rooms',
+        'schedule': timedelta(seconds=600)
+    }
+}
+
+
+LOGGING = {
+    'version': 1,
+    'formatters': {
+        'default': {
+            'format': '%(asctime)s %(levelname)s %(message)s',
+            'datefmt': '%m-%d %H:%M:%S'
+        },
+    },
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'page_processors': {
+            'handlers': ['console', ],
+            'level': 'DEBUG',
+            'propagate': True
+        }
+    }
 }

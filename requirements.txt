@@ -1,3 +1,4 @@
+asgi-redis==1.4.3
 asgiref==1.1.2
 asn1crypto==0.22.0
 attrs==17.2.0
@@ -15,6 +16,7 @@ hyperlink==17.3.1
 idna==2.6
 incremental==17.5.0
 ipaddress==1.0.18
+msgpack-python==0.4.8
 pycparser==2.18
 pyOpenSSL==17.3.0
 pytz==2017.2

@@ -2,6 +2,7 @@
 navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
 
 
+window.call_src = null;
 
 function startLocalVideo(callback) {
     // Get audio/video stream
@@ -31,7 +32,6 @@ function prepareCall(call) {
         // get call stream from remote host
         $('#remote-video').prop('src', URL.createObjectURL(stream));
         // turn on local video for answer
-        console.log('call.pee', call.peer)
         startLocalVideo(function() {
             window.peer.call(call.peer, window.localStream);
         });
@@ -61,7 +61,7 @@ function prepareCall(call) {
 }
 
 
-function start_app() {
+function start_app(callback) {
     window.peer = new Peer({
         key: $('#key').val(),
         host: $('#server').val(),
@@ -71,14 +71,20 @@ function start_app() {
         port: 8000
     });
 
+
     window.peer.on('open', function(id) {
         console.log('Peer: My peer ID is: ' + id);
         window.localPeerId = id;
         $('#peer-id').val(id);
         enableCall();
+        if (callback) {
+            callback();
+        }
     });
     window.peer.on('error', function(err) {
         console.log(err.message);
+        $('#take-call').hide();
+        show_clients([]); 
     });
 
     // Receiving a call
@@ -113,22 +119,108 @@ function disableCall() {
     $('#end-call').prop("disabled", true);
 }
 
+function start_call_app(callback) {
+    window.ws = new WebSocket('wss://' + $('#server').val() + ":8000/call?key=" + $('#key').val() + "&id=" + $('#peer-id').val());
+    window.ws.onopen = function() {
+        console.log('CONNECT to WS');
+        call_send_command({
+            type: "CLIENTS",
+            command: "GET"
+        });
+
+        run_hearbeat();
+
+    };
+    window.ws.onerror = function(error) {
+        console.log("Ошибка WS" + error.message);
+        show_clients([]);
+        $('#take-call').hide();
+    };
+    window.ws.onmessage = function(event) {
+        console.log('onmessage call', event.data);
+        var message = JSON.parse(event.data);
+        if (message.type == 'CLIENTS') {
+            show_clients(message.clients);
+        }
+        if (message.type == 'CALL' && message.command == 'RING' && message.dst == $('#peer-id').val()) {
+            $('#take-call').show();
+            window.call_src = message.src;
+        }
+        if (message.type == 'CALL' && message.command == 'TAKE' && message.dst == $('#peer-id').val()) {
+            $('#take-call').hide();
+            console.log('run video call')
+            run_video_call();
+        }
+    };
+
+    
+}
+
+function call_send_command(command) {
+    window.ws.send(JSON.stringify(command));
+}
+
+function get_clients() {
+
+    call_send_command({
+        type: "CLIENTS",
+        command: "GET"
+    });
+}   
+
+function run_hearbeat() {
+    if (window.ws  && window.ws.readyState == 1) {
+        //console.log('run_hearbeat')
+        call_send_command({
+            type: "HEARBEAT",
+        });
+
+        setTimeout(function() {
+            run_hearbeat();
+        }, 10000);
+    }
+}
+
+function get_key() {
+    var key = $('#key').val();
+    var serv = $('#server').val();
+    if (!key || !serv) {
+        return;
+    }
+    
+    start_app(function() {
+        start_call_app();
+    });
+}
+
+function show_clients(clients) {
+    ul = $('#users');
+    var html = "<ul>";
+    for (var i = 0; i < clients.length; i++) {
+        html += '<li>' + clients[i].fio + ' ' + clients[i].key + '</li>';
+    }
+    html += '</ul>';
+    $('#users').html(html);
+}
+
+
+function run_video_call() {
+     startLocalVideo(function() {
+        var call = window.peer.call($('#callto-id').val(), window.localStream);
+        prepareCall(call);
+    });
+}
+
+
+
+
+
+
 
 $(document).ready(function() {
 
     disableCall();
-    /*
-    window.ws = new WebSocket("wss://127.0.0.1:8000/call");
-        window.ws.onopen = function() {
-            console.log('CONNECT to WS');
-
-            
-        };
-        window.ws.onerror = function(error) {
-            console.log("Ошибка WS" + error.message);
-        };
-        
-    */
+    
 
     
     $('#end-call').click(function() {
@@ -142,30 +234,39 @@ $(document).ready(function() {
 
 
     $('#make-key').click(function() {
-        var key = $('#key').val();
-        var serv = $('#server').val();
-        if (!key || !serv) {
-            return;
-        }
+        get_key();
         
-        start_app();
     });
 
     $('#make-call').click(function() {
-
         
-        //window.ws.send(JSON.stringify({
-        //    type: "CALL"
-        //}));
-
+        window.ws.send(JSON.stringify({
+            type: "CALL",
+            command: "CALL",
+            dst: $('#callto-id').val()
+        }));
+        /*
         
         startLocalVideo(function() {
             var call = window.peer.call($('#callto-id').val(), window.localStream);
             prepareCall(call);
         });
-
+    */
     });
 
-    
+    $('#get-connections').click(function() {
+        get_clients();
+    });
+
+    $('#take-call').click(function() {
+        $('#take-call').hide();
+        window.ws.send(JSON.stringify({
+            type: "CALL",
+            command: 'TAKE',
+            dst: window.call_src
+        }));
+    });
+
+    get_key();
 });
 

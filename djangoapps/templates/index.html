@@ -14,6 +14,13 @@
 <body>
 
     <div>
+        {{user}}
+    </div>
+    <div style="float: right">
+        <ul id="users" style="margin: 0 40px;">
+        </ul>
+    </div>
+    <div>
         <p>127.0.0.1</p>
         <p>dev.levellab.ru</p>
         Your server<input id="server" value="127.0.0.1">
@@ -21,7 +28,7 @@
     <div>
         <p>123456</p>
         <p>654321</p>
-        Your key<input id="key" value="123456">
+        Your key<input id="key" value="{{user.key}}">
         <button id="make-key">Run</button>
     </div>
     <div>
@@ -31,6 +38,8 @@
         <input type="text" placeholder="Call user id..." id="callto-id">
         <button id="make-call">Call</button>
         <button id="end-call">Stop</button>
+        <button id="get-connections">Get connections</button>
+        <button id="take-call" style="display: none;">Take call</button>
     </div>
     <div>
         <video id="remote-video" autoplay="" style="border:2px solid red"></video>
