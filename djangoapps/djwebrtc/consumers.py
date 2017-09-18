@@ -22,10 +22,10 @@ def ws_connect(message):
     client_id = id_list[0]
     # token_list = params.get('token')
     # token = token_list[0]
+    Room.objects.add("Clients", message.reply_channel.name, message.user)
 
-    for p in Presence.objects.filter(room__channel_name='Clients', user__key=client_key):
-        p.user.key_id = client_id
-        p.user.save()
+    #for p in Presence.objects.filter(room__channel_name='Clients', user__key=client_key):
+    #    p.user.key_id = client_id
 
     # Room.objects.add("Clients", message.reply_channel.name, message.user)
 
@@ -42,15 +42,29 @@ def ws_message(message):
     text = message.content.get('text')
     data = json.loads(text)
 
-    client_id = message.channel_session['client_id']
+    Presence.objects.touch(message.reply_channel.name)
+
+    src_id = message.channel_session['client_id']
+    src_obj = Presence.objects.filter(room__channel_name='Clients', user__key_id=src_id).order_by('last_seen').first()
+    if not src_obj:
+        Group("client-%s" % src_id).send({
+            'text': json.dumps({
+                'error': "Not find src client",
+                'type': data['type']
+            })
+        })
+        return
 
     dst_obj = Presence.objects.filter(room__channel_name='Clients', user__key_id=data['dst']).order_by('last_seen').first()
     if not dst_obj:
+        Group("client-%s" % src_id).send({
+            'text': json.dumps({
+                'error': "Not find dst client",
+                'type': data['type']
+            })
+        })
         return
 
-    src_obj = Presence.objects.filter(room__channel_name='Clients', user__key_id=client_id).order_by('last_seen').first()
-    if not src_obj:
-        return
     if data['type'] in ['LEAVE', 'CANDIDATE', 'OFFER', 'ANSWER']:
         Group(src_obj.room.channel_name).send({
             "text": json.dumps({
@@ -91,10 +105,10 @@ def ws_connect_call(message):
 
     run_broadcast_clients()
 
-    Room.objects.add("Clients", message.reply_channel.name, message.user)
+    Room.objects.add("CallClients", message.reply_channel.name, message.user)
 
     message.channel_session['client_id'] = client_id
-    Group("client-%s" % client_id).add(message.reply_channel)
+    Group("call-client-%s" % client_id).add(message.reply_channel)
 
     # message.channel_session['client_key'] = key
 
@@ -107,6 +121,8 @@ def ws_message_call(message):
 
     src_client_id = message.channel_session['client_id']
 
+    Presence.objects.touch(message.reply_channel.name)
+
     print "",  data["type"]
 
     if data["type"] in ['CALL', 'CLIENTS', 'HEARBEAT']:
@@ -114,20 +130,26 @@ def ws_message_call(message):
             if data['command'] == 'GET':
                 run_broadcast_clients()
 
-        if data['type'] == 'HEARBEAT':
-            Presence.objects.touch(message.reply_channel.name)
+        #if data['type'] == 'HEARBEAT':
+        
 
         if data['type'] == 'CALL':
             dst = data['dst']
-            pres = Presence.objects.filter(room__channel_name='Clients', user__key_id=dst).order_by('last_seen').first()
+            pres = Presence.objects.filter(room__channel_name='CallClients', user__key_id=dst).order_by('last_seen').first()
 
             if not pres:
+                Group("call-client-%s" % src_client_id).send({
+                    'text': json.dumps({
+                        'error': "Not find client",
+                        'type': 'CALL'
+                    })
+                })
                 return
 
             if data['command'] == 'CALL':
                 # dst_client_key = pres.user.key
                 dst_client_key_id = pres.user.key_id
-                Group("client-%s" % dst_client_key_id).send({
+                Group("call-client-%s" % dst_client_key_id).send({
                     'text': json.dumps({
                         'dst': dst_client_key_id,
                         'src': src_client_id,
@@ -135,7 +157,7 @@ def ws_message_call(message):
                         'type': 'CALL'
                     })
                 })
-                Group("client-%s" % src_client_id).send({
+                Group("call-client-%s" % src_client_id).send({
                     'text': json.dumps({
                         'dst': src_client_id,
                         'src': src_client_id,
@@ -145,7 +167,7 @@ def ws_message_call(message):
                 })
             if data['command'] == 'TAKE':
                 dst_client_key_id = pres.user.key_id
-                Group("client-%s" % dst_client_key_id).send({
+                Group("call-client-%s" % dst_client_key_id).send({
                     'text': json.dumps({
                         'dst': dst_client_key_id,
                         'src': src_client_id,
@@ -153,7 +175,7 @@ def ws_message_call(message):
                         'type': 'CALL'
                     })
                 })
-                Group("client-%s" % src_client_id).send({
+                Group("call-client-%s" % src_client_id).send({
                     'text': json.dumps({
                         'dst': src_client_id,
                         'src': src_client_id,
@@ -165,18 +187,18 @@ def ws_message_call(message):
 
 def ws_disconnect_call(message):
     print "ws_disconnect_call"
-    Room.objects.remove("Clients", message.reply_channel.name)
+    Room.objects.remove("CallClients", message.reply_channel.name)
 
     client_id = message.channel_session['client_id']
-    Group("client-%s" % client_id).discard(message.reply_channel)
+    Group("call-client-%s" % client_id).discard(message.reply_channel)
 
 
 def run_broadcast_clients():
     clients = []
-    for room in Room.objects.filter(channel_name='Clients'):
+    for room in Room.objects.filter(channel_name='CallClients'):
         clients += [user.serialize() for user in room.get_users()]
 
-    for room in Room.objects.filter(channel_name='Clients'):
+    for room in Room.objects.filter(channel_name='CallClients'):
         Group(room.channel_name).send({
             'text': json.dumps({
                 'clients': clients,

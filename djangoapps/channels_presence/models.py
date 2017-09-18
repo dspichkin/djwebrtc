@@ -6,11 +6,12 @@ from datetime import timedelta
 from django.db import models
 from django.conf import settings
 from django.contrib.auth import get_user_model
-from django.utils.encoding  import python_2_unicode_compatible
+from django.utils.encoding import python_2_unicode_compatible
 from django.utils.timezone import now
 
 from channels import Group
 from channels_presence.signals import presence_changed
+
 
 class PresenceManager(models.Manager):
     def touch(self, channel_name):
@@ -20,6 +21,7 @@ class PresenceManager(models.Manager):
         for presence in self.select_related('room').filter(channel_name=channel_name):
             room = presence.room
             room.remove_presence(presence=presence)
+
 
 @python_2_unicode_compatible
 class Presence(models.Model):
