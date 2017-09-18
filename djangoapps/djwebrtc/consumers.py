@@ -123,8 +123,12 @@ def ws_message_call(message):
 
     src_client_id = message.channel_session['client_id']
 
-    # Presence.objects.touch(message.reply_channel.name)
-    Presence.objects.filter(user__key_id=src_client_id).update(last_seen=timezone.now())
+    Presence.objects.touch(message.reply_channel.name)
+    for p in Presence.objects.filter(channel_name=message.reply_channel.name):
+        last_client = Presence.objects.filter(room="Clients", user=p.user).order_by('last_seen').last()
+        if last_client:
+            last_client.last_seen = timezone.now()
+            last_client.save()
 
     # print "",  data["type"]
 
