@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'accounts',
     'djwebrtc',
     'peerjs',
+    'dialogs',
 ]
 
 MIDDLEWARE = [
@@ -63,7 +64,7 @@ ROOT_URLCONF = 'root.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS': [os.path.join(BASE_DIR, 'templates'), os.path.join(BASE_DIR, '..', 'app')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -91,6 +92,7 @@ DATABASES = {
 
 AUTH_USER_MODEL = 'accounts.Account'
 
+AUTHENTICATION_BACKENDS = ['accounts.backends.EmailBackend']
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators

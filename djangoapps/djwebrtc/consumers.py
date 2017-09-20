@@ -1,20 +1,84 @@
 # -*- coding: utf-8 -*-
 import json
-import logging
+# import logging
 import urlparse
 
 from pprint import pprint
+
 from channels import Group
 from channels.auth import channel_session_user_from_http
-from channels.sessions import channel_session
-
+# from channels.sessions import channel_session
+from django.shortcuts import get_object_or_404
 from django.utils import timezone
 
 from channels_presence.models import Room, Presence
 
+from accounts.models import Account
+from dialogs.models import ActiveDialog
+
 
 @channel_session_user_from_http
 def ws_connect(message):
+    message.reply_channel.send({"accept": True})
+    params = urlparse.parse_qs(message.content['query_string'])
+    id_list = params.get('id')
+    if not id_list:
+        return
+    client_id = id_list[0]
+
+    message.channel_session['client_id'] = client_id
+    Room.objects.add("Clients", message.reply_channel.name, message.user)
+    Group("call-client-%s" % client_id).add(message.reply_channel)
+
+
+@channel_session_user_from_http
+def ws_message(message):
+    Presence.objects.touch(message.reply_channel.name)
+
+    data = message.content.get('text')
+    data = json.loads(data)
+
+    print ("ws_message data", data)
+    # src_client_id = message.channel_session['client_id']
+
+    if data.get("command") == 'CALLING':
+        target = data.get("target")
+        source = data.get("source")
+        if target:
+            activedialog = get_object_or_404(ActiveDialog, pk=target)
+
+            presense = Presence.objects.filter(room__channel_name="Clients", user=activedialog.master).last()
+            source_user = Account.objects.filter(key_id=source).first()
+            if source_user and presense:
+                Group("call-client-%s" % activedialog.master.key_id).send({
+                    'text': json.dumps({
+                        'command': "CALLING",
+                        'target': "TAKEPHONE",
+                        'user': {
+                            'fio': source_user.fio(),
+                            'key_id': source_user.key_id
+                        }
+                    })
+                })
+
+
+@channel_session_user_from_http
+def ws_disconnect(message):
+    print "XXXXX ws_disconnect"
+    if 'client_id' in message.channel_session:
+        client_id = message.channel_session['client_id']
+    Group("call-client-%s" % client_id).discard(message.reply_channel)
+    Room.objects.remove("Clients", message.reply_channel.name)
+
+
+
+
+
+
+
+
+@channel_session_user_from_http
+def ws_connect_peer(message):
     # Accept the incoming connection
     message.reply_channel.send({"accept": True})
     params = urlparse.parse_qs(message.content['query_string'])
@@ -26,7 +90,7 @@ def ws_connect(message):
     # token = token_list[0]
     Room.objects.add("Clients", message.reply_channel.name, message.user)
 
-    #for p in Presence.objects.filter(room__channel_name='Clients', user__key=client_key):
+    # for p in Presence.objects.filter(room__channel_name='Clients', user__key=client_key):
     #    p.user.key_id = client_id
 
     # Room.objects.add("Clients", message.reply_channel.name, message.user)
@@ -39,7 +103,7 @@ def ws_connect(message):
 
 
 @channel_session_user_from_http
-def ws_message(message):
+def ws_message_peer(message):
 
     text = message.content.get('text')
     data = json.loads(text)
@@ -84,7 +148,7 @@ def ws_message(message):
 
 
 @channel_session_user_from_http
-def ws_disconnect(message):
+def ws_disconnect_peer(message):
     print "XXXXX ws_disconnect"
 
     client_id = message.channel_session['client_id']

@@ -1,0 +1,37 @@
+{% extends "registration/base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="container login">
+        {% if form.errors %}
+        <p class="alert alert-danger">Введенный email или пароль неверны. Попробуйте еще раз.</p>
+        {% endif %}
+
+        {% if next %}
+            {% if user.is_authenticated %}
+            <p>Your account doesn't have access to this page. To proceed,
+            please login with an account that has access.</p>
+            {% endif %}
+        {% endif %}
+        <form class="form-horizontal" method="post" action="{% url 'login' %}" style="width: 500px;margin: 10% auto;">
+            {% csrf_token %}
+            <h4 class="login__form-header"></h4>
+            <div class="form-group">
+                {{ form.username.label_tag }}
+                <input autofocus="" id="id_username" maxlength="254" name="username" type="email" class="form-control login__input" required="" value="{{ form.username.value | default:"" }}" placeholder="pochta@pochta.com">
+            </div>
+            <div class="form-group">
+                {{ form.password.label_tag }}
+                <input class="form-control login__input" id="id_password" name="password" type="password" required="" value="{{ form.password.value | default:"" }}">
+            </div>
+            <div class="form-group">
+                <input type="submit" class="btn btn-primary btn-lg login__submit" value="Войти" />
+                <input type="hidden" name="next" value="/" />
+            </div>
+            <!-- <p><a href="{% url 'password_reset' %}">Lost password?</a></p> -->
+        </form>
+
+        
+    </div>
+</div>
+{% endblock %}

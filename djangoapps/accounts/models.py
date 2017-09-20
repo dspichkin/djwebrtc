@@ -11,6 +11,7 @@ class Account(AbstractUser):
     created_at = models.DateTimeField(u'дата создания', auto_now_add=True)
     key = models.CharField(u'ключ', max_length=50, unique=True, blank=True, null=True)
     key_id = models.CharField(u'идетификатор ключа', max_length=50, unique=True, blank=True, null=True)
+    # channel_name = models.CharField(max_length=255, help_text="Reply channel for connection that is present", blank=True, null=True)
 
     class Meta(AbstractUser.Meta):
         verbose_name = u'Пользователь'
