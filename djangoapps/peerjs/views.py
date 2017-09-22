@@ -18,6 +18,10 @@ from accounts.models import Account
 r = redis.StrictRedis(host='localhost', port=6379, db=0)
 
 
+def return_id(request):
+    return HttpResponse(request.user.key_id)
+
+
 def get_id(request, key):
     user = get_object_or_404(Account, key=key)
     hash_object = hashlib.sha256(key)
