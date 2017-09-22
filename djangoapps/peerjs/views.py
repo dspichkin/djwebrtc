@@ -33,23 +33,7 @@ def get_id(request, key):
 
 
 @csrf_exempt
-def set_streaming(request, key, id, token):
-    """
-    ip = request.META['REMOTE_ADDR']
-
-    clients = get_clients()
-    if key not in clients:
-        clients[key] = {
-            "id": id,
-            "ip": ip,
-            "token": token,
-        }
-        set_clients(clients)
-        # start_streaming(clients, key, id, token)
-    else:
-        set_clients(clients)
-        # start_streaming(clients, key, id, token)
-    """
+def set_streaming(request, id, token):
     pad = '00'
     for i in range(0, 10):
         pad += pad
@@ -79,7 +63,7 @@ def set_streaming1(request, id, token):
 
 
 @csrf_exempt
-def handle(request, key, id, token):
+def handle(request, id, token):
     raw_data = request.body
     data = json.loads(raw_data)
     data["src"] = id
