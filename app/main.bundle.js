@@ -591,25 +591,30 @@ var ModeDialogMasterComponent = (function () {
     ModeDialogMasterComponent.prototype.ngOnDestroy = function () {
     };
     ModeDialogMasterComponent.prototype._startPeer = function () {
-        this.peer = new Peer({
-            key: this.user.key,
+        var self = this;
+        self.peer = new Peer({
+            key: self.user.key,
             host: __WEBPACK_IMPORTED_MODULE_1__app_settings__["a" /* AppSettings */].URL_WEBSOKET_PEER,
             path: '/peerjs',
             debug: 3,
             secure: true,
             port: 8000
         });
-        this.peer.on('open', function (id) {
-            this.peerid = id;
+        self.peer.on('open', function (id) {
+            self.peerid = id;
             console.log('Peer: My peer ID is: ' + id);
         });
-        this.peer.on('error', function (err) {
+        self.peer.on('error', function (err) {
             console.log("ERROR:", err.message);
         });
         // Receiving a call
-        this.peer.on('call', function (receivecall) {
+        self.peer.on('call', function (receivecall) {
             console.log('Receiving a call');
             console.log("!!!!!", receivecall);
+            self._startLocalVideo(function () {
+                receivecall.answer(self.localStream);
+                self._prepareCall(receivecall);
+            });
             // ответный звонок на вызов
         });
     };
@@ -631,6 +636,37 @@ var ModeDialogMasterComponent = (function () {
             }
         }, function (error) {
             console.log("ERROR getUserMedia: ", error);
+        });
+    };
+    ModeDialogMasterComponent.prototype._prepareCall = function (call) {
+        var self = this;
+        if (self.answeringCall) {
+            self.answeringCall.close();
+        }
+        self.answeringCall = call;
+        call.on('stream', function (stream) {
+            console.log('XXX!!! got stream');
+            // get call stream from remote host
+            $('#remote-video').prop('src', URL.createObjectURL(stream));
+            // turn on local video for answer
+            //startLocalVideo(function() {
+            //    window.peer.call(call.peer, window.localStream);
+            //});
+        });
+        call.on('close', function () {
+            console.log("CLOSE");
+            if (self.answeringCall) {
+                self.answeringCall.close();
+            }
+            if (self.localStream) {
+                self.localStream.getTracks().forEach(function (track) {
+                    track.stop();
+                });
+                self.localStream.src = "";
+            }
+            if ($('#remote-video')) {
+                $('#remote-video').src = "";
+            }
         });
     };
     ModeDialogMasterComponent.prototype.stopDialog = function () {
@@ -783,7 +819,7 @@ var ModeDialogPupilComponent = (function () {
                 self.localStream.getTracks().forEach(function (track) {
                     track.stop();
                 });
-                window.localStream.src = "";
+                self.localStream.src = "";
             }
             if ($('#remote-video')) {
                 $('#remote-video').src = "";
@@ -1470,7 +1506,7 @@ var StarterViewComponent = (function () {
         self._callingDialog(dialog.id);
     };
     StarterViewComponent.prototype._callingDialog = function (activedialog_id) {
-        console.log("_callingDialog");
+        // console.log("_callingDialog")
         var self = this;
         if (self.mode == __WEBPACK_IMPORTED_MODULE_4__app_settings__["a" /* AppSettings */].MODE_CALLING) {
             self.calling_time = new Date();
