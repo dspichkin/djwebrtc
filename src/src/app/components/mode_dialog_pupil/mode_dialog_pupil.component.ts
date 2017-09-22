@@ -67,7 +67,8 @@ export class ModeDialogPupilComponent implements OnInit, OnDestroy {
         self.peer = new Peer({
             //key: this.user.key,
             host: AppSettings.URL_WEBSOKET_PEER,
-            path: '/peerjs',
+            //path: '/peerjs',
+            //path: '/',
             debug: 3,
             secure: true,
             port: 8000

@@ -596,7 +596,8 @@ var ModeDialogMasterComponent = (function () {
         self.peer = new Peer({
             //key: self.user.key,
             host: __WEBPACK_IMPORTED_MODULE_1__app_settings__["a" /* AppSettings */].URL_WEBSOKET_PEER,
-            path: '/peerjs',
+            //path: '/peerjs',
+            //path: '/',
             debug: 3,
             secure: true,
             port: 8000
@@ -784,7 +785,8 @@ var ModeDialogPupilComponent = (function () {
         self.peer = new Peer({
             //key: this.user.key,
             host: __WEBPACK_IMPORTED_MODULE_2__app_settings__["a" /* AppSettings */].URL_WEBSOKET_PEER,
-            path: '/peerjs',
+            //path: '/peerjs',
+            //path: '/',
             debug: 3,
             secure: true,
             port: 8000

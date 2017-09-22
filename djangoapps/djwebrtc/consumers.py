@@ -38,7 +38,7 @@ def ws_message(message):
     data = message.content.get('text')
     data = json.loads(data)
 
-    # print ("ws_message data", data)
+    # if command != ''
     # src_client_id = message.channel_session['client_id']
 
     command = data.get("command")
@@ -111,6 +111,8 @@ def ws_message(message):
                         'dialog': target,
                     })
                 })
+    else:
+        print ("ws_message data", data)
 
 
 @channel_session_user_from_http
