@@ -1,0 +1,38 @@
+ <div class="panel panel-default">
+     <div class="panel-heading">
+        <div class="container">
+            <div class="col-md-6">
+                <h4>Диалог ученик</h4>
+            </div>
+            <div class="col-md-6" style="text-align: right;">
+                <p style="margin: 0 20px;">{{activedialogid}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="panel-body">
+
+        <div>
+            
+            <div>
+                Peer:<input id="peer-id" readonly="" >
+            </div>
+            <div>
+                <input type="text" placeholder="Call user id..." id="callto-id">
+                <button id="make-call">Call</button>
+                <button id="end-call">Stop</button>
+            </div>
+            <div>
+                <video id="remote-video" autoplay="" style="border:2px solid red"></video>
+            </div>
+            <div>
+                <video id="local-video" muted="true" autoplay="" style="border:2px solid green"></video>
+            </div>
+
+
+        </div>
+        
+        <div style="margin-top: 30px">
+            <button class="btn btn-warning" (click)="stopDialog()"><span>Выход</span></button>
+        </div>
+    </div>
+</div>
