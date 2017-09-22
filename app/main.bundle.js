@@ -607,9 +607,30 @@ var ModeDialogMasterComponent = (function () {
             console.log("ERROR:", err.message);
         });
         // Receiving a call
-        this.peer.on('call', function (call) {
+        this.peer.on('call', function (receivecall) {
             console.log('Receiving a call');
+            console.log("!!!!!", receivecall);
             // ответный звонок на вызов
+        });
+    };
+    ModeDialogMasterComponent.prototype._startLocalVideo = function (callback) {
+        var self = this;
+        // Compatibility shim
+        window.navigator.getUserMedia = window.navigator.getUserMedia ||
+            window.navigator.webkitGetUserMedia ||
+            window.navigator.mozGetUserMedia;
+        // Get audio/video stream
+        window.navigator.getUserMedia({
+            audio: true,
+            video: true
+        }, function (stream) {
+            $('#local-video').prop('src', URL.createObjectURL(stream));
+            self.localStream = stream;
+            if (callback) {
+                callback();
+            }
+        }, function (error) {
+            console.log("ERROR getUserMedia: ", error);
         });
     };
     ModeDialogMasterComponent.prototype.stopDialog = function () {
@@ -706,6 +727,7 @@ var ModeDialogPupilComponent = (function () {
             self.peerid = id;
             self._startLocalVideo(function () {
                 var call = self.peer.call(self.activedialog.master.key_id, self.localStream);
+                self._prepareCall(call);
             });
         });
         self.peer.on('error', function (err) {
@@ -722,7 +744,7 @@ var ModeDialogPupilComponent = (function () {
         // Compatibility shim
         window.navigator.getUserMedia = window.navigator.getUserMedia ||
             window.navigator.webkitGetUserMedia ||
-            window.navigator.mozGetUserMedia;
+            window.navigator.mediaDevices.getUserMedia;
         // Get audio/video stream
         window.navigator.getUserMedia({
             audio: true,
@@ -735,6 +757,37 @@ var ModeDialogPupilComponent = (function () {
             }
         }, function (error) {
             console.log("ERROR getUserMedia: ", error);
+        });
+    };
+    ModeDialogPupilComponent.prototype._prepareCall = function (call) {
+        var self = this;
+        if (self.callingCall) {
+            self.callingCall.close();
+        }
+        self.callingCall = call;
+        call.on('stream', function (stream) {
+            console.log('got stream');
+            // get call stream from remote host
+            $('#remote-video').prop('src', URL.createObjectURL(stream));
+            // turn on local video for answer
+            //startLocalVideo(function() {
+            //    window.peer.call(call.peer, window.localStream);
+            //});
+        });
+        call.on('close', function () {
+            console.log("CLOSE");
+            if (self.callingCall) {
+                self.callingCall.close();
+            }
+            if (self.localStream) {
+                self.localStream.getTracks().forEach(function (track) {
+                    track.stop();
+                });
+                window.localStream.src = "";
+            }
+            if ($('#remote-video')) {
+                $('#remote-video').src = "";
+            }
         });
     };
     ModeDialogPupilComponent.prototype.stopDialog = function () {
