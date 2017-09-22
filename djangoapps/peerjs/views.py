@@ -64,6 +64,21 @@ def set_streaming(request, key, id, token):
 
 
 @csrf_exempt
+def set_streaming1(request, id, token):
+    pad = '00'
+    for i in range(0, 10):
+        pad += pad
+
+    content = pad + '\n'
+    content += json.dumps({
+        "type": "OPEN"
+        })
+    content += '\n'
+
+    return HttpResponse(content, content_type='application/octet-stream')
+
+
+@csrf_exempt
 def handle(request, key, id, token):
     raw_data = request.body
     data = json.loads(raw_data)
