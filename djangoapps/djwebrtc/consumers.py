@@ -19,12 +19,15 @@ from dialogs.models import ActiveDialog, DIALOG_ACTIVE, DIALOG_STOP
 
 @channel_session_user_from_http
 def ws_connect(message):
+
     message.reply_channel.send({"accept": True})
     params = urlparse.parse_qs(message.content['query_string'])
     id_list = params.get('id')
     if not id_list:
         return
     client_id = id_list[0]
+
+    print "ws_connect", client_id
 
     message.channel_session['client_id'] = client_id
     Room.objects.add("Clients", message.reply_channel.name, message.user)
