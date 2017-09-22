@@ -8,7 +8,7 @@ export class AppSettings {
     public static URL_DIALOG_RUNINTO = AppSettings.base_url + "/dialogs/api/runinto/";
     public static URL_DIALOG_ACTIVESTOP = AppSettings.base_url + "/dialogs/api/stop/";
     public static URL_DIALOG_STOP = AppSettings.base_url + "/dialogs/api/stop/";
-    public static URL_WEBSOKET = "wss://" + document.location.hostname + ':8000';
+    public static URL_WEBSOKET = "wss://" + document.location.hostname + ':8000/peerjs';
     public static URL_WEBSOKET_PEER = document.location.hostname;
 
 

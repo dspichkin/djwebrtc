@@ -15,7 +15,7 @@ channel_routing = [
     # route('websocket.receive', ws_message_call, path=r"^/call/?$"),
     # route('websocket.disconnect', ws_disconnect_call, path=r"^/call/?$"),
 
-    route('websocket.connect', ws_connect, path=r"^/$"),
-    route('websocket.receive', ws_message, path=r"^/$"),
-    route('websocket.disconnect', ws_disconnect, path=r"^/$"),
+    route('websocket.connect', ws_connect, path=r"^/peerjs/?$"),
+    route('websocket.receive', ws_message, path=r"^/peerjs/?$"),
+    route('websocket.disconnect', ws_disconnect, path=r"^/peerjs/?$"),
 ]
