@@ -115,18 +115,30 @@ def ws_message(message):
             print ("ws_message data", data)
 
         src_id = message.channel_session['client_id']
-        src_obj = Presence.objects.filter(room__channel_name='Clients', user__key_id=src_id).order_by('last_seen').last()
-        dst_obj = Presence.objects.filter(room__channel_name='Clients', user__key_id=data['dst']).order_by('last_seen').last()
-
-        if data.get('type') in ['LEAVE', 'CANDIDATE', 'OFFER', 'ANSWER']:
-            Group("call-client-%s" % dst_obj.user.key_id).send({
-                "text": json.dumps({
-                    "type": data['type'],
-                    "src": src_obj.user.key_id,
-                    "dst": data['dst'],
-                    "payload": data['payload']
+        if src_id:
+            src_obj = Presence.objects.filter(room__channel_name='Clients', user__key_id=src_id).order_by('last_seen').last()
+            dst = data.get('dst')
+            if dst:
+                dst_obj = Presence.objects.filter(room__channel_name='Clients', user__key_id=dst).order_by('last_seen').last()
+                if data.get('type') in ['LEAVE', 'CANDIDATE', 'OFFER', 'ANSWER']:
+                    Group("call-client-%s" % dst_obj.user.key_id).send({
+                        "text": json.dumps({
+                            "type": data['type'],
+                            "src": src_obj.user.key_id,
+                            "dst": dst,
+                            "payload": data['payload']
+                        })
+                    })
+                """
+                Group("call-client-%s" % dst_obj.user.key_id).send({
+                    "text": json.dumps({
+                        "type": data['type'],
+                        "src": src_obj.user.key_id,
+                        "dst": data['dst'],
+                        "payload": data['payload']
+                    })
                 })
-            })
+                """
 
 
 @channel_session_user_from_http
