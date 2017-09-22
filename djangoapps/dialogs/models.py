@@ -7,9 +7,9 @@ from django.db import models
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.utils.encoding import python_2_unicode_compatible
-from django.utils.timezone import now
 from django.db.models.signals import pre_save, post_save, post_delete
 from django.dispatch import receiver
+from django.utils import timezone
 
 from channels import Group
 
@@ -33,6 +33,7 @@ class Dialog(models.Model):
 
         ordering = ('name', )
 
+
 """
 @receiver(post_save, sender=Dialog)
 def dialog_post_save(sender, instance, created, **kwargs):
@@ -54,22 +55,35 @@ class ActiveDialogManager(models.Manager):
         return activedialog
 
 
+DIALOG_WAIT = 1
+DIALOG_ACTIVE = 2
+DIALOG_STOP = 3
+DIALOG_CANCEL = 4
+DIALOG_STATUS = (
+    (DIALOG_WAIT, u'Ожидания подключения ученика'),
+    (DIALOG_ACTIVE, u'Диалог запущен'),
+    (DIALOG_STOP, u'Диалог завершен'),
+    (DIALOG_CANCEL, u'Диалог отменен'),
+)
+
+
 @python_2_unicode_compatible
 class ActiveDialog(models.Model):
     created_at = models.DateTimeField(u'дата создания', auto_now_add=True)
-    running_at = models.DateTimeField(u'дата запуска', blank=True, null=True)
+    running_at = models.DateTimeField(u'дата запуска диалога', blank=True, null=True)
 
     dialog = models.ForeignKey(Dialog, verbose_name=u'диалог')
     master = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=u'ведущий', related_name='master',)
     pupil = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=u'ведомый', related_name='pupil',
                               blank=True, null=True)
 
+    status = models.SmallIntegerField(u'статус диалога', default=1, choices=DIALOG_STATUS)
+
     objects = ActiveDialogManager()
 
     class Meta:
         verbose_name = 'Диалог'
         verbose_name_plural = 'Диалоги'
-        unique_together = [('dialog', 'master')]
 
         ordering = ('created_at', )
 
@@ -90,6 +104,16 @@ class ActiveDialog(models.Model):
             add=add,
             removed=removed,
         )
+
+    def run_dialog(self, pupil_key_id):
+        from accounts.models import Account
+        userpupil = Account.objects.filter(key_id=pupil_key_id).first()
+        if not userpupil:
+            return False
+        self.pupil = userpupil
+        self.running_at = timezone.now()
+        self.save()
+        return True
 
 
 @receiver(post_save, sender=ActiveDialog)

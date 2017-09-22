@@ -14,7 +14,7 @@ from django.utils import timezone
 from channels_presence.models import Room, Presence
 
 from accounts.models import Account
-from dialogs.models import ActiveDialog
+from dialogs.models import ActiveDialog, DIALOG_ACTIVE, DIALOG_STOP
 
 
 @channel_session_user_from_http
@@ -38,28 +38,80 @@ def ws_message(message):
     data = message.content.get('text')
     data = json.loads(data)
 
-    print ("ws_message data", data)
+    # print ("ws_message data", data)
     # src_client_id = message.channel_session['client_id']
 
-    if data.get("command") == 'CALLING':
-        target = data.get("target")
-        source = data.get("source")
-        if target:
-            activedialog = get_object_or_404(ActiveDialog, pk=target)
+    command = data.get("command")
+    if command:
+        if command == 'CALLING':
+            target = data.get("target")
+            source = data.get("source")
+            if target:
+                activedialog = get_object_or_404(ActiveDialog, pk=target)
 
-            presense = Presence.objects.filter(room__channel_name="Clients", user=activedialog.master).last()
-            source_user = Account.objects.filter(key_id=source).first()
-            if source_user and presense:
-                Group("call-client-%s" % activedialog.master.key_id).send({
+                presense = Presence.objects.filter(room__channel_name="Clients", user=activedialog.master).last()
+                source_user = Account.objects.filter(key_id=source).first()
+                if source_user and presense:
+                    Group("call-client-%s" % activedialog.master.key_id).send({
+                        'text': json.dumps({
+                            'command': "CALLING",
+                            'target': "TAKEPHONE",
+                            'user': {
+                                'fio': source_user.fio(),
+                                'key_id': source_user.key_id
+                            }
+                        })
+                    })
+        if command == 'CALLING_MASTER_REJECT':
+            target = data.get("target")
+            source = data.get("source")
+            if target:
+                Group("call-client-%s" % target).send({
                     'text': json.dumps({
-                        'command': "CALLING",
+                        'command': "CALLING_MASTER_REJECT",
                         'target': "TAKEPHONE",
-                        'user': {
-                            'fio': source_user.fio(),
-                            'key_id': source_user.key_id
-                        }
                     })
                 })
+        if command == 'START_DIALOG':
+            target = data.get("target")
+            master = data.get("master")
+            pupil = data.get("pupil")
+            if target and master and pupil:
+                ac = get_object_or_404(ActiveDialog, pk=target)
+                if ac.run_dialog(pupil):
+                    Group("call-client-%s" % master).send({
+                        'text': json.dumps({
+                            'command': "START_DIALOG_MASTER",
+                            'dialog': target,
+                        })
+                    })
+                    Group("call-client-%s" % pupil).send({
+                        'text': json.dumps({
+                            'command': "START_DIALOG_PUPIL",
+                            'dialog': target,
+                        })
+                    })
+        if command == 'STOP_ACTIVE_DIALOG':
+            target = data.get("target")
+            user__key_id = data.get("user")
+            if target and user__key_id:
+                ac = get_object_or_404(ActiveDialog, pk=target)
+                ac.status = DIALOG_STOP
+                ac.save()
+
+                Group("call-client-%s" % ac.master.key_id).send({
+                    'text': json.dumps({
+                        'command': "STOP_DIALOG_MASTER",
+                        'dialog': target,
+                    })
+                })
+                Group("call-client-%s" % ac.pupil.key_id).send({
+                    'text': json.dumps({
+                        'command': "STOP_DIALOG_PUPIL",
+                        'dialog': target,
+                    })
+                })
+
 
 
 @channel_session_user_from_http

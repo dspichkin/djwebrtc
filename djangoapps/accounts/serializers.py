@@ -9,4 +9,4 @@ class AccountSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Account
-        fields = ('fio', 'key_id', 'email', )
+        fields = ('fio', 'key', 'key_id', 'email', )

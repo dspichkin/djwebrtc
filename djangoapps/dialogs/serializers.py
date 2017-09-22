@@ -18,6 +18,7 @@ class ActiveDialogSerializer(serializers.ModelSerializer):
 
     dialog = DialogSerializer()
     master = AccountSerializer()
+    pupil = AccountSerializer()
 
     class Meta:
         model = ActiveDialog
