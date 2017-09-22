@@ -7,7 +7,7 @@ from peerjs.views import (
 )
 
 urlpatterns = [
-    url(r'^peerjs/id$', return_id, name="return_id"),
+    url(r'^id$', return_id, name="return_id"),
     url(r'^(?P<key>\w+)/id$', get_id, name="get_id"),
     url(r'^(?P<key>\w+)/(?P<id>\w+)/(?P<token>\w+)/id$', set_streaming, name="set_streaming"),
     url(r'^(?P<key>\w+)/(?P<id>\w+)/(?P<token>\w+)/candidate$', handle, name="handle"),
