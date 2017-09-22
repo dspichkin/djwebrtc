@@ -113,7 +113,6 @@ def ws_message(message):
                 })
 
 
-
 @channel_session_user_from_http
 def ws_disconnect(message):
     print "XXXXX ws_disconnect"
@@ -140,7 +139,7 @@ def ws_connect_peer(message):
     client_id = id_list[0]
     # token_list = params.get('token')
     # token = token_list[0]
-    Room.objects.add("Clients", message.reply_channel.name, message.user)
+    Room.objects.add("PeerClients", message.reply_channel.name, message.user)
 
     # for p in Presence.objects.filter(room__channel_name='Clients', user__key=client_key):
     #    p.user.key_id = client_id
@@ -149,7 +148,7 @@ def ws_connect_peer(message):
 
     # message.channel_session['rooms'] = list(set(message.channel_session['rooms']).union([room.id]))
     message.channel_session['client_id'] = client_id
-    Group("client-%s" % client_id).add(message.reply_channel)
+    Group("peer-client-%s" % client_id).add(message.reply_channel)
 
     print "ws_connect"
 
@@ -162,12 +161,12 @@ def ws_message_peer(message):
     # print "data:"
     # pprint(data)
 
-    # Presence.objects.touch(message.reply_channel.name)
+    Presence.objects.touch(message.reply_channel.name)
 
     src_id = message.channel_session['client_id']
-    src_obj = Presence.objects.filter(room__channel_name='Clients', user__key_id=src_id).order_by('last_seen').first()
+    src_obj = Presence.objects.filter(room__channel_name='PeerClients', user__key_id=src_id).order_by('last_seen').first()
     if not src_obj:
-        Group("client-%s" % src_id).send({
+        Group("peer-client-%s" % src_id).send({
             'text': json.dumps({
                 'error': "Not find src client",
                 'type': data['type']
@@ -175,9 +174,9 @@ def ws_message_peer(message):
         })
         return
 
-    dst_obj = Presence.objects.filter(room__channel_name='Clients', user__key_id=data['dst']).order_by('last_seen').first()
+    dst_obj = Presence.objects.filter(room__channel_name='PeerClients', user__key_id=data['dst']).order_by('last_seen').first()
     if not dst_obj:
-        Group("client-%s" % src_id).send({
+        Group("peer-client-%s" % src_id).send({
             'text': json.dumps({
                 'error': "Not find dst client",
                 'type': data['type']
@@ -186,7 +185,7 @@ def ws_message_peer(message):
         return
 
     if data['type'] in ['LEAVE', 'CANDIDATE', 'OFFER', 'ANSWER']:
-        Group("client-%s" % dst_obj.user.key_id).send({
+        Group("peer-client-%s" % dst_obj.user.key_id).send({
             "text": json.dumps({
                 "type": data['type'],
                 "src": src_obj.user.key_id,
@@ -204,8 +203,8 @@ def ws_disconnect_peer(message):
     print "XXXXX ws_disconnect"
 
     client_id = message.channel_session['client_id']
-    Room.objects.remove("Clients", message.reply_channel.name)
-    Group("client-%s" % client_id).discard(message.reply_channel)
+    Room.objects.remove("PeerClients", message.reply_channel.name)
+    Group("peer-client-%s" % client_id).discard(message.reply_channel)
 
 
 # ===========================
