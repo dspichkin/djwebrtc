@@ -164,7 +164,7 @@ def ws_message_peer(message):
     Presence.objects.touch(message.reply_channel.name)
 
     src_id = message.channel_session['client_id']
-    src_obj = Presence.objects.filter(room__channel_name='Clients', user__key_id=src_id).order_by('last_seen').first()
+    src_obj = Presence.objects.filter(room__channel_name='Clients', user__key_id=src_id).order_by('last_seen').last()
     if not src_obj:
         Group("peer-client-%s" % src_id).send({
             'text': json.dumps({
@@ -174,7 +174,7 @@ def ws_message_peer(message):
         })
         return
 
-    dst_obj = Presence.objects.filter(room__channel_name='Clients', user__key_id=data['dst']).order_by('last_seen').first()
+    dst_obj = Presence.objects.filter(room__channel_name='Clients', user__key_id=data['dst']).order_by('last_seen').last()
     if not dst_obj:
         Group("peer-client-%s" % src_id).send({
             'text': json.dumps({

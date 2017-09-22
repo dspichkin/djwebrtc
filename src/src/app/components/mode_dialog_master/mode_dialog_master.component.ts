@@ -105,6 +105,7 @@ export class ModeDialogMasterComponent implements OnInit, OnDestroy {
             video: true
         }, function(stream) {
             $('#local-video').prop('src', URL.createObjectURL(stream));
+            console.log("!!!!!$('#local-video')", $('#local-video'))
             self.localStream = stream;
             if (callback) {
                 callback();
