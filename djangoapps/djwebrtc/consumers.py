@@ -161,6 +161,7 @@ def ws_disconnect(message):
 
 @channel_session_user_from_http
 def ws_connect_peer(message):
+    return
     # Accept the incoming connection
     message.reply_channel.send({"accept": True})
     params = urlparse.parse_qs(message.content['query_string'])
@@ -186,7 +187,7 @@ def ws_connect_peer(message):
 
 @channel_session_user_from_http
 def ws_message_peer(message):
-
+    return
     text = message.content.get('text')
     data = json.loads(text)
     # print "data:"
@@ -231,6 +232,7 @@ def ws_message_peer(message):
 
 @channel_session_user_from_http
 def ws_disconnect_peer(message):
+    return
     print "XXXXX ws_disconnect"
 
     client_id = message.channel_session['client_id']

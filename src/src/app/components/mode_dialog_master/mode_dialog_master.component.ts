@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { AppSettings } from '../../app.settings';
 import { StatusService } from '../../services/status.service';
 import { DialogsService } from '../../services/dialogs.service';
+import { WebSocketService } from '../../services/websocket.service';
 
 declare var Peer:any;
 declare var $:any;
@@ -31,7 +32,8 @@ export class ModeDialogMasterComponent implements OnInit, OnDestroy {
 
     constructor(
         private statusService: StatusService,
-        private dialogsService: DialogsService
+        private dialogsService: DialogsService,
+        private websocketService: WebSocketService
         ) {
         var self = this;
     }
@@ -63,13 +65,15 @@ export class ModeDialogMasterComponent implements OnInit, OnDestroy {
     private _startPeer() {
         let self = this;
         self.peer = new Peer({
+            socket: self.websocketService.ws,
             //key: self.user.key,
             host: AppSettings.URL_WEBSOKET_PEER,
             //path: '/peerjs',
             //path: '/',
             debug: 3,
             secure: true,
-            port: 8000
+            port: 8000,
+            id: self.user.key_id
         });
 
         self.peer.on('open', function(id) {

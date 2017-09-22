@@ -6,11 +6,12 @@ import { FormsModule } from '@angular/forms';
 import { StatusService } from '../../services/status.service';
 import { AppSettings } from '../../app.settings';
 import { DialogsService } from '../../services/dialogs.service';
+import { WebSocketService } from '../../services/websocket.service';
 
 
 declare var Peer:any;
 declare var $:any;
-declare var window: any;
+declare const navigator;
 
 @Component({
   selector: 'modedialogpupil',
@@ -21,6 +22,7 @@ export class ModeDialogPupilComponent implements OnInit, OnDestroy {
     @Input() public activedialogid;
     @Output() public stopdialog = new EventEmitter();
 
+    public userMedia = <any>navigator;
     activedialog;
     peer;
     peerid;
@@ -31,7 +33,8 @@ export class ModeDialogPupilComponent implements OnInit, OnDestroy {
 
     constructor(
         private statusService: StatusService,
-        private dialogsService: DialogsService
+        private dialogsService: DialogsService,
+        private websocketService: WebSocketService
         ) {
         var self = this;
     }
@@ -65,13 +68,15 @@ export class ModeDialogPupilComponent implements OnInit, OnDestroy {
         let self = this;
 
         self.peer = new Peer({
+            socket: self.websocketService.ws,
             //key: this.user.key,
             host: AppSettings.URL_WEBSOKET_PEER,
             //path: '/peerjs',
             //path: '/',
             debug: 3,
             secure: true,
-            port: 8000
+            port: 8000,
+            id: self.user.key_id
         });
 
         self.peer.on('open', function(id) {
@@ -98,13 +103,40 @@ export class ModeDialogPupilComponent implements OnInit, OnDestroy {
 
     private _startLocalVideo(callback) {
         let self = this;
-        // Compatibility shim
-        window.navigator.getUserMedia = window.navigator.getUserMedia || 
-            window.navigator.webkitGetUserMedia || 
-            window.navigator.mediaDevices.getUserMedia;
+        if (!navigator.getUserMedia)
+            this.userMedia.getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+        if (!navigator.cancelAnimationFrame)
+            this.userMedia.cancelAnimationFrame = navigator.webkitCancelAnimationFrame || navigator.mozCancelAnimationFrame;
+        if (!navigator.requestAnimationFrame)
+            this.userMedia.requestAnimationFrame = navigator.webkitRequestAnimationFrame || navigator.mozRequestAnimationFrame;
 
+
+
+        this.userMedia.getUserMedia(
+            {
+                audio: {
+                    "mandatory": {
+                        "googEchoCancellation": "false",
+                        "googAutoGainControl": "false",
+                        "googNoiseSuppression": "false",
+                        "googHighpassFilter": "false"
+                    },
+                    "optional": []
+                },video: true
+            }, (stream)=>{
+                $('#local-video').prop('src', URL.createObjectURL(stream));
+                console.log("!!!!!$('#local-video')", $('#local-video'))
+                self.localStream = stream;
+                if (callback) {
+                    callback();
+                }
+            },
+            (error)=>{
+                console.log("ERROR getUserMedia: ", error);
+            });
+        /*
         // Get audio/video stream
-        window.navigator.getUserMedia({
+        this.userMedia.getUserMedia({
             audio: true,
             video: true
         }, function(stream) {
@@ -116,6 +148,7 @@ export class ModeDialogPupilComponent implements OnInit, OnDestroy {
         }, function(error) {
             console.log("ERROR getUserMedia: ", error);
         });
+        */
     }
 
     private _prepareCall(call) {

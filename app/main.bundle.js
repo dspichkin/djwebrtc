@@ -553,6 +553,7 @@ module.exports = "<div class=\"panel panel-default\">\n    <div class=\"panel-he
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_settings__ = __webpack_require__("../../../../../src/app/app.settings.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_status_service__ = __webpack_require__("../../../../../src/app/services/status.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__services_dialogs_service__ = __webpack_require__("../../../../../src/app/services/dialogs.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__services_websocket_service__ = __webpack_require__("../../../../../src/app/services/websocket.service.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -566,10 +567,12 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 var ModeDialogMasterComponent = (function () {
-    function ModeDialogMasterComponent(statusService, dialogsService) {
+    function ModeDialogMasterComponent(statusService, dialogsService, websocketService) {
         this.statusService = statusService;
         this.dialogsService = dialogsService;
+        this.websocketService = websocketService;
         this.stopdialog = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]();
         this.userMedia = navigator;
         this.loading = false;
@@ -594,13 +597,15 @@ var ModeDialogMasterComponent = (function () {
     ModeDialogMasterComponent.prototype._startPeer = function () {
         var self = this;
         self.peer = new Peer({
+            socket: self.websocketService.ws,
             //key: self.user.key,
             host: __WEBPACK_IMPORTED_MODULE_1__app_settings__["a" /* AppSettings */].URL_WEBSOKET_PEER,
             //path: '/peerjs',
             //path: '/',
             debug: 3,
             secure: true,
-            port: 8000
+            port: 8000,
+            id: self.user.key_id
         });
         self.peer.on('open', function (id) {
             self.peerid = id;
@@ -719,10 +724,10 @@ ModeDialogMasterComponent = __decorate([
         selector: 'modedialogmaster',
         template: __webpack_require__("../../../../../src/app/components/mode_dialog_master/mode_dialog_master.template.html")
     }),
-    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__services_status_service__["a" /* StatusService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__services_status_service__["a" /* StatusService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_3__services_dialogs_service__["a" /* DialogsService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__services_dialogs_service__["a" /* DialogsService */]) === "function" && _b || Object])
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__services_status_service__["a" /* StatusService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__services_status_service__["a" /* StatusService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_3__services_dialogs_service__["a" /* DialogsService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__services_dialogs_service__["a" /* DialogsService */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_4__services_websocket_service__["a" /* WebSocketService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__services_websocket_service__["a" /* WebSocketService */]) === "function" && _c || Object])
 ], ModeDialogMasterComponent);
 
-var _a, _b;
+var _a, _b, _c;
 //# sourceMappingURL=mode_dialog_master.component.js.map
 
 /***/ }),
@@ -743,6 +748,7 @@ module.exports = " <div class=\"panel panel-default\">\n     <div class=\"panel-
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services_status_service__ = __webpack_require__("../../../../../src/app/services/status.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__app_settings__ = __webpack_require__("../../../../../src/app/app.settings.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__services_dialogs_service__ = __webpack_require__("../../../../../src/app/services/dialogs.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__services_websocket_service__ = __webpack_require__("../../../../../src/app/services/websocket.service.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -756,11 +762,14 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 var ModeDialogPupilComponent = (function () {
-    function ModeDialogPupilComponent(statusService, dialogsService) {
+    function ModeDialogPupilComponent(statusService, dialogsService, websocketService) {
         this.statusService = statusService;
         this.dialogsService = dialogsService;
+        this.websocketService = websocketService;
         this.stopdialog = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]();
+        this.userMedia = navigator;
         this.loading = false;
         var self = this;
     }
@@ -783,13 +792,15 @@ var ModeDialogPupilComponent = (function () {
     ModeDialogPupilComponent.prototype._startPeer = function () {
         var self = this;
         self.peer = new Peer({
+            socket: self.websocketService.ws,
             //key: this.user.key,
             host: __WEBPACK_IMPORTED_MODULE_2__app_settings__["a" /* AppSettings */].URL_WEBSOKET_PEER,
             //path: '/peerjs',
             //path: '/',
             debug: 3,
             secure: true,
-            port: 8000
+            port: 8000,
+            id: self.user.key_id
         });
         self.peer.on('open', function (id) {
             console.log('Peer: My peer ID is: ' + id);
@@ -810,16 +821,25 @@ var ModeDialogPupilComponent = (function () {
     };
     ModeDialogPupilComponent.prototype._startLocalVideo = function (callback) {
         var self = this;
-        // Compatibility shim
-        window.navigator.getUserMedia = window.navigator.getUserMedia ||
-            window.navigator.webkitGetUserMedia ||
-            window.navigator.mediaDevices.getUserMedia;
-        // Get audio/video stream
-        window.navigator.getUserMedia({
-            audio: true,
-            video: true
+        if (!navigator.getUserMedia)
+            this.userMedia.getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+        if (!navigator.cancelAnimationFrame)
+            this.userMedia.cancelAnimationFrame = navigator.webkitCancelAnimationFrame || navigator.mozCancelAnimationFrame;
+        if (!navigator.requestAnimationFrame)
+            this.userMedia.requestAnimationFrame = navigator.webkitRequestAnimationFrame || navigator.mozRequestAnimationFrame;
+        this.userMedia.getUserMedia({
+            audio: {
+                "mandatory": {
+                    "googEchoCancellation": "false",
+                    "googAutoGainControl": "false",
+                    "googNoiseSuppression": "false",
+                    "googHighpassFilter": "false"
+                },
+                "optional": []
+            }, video: true
         }, function (stream) {
             $('#local-video').prop('src', URL.createObjectURL(stream));
+            console.log("!!!!!$('#local-video')", $('#local-video'));
             self.localStream = stream;
             if (callback) {
                 callback();
@@ -827,6 +847,21 @@ var ModeDialogPupilComponent = (function () {
         }, function (error) {
             console.log("ERROR getUserMedia: ", error);
         });
+        /*
+        // Get audio/video stream
+        this.userMedia.getUserMedia({
+            audio: true,
+            video: true
+        }, function(stream) {
+            $('#local-video').prop('src', URL.createObjectURL(stream));
+            self.localStream = stream;
+            if (callback) {
+                callback();
+            }
+        }, function(error) {
+            console.log("ERROR getUserMedia: ", error);
+        });
+        */
     };
     ModeDialogPupilComponent.prototype._prepareCall = function (call) {
         var self = this;
@@ -882,10 +917,10 @@ ModeDialogPupilComponent = __decorate([
         selector: 'modedialogpupil',
         template: __webpack_require__("../../../../../src/app/components/mode_dialog_pupil/mode_dialog_pupil.template.html")
     }),
-    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__services_status_service__["a" /* StatusService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__services_status_service__["a" /* StatusService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_3__services_dialogs_service__["a" /* DialogsService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__services_dialogs_service__["a" /* DialogsService */]) === "function" && _b || Object])
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__services_status_service__["a" /* StatusService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__services_status_service__["a" /* StatusService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_3__services_dialogs_service__["a" /* DialogsService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__services_dialogs_service__["a" /* DialogsService */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_4__services_websocket_service__["a" /* WebSocketService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__services_websocket_service__["a" /* WebSocketService */]) === "function" && _c || Object])
 ], ModeDialogPupilComponent);
 
-var _a, _b;
+var _a, _b, _c;
 //# sourceMappingURL=mode_dialog_pupil.component.js.map
 
 /***/ }),
