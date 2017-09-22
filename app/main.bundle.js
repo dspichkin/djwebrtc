@@ -698,6 +698,11 @@ var ModeDialogMasterComponent = (function () {
     ModeDialogMasterComponent.prototype.stopDialog = function () {
         this.stopdialog.emit(this.activedialogid);
     };
+    ModeDialogMasterComponent.prototype.hangPhone = function () {
+        if (this.answeringCall) {
+            this.answeringCall.close();
+        }
+    };
     return ModeDialogMasterComponent;
 }());
 __decorate([
@@ -724,7 +729,7 @@ var _a, _b;
 /***/ "../../../../../src/app/components/mode_dialog_master/mode_dialog_master.template.html":
 /***/ (function(module, exports) {
 
-module.exports = " <div class=\"panel panel-default\">\n     <div class=\"panel-heading\">\n        <div class=\"container\">\n            <div class=\"col-md-6\">\n                <h4>Диалог мастер</h4>\n            </div>\n            <div class=\"col-md-6\" style=\"text-align: right;\">\n                <p style=\"margin: 0 20px;\">{{activedialogid}}</p>\n            </div>\n        </div>\n    </div>\n    <div class=\"panel-body\">\n\n        <div>\n            \n            <div>\n                Peer:<input id=\"peer-id\" readonly=\"\" >\n            </div>\n            <div>\n                <input type=\"text\" placeholder=\"Call user id...\" id=\"callto-id\">\n                <button id=\"make-call\">Call</button>\n                <button id=\"end-call\">Stop</button>\n            </div>\n            <div>\n                <video id=\"remote-video\" autoplay=\"\" style=\"border:2px solid red\"></video>\n            </div>\n            <div>\n                <video id=\"local-video\" muted=\"true\" autoplay=\"\" style=\"border:2px solid green\"></video>\n            </div>\n\n\n        </div>\n        \n        <div style=\"margin-top: 30px\">\n            <button class=\"btn btn-warning\" (click)=\"stopDialog()\"><span>Выход</span></button>\n        </div>\n    </div>\n</div>"
+module.exports = " <div class=\"panel panel-default\">\n     <div class=\"panel-heading\">\n        <div class=\"container\">\n            <div class=\"col-md-6\">\n                <h4>Диалог мастер</h4>\n            </div>\n            <div class=\"col-md-6\" style=\"text-align: right;\">\n                <p style=\"margin: 0 20px;\">{{activedialogid}}</p>\n            </div>\n        </div>\n    </div>\n    <div class=\"panel-body\">\n\n        <div>\n            \n           \n            <div>\n                <video id=\"remote-video\" autoplay=\"\" style=\"border:2px solid red\"></video>\n            </div>\n            <div>\n                <video id=\"local-video\" muted=\"true\" autoplay=\"\" style=\"border:2px solid green\"></video>\n            </div>\n\n\n        </div>\n        \n        <div style=\"margin-top: 30px\">\n            <button class=\"btn btn-warning\" (click)=\"hangPhone()\"><span>Сбросить трубку</span></button>\n            <button class=\"btn btn-warning\" (click)=\"stopDialog()\"><span>Выход</span></button>\n        </div>\n    </div>\n</div>"
 
 /***/ }),
 
@@ -855,6 +860,11 @@ var ModeDialogPupilComponent = (function () {
     ModeDialogPupilComponent.prototype.stopDialog = function () {
         this.stopdialog.emit(this.activedialogid);
     };
+    ModeDialogPupilComponent.prototype.hangPhone = function () {
+        if (this.callingCall) {
+            this.callingCall.close();
+        }
+    };
     return ModeDialogPupilComponent;
 }());
 __decorate([
@@ -881,7 +891,7 @@ var _a, _b;
 /***/ "../../../../../src/app/components/mode_dialog_pupil/mode_dialog_pupil.template.html":
 /***/ (function(module, exports) {
 
-module.exports = " <div class=\"panel panel-default\">\n     <div class=\"panel-heading\">\n        <div class=\"container\">\n            <div class=\"col-md-6\">\n                <h4>Диалог ученик</h4>\n            </div>\n            <div class=\"col-md-6\" style=\"text-align: right;\">\n                <p style=\"margin: 0 20px;\">{{activedialogid}}</p>\n            </div>\n        </div>\n    </div>\n    <div class=\"panel-body\">\n\n        <div>\n            \n            <div>\n                Peer:<input id=\"peer-id\" readonly=\"\" >\n            </div>\n            <div>\n                <input type=\"text\" placeholder=\"Call user id...\" id=\"callto-id\">\n                <button id=\"make-call\">Call</button>\n                <button id=\"end-call\">Stop</button>\n            </div>\n            <div>\n                <video id=\"remote-video\" autoplay=\"\" style=\"border:2px solid red\"></video>\n            </div>\n            <div>\n                <video id=\"local-video\" muted=\"true\" autoplay=\"\" style=\"border:2px solid green\"></video>\n            </div>\n\n\n        </div>\n        \n        <div style=\"margin-top: 30px\">\n            <button class=\"btn btn-warning\" (click)=\"stopDialog()\"><span>Выход</span></button>\n        </div>\n    </div>\n</div>"
+module.exports = " <div class=\"panel panel-default\">\n     <div class=\"panel-heading\">\n        <div class=\"container\">\n            <div class=\"col-md-6\">\n                <h4>Диалог ученик</h4>\n            </div>\n            <div class=\"col-md-6\" style=\"text-align: right;\">\n                <p style=\"margin: 0 20px;\">{{activedialogid}}</p>\n            </div>\n        </div>\n    </div>\n    <div class=\"panel-body\">\n\n        <div>\n            \n            <div>\n                <video id=\"remote-video\" autoplay=\"\" style=\"border:2px solid red\"></video>\n            </div>\n            <div>\n                <video id=\"local-video\" muted=\"true\" autoplay=\"\" style=\"border:2px solid green\"></video>\n            </div>\n\n\n        </div>\n        \n        <div style=\"margin-top: 30px\">\n             <button class=\"btn btn-warning\" (click)=\"hangPhone()\"><span>Сбросить трубку</span></button>\n            <button class=\"btn btn-warning\" (click)=\"stopDialog()\"><span>Выход</span></button>\n        </div>\n    </div>\n</div>"
 
 /***/ }),
 

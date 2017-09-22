@@ -158,4 +158,10 @@ export class ModeDialogPupilComponent implements OnInit, OnDestroy {
     public stopDialog() {
         this.stopdialog.emit(this.activedialogid);
     }    
+
+    public hangPhone() {
+        if (this.callingCall) {
+            this.callingCall.close();
+        }
+    } 
 }

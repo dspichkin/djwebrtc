@@ -14,14 +14,6 @@
         <div>
             
             <div>
-                Peer:<input id="peer-id" readonly="" >
-            </div>
-            <div>
-                <input type="text" placeholder="Call user id..." id="callto-id">
-                <button id="make-call">Call</button>
-                <button id="end-call">Stop</button>
-            </div>
-            <div>
                 <video id="remote-video" autoplay="" style="border:2px solid red"></video>
             </div>
             <div>
@@ -32,6 +24,7 @@
         </div>
         
         <div style="margin-top: 30px">
+             <button class="btn btn-warning" (click)="hangPhone()"><span>Сбросить трубку</span></button>
             <button class="btn btn-warning" (click)="stopDialog()"><span>Выход</span></button>
         </div>
     </div>

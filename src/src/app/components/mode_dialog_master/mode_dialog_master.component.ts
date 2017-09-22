@@ -181,5 +181,11 @@ export class ModeDialogMasterComponent implements OnInit, OnDestroy {
     }
     public stopDialog() {
         this.stopdialog.emit(this.activedialogid);
-    }    
+    }   
+
+    public hangPhone() {
+        if (this.answeringCall) {
+            this.answeringCall.close();
+        }
+    } 
 }
