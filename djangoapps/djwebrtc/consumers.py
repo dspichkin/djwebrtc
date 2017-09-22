@@ -139,7 +139,7 @@ def ws_connect_peer(message):
     client_id = id_list[0]
     # token_list = params.get('token')
     # token = token_list[0]
-    Room.objects.add("PeerClients", message.reply_channel.name, message.user)
+    Room.objects.add("Clients", message.reply_channel.name, message.user)
 
     # for p in Presence.objects.filter(room__channel_name='Clients', user__key=client_key):
     #    p.user.key_id = client_id
@@ -164,7 +164,7 @@ def ws_message_peer(message):
     Presence.objects.touch(message.reply_channel.name)
 
     src_id = message.channel_session['client_id']
-    src_obj = Presence.objects.filter(room__channel_name='PeerClients', user__key_id=src_id).order_by('last_seen').first()
+    src_obj = Presence.objects.filter(room__channel_name='Clients', user__key_id=src_id).order_by('last_seen').first()
     if not src_obj:
         Group("peer-client-%s" % src_id).send({
             'text': json.dumps({
@@ -174,7 +174,7 @@ def ws_message_peer(message):
         })
         return
 
-    dst_obj = Presence.objects.filter(room__channel_name='PeerClients', user__key_id=data['dst']).order_by('last_seen').first()
+    dst_obj = Presence.objects.filter(room__channel_name='Clients', user__key_id=data['dst']).order_by('last_seen').first()
     if not dst_obj:
         Group("peer-client-%s" % src_id).send({
             'text': json.dumps({
@@ -203,7 +203,7 @@ def ws_disconnect_peer(message):
     print "XXXXX ws_disconnect"
 
     client_id = message.channel_session['client_id']
-    Room.objects.remove("PeerClients", message.reply_channel.name)
+    Room.objects.remove("Clients", message.reply_channel.name)
     Group("peer-client-%s" % client_id).discard(message.reply_channel)
 
 
