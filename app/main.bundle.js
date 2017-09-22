@@ -571,6 +571,7 @@ var ModeDialogMasterComponent = (function () {
         this.statusService = statusService;
         this.dialogsService = dialogsService;
         this.stopdialog = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]();
+        this.userMedia = navigator;
         this.loading = false;
         var self = this;
     }
@@ -593,7 +594,7 @@ var ModeDialogMasterComponent = (function () {
     ModeDialogMasterComponent.prototype._startPeer = function () {
         var self = this;
         self.peer = new Peer({
-            key: self.user.key,
+            //key: self.user.key,
             host: __WEBPACK_IMPORTED_MODULE_1__app_settings__["a" /* AppSettings */].URL_WEBSOKET_PEER,
             path: '/peerjs',
             debug: 3,
@@ -620,14 +621,22 @@ var ModeDialogMasterComponent = (function () {
     };
     ModeDialogMasterComponent.prototype._startLocalVideo = function (callback) {
         var self = this;
-        // Compatibility shim
-        window.navigator.getUserMedia = window.navigator.getUserMedia ||
-            window.navigator.webkitGetUserMedia ||
-            window.navigator.mozGetUserMedia;
-        // Get audio/video stream
-        window.navigator.getUserMedia({
-            audio: true,
-            video: true
+        if (!navigator.getUserMedia)
+            this.userMedia.getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+        if (!navigator.cancelAnimationFrame)
+            this.userMedia.cancelAnimationFrame = navigator.webkitCancelAnimationFrame || navigator.mozCancelAnimationFrame;
+        if (!navigator.requestAnimationFrame)
+            this.userMedia.requestAnimationFrame = navigator.webkitRequestAnimationFrame || navigator.mozRequestAnimationFrame;
+        this.userMedia.getUserMedia({
+            audio: {
+                "mandatory": {
+                    "googEchoCancellation": "false",
+                    "googAutoGainControl": "false",
+                    "googNoiseSuppression": "false",
+                    "googHighpassFilter": "false"
+                },
+                "optional": []
+            }, video: true
         }, function (stream) {
             $('#local-video').prop('src', URL.createObjectURL(stream));
             console.log("!!!!!$('#local-video')", $('#local-video'));
@@ -638,6 +647,22 @@ var ModeDialogMasterComponent = (function () {
         }, function (error) {
             console.log("ERROR getUserMedia: ", error);
         });
+        /*
+        // Get audio/video stream
+        window.navigator.getUserMedia({
+            audio: true,
+            video: true
+        }, function(stream) {
+            $('#local-video').prop('src', URL.createObjectURL(stream));
+            console.log("!!!!!$('#local-video')", $('#local-video'))
+            self.localStream = stream;
+            if (callback) {
+                callback();
+            }
+        }, function(error) {
+            console.log("ERROR getUserMedia: ", error);
+        });
+        */
     };
     ModeDialogMasterComponent.prototype._prepareCall = function (call) {
         var self = this;
@@ -752,7 +777,7 @@ var ModeDialogPupilComponent = (function () {
     ModeDialogPupilComponent.prototype._startPeer = function () {
         var self = this;
         self.peer = new Peer({
-            key: this.user.key,
+            //key: this.user.key,
             host: __WEBPACK_IMPORTED_MODULE_2__app_settings__["a" /* AppSettings */].URL_WEBSOKET_PEER,
             path: '/peerjs',
             debug: 3,

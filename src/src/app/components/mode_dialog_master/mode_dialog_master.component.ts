@@ -9,7 +9,7 @@ import { DialogsService } from '../../services/dialogs.service';
 
 declare var Peer:any;
 declare var $:any;
-declare var window: any;
+declare const navigator;
 
 @Component({
   selector: 'modedialogmaster',
@@ -20,6 +20,7 @@ export class ModeDialogMasterComponent implements OnInit, OnDestroy {
     @Input() public activedialogid;
     @Output() public stopdialog = new EventEmitter();
 
+    public userMedia = <any>navigator;
     activedialog;
     peer;
     peerid;
@@ -62,7 +63,7 @@ export class ModeDialogMasterComponent implements OnInit, OnDestroy {
     private _startPeer() {
         let self = this;
         self.peer = new Peer({
-            key: self.user.key,
+            //key: self.user.key,
             host: AppSettings.URL_WEBSOKET_PEER,
             path: '/peerjs',
             debug: 3,
@@ -94,11 +95,36 @@ export class ModeDialogMasterComponent implements OnInit, OnDestroy {
 
     private _startLocalVideo(callback) {
         let self = this;
-        // Compatibility shim
-        window.navigator.getUserMedia = window.navigator.getUserMedia || 
-            window.navigator.webkitGetUserMedia || 
-            window.navigator.mozGetUserMedia;
-
+        if (!navigator.getUserMedia)
+            this.userMedia.getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+        if (!navigator.cancelAnimationFrame)
+            this.userMedia.cancelAnimationFrame = navigator.webkitCancelAnimationFrame || navigator.mozCancelAnimationFrame;
+        if (!navigator.requestAnimationFrame)
+            this.userMedia.requestAnimationFrame = navigator.webkitRequestAnimationFrame || navigator.mozRequestAnimationFrame;
+   
+        this.userMedia.getUserMedia(
+            {
+                audio: {
+                    "mandatory": {
+                        "googEchoCancellation": "false",
+                        "googAutoGainControl": "false",
+                        "googNoiseSuppression": "false",
+                        "googHighpassFilter": "false"
+                    },
+                    "optional": []
+                },video: true
+            }, (stream)=>{
+                $('#local-video').prop('src', URL.createObjectURL(stream));
+                console.log("!!!!!$('#local-video')", $('#local-video'))
+                self.localStream = stream;
+                if (callback) {
+                    callback();
+                }
+            },
+            (error)=>{
+                console.log("ERROR getUserMedia: ", error);
+            });
+        /*
         // Get audio/video stream
         window.navigator.getUserMedia({
             audio: true,
@@ -113,6 +139,7 @@ export class ModeDialogMasterComponent implements OnInit, OnDestroy {
         }, function(error) {
             console.log("ERROR getUserMedia: ", error);
         });
+        */
     }
 
 
