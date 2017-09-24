@@ -602,7 +602,7 @@ var ModeDialogMasterComponent = (function () {
             host: __WEBPACK_IMPORTED_MODULE_1__app_settings__["a" /* AppSettings */].URL_WEBSOKET_PEER,
             //path: '/peerjs',
             //path: '/',
-            debug: 3,
+            debug: 0,
             secure: true,
             port: 8000,
             id: self.user.key_id
@@ -617,7 +617,6 @@ var ModeDialogMasterComponent = (function () {
         // Receiving a call
         self.peer.on('call', function (receivecall) {
             console.log('Receiving a call');
-            console.log("!!!!!", receivecall);
             self._startLocalVideo(function () {
                 receivecall.answer(self.localStream);
                 self._prepareCall(receivecall);
@@ -795,7 +794,7 @@ var ModeDialogPupilComponent = (function () {
             host: __WEBPACK_IMPORTED_MODULE_2__app_settings__["a" /* AppSettings */].URL_WEBSOKET_PEER,
             //path: '/peerjs',
             //path: '/',
-            debug: 3,
+            debug: 0,
             secure: true,
             port: 8000,
             id: self.user.key_id

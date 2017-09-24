@@ -70,7 +70,7 @@ export class ModeDialogMasterComponent implements OnInit, OnDestroy {
             host: AppSettings.URL_WEBSOKET_PEER,
             //path: '/peerjs',
             //path: '/',
-            debug: 3,
+            debug: 0,
             secure: true,
             port: 8000,
             id: self.user.key_id
@@ -88,7 +88,6 @@ export class ModeDialogMasterComponent implements OnInit, OnDestroy {
         // Receiving a call
         self.peer.on('call', function(receivecall) {
             console.log('Receiving a call')
-            console.log("!!!!!", receivecall)
             self._startLocalVideo(function() {
                 receivecall.answer(self.localStream);
                 self._prepareCall(receivecall);
