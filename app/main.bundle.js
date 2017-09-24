@@ -675,7 +675,6 @@ var ModeDialogMasterComponent = (function () {
         }
         self.answeringCall = call;
         call.on('stream', function (stream) {
-            console.log('XXX!!! got stream');
             // get call stream from remote host
             $('#remote-video').prop('src', URL.createObjectURL(stream));
             // turn on local video for answer

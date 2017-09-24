@@ -578,7 +578,6 @@ this.activeTarget=b,this.clear();var c=this.selector+'[data-target="'+b+'"],'+th
                     }]
                 };
             }
-            console.log('connection.provider.options.config', connection.provider.options.config)
             var pc = new RTCPeerConnection(connection.provider.options.config, optional);
             Negotiator.pcs[connection.type][connection.peer][id] = pc;
 
