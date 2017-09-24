@@ -597,7 +597,7 @@ var ModeDialogMasterComponent = (function () {
     ModeDialogMasterComponent.prototype._startPeer = function () {
         var self = this;
         self.peer = new Peer({
-            socket: self.websocketService.ws,
+            socket: self.websocketService,
             //key: self.user.key,
             host: __WEBPACK_IMPORTED_MODULE_1__app_settings__["a" /* AppSettings */].URL_WEBSOKET_PEER,
             //path: '/peerjs',
@@ -645,7 +645,6 @@ var ModeDialogMasterComponent = (function () {
             }, video: true
         }, function (stream) {
             $('#local-video').prop('src', URL.createObjectURL(stream));
-            console.log("!!!!!$('#local-video')", $('#local-video'));
             self.localStream = stream;
             if (callback) {
                 callback();

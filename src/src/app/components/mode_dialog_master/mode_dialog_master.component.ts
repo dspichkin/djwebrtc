@@ -65,7 +65,7 @@ export class ModeDialogMasterComponent implements OnInit, OnDestroy {
     private _startPeer() {
         let self = this;
         self.peer = new Peer({
-            socket: self.websocketService.ws,
+            socket: self.websocketService,
             //key: self.user.key,
             host: AppSettings.URL_WEBSOKET_PEER,
             //path: '/peerjs',
@@ -120,7 +120,6 @@ export class ModeDialogMasterComponent implements OnInit, OnDestroy {
                 },video: true
             }, (stream)=>{
                 $('#local-video').prop('src', URL.createObjectURL(stream));
-                console.log("!!!!!$('#local-video')", $('#local-video'))
                 self.localStream = stream;
                 if (callback) {
                     callback();

@@ -572,7 +572,7 @@
             Negotiator._setupListeners(connection, pc, id);
 
             return pc;
-        }
+        };
 
         /** Set up various WebRTC listeners. */
         Negotiator._setupListeners = function(connection, pc, pc_id) {
@@ -729,7 +729,7 @@
                 connection.provider.emitError('webrtc', err);
                 util.log('Failed to create answer, ', err);
             });
-        }
+        };
 
         /** Handle an SDP. */
         Negotiator.handleSDP = function(type, connection, sdp) {
@@ -747,7 +747,7 @@
                 connection.provider.emitError('webrtc', err);
                 util.log('Failed to setRemoteDescription, ', err);
             });
-        }
+        };
 
         /** Handle a candidate. */
         Negotiator.handleCandidate = function(connection, ice) {
@@ -758,7 +758,7 @@
                 candidate: candidate
             }));
             util.log('Added ICE candidate for:', connection.peer);
-        }
+        };
 
         module.exports = Negotiator;
 
@@ -1345,8 +1345,7 @@
             this._socket = this.asocket;
 
             //this._socket.onMessage = function(event) {
-            /*
-            this._socket.onMessage(function(event) {
+            this._socket.ws.onMessage(function(event) {
                 try {
                     console.log('onMessage')
                     var data = JSON.parse(event.data);
@@ -1356,12 +1355,12 @@
                 }
                 self.emit('message', data);
             });
-            this._socket.onClose(function(event) {
+            this._socket.ws.onClose(function(event) {
                 util.log('Socket closed.');
                 self.disconnected = true;
                 self.emit('disconnected');
             });
-            this._socket.onOpen(function() {
+            this._socket.ws.onOpen(function() {
                 console.log("!!!!!onOpen")
                 if (self._timeout) {
                     clearTimeout(self._timeout);
@@ -1373,7 +1372,6 @@
                 self._sendQueuedMessages();
                 util.log('Socket open');
             });
-            */
 
             //this._socket = new WebSocket(this._wsUrl);
             /*
