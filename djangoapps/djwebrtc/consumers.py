@@ -114,8 +114,8 @@ def ws_message(message):
                     })
                 })
     else:
-        if data.get('type') != 'HEARBEAT':
-            print ("ws_message data", data)
+        # if data.get('type') != 'HEARBEAT':
+        #    print ("ws_message data", data)
 
         src_id = message.channel_session['client_id']
         if src_id:
