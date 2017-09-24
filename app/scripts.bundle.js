@@ -664,7 +664,7 @@ this.activeTarget=b,this.clear();var c=this.selector+'[data-target="'+b+'"],'+th
                     connection.addStream(stream);
                 }
             };
-        }
+        };
 
         Negotiator.cleanup = function(connection) {
             util.log('Cleaning up PeerConnection to ' + connection.peer);
@@ -675,7 +675,7 @@ this.activeTarget=b,this.clear();var c=this.selector+'[data-target="'+b+'"],'+th
                 pc.close();
                 connection.pc = null;
             }
-        }
+        };
 
         Negotiator._makeOffer = function(connection) {
             var pc = connection.pc;
@@ -710,7 +710,7 @@ this.activeTarget=b,this.clear();var c=this.selector+'[data-target="'+b+'"],'+th
                 connection.provider.emitError('webrtc', err);
                 util.log('Failed to createOffer, ', err);
             }, connection.options.constraints);
-        }
+        };
 
         Negotiator._makeAnswer = function(connection) {
             var pc = connection.pc;
@@ -900,7 +900,6 @@ this.activeTarget=b,this.clear();var c=this.selector+'[data-target="'+b+'"],'+th
                 this.options.id);
 
             this.id = this.options.id;
-            console.log("!!!this.socket", this.socket)
 
             this.socket.on('message', function(data) {
                 self._handleMessage(data);
@@ -1359,9 +1358,9 @@ this.activeTarget=b,this.clear();var c=this.selector+'[data-target="'+b+'"],'+th
 
             //this._socket.onMessage = function(event) {
             this._socket.ws.onMessage(function(event) {
+                var data;
                 try {
-                    console.log('onMessage')
-                    var data = JSON.parse(event.data);
+                    data = JSON.parse(event.data);
                 } catch (e) {
                     util.log('Invalid server message', event.data);
                     return;
@@ -1374,7 +1373,6 @@ this.activeTarget=b,this.clear();var c=this.selector+'[data-target="'+b+'"],'+th
                 self.emit('disconnected');
             });
             this._socket.ws.onOpen(function() {
-                console.log("!!!!!onOpen")
                 if (self._timeout) {
                     clearTimeout(self._timeout);
                     setTimeout(function() {
@@ -1539,8 +1537,6 @@ this.activeTarget=b,this.clear();var c=this.selector+'[data-target="'+b+'"],'+th
             }
 
             var message = JSON.stringify(data);
-            console.log("send message", message)
-            console.log("this._socket", this._socket)
             this._socket.sendCommand(message);
             /*
             if (this._wsOpen()) {

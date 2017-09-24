@@ -803,9 +803,6 @@ var ModeDialogPupilComponent = (function () {
         self.peer.on('open', function (id) {
             console.log('Peer: My peer ID is: ' + id);
             self.peerid = id;
-            self.websocketService.sendCommand({
-                "TEST2": "test2"
-            });
             self._startLocalVideo(function () {
                 var call = self.peer.call(self.activedialog.master.key_id, self.localStream);
                 self._prepareCall(call);

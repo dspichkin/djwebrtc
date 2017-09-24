@@ -84,11 +84,6 @@ export class ModeDialogPupilComponent implements OnInit, OnDestroy {
             console.log('Peer: My peer ID is: ' + id);
             self.peerid = id;
 
-             self.websocketService.sendCommand({
-            "TEST2": "test2"
-        })
-
-
             self._startLocalVideo(function() {
                 let call = self.peer.call(self.activedialog.master.key_id, self.localStream);
                 self._prepareCall(call);
