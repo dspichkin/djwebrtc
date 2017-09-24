@@ -11,9 +11,9 @@ const webSocketConfig = {
 
 @Injectable()
 export class WebSocketService {
-    ws;
-    ready: EventEmitter<any> = new EventEmitter();
-    message: EventEmitter<any> = new EventEmitter();
+    public ws;
+    public ready: EventEmitter<any> = new EventEmitter();
+    public message: EventEmitter<any> = new EventEmitter();
 
     constructor() {
         
@@ -37,7 +37,7 @@ export class WebSocketService {
     }
 
 
-    sendCommand(command) {
+    public sendCommand(command) {
         this.ws.send(command).subscribe(
             (msg)=> {
                 //console.log("msg", msg);

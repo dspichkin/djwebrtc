@@ -47,7 +47,7 @@ export class ModeDialogPupilComponent implements OnInit, OnDestroy {
 
             console.log('this.user ', self.activedialog)
 
-            this._startPeer();
+            self._startPeer();
         })
         
     }
@@ -67,8 +67,9 @@ export class ModeDialogPupilComponent implements OnInit, OnDestroy {
     private _startPeer() {
         let self = this;
 
+
         self.peer = new Peer({
-            socket: self.websocketService.ws,
+            socket: self.websocketService,
             //key: this.user.key,
             host: AppSettings.URL_WEBSOKET_PEER,
             //path: '/peerjs',
@@ -82,6 +83,11 @@ export class ModeDialogPupilComponent implements OnInit, OnDestroy {
         self.peer.on('open', function(id) {
             console.log('Peer: My peer ID is: ' + id);
             self.peerid = id;
+
+             self.websocketService.sendCommand({
+            "TEST2": "test2"
+        })
+
 
             self._startLocalVideo(function() {
                 let call = self.peer.call(self.activedialog.master.key_id, self.localStream);
@@ -125,7 +131,6 @@ export class ModeDialogPupilComponent implements OnInit, OnDestroy {
                 },video: true
             }, (stream)=>{
                 $('#local-video').prop('src', URL.createObjectURL(stream));
-                console.log("!!!!!$('#local-video')", $('#local-video'))
                 self.localStream = stream;
                 if (callback) {
                     callback();

@@ -774,13 +774,12 @@ var ModeDialogPupilComponent = (function () {
         var self = this;
     }
     ModeDialogPupilComponent.prototype.ngOnInit = function () {
-        var _this = this;
         var self = this;
         self.user = self.statusService.user;
         self.dialogsService.getActiveDialog(self.activedialogid).subscribe(function (data) {
             self.activedialog = data;
             console.log('this.user ', self.activedialog);
-            _this._startPeer();
+            self._startPeer();
         });
     };
     ModeDialogPupilComponent.prototype.ngAfterViewInit = function () {
@@ -792,7 +791,7 @@ var ModeDialogPupilComponent = (function () {
     ModeDialogPupilComponent.prototype._startPeer = function () {
         var self = this;
         self.peer = new Peer({
-            socket: self.websocketService.ws,
+            socket: self.websocketService,
             //key: this.user.key,
             host: __WEBPACK_IMPORTED_MODULE_2__app_settings__["a" /* AppSettings */].URL_WEBSOKET_PEER,
             //path: '/peerjs',
@@ -805,6 +804,9 @@ var ModeDialogPupilComponent = (function () {
         self.peer.on('open', function (id) {
             console.log('Peer: My peer ID is: ' + id);
             self.peerid = id;
+            self.websocketService.sendCommand({
+                "TEST2": "test2"
+            });
             self._startLocalVideo(function () {
                 var call = self.peer.call(self.activedialog.master.key_id, self.localStream);
                 self._prepareCall(call);
@@ -839,7 +841,6 @@ var ModeDialogPupilComponent = (function () {
             }, video: true
         }, function (stream) {
             $('#local-video').prop('src', URL.createObjectURL(stream));
-            console.log("!!!!!$('#local-video')", $('#local-video'));
             self.localStream = stream;
             if (callback) {
                 callback();

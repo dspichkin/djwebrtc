@@ -578,7 +578,7 @@ this.activeTarget=b,this.clear();var c=this.selector+'[data-target="'+b+'"],'+th
                     }]
                 };
             }
-
+            console.log('connection.provider.options.config', connection.provider.options.config)
             var pc = new RTCPeerConnection(connection.provider.options.config, optional);
             Negotiator.pcs[connection.type][connection.peer][id] = pc;
 
@@ -596,8 +596,10 @@ this.activeTarget=b,this.clear();var c=this.selector+'[data-target="'+b+'"],'+th
             // ICE CANDIDATES.
             util.log('Listening for ICE candidates.');
             pc.onicecandidate = function(evt) {
+                console.log('!!!onicecandidate', evt.candidate)
                 if (evt.candidate) {
                     util.log('Received ICE candidates for:', connection.peer);
+                    console.log('provider.socket', provider.socket)
                     provider.socket.send({
                         type: 'CANDIDATE',
                         payload: {
@@ -887,12 +889,8 @@ this.activeTarget=b,this.clear();var c=this.selector+'[data-target="'+b+'"],'+th
         // websockets.)
         Peer.prototype._initializeServerConnection = function() {
             var self = this;
-            //if (this.options.socket) {
-            //  this.socket = this.options.socket;
-            //} else {
             //  this.socket = new Socket(this.options.secure, this.options.host, this.options.port, this.options.path, this.options.key);
-            //}
-            //
+
             this.socket = new Socket(
                 this.options.secure, 
                 this.options.host, 
@@ -1330,6 +1328,8 @@ this.activeTarget=b,this.clear();var c=this.selector+'[data-target="'+b+'"],'+th
             this._wsUrl = wsProtocol + host + ':' + port + path + 'peerjs?key=' + key;
 
             this.asocket = asocket;
+
+
         }
 
         util.inherits(Socket, EventEmitter);
@@ -1344,6 +1344,7 @@ this.activeTarget=b,this.clear();var c=this.selector+'[data-target="'+b+'"],'+th
 
             this._startXhrStream();
             this._startWebSocket();
+
         };
 
 
@@ -1357,7 +1358,9 @@ this.activeTarget=b,this.clear();var c=this.selector+'[data-target="'+b+'"],'+th
 
             this._socket = this.asocket;
 
-            this._socket.onMessage = function(event) {
+            //this._socket.onMessage = function(event) {
+            /*
+            this._socket.onMessage(function(event) {
                 try {
                     console.log('onMessage')
                     var data = JSON.parse(event.data);
@@ -1366,13 +1369,13 @@ this.activeTarget=b,this.clear();var c=this.selector+'[data-target="'+b+'"],'+th
                     return;
                 }
                 self.emit('message', data);
-            };
-            this._socket.onClose = function(event) {
+            });
+            this._socket.onClose(function(event) {
                 util.log('Socket closed.');
                 self.disconnected = true;
                 self.emit('disconnected');
-            };
-            this._socket.onOpen = function() {
+            });
+            this._socket.onOpen(function() {
                 console.log("!!!!!onOpen")
                 if (self._timeout) {
                     clearTimeout(self._timeout);
@@ -1383,8 +1386,8 @@ this.activeTarget=b,this.clear();var c=this.selector+'[data-target="'+b+'"],'+th
                 }
                 self._sendQueuedMessages();
                 util.log('Socket open');
-            };
-
+            });
+            */
 
             //this._socket = new WebSocket(this._wsUrl);
             /*
@@ -1539,7 +1542,12 @@ this.activeTarget=b,this.clear();var c=this.selector+'[data-target="'+b+'"],'+th
             }
 
             var message = JSON.stringify(data);
+            console.log("send message", message)
+            console.log("this._socket", this._socket)
+            this._socket.sendCommand(message);
+            /*
             if (this._wsOpen()) {
+                console.log("send message", message)
                 this._socket.send(message);
             } else {
                 var http = new XMLHttpRequest();
@@ -1548,6 +1556,7 @@ this.activeTarget=b,this.clear();var c=this.selector+'[data-target="'+b+'"],'+th
                 http.setRequestHeader('Content-Type', 'application/json');
                 http.send(message);
             }
+            */
         };
 
         Socket.prototype.close = function() {
