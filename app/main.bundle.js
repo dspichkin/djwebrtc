@@ -1165,6 +1165,9 @@ var CallingFromsComponent = (function () {
     };
     CallingFromsComponent.prototype.ngOnChanges = function (changes) {
         //console.log('changes', changes)
+        if (this.loading) {
+            this.loading = false;
+        }
         this._checkInterval();
     };
     CallingFromsComponent.prototype.ngOnDestroy = function () {

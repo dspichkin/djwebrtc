@@ -39,6 +39,9 @@ export class CallingFromsComponent implements OnInit, OnDestroy {
 
     ngOnChanges(changes) {
         //console.log('changes', changes)
+        if (this.loading) {
+            this.loading = false;
+        }
         this._checkInterval();    
     }
     
