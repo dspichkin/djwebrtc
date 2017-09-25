@@ -3,30 +3,29 @@
         <div class="container">
             <div class="col-md-6">
                 <h4>Диалог мастер</h4>
+                <p *ngIf="status_activedialog=='run'"  style="font-size: 12px;color:green;">Диалог запущен</p>
+                <p *ngIf="status_activedialog=='stop'" style="font-size: 12px;color:red;">Диалог остановлен</p>
+                <p *ngIf="status_activedialog=='starting'" style="font-size: 12px;color:blue;">Диалог запускается</p>
             </div>
             <div class="col-md-6" style="text-align: right;">
-                <p style="margin: 0 20px;">{{activedialogid}}</p>
+                <p style="margin: 0 20px;">{{last_hearbeat_from_pupil}} {{activedialogid}}</p>
             </div>
         </div>
     </div>
     <div class="panel-body">
 
-        <div>
-            
-           
+        <div [hidden]="status_activedialog!='run'">
             <div>
-                <video id="remote-video" autoplay="" style="border:2px solid red"></video>
+                <video #remoteVideo autoplay="" style="border:2px solid red"></video>
             </div>
             <div>
-                <video id="local-video" muted="true" autoplay="" style="border:2px solid green"></video>
+                <video #localVideo muted="true" autoplay="" style="border:2px solid green"></video>
             </div>
-
-
         </div>
         
         <div style="margin-top: 30px">
-            <button class="btn btn-warning" (click)="hangPhone()"><span>Сбросить трубку</span></button>
-            <button class="btn btn-warning" (click)="stopDialog()"><span>Выход</span></button>
+            <button  *ngIf="status_activedialog" class="btn btn-warning" (click)="hangPhone()"><span>Сбросить трубку</span></button>
+            <button class="btn btn-warning" (click)="stopDialog()"><span>Выход из режима диалога</span></button>
         </div>
     </div>
 </div>

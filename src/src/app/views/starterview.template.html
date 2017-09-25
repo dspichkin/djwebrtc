@@ -5,8 +5,8 @@
                 <h4>Выберите диалог</h4>
             </div>
             <div class="panel-body">
-                <button class="btn btn-default" [ngClass]="{'btn-info': mode_select_dialog == 2}" (click)="showActiveDialogs()"><span>Диалоги в ожидание игроков</span></button>
-                <button class="btn btn-default" [ngClass]="{'btn-info': mode_select_dialog == 1}" (click)="showDialogs()"><span>Все диалоги</span></button>
+                <button class="btn btn-default" [ngClass]="{'btn-info': mode_select_dialog == 2}" (click)="showActiveDialogs()" [disabled]="loading"><span>Диалоги в ожидание игроков</span></button>
+                <button class="btn btn-default" [ngClass]="{'btn-info': mode_select_dialog == 1}" (click)="showDialogs()" [disabled]="loading"><span>Все диалоги</span></button>
             
                 <div *ngIf="mode_select_dialog == 1" class="row" style="margin: 20px 0;"> 
                     <div class="col-sm-6 col-md-4" *ngFor="let item of dialogs"> 

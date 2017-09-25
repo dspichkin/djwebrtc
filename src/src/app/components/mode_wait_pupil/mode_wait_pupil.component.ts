@@ -62,7 +62,6 @@ export class ModeWaitPupilComponent implements OnInit, OnDestroy {
     }
 
     public handlerRejectfrom(user_key_id) {
-        console.log('user_key_id', user_key_id)
         this.webSocketService.sendCommand({
             command: 'CALLING_MASTER_REJECT',
             target: user_key_id,

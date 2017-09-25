@@ -224,6 +224,7 @@ AppSettings.URL_DIALOG_STOP = AppSettings.base_url + "/dialogs/api/stop/";
 AppSettings.URL_WEBSOKET = "wss://" + document.location.hostname + ':8000/peerjs';
 AppSettings.URL_WEBSOKET_PEER = document.location.hostname;
 AppSettings.CALLING_TIME_INTERVAL = 3000;
+AppSettings.HEARTBEAT_DIALOG_TIMEOUT = 10000;
 AppSettings.MODE_LIST = 'mode_list';
 AppSettings.MODE_WAIT_PUPIL = 'mode_wait_pupil';
 AppSettings.MODE_CALLING = 'mode_calling';
@@ -569,13 +570,14 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 var ModeDialogMasterComponent = (function () {
-    function ModeDialogMasterComponent(statusService, dialogsService, websocketService) {
+    function ModeDialogMasterComponent(statusService, dialogsService, webSocketService) {
         this.statusService = statusService;
         this.dialogsService = dialogsService;
-        this.websocketService = websocketService;
+        this.webSocketService = webSocketService;
         this.stopdialog = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]();
         this.userMedia = navigator;
         this.loading = false;
+        this.status_activedialog = 'starting'; //starting, run, stop
         var self = this;
     }
     ModeDialogMasterComponent.prototype.ngOnInit = function () {
@@ -587,6 +589,17 @@ var ModeDialogMasterComponent = (function () {
             console.log('this.user ', self.activedialog);
             _this._startPeer();
         });
+        self.webSocketService.message.subscribe(function (data) {
+            var message = JSON.parse(data);
+            if (message.command == "DIALOG_STOP") {
+                self._closeDialog();
+                self.status_activedialog = 'stop';
+            }
+            if (message.command == "HEARBEAT_DIALOG_PUPIL") {
+                self.last_hearbeat_from_pupil = new Date();
+            }
+        });
+        self._runHearbeatPupil();
     };
     ModeDialogMasterComponent.prototype.ngAfterViewInit = function () {
     };
@@ -597,11 +610,8 @@ var ModeDialogMasterComponent = (function () {
     ModeDialogMasterComponent.prototype._startPeer = function () {
         var self = this;
         self.peer = new Peer({
-            socket: self.websocketService,
-            //key: self.user.key,
+            socket: self.webSocketService,
             host: __WEBPACK_IMPORTED_MODULE_1__app_settings__["a" /* AppSettings */].URL_WEBSOKET_PEER,
-            //path: '/peerjs',
-            //path: '/',
             debug: 0,
             secure: true,
             port: 8000,
@@ -618,6 +628,7 @@ var ModeDialogMasterComponent = (function () {
         self.peer.on('call', function (receivecall) {
             console.log('Receiving a call');
             self._startLocalVideo(function () {
+                self.status_activedialog = 'run';
                 receivecall.answer(self.localStream);
                 self._prepareCall(receivecall);
             });
@@ -643,7 +654,7 @@ var ModeDialogMasterComponent = (function () {
                 "optional": []
             }, video: true
         }, function (stream) {
-            $('#local-video').prop('src', URL.createObjectURL(stream));
+            self.localVideo.nativeElement.src = URL.createObjectURL(stream);
             self.localStream = stream;
             if (callback) {
                 callback();
@@ -651,22 +662,6 @@ var ModeDialogMasterComponent = (function () {
         }, function (error) {
             console.log("ERROR getUserMedia: ", error);
         });
-        /*
-        // Get audio/video stream
-        window.navigator.getUserMedia({
-            audio: true,
-            video: true
-        }, function(stream) {
-            $('#local-video').prop('src', URL.createObjectURL(stream));
-            console.log("!!!!!$('#local-video')", $('#local-video'))
-            self.localStream = stream;
-            if (callback) {
-                callback();
-            }
-        }, function(error) {
-            console.log("ERROR getUserMedia: ", error);
-        });
-        */
     };
     ModeDialogMasterComponent.prototype._prepareCall = function (call) {
         var self = this;
@@ -676,35 +671,68 @@ var ModeDialogMasterComponent = (function () {
         self.answeringCall = call;
         call.on('stream', function (stream) {
             // get call stream from remote host
-            $('#remote-video').prop('src', URL.createObjectURL(stream));
-            // turn on local video for answer
-            //startLocalVideo(function() {
-            //    window.peer.call(call.peer, window.localStream);
-            //});
+            self.remoteVideo.nativeElement.src = URL.createObjectURL(stream);
         });
         call.on('close', function () {
             console.log("CLOSE");
-            if (self.answeringCall) {
-                self.answeringCall.close();
-            }
-            if (self.localStream) {
-                self.localStream.getTracks().forEach(function (track) {
-                    track.stop();
-                });
-                self.localStream.src = "";
-            }
-            if ($('#remote-video')) {
-                $('#remote-video').src = "";
-            }
+            self._closeDialog();
         });
+    };
+    ModeDialogMasterComponent.prototype._closeDialog = function () {
+        var self = this;
+        if (self.answeringCall) {
+            self.answeringCall.close();
+        }
+        if (self.localStream) {
+            self.localStream.getTracks().forEach(function (track) {
+                track.stop();
+            });
+            self.localStream.src = "";
+        }
+        if (self.remoteVideo.nativeElement.src) {
+            self.remoteVideo.nativeElement.src = "";
+        }
     };
     ModeDialogMasterComponent.prototype.stopDialog = function () {
         this.stopdialog.emit(this.activedialogid);
+        this._closeDialog();
     };
     ModeDialogMasterComponent.prototype.hangPhone = function () {
         if (this.answeringCall) {
             this.answeringCall.close();
         }
+    };
+    ModeDialogMasterComponent.prototype._runHearbeatPupil = function () {
+        var self = this;
+        if (self._checkLastMessageFromPupil) {
+            if (self.webSocketService.ws.socket.readyState == 1) {
+                if (self.answeringCall && self.answeringCall.open) {
+                    console.log('_runHearbeatPupil');
+                    self.webSocketService.sendCommand({
+                        command: "HEARBEAT_DIALOG_MASTER",
+                        target: self.activedialog.id
+                    });
+                }
+            }
+        }
+        if (self._timeout) {
+            clearTimeout(self._timeout);
+        }
+        self._timeout = setTimeout(function () {
+            self._runHearbeatPupil();
+        }, 4000);
+    };
+    ModeDialogMasterComponent.prototype._checkLastMessageFromPupil = function () {
+        var self = this;
+        if (new Date(self.last_hearbeat_from_pupil).getTime() +
+            __WEBPACK_IMPORTED_MODULE_1__app_settings__["a" /* AppSettings */].HEARTBEAT_DIALOG_TIMEOUT < new Date().getTime()) {
+            self.webSocketService.sendCommand({
+                command: "STOP_ACTIVE_DIALOG",
+                target: self.activedialog.id,
+            });
+            return false;
+        }
+        return true;
     };
     return ModeDialogMasterComponent;
 }());
@@ -716,15 +744,23 @@ __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Output"])(),
     __metadata("design:type", Object)
 ], ModeDialogMasterComponent.prototype, "stopdialog", void 0);
+__decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewChild"])('remoteVideo'),
+    __metadata("design:type", typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["ElementRef"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_core__["ElementRef"]) === "function" && _a || Object)
+], ModeDialogMasterComponent.prototype, "remoteVideo", void 0);
+__decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewChild"])('localVideo'),
+    __metadata("design:type", typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["ElementRef"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_core__["ElementRef"]) === "function" && _b || Object)
+], ModeDialogMasterComponent.prototype, "localVideo", void 0);
 ModeDialogMasterComponent = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
         selector: 'modedialogmaster',
         template: __webpack_require__("../../../../../src/app/components/mode_dialog_master/mode_dialog_master.template.html")
     }),
-    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__services_status_service__["a" /* StatusService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__services_status_service__["a" /* StatusService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_3__services_dialogs_service__["a" /* DialogsService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__services_dialogs_service__["a" /* DialogsService */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_4__services_websocket_service__["a" /* WebSocketService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__services_websocket_service__["a" /* WebSocketService */]) === "function" && _c || Object])
+    __metadata("design:paramtypes", [typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_2__services_status_service__["a" /* StatusService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__services_status_service__["a" /* StatusService */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_3__services_dialogs_service__["a" /* DialogsService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__services_dialogs_service__["a" /* DialogsService */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_4__services_websocket_service__["a" /* WebSocketService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__services_websocket_service__["a" /* WebSocketService */]) === "function" && _e || Object])
 ], ModeDialogMasterComponent);
 
-var _a, _b, _c;
+var _a, _b, _c, _d, _e;
 //# sourceMappingURL=mode_dialog_master.component.js.map
 
 /***/ }),
@@ -732,7 +768,7 @@ var _a, _b, _c;
 /***/ "../../../../../src/app/components/mode_dialog_master/mode_dialog_master.template.html":
 /***/ (function(module, exports) {
 
-module.exports = " <div class=\"panel panel-default\">\n     <div class=\"panel-heading\">\n        <div class=\"container\">\n            <div class=\"col-md-6\">\n                <h4>Диалог мастер</h4>\n            </div>\n            <div class=\"col-md-6\" style=\"text-align: right;\">\n                <p style=\"margin: 0 20px;\">{{activedialogid}}</p>\n            </div>\n        </div>\n    </div>\n    <div class=\"panel-body\">\n\n        <div>\n            \n           \n            <div>\n                <video id=\"remote-video\" autoplay=\"\" style=\"border:2px solid red\"></video>\n            </div>\n            <div>\n                <video id=\"local-video\" muted=\"true\" autoplay=\"\" style=\"border:2px solid green\"></video>\n            </div>\n\n\n        </div>\n        \n        <div style=\"margin-top: 30px\">\n            <button class=\"btn btn-warning\" (click)=\"hangPhone()\"><span>Сбросить трубку</span></button>\n            <button class=\"btn btn-warning\" (click)=\"stopDialog()\"><span>Выход</span></button>\n        </div>\n    </div>\n</div>"
+module.exports = " <div class=\"panel panel-default\">\n     <div class=\"panel-heading\">\n        <div class=\"container\">\n            <div class=\"col-md-6\">\n                <h4>Диалог мастер</h4>\n                <p *ngIf=\"status_activedialog=='run'\"  style=\"font-size: 12px;color:green;\">Диалог запущен</p>\n                <p *ngIf=\"status_activedialog=='stop'\" style=\"font-size: 12px;color:red;\">Диалог остановлен</p>\n                <p *ngIf=\"status_activedialog=='starting'\" style=\"font-size: 12px;color:blue;\">Диалог запускается</p>\n            </div>\n            <div class=\"col-md-6\" style=\"text-align: right;\">\n                <p style=\"margin: 0 20px;\">{{last_hearbeat_from_pupil}} {{activedialogid}}</p>\n            </div>\n        </div>\n    </div>\n    <div class=\"panel-body\">\n\n        <div [hidden]=\"status_activedialog!='run'\">\n            <div>\n                <video #remoteVideo autoplay=\"\" style=\"border:2px solid red\"></video>\n            </div>\n            <div>\n                <video #localVideo muted=\"true\" autoplay=\"\" style=\"border:2px solid green\"></video>\n            </div>\n        </div>\n        \n        <div style=\"margin-top: 30px\">\n            <button  *ngIf=\"status_activedialog\" class=\"btn btn-warning\" (click)=\"hangPhone()\"><span>Сбросить трубку</span></button>\n            <button class=\"btn btn-warning\" (click)=\"stopDialog()\"><span>Выход из режима диалога</span></button>\n        </div>\n    </div>\n</div>"
 
 /***/ }),
 
@@ -761,13 +797,14 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 var ModeDialogPupilComponent = (function () {
-    function ModeDialogPupilComponent(statusService, dialogsService, websocketService) {
+    function ModeDialogPupilComponent(statusService, dialogsService, webSocketService) {
         this.statusService = statusService;
         this.dialogsService = dialogsService;
-        this.websocketService = websocketService;
+        this.webSocketService = webSocketService;
         this.stopdialog = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]();
         this.userMedia = navigator;
         this.loading = false;
+        this.status_activedialog = 'starting';
         var self = this;
     }
     ModeDialogPupilComponent.prototype.ngOnInit = function () {
@@ -775,9 +812,20 @@ var ModeDialogPupilComponent = (function () {
         self.user = self.statusService.user;
         self.dialogsService.getActiveDialog(self.activedialogid).subscribe(function (data) {
             self.activedialog = data;
-            console.log('this.user ', self.activedialog);
+            //console.log('this.user ', self.activedialog)
             self._startPeer();
         });
+        self.webSocketService.message.subscribe(function (data) {
+            var message = JSON.parse(data);
+            if (message.command == "DIALOG_STOP") {
+                self._closeDialog();
+                self.status_activedialog = 'stop';
+            }
+            if (message.command == "HEARBEAT_DIALOG_MASTER") {
+                self.last_hearbeat_from_master = new Date();
+            }
+        });
+        self._runHearbeatPupil();
     };
     ModeDialogPupilComponent.prototype.ngAfterViewInit = function () {
     };
@@ -788,7 +836,7 @@ var ModeDialogPupilComponent = (function () {
     ModeDialogPupilComponent.prototype._startPeer = function () {
         var self = this;
         self.peer = new Peer({
-            socket: self.websocketService,
+            socket: self.webSocketService,
             //key: this.user.key,
             host: __WEBPACK_IMPORTED_MODULE_2__app_settings__["a" /* AppSettings */].URL_WEBSOKET_PEER,
             //path: '/peerjs',
@@ -834,7 +882,9 @@ var ModeDialogPupilComponent = (function () {
                 "optional": []
             }, video: true
         }, function (stream) {
-            $('#local-video').prop('src', URL.createObjectURL(stream));
+            console.log('self.localVideo', self.localVideo);
+            self.localVideo.nativeElement.src = URL.createObjectURL(stream);
+            //$('#local-video').prop('src', URL.createObjectURL(stream));
             self.localStream = stream;
             if (callback) {
                 callback();
@@ -842,21 +892,6 @@ var ModeDialogPupilComponent = (function () {
         }, function (error) {
             console.log("ERROR getUserMedia: ", error);
         });
-        /*
-        // Get audio/video stream
-        this.userMedia.getUserMedia({
-            audio: true,
-            video: true
-        }, function(stream) {
-            $('#local-video').prop('src', URL.createObjectURL(stream));
-            self.localStream = stream;
-            if (callback) {
-                callback();
-            }
-        }, function(error) {
-            console.log("ERROR getUserMedia: ", error);
-        });
-        */
     };
     ModeDialogPupilComponent.prototype._prepareCall = function (call) {
         var self = this;
@@ -867,35 +902,71 @@ var ModeDialogPupilComponent = (function () {
         call.on('stream', function (stream) {
             console.log('got stream');
             // get call stream from remote host
-            $('#remote-video').prop('src', URL.createObjectURL(stream));
-            // turn on local video for answer
-            //startLocalVideo(function() {
-            //    window.peer.call(call.peer, window.localStream);
-            //});
+            self.remoteVideo.nativeElement.src = URL.createObjectURL(stream);
+            self.status_activedialog = 'run';
         });
         call.on('close', function () {
             console.log("CLOSE");
-            if (self.callingCall) {
-                self.callingCall.close();
-            }
-            if (self.localStream) {
-                self.localStream.getTracks().forEach(function (track) {
-                    track.stop();
-                });
-                self.localStream.src = "";
-            }
-            if ($('#remote-video')) {
-                $('#remote-video').src = "";
-            }
+            self._closeDialog();
         });
     };
+    ModeDialogPupilComponent.prototype._closeDialog = function () {
+        var self = this;
+        if (self.callingCall) {
+            self.callingCall.close();
+        }
+        if (self.localStream) {
+            self.localStream.getTracks().forEach(function (track) {
+                track.stop();
+            });
+            self.localStream.src = "";
+        }
+        if (self.remoteVideo.nativeElement.src) {
+            self.remoteVideo.nativeElement.src = "";
+        }
+    };
     ModeDialogPupilComponent.prototype.stopDialog = function () {
-        this.stopdialog.emit(this.activedialogid);
+        this.stopdialog.emit({
+            activedialogid: this.activedialogid,
+            type: 'pupil'
+        });
+        this._closeDialog();
     };
     ModeDialogPupilComponent.prototype.hangPhone = function () {
         if (this.callingCall) {
             this.callingCall.close();
         }
+    };
+    ModeDialogPupilComponent.prototype._runHearbeatPupil = function () {
+        var self = this;
+        if (self._checkLastMessageFromPupil) {
+            if (self.webSocketService.ws.socket.readyState == 1) {
+                if (self.callingCall && self.callingCall.open) {
+                    self.webSocketService.sendCommand({
+                        command: "HEARBEAT_DIALOG_PUPIL",
+                        target: self.activedialog.id
+                    });
+                }
+            }
+        }
+        if (self._timeout) {
+            clearTimeout(self._timeout);
+        }
+        self._timeout = setTimeout(function () {
+            self._runHearbeatPupil();
+        }, 4000);
+    };
+    ModeDialogPupilComponent.prototype._checkLastMessageFromPupil = function () {
+        var self = this;
+        if (new Date(self.last_hearbeat_from_master).getTime() +
+            __WEBPACK_IMPORTED_MODULE_2__app_settings__["a" /* AppSettings */].HEARTBEAT_DIALOG_TIMEOUT < new Date().getTime()) {
+            self.webSocketService.sendCommand({
+                command: "STOP_ACTIVE_DIALOG",
+                target: self.activedialog.id,
+            });
+            return false;
+        }
+        return true;
     };
     return ModeDialogPupilComponent;
 }());
@@ -907,15 +978,23 @@ __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Output"])(),
     __metadata("design:type", Object)
 ], ModeDialogPupilComponent.prototype, "stopdialog", void 0);
+__decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewChild"])('remoteVideo'),
+    __metadata("design:type", typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["ElementRef"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_core__["ElementRef"]) === "function" && _a || Object)
+], ModeDialogPupilComponent.prototype, "remoteVideo", void 0);
+__decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewChild"])('localVideo'),
+    __metadata("design:type", typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["ElementRef"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_core__["ElementRef"]) === "function" && _b || Object)
+], ModeDialogPupilComponent.prototype, "localVideo", void 0);
 ModeDialogPupilComponent = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
         selector: 'modedialogpupil',
         template: __webpack_require__("../../../../../src/app/components/mode_dialog_pupil/mode_dialog_pupil.template.html")
     }),
-    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__services_status_service__["a" /* StatusService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__services_status_service__["a" /* StatusService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_3__services_dialogs_service__["a" /* DialogsService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__services_dialogs_service__["a" /* DialogsService */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_4__services_websocket_service__["a" /* WebSocketService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__services_websocket_service__["a" /* WebSocketService */]) === "function" && _c || Object])
+    __metadata("design:paramtypes", [typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_1__services_status_service__["a" /* StatusService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__services_status_service__["a" /* StatusService */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_3__services_dialogs_service__["a" /* DialogsService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__services_dialogs_service__["a" /* DialogsService */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_4__services_websocket_service__["a" /* WebSocketService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__services_websocket_service__["a" /* WebSocketService */]) === "function" && _e || Object])
 ], ModeDialogPupilComponent);
 
-var _a, _b, _c;
+var _a, _b, _c, _d, _e;
 //# sourceMappingURL=mode_dialog_pupil.component.js.map
 
 /***/ }),
@@ -923,7 +1002,7 @@ var _a, _b, _c;
 /***/ "../../../../../src/app/components/mode_dialog_pupil/mode_dialog_pupil.template.html":
 /***/ (function(module, exports) {
 
-module.exports = " <div class=\"panel panel-default\">\n     <div class=\"panel-heading\">\n        <div class=\"container\">\n            <div class=\"col-md-6\">\n                <h4>Диалог ученик</h4>\n            </div>\n            <div class=\"col-md-6\" style=\"text-align: right;\">\n                <p style=\"margin: 0 20px;\">{{activedialogid}}</p>\n            </div>\n        </div>\n    </div>\n    <div class=\"panel-body\">\n\n        <div>\n            \n            <div>\n                <video id=\"remote-video\" autoplay=\"\" style=\"border:2px solid red\"></video>\n            </div>\n            <div>\n                <video id=\"local-video\" muted=\"true\" autoplay=\"\" style=\"border:2px solid green\"></video>\n            </div>\n\n\n        </div>\n        \n        <div style=\"margin-top: 30px\">\n             <button class=\"btn btn-warning\" (click)=\"hangPhone()\"><span>Сбросить трубку</span></button>\n            <button class=\"btn btn-warning\" (click)=\"stopDialog()\"><span>Выход</span></button>\n        </div>\n    </div>\n</div>"
+module.exports = " <div class=\"panel panel-default\">\n     <div class=\"panel-heading\">\n        <div class=\"container\">\n            <div class=\"col-md-6\">\n                <h4>Диалог ученик </h4>\n                <p *ngIf=\"status_activedialog=='run'\"  style=\"font-size: 12px;color:green;\">Диалог запущен</p>\n                <p *ngIf=\"status_activedialog=='stop'\" style=\"font-size: 12px;color:red;\">Диалог остановлен</p>\n                <p *ngIf=\"status_activedialog=='starting'\" style=\"font-size: 12px;color:blue;\">Диалог запускается</p>\n            </div>\n            <div class=\"col-md-6\" style=\"text-align: right;\">\n                <p style=\"margin: 0 20px;\">{{last_hearbeat_from_master}} {{activedialogid}}</p>\n            </div>\n        </div>\n    </div>\n    <div class=\"panel-body\">\n\n        <div [hidden]=\"status_activedialog != 'run'\">\n            \n            <div>\n                <video #remoteVideo autoplay=\"\" style=\"border:2px solid red\"></video>\n            </div>\n            <div>\n                <video #localVideo muted=\"true\" autoplay=\"\" style=\"border:2px solid green\"></video>\n            </div>\n\n\n        </div>\n        \n        <div style=\"margin-top: 30px\">\n             <button *ngIf=\"status_activedialog\" class=\"btn btn-warning\" (click)=\"hangPhone()\"><span>Сбросить трубку</span></button>\n            <button class=\"btn btn-warning\" (click)=\"stopDialog()\"><span>Выход из режима диалога</span></button>\n        </div>\n    </div>\n</div>"
 
 /***/ }),
 
@@ -975,7 +1054,6 @@ var ModeWaitPupilComponent = (function () {
     ModeWaitPupilComponent.prototype.ngOnDestroy = function () {
     };
     ModeWaitPupilComponent.prototype.handlerRejectfrom = function (user_key_id) {
-        console.log('user_key_id', user_key_id);
         this.webSocketService.sendCommand({
             command: 'CALLING_MASTER_REJECT',
             target: user_key_id,
@@ -1351,6 +1429,7 @@ var WebSocketService = (function () {
     function WebSocketService() {
         this.ready = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]();
         this.message = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]();
+        this.error = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]();
     }
     WebSocketService.prototype.init = function (user_key, callback) {
         var self = this;
@@ -1365,6 +1444,9 @@ var WebSocketService = (function () {
             if (msg.type == 'message') {
                 self.message.emit(msg.data);
             }
+        });
+        this.ws.onError(function (msg) {
+            self.error.emit(msg);
         });
     };
     WebSocketService.prototype.sendCommand = function (command) {
@@ -1488,7 +1570,7 @@ var StarterViewComponent = (function () {
         this.mode_select_dialog = 1;
         this.activedialog = null;
         this.activedialog_id = null;
-        this.loading = false;
+        this.loading = true;
         this.reject_call_from = null;
         this._CALLING_TIME_INTERVAL = 3000;
     }
@@ -1519,15 +1601,21 @@ var StarterViewComponent = (function () {
                 self.activedialog_id = message.dialog;
                 self.mode = __WEBPACK_IMPORTED_MODULE_4__app_settings__["a" /* AppSettings */].MODE_DIALOG_PUPIL;
             }
-            if (message.command == "STOP_DIALOG_MASTER") {
+            if (message.command == "EXIT_FROM_ACTIVE_DIALOG_BY_PUPIL") {
+                console.log("EXIT_FROM_ACTIVE_DIALOG_BY_PUPIL");
                 self.mode = __WEBPACK_IMPORTED_MODULE_4__app_settings__["a" /* AppSettings */].MODE_LIST;
-                //ToDo update status
+                self.statusService.init();
             }
-            if (message.command == "STOP_DIALOG_PUPIL") {
+            if (message.command == "EXIT_FROM_ACTIVE_DIALOG_BY_MASTER") {
+                console.log("EXIT_FROM_ACTIVE_DIALOG_BY_MASTER");
                 self.mode = __WEBPACK_IMPORTED_MODULE_4__app_settings__["a" /* AppSettings */].MODE_LIST;
-                //ToDo update status
+                self.statusService.init();
             }
         });
+        self.webSocketService.error.subscribe(function (err) {
+            console.log("Error", err);
+        });
+        //self._runGetActiveDialogs();
     };
     StarterViewComponent.prototype.ngOnDestroy = function () {
     };
@@ -1549,11 +1637,23 @@ var StarterViewComponent = (function () {
     };
     StarterViewComponent.prototype._updateActiveDialogs = function () {
         var _this = this;
+        console.log('_updateActiveDialogs');
         this.loading = true;
         this.dialogsService.getActiveDialogs().subscribe(function (data) {
             _this.activedialogs = data;
             _this.loading = false;
         });
+    };
+    StarterViewComponent.prototype._runGetActiveDialogs = function () {
+        var self = this;
+        if (self._intervalid) {
+            clearInterval(self._intervalid);
+        }
+        self._intervalid = setInterval(function () {
+            if (self.mode == __WEBPACK_IMPORTED_MODULE_4__app_settings__["a" /* AppSettings */].MODE_LIST) {
+                self._updateActiveDialogs();
+            }
+        }, 10000);
     };
     StarterViewComponent.prototype.runDialog = function (dialog) {
         var self = this;
@@ -1574,7 +1674,6 @@ var StarterViewComponent = (function () {
         self._callingDialog(dialog.id);
     };
     StarterViewComponent.prototype._callingDialog = function (activedialog_id) {
-        // console.log("_callingDialog")
         var self = this;
         if (self.mode == __WEBPACK_IMPORTED_MODULE_4__app_settings__["a" /* AppSettings */].MODE_CALLING) {
             self.calling_time = new Date();
@@ -1591,6 +1690,7 @@ var StarterViewComponent = (function () {
     StarterViewComponent.prototype.handlerStopCalling = function ($event) {
         this.callingdialog = null;
         this.mode = __WEBPACK_IMPORTED_MODULE_4__app_settings__["a" /* AppSettings */].MODE_LIST;
+        this._updateActiveDialogs();
     };
     StarterViewComponent.prototype.handelerStopWaitDialog = function (data) {
         if (data.status) {
@@ -1599,7 +1699,6 @@ var StarterViewComponent = (function () {
         }
     };
     StarterViewComponent.prototype.handlerAcceptCall = function (user_key_id) {
-        //this.mode = AppSettings.MODE_DIALOG_M;
         var self = this;
         self.webSocketService.sendCommand({
             command: 'START_DIALOG',
@@ -1611,19 +1710,21 @@ var StarterViewComponent = (function () {
     StarterViewComponent.prototype.handelerStopDialog = function (data) {
         var self = this;
         self.loading = true;
-        console.log('data', data);
-        self.webSocketService.sendCommand({
-            command: 'STOP_ACTIVE_DIALOG',
-            target: data,
-            user: self.user.key_id
-        });
-        /*
-        self.dialogsService.stopActiveDialog(self.activedialog_id).subscribe((data) => {
-            console.log(data)
-            self.loading = false;
-            self.mode = AppSettings.MODE_LIST;
-        });
-        */
+        var command;
+        if (data.type == 'pupil') {
+            command = {
+                command: 'EXIT_FROM_ACTIVE_DIALOG_BY_PUPIL',
+                target: data.activedialogid,
+            };
+        }
+        if (data.type == 'master') {
+            command = {
+                command: 'EXIT_FROM_ACTIVE_DIALOG_BY_MASTER',
+                target: data.activedialogid
+            };
+        }
+        self.webSocketService.sendCommand(command);
+        this._updateActiveDialogs();
     };
     return StarterViewComponent;
 }());
@@ -1643,7 +1744,7 @@ var _a, _b, _c;
 /***/ "../../../../../src/app/views/starterview.template.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container\">\n    <div class=\"row\">\n        <div *ngIf=\"mode == 'mode_list'\" class=\"panel panel-default\">\n            <div class=\"panel-heading\">\n                <h4>Выберите диалог</h4>\n            </div>\n            <div class=\"panel-body\">\n                <button class=\"btn btn-default\" [ngClass]=\"{'btn-info': mode_select_dialog == 2}\" (click)=\"showActiveDialogs()\"><span>Диалоги в ожидание игроков</span></button>\n                <button class=\"btn btn-default\" [ngClass]=\"{'btn-info': mode_select_dialog == 1}\" (click)=\"showDialogs()\"><span>Все диалоги</span></button>\n            \n                <div *ngIf=\"mode_select_dialog == 1\" class=\"row\" style=\"margin: 20px 0;\"> \n                    <div class=\"col-sm-6 col-md-4\" *ngFor=\"let item of dialogs\"> \n                        <div class=\"thumbnail\"> \n                            <img alt=\"100%x200\" data-src=\"holder.js/100%x200\" src=\"data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/PjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iMjQyIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDI0MiAyMDAiIHByZXNlcnZlQXNwZWN0UmF0aW89Im5vbmUiPjwhLS0KU291cmNlIFVSTDogaG9sZGVyLmpzLzEwMCV4MjAwCkNyZWF0ZWQgd2l0aCBIb2xkZXIuanMgMi42LjAuCkxlYXJuIG1vcmUgYXQgaHR0cDovL2hvbGRlcmpzLmNvbQooYykgMjAxMi0yMDE1IEl2YW4gTWFsb3BpbnNreSAtIGh0dHA6Ly9pbXNreS5jbwotLT48ZGVmcz48c3R5bGUgdHlwZT0idGV4dC9jc3MiPjwhW0NEQVRBWyNob2xkZXJfMTVlOTZiYzA5NjUgdGV4dCB7IGZpbGw6I0FBQUFBQTtmb250LXdlaWdodDpib2xkO2ZvbnQtZmFtaWx5OkFyaWFsLCBIZWx2ZXRpY2EsIE9wZW4gU2Fucywgc2Fucy1zZXJpZiwgbW9ub3NwYWNlO2ZvbnQtc2l6ZToxMnB0IH0gXV0+PC9zdHlsZT48L2RlZnM+PGcgaWQ9ImhvbGRlcl8xNWU5NmJjMDk2NSI+PHJlY3Qgd2lkdGg9IjI0MiIgaGVpZ2h0PSIyMDAiIGZpbGw9IiNFRUVFRUUiLz48Zz48dGV4dCB4PSI4OS44NTkzNzUiIHk9IjEwNS40Ij4yNDJ4MjAwPC90ZXh0PjwvZz48L2c+PC9zdmc+\" data-holder-rendered=\"true\" style=\"height: 100px; width: 100%; display: block;\"> \n                            <div class=\"caption\"> \n                                <h3>{{item.name}}</h3> \n                                <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p> \n                                <p>\n                                    <button class=\"btn btn-primary\" (click)=\"runDialog(item)\">\n                                        Запустить диалог и ждать игрока\n                                    </button> \n                                </p> \n                            </div> \n                        </div> \n                    </div> \n                </div>\n\n\n                <div *ngIf=\"mode_select_dialog == 2\" class=\"row\" style=\"margin: 20px 0;\"> \n                    <div class=\"col-sm-6 col-md-4\" *ngFor=\"let item of activedialogs\"> \n                        <div class=\"thumbnail\"> \n                            <img alt=\"100%x200\" data-src=\"holder.js/100%x200\" src=\"data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/PjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iMjQyIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDI0MiAyMDAiIHByZXNlcnZlQXNwZWN0UmF0aW89Im5vbmUiPjwhLS0KU291cmNlIFVSTDogaG9sZGVyLmpzLzEwMCV4MjAwCkNyZWF0ZWQgd2l0aCBIb2xkZXIuanMgMi42LjAuCkxlYXJuIG1vcmUgYXQgaHR0cDovL2hvbGRlcmpzLmNvbQooYykgMjAxMi0yMDE1IEl2YW4gTWFsb3BpbnNreSAtIGh0dHA6Ly9pbXNreS5jbwotLT48ZGVmcz48c3R5bGUgdHlwZT0idGV4dC9jc3MiPjwhW0NEQVRBWyNob2xkZXJfMTVlOTZiYzA5NjUgdGV4dCB7IGZpbGw6I0FBQUFBQTtmb250LXdlaWdodDpib2xkO2ZvbnQtZmFtaWx5OkFyaWFsLCBIZWx2ZXRpY2EsIE9wZW4gU2Fucywgc2Fucy1zZXJpZiwgbW9ub3NwYWNlO2ZvbnQtc2l6ZToxMnB0IH0gXV0+PC9zdHlsZT48L2RlZnM+PGcgaWQ9ImhvbGRlcl8xNWU5NmJjMDk2NSI+PHJlY3Qgd2lkdGg9IjI0MiIgaGVpZ2h0PSIyMDAiIGZpbGw9IiNFRUVFRUUiLz48Zz48dGV4dCB4PSI4OS44NTkzNzUiIHk9IjEwNS40Ij4yNDJ4MjAwPC90ZXh0PjwvZz48L2c+PC9zdmc+\" data-holder-rendered=\"true\" style=\"height: 100px; width: 100%; display: block;\"> \n                            <div class=\"caption\"> \n                                <h3>{{item.dialog?.name}}</h3> \n                                <p style=\"text-align: right;\">{{item.master?.fio}}</p>\n                                <p style=\"text-align: right;\">запущено: {{item.created_at| date:\"hh:mm dd-MM-yyyy\"}}</p>\n                                <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p> \n                                <p>\n                                    <button class=\"btn btn-primary\" (click)=\"callDialog(item)\">\n                                        Войти\n                                    </button> \n                                </p> \n                            </div> \n                        </div> \n                    </div> \n                </div>\n\n\n            </div>\n        </div>\n\n        <div *ngIf=\"mode == 'mode_wait_pupil'\">\n            <modewaitpupil [user]=\"user\" [activedialog]=\"activedialog\" (stopwaitingdialog)=\"handelerStopWaitDialog($event)\" (acceptcall)=\"handlerAcceptCall($event)\"></modewaitpupil>\n        </div>\n\n\n\n        <div *ngIf=\"mode == 'mode_calling'\">\n            <modecalling [callingdialog]=\"callingdialog\" (stopcalling)=\"handlerStopCalling($event)\"></modecalling>\n        </div>\n\n        \n        <div *ngIf=\"mode == 'mode_dialog_master'\">\n            <modedialogmaster [activedialogid]=\"activedialog_id\" (stopdialog)=\"handelerStopDialog($event)\"></modedialogmaster>\n        </div>\n\n        <div *ngIf=\"mode == 'mode_dialog_pupil'\">\n            <modedialogpupil [activedialogid]=\"activedialog_id\" (stopdialog)=\"handelerStopDialog($event)\"></modedialogpupil>\n        </div>\n\n    </div>\n</div>\n\n"
+module.exports = "<div class=\"container\">\n    <div class=\"row\">\n        <div *ngIf=\"mode == 'mode_list'\" class=\"panel panel-default\">\n            <div class=\"panel-heading\">\n                <h4>Выберите диалог</h4>\n            </div>\n            <div class=\"panel-body\">\n                <button class=\"btn btn-default\" [ngClass]=\"{'btn-info': mode_select_dialog == 2}\" (click)=\"showActiveDialogs()\" [disabled]=\"loading\"><span>Диалоги в ожидание игроков</span></button>\n                <button class=\"btn btn-default\" [ngClass]=\"{'btn-info': mode_select_dialog == 1}\" (click)=\"showDialogs()\" [disabled]=\"loading\"><span>Все диалоги</span></button>\n            \n                <div *ngIf=\"mode_select_dialog == 1\" class=\"row\" style=\"margin: 20px 0;\"> \n                    <div class=\"col-sm-6 col-md-4\" *ngFor=\"let item of dialogs\"> \n                        <div class=\"thumbnail\"> \n                            <img alt=\"100%x200\" data-src=\"holder.js/100%x200\" src=\"data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/PjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iMjQyIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDI0MiAyMDAiIHByZXNlcnZlQXNwZWN0UmF0aW89Im5vbmUiPjwhLS0KU291cmNlIFVSTDogaG9sZGVyLmpzLzEwMCV4MjAwCkNyZWF0ZWQgd2l0aCBIb2xkZXIuanMgMi42LjAuCkxlYXJuIG1vcmUgYXQgaHR0cDovL2hvbGRlcmpzLmNvbQooYykgMjAxMi0yMDE1IEl2YW4gTWFsb3BpbnNreSAtIGh0dHA6Ly9pbXNreS5jbwotLT48ZGVmcz48c3R5bGUgdHlwZT0idGV4dC9jc3MiPjwhW0NEQVRBWyNob2xkZXJfMTVlOTZiYzA5NjUgdGV4dCB7IGZpbGw6I0FBQUFBQTtmb250LXdlaWdodDpib2xkO2ZvbnQtZmFtaWx5OkFyaWFsLCBIZWx2ZXRpY2EsIE9wZW4gU2Fucywgc2Fucy1zZXJpZiwgbW9ub3NwYWNlO2ZvbnQtc2l6ZToxMnB0IH0gXV0+PC9zdHlsZT48L2RlZnM+PGcgaWQ9ImhvbGRlcl8xNWU5NmJjMDk2NSI+PHJlY3Qgd2lkdGg9IjI0MiIgaGVpZ2h0PSIyMDAiIGZpbGw9IiNFRUVFRUUiLz48Zz48dGV4dCB4PSI4OS44NTkzNzUiIHk9IjEwNS40Ij4yNDJ4MjAwPC90ZXh0PjwvZz48L2c+PC9zdmc+\" data-holder-rendered=\"true\" style=\"height: 100px; width: 100%; display: block;\"> \n                            <div class=\"caption\"> \n                                <h3>{{item.name}}</h3> \n                                <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p> \n                                <p>\n                                    <button class=\"btn btn-primary\" (click)=\"runDialog(item)\">\n                                        Запустить диалог и ждать игрока\n                                    </button> \n                                </p> \n                            </div> \n                        </div> \n                    </div> \n                </div>\n\n\n                <div *ngIf=\"mode_select_dialog == 2\" class=\"row\" style=\"margin: 20px 0;\"> \n                    <div class=\"col-sm-6 col-md-4\" *ngFor=\"let item of activedialogs\"> \n                        <div class=\"thumbnail\"> \n                            <img alt=\"100%x200\" data-src=\"holder.js/100%x200\" src=\"data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/PjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iMjQyIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDI0MiAyMDAiIHByZXNlcnZlQXNwZWN0UmF0aW89Im5vbmUiPjwhLS0KU291cmNlIFVSTDogaG9sZGVyLmpzLzEwMCV4MjAwCkNyZWF0ZWQgd2l0aCBIb2xkZXIuanMgMi42LjAuCkxlYXJuIG1vcmUgYXQgaHR0cDovL2hvbGRlcmpzLmNvbQooYykgMjAxMi0yMDE1IEl2YW4gTWFsb3BpbnNreSAtIGh0dHA6Ly9pbXNreS5jbwotLT48ZGVmcz48c3R5bGUgdHlwZT0idGV4dC9jc3MiPjwhW0NEQVRBWyNob2xkZXJfMTVlOTZiYzA5NjUgdGV4dCB7IGZpbGw6I0FBQUFBQTtmb250LXdlaWdodDpib2xkO2ZvbnQtZmFtaWx5OkFyaWFsLCBIZWx2ZXRpY2EsIE9wZW4gU2Fucywgc2Fucy1zZXJpZiwgbW9ub3NwYWNlO2ZvbnQtc2l6ZToxMnB0IH0gXV0+PC9zdHlsZT48L2RlZnM+PGcgaWQ9ImhvbGRlcl8xNWU5NmJjMDk2NSI+PHJlY3Qgd2lkdGg9IjI0MiIgaGVpZ2h0PSIyMDAiIGZpbGw9IiNFRUVFRUUiLz48Zz48dGV4dCB4PSI4OS44NTkzNzUiIHk9IjEwNS40Ij4yNDJ4MjAwPC90ZXh0PjwvZz48L2c+PC9zdmc+\" data-holder-rendered=\"true\" style=\"height: 100px; width: 100%; display: block;\"> \n                            <div class=\"caption\"> \n                                <h3>{{item.dialog?.name}}</h3> \n                                <p style=\"text-align: right;\">{{item.master?.fio}}</p>\n                                <p style=\"text-align: right;\">запущено: {{item.created_at| date:\"hh:mm dd-MM-yyyy\"}}</p>\n                                <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p> \n                                <p>\n                                    <button class=\"btn btn-primary\" (click)=\"callDialog(item)\">\n                                        Войти\n                                    </button> \n                                </p> \n                            </div> \n                        </div> \n                    </div> \n                </div>\n\n\n            </div>\n        </div>\n\n        <div *ngIf=\"mode == 'mode_wait_pupil'\">\n            <modewaitpupil [user]=\"user\" [activedialog]=\"activedialog\" (stopwaitingdialog)=\"handelerStopWaitDialog($event)\" (acceptcall)=\"handlerAcceptCall($event)\"></modewaitpupil>\n        </div>\n\n\n\n        <div *ngIf=\"mode == 'mode_calling'\">\n            <modecalling [callingdialog]=\"callingdialog\" (stopcalling)=\"handlerStopCalling($event)\"></modecalling>\n        </div>\n\n        \n        <div *ngIf=\"mode == 'mode_dialog_master'\">\n            <modedialogmaster [activedialogid]=\"activedialog_id\" (stopdialog)=\"handelerStopDialog($event)\"></modedialogmaster>\n        </div>\n\n        <div *ngIf=\"mode == 'mode_dialog_pupil'\">\n            <modedialogpupil [activedialogid]=\"activedialog_id\" (stopdialog)=\"handelerStopDialog($event)\"></modedialogpupil>\n        </div>\n\n    </div>\n</div>\n\n"
 
 /***/ }),
 

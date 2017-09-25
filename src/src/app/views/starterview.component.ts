@@ -27,12 +27,13 @@ export class StarterViewComponent implements OnInit  {
     public mode_select_dialog: number = 1;
     public activedialog = null;
     public activedialog_id = null;
-    public loading = false;
+    public loading = true;
     public calling_time;
     
     public reject_call_from = null;
 
     private _CALLING_TIME_INTERVAL = 3000;
+    private _intervalid;
 
     public constructor(
         private statusService: StatusService,
@@ -70,16 +71,24 @@ export class StarterViewComponent implements OnInit  {
                 self.activedialog_id = message.dialog;
                 self.mode = AppSettings.MODE_DIALOG_PUPIL
             }
-            if (message.command == "STOP_DIALOG_MASTER") {
+            if (message.command == "EXIT_FROM_ACTIVE_DIALOG_BY_PUPIL") {
+                console.log("EXIT_FROM_ACTIVE_DIALOG_BY_PUPIL")
                 self.mode = AppSettings.MODE_LIST;
-                //ToDo update status
+                self.statusService.init();
             }
-            if (message.command == "STOP_DIALOG_PUPIL") {
+            if (message.command == "EXIT_FROM_ACTIVE_DIALOG_BY_MASTER") {
+                console.log("EXIT_FROM_ACTIVE_DIALOG_BY_MASTER")
                 self.mode = AppSettings.MODE_LIST;
-                //ToDo update status
+                self.statusService.init();
             }
 
         })
+
+        self.webSocketService.error.subscribe((err) => {
+            console.log("Error", err)
+        })
+
+        //self._runGetActiveDialogs();
         
     }
 
@@ -108,6 +117,7 @@ export class StarterViewComponent implements OnInit  {
     }
 
     private _updateActiveDialogs() {
+        console.log('_updateActiveDialogs')
         this.loading = true;
         this.dialogsService.getActiveDialogs().subscribe((data) => {
             this.activedialogs = data;
@@ -115,6 +125,18 @@ export class StarterViewComponent implements OnInit  {
         });
     }
 
+    private _runGetActiveDialogs() {
+        let self = this;
+        if (self._intervalid) {
+            clearInterval(self._intervalid);
+        }
+
+        self._intervalid = setInterval(function() {
+            if (self.mode == AppSettings.MODE_LIST) {
+                self._updateActiveDialogs();
+            }
+        }, 10000);
+    }
     public runDialog(dialog) {
         let self = this;
         self.loading = true;
@@ -140,7 +162,6 @@ export class StarterViewComponent implements OnInit  {
     
 
     private _callingDialog(activedialog_id) {
-       // console.log("_callingDialog")
         let self = this;
         if (self.mode == AppSettings.MODE_CALLING) {
             self.calling_time = new Date();
@@ -161,6 +182,7 @@ export class StarterViewComponent implements OnInit  {
     public handlerStopCalling($event) {
         this.callingdialog = null;
         this.mode = AppSettings.MODE_LIST;
+        this._updateActiveDialogs();
     }
 
     public handelerStopWaitDialog(data) {
@@ -171,7 +193,6 @@ export class StarterViewComponent implements OnInit  {
     }
 
     public handlerAcceptCall(user_key_id) {
-        //this.mode = AppSettings.MODE_DIALOG_M;
         let self = this;
         self.webSocketService.sendCommand({
             command: 'START_DIALOG',
@@ -184,19 +205,21 @@ export class StarterViewComponent implements OnInit  {
     public handelerStopDialog(data) {
         let self = this;
         self.loading = true;
-        console.log('data', data)
-        self.webSocketService.sendCommand({
-            command: 'STOP_ACTIVE_DIALOG',
-            target: data,
-            user: self.user.key_id
-        })
-        /*
-        self.dialogsService.stopActiveDialog(self.activedialog_id).subscribe((data) => {
-            console.log(data)
-            self.loading = false;
-            self.mode = AppSettings.MODE_LIST;
-        });
-        */
+        let command;
+        if (data.type == 'pupil') {
+            command = {
+                command: 'EXIT_FROM_ACTIVE_DIALOG_BY_PUPIL',
+                target: data.activedialogid,
+            }
+        }
+        if (data.type == 'master') {
+            command = {
+                command: 'EXIT_FROM_ACTIVE_DIALOG_BY_MASTER',
+                target: data.activedialogid
+            }
+        }
+        self.webSocketService.sendCommand(command)
+        this._updateActiveDialogs();
     }
 
 

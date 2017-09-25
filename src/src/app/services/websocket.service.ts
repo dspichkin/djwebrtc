@@ -14,6 +14,7 @@ export class WebSocketService {
     public ws;
     public ready: EventEmitter<any> = new EventEmitter();
     public message: EventEmitter<any> = new EventEmitter();
+    public error: EventEmitter<any> = new EventEmitter();
 
     constructor() {
         
@@ -32,6 +33,10 @@ export class WebSocketService {
             if (msg.type == 'message') {
                 self.message.emit(msg.data);
             }
+        });
+
+        this.ws.onError((msg: MessageEvent) => {
+            self.error.emit(msg);
         });
         
     }

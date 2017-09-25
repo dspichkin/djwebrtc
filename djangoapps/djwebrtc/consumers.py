@@ -27,8 +27,6 @@ def ws_connect(message):
         return
     client_id = id_list[0]
 
-    print "ws_connect", client_id
-
     message.channel_session['client_id'] = client_id
     Room.objects.add("Clients", message.reply_channel.name, message.user)
     Group("call-client-%s" % client_id).add(message.reply_channel)
@@ -80,6 +78,9 @@ def ws_message(message):
             pupil = data.get("pupil")
             if target and master and pupil:
                 ac = get_object_or_404(ActiveDialog, pk=target)
+                ac.status = DIALOG_ACTIVE
+                ac.save()
+
                 if ac.run_dialog(pupil):
                     Group("call-client-%s" % master).send({
                         'text': json.dumps({
@@ -93,30 +94,68 @@ def ws_message(message):
                             'dialog': target,
                         })
                     })
-        if command == 'STOP_ACTIVE_DIALOG':
+        if command == 'EXIT_FROM_ACTIVE_DIALOG_BY_PUPIL':
             target = data.get("target")
-            user__key_id = data.get("user")
-            if target and user__key_id:
+            if target:
                 ac = get_object_or_404(ActiveDialog, pk=target)
                 ac.status = DIALOG_STOP
                 ac.save()
 
                 Group("call-client-%s" % ac.master.key_id).send({
                     'text': json.dumps({
-                        'command': "STOP_DIALOG_MASTER",
+                        'command': "DIALOG_STOP",
                         'dialog': target,
                     })
                 })
                 Group("call-client-%s" % ac.pupil.key_id).send({
                     'text': json.dumps({
-                        'command': "STOP_DIALOG_PUPIL",
+                        'command': "EXIT_FROM_ACTIVE_DIALOG_BY_PUPIL",
+                        'dialog': target,
+                    })
+                })
+        if command == 'EXIT_FROM_ACTIVE_DIALOG_BY_MASTER':
+            target = data.get("target")
+            if target:
+                ac = get_object_or_404(ActiveDialog, pk=target)
+                ac.status = DIALOG_STOP
+                ac.save()
+
+                Group("call-client-%s" % ac.master.key_id).send({
+                    'text': json.dumps({
+                        'command': "EXIT_FROM_ACTIVE_DIALOG_BY_MASTER",
+                        'dialog': target,
+                    })
+                })
+                Group("call-client-%s" % ac.pupil.key_id).send({
+                    'text': json.dumps({
+                        'command': "DIALOG_STOP",
+                        'dialog': target,
+                    })
+                })
+
+        if command == 'HEARBEAT_DIALOG_PUPIL':
+            # отпарвляем мастеру HEARBEAT
+            target = data.get("target")
+            if target:
+                ac = get_object_or_404(ActiveDialog, pk=target)
+                Group("call-client-%s" % ac.master.key_id).send({
+                    'text': json.dumps({
+                        'command': "HEARBEAT_DIALOG_PUPIL",
+                        'dialog': target,
+                    })
+                })
+        if command == 'HEARBEAT_DIALOG_MASTER':
+            # отпарвляем ученику HEARBEAT
+            target = data.get("target")
+            if target:
+                ac = get_object_or_404(ActiveDialog, pk=target)
+                Group("call-client-%s" % ac.pupil.key_id).send({
+                    'text': json.dumps({
+                        'command': "HEARBEAT_DIALOG_MASTER",
                         'dialog': target,
                     })
                 })
     else:
-        # if data.get('type') != 'HEARBEAT':
-        #    print ("ws_message data", data)
-
         src_id = message.channel_session['client_id']
         if src_id:
             src_obj = Presence.objects.filter(room__channel_name='Clients', user__key_id=src_id).order_by('last_seen').last()
@@ -132,16 +171,6 @@ def ws_message(message):
                             "payload": data['payload']
                         })
                     })
-                """
-                Group("call-client-%s" % dst_obj.user.key_id).send({
-                    "text": json.dumps({
-                        "type": data['type'],
-                        "src": src_obj.user.key_id,
-                        "dst": data['dst'],
-                        "payload": data['payload']
-                    })
-                })
-                """
 
 
 @channel_session_user_from_http
@@ -149,7 +178,34 @@ def ws_disconnect(message):
     print "XXXXX ws_disconnect"
     if 'client_id' in message.channel_session:
         client_id = message.channel_session['client_id']
-    Group("call-client-%s" % client_id).discard(message.reply_channel)
+        account = Account.objects.filter(key_id=client_id).first()
+        if account:
+            ad_master = ActiveDialog.objects.filter(master=account, status=DIALOG_ACTIVE).first()
+            if ad_master:
+                print "send pupil", ad_master.pupil.key_id
+                Group("call-client-%s" % ad_master.pupil.key_id).send({
+                    'text': json.dumps({
+                        'dst': ad_master.pupil.key_id,
+                        'src': client_id,
+                        'command': 'DIALOG_STOP',
+                        'type': 'DIALOG_STOP'
+                    })
+                })
+                # ad_master.status = DIALOG_STOP
+            ad_pupil = ActiveDialog.objects.filter(pupil=account, status=DIALOG_ACTIVE).first()
+            if ad_pupil:
+                print "send master", ad_pupil.master.key_id
+                Group("call-client-%s" % ad_pupil.master.key_id).send({
+                    'text': json.dumps({
+                        'dst': ad_pupil.master.key_id,
+                        'src': client_id,
+                        'command': 'DIALOG_STOP',
+                        'type': 'DIALOG_STOP'
+                    })
+                })
+                # ad_pupil.status = DIALOG_STOP
+
+        Group("call-client-%s" % client_id).discard(message.reply_channel)
     Room.objects.remove("Clients", message.reply_channel.name)
 
 
@@ -345,6 +401,8 @@ def ws_disconnect_call(message):
     if 'client_id' in message.channel_session:
         client_id = message.channel_session['client_id']
     Group("call-client-%s" % client_id).discard(message.reply_channel)
+
+
 
 
 def run_broadcast_clients():

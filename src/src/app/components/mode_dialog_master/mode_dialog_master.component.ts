@@ -1,4 +1,5 @@
-import { Component, OnInit, OnDestroy, Input, Output, OnChanges, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, Output, 
+    OnChanges, ViewChild, ElementRef, EventEmitter } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 
@@ -21,6 +22,9 @@ export class ModeDialogMasterComponent implements OnInit, OnDestroy {
     @Input() public activedialogid;
     @Output() public stopdialog = new EventEmitter();
 
+    @ViewChild('remoteVideo') private remoteVideo: ElementRef;
+    @ViewChild('localVideo') private localVideo: ElementRef;
+
     public userMedia = <any>navigator;
     activedialog;
     peer;
@@ -29,11 +33,16 @@ export class ModeDialogMasterComponent implements OnInit, OnDestroy {
     loading: boolean = false;
     localStream;
     answeringCall;
+    last_message_from_pupil;
+    status_activedialog = 'starting'; //starting, run, stop
+    last_hearbeat_from_pupil;
+
+    private _timeout;
 
     constructor(
         private statusService: StatusService,
         private dialogsService: DialogsService,
-        private websocketService: WebSocketService
+        private webSocketService: WebSocketService
         ) {
         var self = this;
     }
@@ -47,7 +56,18 @@ export class ModeDialogMasterComponent implements OnInit, OnDestroy {
             console.log('this.user ', self.activedialog)
             this._startPeer();
         })
-        
+        self.webSocketService.message.subscribe((data) => {
+            let message = JSON.parse(data);
+            if (message.command == "DIALOG_STOP") {
+                self._closeDialog();
+                self.status_activedialog = 'stop';
+            }
+            if (message.command == "HEARBEAT_DIALOG_PUPIL") {
+                self.last_hearbeat_from_pupil = new Date();
+            }
+        });
+
+        self._runHearbeatPupil();
     }
 
     ngAfterViewInit() {
@@ -65,11 +85,8 @@ export class ModeDialogMasterComponent implements OnInit, OnDestroy {
     private _startPeer() {
         let self = this;
         self.peer = new Peer({
-            socket: self.websocketService,
-            //key: self.user.key,
+            socket: self.webSocketService,
             host: AppSettings.URL_WEBSOKET_PEER,
-            //path: '/peerjs',
-            //path: '/',
             debug: 0,
             secure: true,
             port: 8000,
@@ -89,6 +106,7 @@ export class ModeDialogMasterComponent implements OnInit, OnDestroy {
         self.peer.on('call', function(receivecall) {
             console.log('Receiving a call')
             self._startLocalVideo(function() {
+                self.status_activedialog = 'run';
                 receivecall.answer(self.localStream);
                 self._prepareCall(receivecall);
             })
@@ -118,7 +136,7 @@ export class ModeDialogMasterComponent implements OnInit, OnDestroy {
                     "optional": []
                 },video: true
             }, (stream)=>{
-                $('#local-video').prop('src', URL.createObjectURL(stream));
+                self.localVideo.nativeElement.src = URL.createObjectURL(stream);
                 self.localStream = stream;
                 if (callback) {
                     callback();
@@ -127,22 +145,6 @@ export class ModeDialogMasterComponent implements OnInit, OnDestroy {
             (error)=>{
                 console.log("ERROR getUserMedia: ", error);
             });
-        /*
-        // Get audio/video stream
-        window.navigator.getUserMedia({
-            audio: true,
-            video: true
-        }, function(stream) {
-            $('#local-video').prop('src', URL.createObjectURL(stream));
-            console.log("!!!!!$('#local-video')", $('#local-video'))
-            self.localStream = stream;
-            if (callback) {
-                callback();
-            }
-        }, function(error) {
-            console.log("ERROR getUserMedia: ", error);
-        });
-        */
     }
 
 
@@ -155,34 +157,39 @@ export class ModeDialogMasterComponent implements OnInit, OnDestroy {
 
         call.on('stream', function(stream) {
             // get call stream from remote host
-            $('#remote-video').prop('src', URL.createObjectURL(stream));
-            // turn on local video for answer
-            //startLocalVideo(function() {
-            //    window.peer.call(call.peer, window.localStream);
-            //});
+
+            self.remoteVideo.nativeElement.src = URL.createObjectURL(stream);
         });
         
         call.on('close', function() {
             console.log("CLOSE");
-            if (self.answeringCall) {
-                self.answeringCall.close();
-            }
-
-            if (self.localStream) {
-                self.localStream.getTracks().forEach(function (track) {
-                    track.stop();
-                });
-                self.localStream.src = "";
-            }
-            if ($('#remote-video')) {
-                $('#remote-video').src = "";
-            }
-
+            self._closeDialog();
+            
         });
 
     }
+
+    private _closeDialog() {
+        let self = this;
+
+        if (self.answeringCall) {
+            self.answeringCall.close();
+        }
+
+        if (self.localStream) {
+            self.localStream.getTracks().forEach(function (track) {
+                track.stop();
+            });
+            self.localStream.src = "";
+        }
+        if (self.remoteVideo.nativeElement.src) {
+            self.remoteVideo.nativeElement.src = "";
+        }
+    }
+
     public stopDialog() {
         this.stopdialog.emit(this.activedialogid);
+        this._closeDialog();
     }   
 
     public hangPhone() {
@@ -190,4 +197,40 @@ export class ModeDialogMasterComponent implements OnInit, OnDestroy {
             this.answeringCall.close();
         }
     } 
+
+    private _runHearbeatPupil(): void {
+
+        let self = this;
+
+        if (self._checkLastMessageFromPupil) {
+            if (self.webSocketService.ws.socket.readyState == 1) {
+                if (self.answeringCall && self.answeringCall.open) {
+                    console.log('_runHearbeatPupil')
+                    self.webSocketService.sendCommand({
+                        command: "HEARBEAT_DIALOG_MASTER",
+                        target: self.activedialog.id
+                    })
+                }
+            }
+        }
+        if (self._timeout) {
+            clearTimeout(self._timeout);
+        }
+        self._timeout = setTimeout(function() {
+            self._runHearbeatPupil();
+        }, 4000);
+    }
+
+    private _checkLastMessageFromPupil(): boolean {
+        let self = this;
+        if (new Date(self.last_hearbeat_from_pupil).getTime() + 
+                AppSettings.HEARTBEAT_DIALOG_TIMEOUT < new Date().getTime()) {
+            self.webSocketService.sendCommand({
+                command: "STOP_ACTIVE_DIALOG",
+                target: self.activedialog.id,
+            })
+            return false;
+        }
+        return true;
+    }
 }

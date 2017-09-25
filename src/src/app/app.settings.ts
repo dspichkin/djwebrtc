@@ -13,6 +13,7 @@ export class AppSettings {
 
 
     public static CALLING_TIME_INTERVAL = 3000;
+    public static HEARTBEAT_DIALOG_TIMEOUT = 10000;
 
     public static MODE_LIST = 'mode_list';
     public static MODE_WAIT_PUPIL = 'mode_wait_pupil';
