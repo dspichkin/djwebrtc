@@ -2,7 +2,6 @@
     <div style="border: 1px solid;padding: 30px;margin:10px;">
         <p>Звонок от {{item.fio}}</p>
         <p>{{item.lasttime}}</p>
-        {{loading}}
         <button class="btn btn-success" (click)="takeCall(item)" [disabled]="loading"><span>Принять звонок</span></button>
         <button class="btn btn-default" (click)="rejectCall(item)" [disabled]="loading"><span>Сбросить</span></button>
     </div>

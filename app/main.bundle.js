@@ -1227,7 +1227,7 @@ CallingFromsComponent = __decorate([
 /***/ "../../../../../src/app/components/view_block_calling/callingfroms.template.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"\" *ngFor=\"let item of listin\">\n    <div style=\"border: 1px solid;padding: 30px;margin:10px;\">\n        <p>Звонок от {{item.fio}}</p>\n        <p>{{item.lasttime}}</p>\n        {{loading}}\n        <button class=\"btn btn-success\" (click)=\"takeCall(item)\" [disabled]=\"loading\"><span>Принять звонок</span></button>\n        <button class=\"btn btn-default\" (click)=\"rejectCall(item)\" [disabled]=\"loading\"><span>Сбросить</span></button>\n    </div>\n</div>"
+module.exports = "<div class=\"\" *ngFor=\"let item of listin\">\n    <div style=\"border: 1px solid;padding: 30px;margin:10px;\">\n        <p>Звонок от {{item.fio}}</p>\n        <p>{{item.lasttime}}</p>\n        <button class=\"btn btn-success\" (click)=\"takeCall(item)\" [disabled]=\"loading\"><span>Принять звонок</span></button>\n        <button class=\"btn btn-default\" (click)=\"rejectCall(item)\" [disabled]=\"loading\"><span>Сбросить</span></button>\n    </div>\n</div>"
 
 /***/ }),
 
