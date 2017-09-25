@@ -94,6 +94,26 @@ def ws_message(message):
                             'dialog': target,
                         })
                     })
+
+        if command == 'DIALOG_STOP':
+            target = data.get("target")
+            if target:
+                ac = get_object_or_404(ActiveDialog, pk=target)
+                ac.status = DIALOG_STOP
+                ac.save()
+                Group("call-client-%s" % ac.master.key_id).send({
+                    'text': json.dumps({
+                        'command': "DIALOG_STOP",
+                        'dialog': target,
+                    })
+                })
+                Group("call-client-%s" % ac.pupil.key_id).send({
+                    'text': json.dumps({
+                        'command': "DIALOG_STOP",
+                        'dialog': target,
+                    })
+                })
+
         if command == 'EXIT_FROM_ACTIVE_DIALOG_BY_PUPIL':
             target = data.get("target")
             if target:
@@ -175,7 +195,7 @@ def ws_message(message):
 
 @channel_session_user_from_http
 def ws_disconnect(message):
-    print "XXXXX ws_disconnect"
+    # print "XXXXX ws_disconnect"
     if 'client_id' in message.channel_session:
         client_id = message.channel_session['client_id']
         account = Account.objects.filter(key_id=client_id).first()

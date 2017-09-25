@@ -146,7 +146,6 @@ export class ModeDialogPupilComponent implements OnInit, OnDestroy {
                     "optional": []
                 },video: true
             }, (stream)=>{
-                console.log('self.localVideo', self.localVideo)
                 self.localVideo.nativeElement.src =  URL.createObjectURL(stream);
                 //$('#local-video').prop('src', URL.createObjectURL(stream));
                 self.localStream = stream;
@@ -199,18 +198,23 @@ export class ModeDialogPupilComponent implements OnInit, OnDestroy {
     }
 
 
-    public stopDialog() {
+    public exitDialog() {
+        this._closeDialog();
         this.stopdialog.emit({
             activedialogid: this.activedialogid,
             type: 'pupil'
         });
-        this._closeDialog();
+        
     }    
 
     public hangPhone() {
-        if (this.callingCall) {
-            this.callingCall.close();
-        }
+        let self = this;
+        this._closeDialog();
+        self.webSocketService.sendCommand({
+            command: "DIALOG_STOP",
+            target: self.activedialog.id,
+        })
+
     } 
 
     private _runHearbeatPupil(): void {
@@ -238,7 +242,7 @@ export class ModeDialogPupilComponent implements OnInit, OnDestroy {
         if (new Date(self.last_hearbeat_from_master).getTime() + 
                 AppSettings.HEARTBEAT_DIALOG_TIMEOUT < new Date().getTime()) {
             self.webSocketService.sendCommand({
-                command: "STOP_ACTIVE_DIALOG",
+                command: "DIALOG_STOP",
                 target: self.activedialog.id,
             })
             return false;

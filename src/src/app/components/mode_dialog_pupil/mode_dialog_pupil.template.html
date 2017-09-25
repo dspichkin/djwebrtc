@@ -14,21 +14,34 @@
     </div>
     <div class="panel-body">
 
-        <div [hidden]="status_activedialog != 'run'">
-            
-            <div>
-                <video #remoteVideo autoplay="" style="border:2px solid red"></video>
+        <!-- Loading -->
+        <div *ngIf="loading" style="position: absolute;top:0;left:0;width:100%;height:100%;z-index: 100;">
+            <div style="position: absolute;opacity: 0.5;width:100%;height:100%;background-color: white;">
             </div>
-            <div>
-                <video #localVideo muted="true" autoplay="" style="border:2px solid green"></video>
+            <div style="width: 50px;margin: auto;margin-top: 60px;">
+                <i class="fa fa-spin fa-gear" style="font-size: 50px;"></i>
             </div>
+        </div>
+        <!-- END Loading -->
 
-
+        <div [hidden]="status_activedialog != 'run'" class="row">
+            <div class="container" style="text-align: right;">
+                <div class="pull-right" style="display: flex;">
+                    <div style="margin: 5px;">
+                        <video #remoteVideo autoplay="" style="border:2px solid red;width: 100px;"></video>
+                        <p style="font-size: 8px;margin-top: -5px;">Remote</p>
+                    </div>
+                    <div style="margin: 5px;">
+                        <video #localVideo muted="true" autoplay="" style="border:2px solid green;width: 100px;"></video>
+                        <p style="font-size: 8px;margin-top: -5px;">Local</p>
+                    </div>
+                </div>
+            </div>
         </div>
         
         <div style="margin-top: 30px">
-             <button *ngIf="status_activedialog" class="btn btn-warning" (click)="hangPhone()"><span>Сбросить трубку</span></button>
-            <button class="btn btn-warning" (click)="stopDialog()"><span>Выход из режима диалога</span></button>
+             <button *ngIf="status_activedialog=='run'" class="btn btn-warning" (click)="hangPhone()"><span>Остановить диалог</span></button>
+            <button class="btn btn-warning" (click)="exitDialog()"><span>Выход из режима диалога</span></button>
         </div>
     </div>
 </div>

@@ -82,8 +82,8 @@ class ActiveDialog(models.Model):
     objects = ActiveDialogManager()
 
     class Meta:
-        verbose_name = 'Диалог'
-        verbose_name_plural = 'Диалоги'
+        verbose_name = 'Запущенный диалог'
+        verbose_name_plural = 'Запущенные диалоги'
 
         ordering = ('created_at', )
 

@@ -7,9 +7,9 @@ from djwebrtc.consumers import (
 
 
 channel_routing = [
-    route('websocket.connect', ws_connect_peer, path=r"^/peerjs/peerjs?$"),
-    route('websocket.receive', ws_message_peer, path=r"^/peerjs/peerjs?$"),
-    route('websocket.disconnect', ws_disconnect_peer, path=r"^/peerjs/peerjs?$"),
+    # route('websocket.connect', ws_connect_peer, path=r"^/peerjs/peerjs?$"),
+    # route('websocket.receive', ws_message_peer, path=r"^/peerjs/peerjs?$"),
+    # route('websocket.disconnect', ws_disconnect_peer, path=r"^/peerjs/peerjs?$"),
 
     # route('websocket.connect', ws_connect_call, path=r"^/call/?$"),
     # route('websocket.receive', ws_message_call, path=r"^/call/?$"),

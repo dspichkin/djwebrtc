@@ -187,25 +187,30 @@ export class ModeDialogMasterComponent implements OnInit, OnDestroy {
         }
     }
 
-    public stopDialog() {
-        this.stopdialog.emit(this.activedialogid);
+    public exitDialog() {
         this._closeDialog();
+        this.stopdialog.emit({
+            activedialogid: this.activedialogid,
+            type: 'master'
+        });
     }   
 
+
     public hangPhone() {
-        if (this.answeringCall) {
-            this.answeringCall.close();
-        }
+        let self = this;
+        this._closeDialog();
+        self.webSocketService.sendCommand({
+            command: "DIALOG_STOP",
+            target: self.activedialog.id,
+        })
+
     } 
 
     private _runHearbeatPupil(): void {
-
         let self = this;
-
         if (self._checkLastMessageFromPupil) {
             if (self.webSocketService.ws.socket.readyState == 1) {
                 if (self.answeringCall && self.answeringCall.open) {
-                    console.log('_runHearbeatPupil')
                     self.webSocketService.sendCommand({
                         command: "HEARBEAT_DIALOG_MASTER",
                         target: self.activedialog.id
@@ -226,7 +231,7 @@ export class ModeDialogMasterComponent implements OnInit, OnDestroy {
         if (new Date(self.last_hearbeat_from_pupil).getTime() + 
                 AppSettings.HEARTBEAT_DIALOG_TIMEOUT < new Date().getTime()) {
             self.webSocketService.sendCommand({
-                command: "STOP_ACTIVE_DIALOG",
+                command: "DIALOG_STOP",
                 target: self.activedialog.id,
             })
             return false;
