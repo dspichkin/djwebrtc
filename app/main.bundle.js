@@ -1164,7 +1164,7 @@ var CallingFromsComponent = (function () {
         this.loading = false;
     };
     CallingFromsComponent.prototype.ngOnChanges = function (changes) {
-        console.log('changes', changes);
+        //console.log('changes', changes)
         if (this.loading) {
             this.loading = false;
         }
