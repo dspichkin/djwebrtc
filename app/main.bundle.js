@@ -1588,9 +1588,9 @@ var StarterViewComponent = (function () {
             self.user = _this.statusService.user;
             self.mode = _this.statusService.mode;
             self.activedialog = self.statusService.activedialog;
-            //if (!this.activedialog) {
-            //    this.showActiveDialogs();
-            //}
+            if (!_this.activedialog) {
+                _this._updateActiveDialogs();
+            }
         });
         self.webSocketService.message.subscribe(function (data) {
             var message = JSON.parse(data);

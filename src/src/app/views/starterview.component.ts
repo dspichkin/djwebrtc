@@ -49,9 +49,9 @@ export class StarterViewComponent implements OnInit  {
             self.user = this.statusService.user;
             self.mode = this.statusService.mode;
             self.activedialog = self.statusService.activedialog;
-            //if (!this.activedialog) {
-            //    this.showActiveDialogs();
-            //}
+            if (!this.activedialog) {
+                this._updateActiveDialogs();
+            }
         });
 
         self.webSocketService.message.subscribe((data) => {
