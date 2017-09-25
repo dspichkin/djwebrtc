@@ -52,8 +52,6 @@ export class ModeDialogMasterComponent implements OnInit, OnDestroy {
         self.user = self.statusService.user;
         self.dialogsService.getActiveDialog(self.activedialogid).subscribe((data) => {
             self.activedialog = data;
-
-            console.log('this.user ', self.activedialog)
             this._startPeer();
         })
         self.webSocketService.message.subscribe((data) => {
@@ -95,7 +93,7 @@ export class ModeDialogMasterComponent implements OnInit, OnDestroy {
 
         self.peer.on('open', function(id) {
             self.peerid = id;
-            console.log('Peer: My peer ID is: ' + id);
+            //console.log('Peer: My peer ID is: ' + id);
         });
 
         self.peer.on('error', function(err) {

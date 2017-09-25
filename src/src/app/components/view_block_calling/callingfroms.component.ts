@@ -34,7 +34,7 @@ export class CallingFromsComponent implements OnInit, OnDestroy {
     }
 
     ngAfterViewInit() {
-        
+        this.loading = false;
     }
 
     ngOnChanges(changes) {

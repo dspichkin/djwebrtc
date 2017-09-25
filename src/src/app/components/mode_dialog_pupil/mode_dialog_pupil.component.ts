@@ -102,7 +102,7 @@ export class ModeDialogPupilComponent implements OnInit, OnDestroy {
         });
 
         self.peer.on('open', function(id) {
-            console.log('Peer: My peer ID is: ' + id);
+            //console.log('Peer: My peer ID is: ' + id);
             self.peerid = id;
 
             self._startLocalVideo(function() {
@@ -118,7 +118,7 @@ export class ModeDialogPupilComponent implements OnInit, OnDestroy {
 
         // Receiving a call
         self.peer.on('call', function(call) {
-            console.log('Receiving a call')
+            //console.log('Receiving a call')
             // ответный звонок на вызов
         });
     }
@@ -166,7 +166,7 @@ export class ModeDialogPupilComponent implements OnInit, OnDestroy {
         self.callingCall = call;
 
         call.on('stream', function(stream) {
-            console.log('got stream')
+            //console.log('got stream')
             // get call stream from remote host
             self.remoteVideo.nativeElement.src = URL.createObjectURL(stream); 
             self.status_activedialog = 'run';

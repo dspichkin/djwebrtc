@@ -586,7 +586,6 @@ var ModeDialogMasterComponent = (function () {
         self.user = self.statusService.user;
         self.dialogsService.getActiveDialog(self.activedialogid).subscribe(function (data) {
             self.activedialog = data;
-            console.log('this.user ', self.activedialog);
             _this._startPeer();
         });
         self.webSocketService.message.subscribe(function (data) {
@@ -619,7 +618,7 @@ var ModeDialogMasterComponent = (function () {
         });
         self.peer.on('open', function (id) {
             self.peerid = id;
-            console.log('Peer: My peer ID is: ' + id);
+            //console.log('Peer: My peer ID is: ' + id);
         });
         self.peer.on('error', function (err) {
             console.log("ERROR:", err.message);
@@ -852,7 +851,7 @@ var ModeDialogPupilComponent = (function () {
             id: self.user.key_id
         });
         self.peer.on('open', function (id) {
-            console.log('Peer: My peer ID is: ' + id);
+            //console.log('Peer: My peer ID is: ' + id);
             self.peerid = id;
             self._startLocalVideo(function () {
                 var call = self.peer.call(self.activedialog.master.key_id, self.localStream);
@@ -864,7 +863,7 @@ var ModeDialogPupilComponent = (function () {
         });
         // Receiving a call
         self.peer.on('call', function (call) {
-            console.log('Receiving a call');
+            //console.log('Receiving a call')
             // ответный звонок на вызов
         });
     };
@@ -904,7 +903,7 @@ var ModeDialogPupilComponent = (function () {
         }
         self.callingCall = call;
         call.on('stream', function (stream) {
-            console.log('got stream');
+            //console.log('got stream')
             // get call stream from remote host
             self.remoteVideo.nativeElement.src = URL.createObjectURL(stream);
             self.status_activedialog = 'run';
@@ -1162,6 +1161,7 @@ var CallingFromsComponent = (function () {
         this._checkInterval();
     };
     CallingFromsComponent.prototype.ngAfterViewInit = function () {
+        this.loading = false;
     };
     CallingFromsComponent.prototype.ngOnChanges = function (changes) {
         //console.log('changes', changes)
