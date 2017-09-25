@@ -1589,7 +1589,7 @@ var StarterViewComponent = (function () {
             self.mode = _this.statusService.mode;
             self.activedialog = self.statusService.activedialog;
             if (!_this.activedialog) {
-                _this._updateActiveDialogs();
+                _this._updateDialogs();
             }
         });
         self.webSocketService.message.subscribe(function (data) {

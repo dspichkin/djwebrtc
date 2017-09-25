@@ -48,9 +48,10 @@ export class StarterViewComponent implements OnInit  {
         self.statusService.ready.subscribe((date)=> {
             self.user = this.statusService.user;
             self.mode = this.statusService.mode;
+
             self.activedialog = self.statusService.activedialog;
             if (!this.activedialog) {
-                this._updateActiveDialogs();
+                this._updateDialogs();
             }
         });
 
