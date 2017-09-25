@@ -765,11 +765,13 @@ this.activeTarget=b,this.clear();var c=this.selector+'[data-target="'+b+'"],'+th
         Negotiator.handleCandidate = function(connection, ice) {
             var candidate = ice.candidate;
             var sdpMLineIndex = ice.sdpMLineIndex;
-            connection.pc.addIceCandidate(new RTCIceCandidate({
-                sdpMLineIndex: sdpMLineIndex,
-                candidate: candidate
-            }));
-            util.log('Added ICE candidate for:', connection.peer);
+            if (connection && connection.pc) {
+                connection.pc.addIceCandidate(new RTCIceCandidate({
+                    sdpMLineIndex: sdpMLineIndex,
+                    candidate: candidate
+                }));
+                util.log('Added ICE candidate for:', connection.peer);
+            }
         };
 
         module.exports = Negotiator;
