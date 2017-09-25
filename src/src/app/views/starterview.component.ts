@@ -49,9 +49,9 @@ export class StarterViewComponent implements OnInit  {
             self.user = this.statusService.user;
             self.mode = this.statusService.mode;
             self.activedialog = self.statusService.activedialog;
-            if (!this.activedialog) {
-                this.showActiveDialogs();
-            }
+            //if (!this.activedialog) {
+            //    this.showActiveDialogs();
+            //}
         });
 
         self.webSocketService.message.subscribe((data) => {
@@ -72,12 +72,10 @@ export class StarterViewComponent implements OnInit  {
                 self.mode = AppSettings.MODE_DIALOG_PUPIL
             }
             if (message.command == "EXIT_FROM_ACTIVE_DIALOG_BY_PUPIL") {
-                console.log("EXIT_FROM_ACTIVE_DIALOG_BY_PUPIL")
                 self.mode = AppSettings.MODE_LIST;
                 self.statusService.init();
             }
             if (message.command == "EXIT_FROM_ACTIVE_DIALOG_BY_MASTER") {
-                console.log("EXIT_FROM_ACTIVE_DIALOG_BY_MASTER")
                 self.mode = AppSettings.MODE_LIST;
                 self.statusService.init();
             }
@@ -117,7 +115,6 @@ export class StarterViewComponent implements OnInit  {
     }
 
     private _updateActiveDialogs() {
-        console.log('_updateActiveDialogs')
         this.loading = true;
         this.dialogsService.getActiveDialogs().subscribe((data) => {
             this.activedialogs = data;

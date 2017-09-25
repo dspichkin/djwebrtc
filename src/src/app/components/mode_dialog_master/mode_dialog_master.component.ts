@@ -104,7 +104,7 @@ export class ModeDialogMasterComponent implements OnInit, OnDestroy {
 
         // Receiving a call
         self.peer.on('call', function(receivecall) {
-            console.log('Receiving a call')
+            //console.log('Receiving a call')
             self._startLocalVideo(function() {
                 self.status_activedialog = 'run';
                 receivecall.answer(self.localStream);

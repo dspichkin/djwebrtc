@@ -626,7 +626,7 @@ var ModeDialogMasterComponent = (function () {
         });
         // Receiving a call
         self.peer.on('call', function (receivecall) {
-            console.log('Receiving a call');
+            //console.log('Receiving a call')
             self._startLocalVideo(function () {
                 self.status_activedialog = 'run';
                 receivecall.answer(self.localStream);
@@ -1357,7 +1357,7 @@ var StatusService = (function () {
     StatusService.prototype.init = function () {
         var self = this;
         this.getStatus().subscribe(function (data) {
-            console.log('data', data);
+            //console.log('data', data)
             self.user = data.user;
             if (data.status) {
                 if (data.activedialog) {
@@ -1588,9 +1588,9 @@ var StarterViewComponent = (function () {
             self.user = _this.statusService.user;
             self.mode = _this.statusService.mode;
             self.activedialog = self.statusService.activedialog;
-            if (!_this.activedialog) {
-                _this.showActiveDialogs();
-            }
+            //if (!this.activedialog) {
+            //    this.showActiveDialogs();
+            //}
         });
         self.webSocketService.message.subscribe(function (data) {
             var message = JSON.parse(data);
@@ -1609,12 +1609,10 @@ var StarterViewComponent = (function () {
                 self.mode = __WEBPACK_IMPORTED_MODULE_4__app_settings__["a" /* AppSettings */].MODE_DIALOG_PUPIL;
             }
             if (message.command == "EXIT_FROM_ACTIVE_DIALOG_BY_PUPIL") {
-                console.log("EXIT_FROM_ACTIVE_DIALOG_BY_PUPIL");
                 self.mode = __WEBPACK_IMPORTED_MODULE_4__app_settings__["a" /* AppSettings */].MODE_LIST;
                 self.statusService.init();
             }
             if (message.command == "EXIT_FROM_ACTIVE_DIALOG_BY_MASTER") {
-                console.log("EXIT_FROM_ACTIVE_DIALOG_BY_MASTER");
                 self.mode = __WEBPACK_IMPORTED_MODULE_4__app_settings__["a" /* AppSettings */].MODE_LIST;
                 self.statusService.init();
             }
@@ -1644,7 +1642,6 @@ var StarterViewComponent = (function () {
     };
     StarterViewComponent.prototype._updateActiveDialogs = function () {
         var _this = this;
-        console.log('_updateActiveDialogs');
         this.loading = true;
         this.dialogsService.getActiveDialogs().subscribe(function (data) {
             _this.activedialogs = data;

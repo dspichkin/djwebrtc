@@ -26,7 +26,7 @@ export class StatusService {
     init() {
         let self = this;
         this.getStatus().subscribe((data) => {
-            console.log('data', data)
+            //console.log('data', data)
             self.user = data.user;
             if (data.status) {
                 if (data.activedialog) {
