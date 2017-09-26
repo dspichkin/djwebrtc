@@ -37,6 +37,10 @@ export class ModeDialogMasterComponent implements OnInit, OnDestroy {
     status_activedialog = 'starting'; //starting, run, stop
     last_hearbeat_from_pupil;
 
+    // продолжительность диалога
+    during_conversation;
+    start_converstion;
+
     private _timeout;
 
     constructor(
@@ -62,6 +66,10 @@ export class ModeDialogMasterComponent implements OnInit, OnDestroy {
             }
             if (message.command == "HEARBEAT_DIALOG_PUPIL") {
                 self.last_hearbeat_from_pupil = new Date();
+                let value = Math.round((self.last_hearbeat_from_pupil - self.start_converstion) / 1000);
+                if (value) {
+                   self.during_conversation = value;
+                }
             }
         });
 
@@ -93,7 +101,6 @@ export class ModeDialogMasterComponent implements OnInit, OnDestroy {
 
         self.peer.on('open', function(id) {
             self.peerid = id;
-            //console.log('Peer: My peer ID is: ' + id);
         });
 
         self.peer.on('error', function(err) {
@@ -102,14 +109,13 @@ export class ModeDialogMasterComponent implements OnInit, OnDestroy {
 
         // Receiving a call
         self.peer.on('call', function(receivecall) {
-            //console.log('Receiving a call')
             self._startLocalVideo(function() {
                 self.status_activedialog = 'run';
+                self.start_converstion = new Date();
+
                 receivecall.answer(self.localStream);
                 self._prepareCall(receivecall);
             })
-            
-            // ответный звонок на вызов
         });
     }
 
@@ -170,6 +176,8 @@ export class ModeDialogMasterComponent implements OnInit, OnDestroy {
     private _closeDialog() {
         let self = this;
 
+        self.status_activedialog = 'stop';
+
         if (self.answeringCall) {
             self.answeringCall.close();
         }
@@ -203,6 +211,29 @@ export class ModeDialogMasterComponent implements OnInit, OnDestroy {
         })
 
     } 
+
+    public displayTime(_seconds) {
+        let hours   = Math.floor(_seconds / 3600);
+        let minutes = Math.floor((_seconds - (hours * 3600)) / 60);
+        let seconds = _seconds - (hours * 3600) - (minutes * 60);
+        var time = "";
+
+        if (hours != 0) {
+          time = hours+":";
+        }
+        if (minutes != 0 || time !== "") {
+            let sminutes = (minutes < 10 && time !== "") ? "0"+ minutes : String(minutes);
+            time += sminutes + ":";
+        }
+        if (time === "") {
+            time = seconds + "сек";
+        }
+        else {
+            time += (seconds < 10) ? "0"+ seconds : String(seconds);
+        }
+        return time;
+    }
+
 
     private _runHearbeatPupil(): void {
         let self = this;

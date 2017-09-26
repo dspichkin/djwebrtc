@@ -22,6 +22,7 @@ hyperlink==17.3.1
 idna==2.6
 incremental==17.5.0
 ipaddress==1.0.18
+jsonfield==2.0.2
 kombu==3.0.37
 msgpack-python==0.4.8
 pycparser==2.18

@@ -36,6 +36,9 @@ export class ModeDialogPupilComponent implements OnInit, OnDestroy {
     callingCall;
     status_activedialog = 'starting';
     last_hearbeat_from_master;
+    // продолжительность диалога
+    during_conversation;
+    start_converstion;
 
     private _timeout;
 
@@ -52,7 +55,6 @@ export class ModeDialogPupilComponent implements OnInit, OnDestroy {
         self.user = self.statusService.user;
         self.dialogsService.getActiveDialog(self.activedialogid).subscribe((data) => {
             self.activedialog = data;
-            //console.log('this.user ', self.activedialog)
             self._startPeer();
         })
 
@@ -64,6 +66,10 @@ export class ModeDialogPupilComponent implements OnInit, OnDestroy {
             }
             if (message.command == "HEARBEAT_DIALOG_MASTER") {
                 self.last_hearbeat_from_master = new Date();
+                let value = Math.round((self.last_hearbeat_from_master - self.start_converstion) / 1000);
+                if (value) {
+                   self.during_conversation = value;
+                }
             }
         });
 
@@ -91,10 +97,7 @@ export class ModeDialogPupilComponent implements OnInit, OnDestroy {
 
         self.peer = new Peer({
             socket: self.webSocketService,
-            //key: this.user.key,
             host: AppSettings.URL_WEBSOKET_PEER,
-            //path: '/peerjs',
-            //path: '/',
             debug: 0,
             secure: true,
             port: 8000,
@@ -147,7 +150,6 @@ export class ModeDialogPupilComponent implements OnInit, OnDestroy {
                 },video: true
             }, (stream)=>{
                 self.localVideo.nativeElement.src =  URL.createObjectURL(stream);
-                //$('#local-video').prop('src', URL.createObjectURL(stream));
                 self.localStream = stream;
                 if (callback) {
                     callback();
@@ -170,6 +172,7 @@ export class ModeDialogPupilComponent implements OnInit, OnDestroy {
             // get call stream from remote host
             self.remoteVideo.nativeElement.src = URL.createObjectURL(stream); 
             self.status_activedialog = 'run';
+            self.start_converstion = new Date();
         });
         
         call.on('close', function() {
@@ -181,6 +184,9 @@ export class ModeDialogPupilComponent implements OnInit, OnDestroy {
 
     private _closeDialog() {
         let self = this;
+
+        self.status_activedialog = 'stop';
+
         if (self.callingCall) {
             self.callingCall.close();
         }
@@ -214,8 +220,29 @@ export class ModeDialogPupilComponent implements OnInit, OnDestroy {
             command: "DIALOG_STOP",
             target: self.activedialog.id,
         })
-
     } 
+
+    public displayTime(_seconds) {
+        let hours   = Math.floor(_seconds / 3600);
+        let minutes = Math.floor((_seconds - (hours * 3600)) / 60);
+        let seconds = _seconds - (hours * 3600) - (minutes * 60);
+        var time = "";
+
+        if (hours != 0) {
+          time = hours+":";
+        }
+        if (minutes != 0 || time !== "") {
+            let sminutes = (minutes < 10 && time !== "") ? "0"+ minutes : String(minutes);
+            time += sminutes + ":";
+        }
+        if (time === "") {
+            time = seconds + "сек";
+        }
+        else {
+            time += (seconds < 10) ? "0"+ seconds : String(seconds);
+        }
+        return time;
+    }
 
     private _runHearbeatPupil(): void {
         let self = this;

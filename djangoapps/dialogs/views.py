@@ -18,6 +18,15 @@ from dialogs.serializers import (DialogSerializer, ActiveDialogSerializer)
 
 @api_view(['GET'])
 @permission_classes((IsAuthenticated,))
+def get_dialog(request, dialog_pk):
+    queryset = get_object_or_404(Dialog, pk=dialog_pk)
+    serializer = DialogSerializer(queryset)
+
+    return Response(serializer.data, status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+@permission_classes((IsAuthenticated,))
 def get_dialogs(request):
 
     queryset = Dialog.objects.all()

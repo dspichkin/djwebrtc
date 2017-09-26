@@ -1,13 +1,13 @@
 import {Routes} from "@angular/router";
 
 import {StarterViewComponent} from "./views/starterview.component";
+import {DialogViewComponent} from "./views/dialogview.component";
 //import {LoginComponent} from "./views/login.component";
 
 //import {BlankLayoutComponent} from "./components/common/layouts/blankLayout.component";
 import {BasicLayoutComponent} from "./components/common/layouts/basicLayout.component";
 //import {TopNavigationLayoutComponent} from "./components/common/layouts/topNavigationlayout.component";
-
-//import { AuthGuard } from './services/guards.service';
+import { AuthGuard } from './services/guards.service';
 
 export const ROUTES:Routes = [
   // Main redirect
@@ -20,7 +20,17 @@ export const ROUTES:Routes = [
         {
             path: '', 
             component: StarterViewComponent,
-            //canActivate: [AuthGuard]
+            canActivate: [AuthGuard]
+        }
+    ]
+  },
+  {
+    path: '', component: BasicLayoutComponent,
+    children: [
+        {
+            path: 'dialog/:dialog_id', 
+            component: DialogViewComponent,
+            canActivate: [AuthGuard]
         }
     ]
   },

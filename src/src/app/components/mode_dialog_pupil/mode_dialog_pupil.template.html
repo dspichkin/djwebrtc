@@ -8,7 +8,8 @@
                 <p *ngIf="status_activedialog=='starting'" style="font-size: 12px;color:blue;">Диалог запускается</p>
             </div>
             <div class="col-md-6" style="text-align: right;">
-                <p style="margin: 0 20px;">{{last_hearbeat_from_master}} {{activedialogid}}</p>
+                <p *ngIf="activedialog" style="margin: 0 20px;">{{activedialog.dialog.name}}</p>
+                <p *ngIf="during_conversation" style="margin: 0 20px;font-size: 8px;">{{displayTime(during_conversation)}}</p>
             </div>
         </div>
     </div>

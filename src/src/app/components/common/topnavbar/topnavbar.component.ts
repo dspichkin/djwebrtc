@@ -2,8 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 //import { ErrorService } from '../../../services/error.service';
 //import { AuthenticationService } from '../../../services/authentication.service';
-
+import { ErrorService } from '../../../services/error.service';
 import { StatusService } from '../../../services/status.service';
+import { WebSocketService } from '../../../services/websocket.service';
 
 
 @Component({
@@ -15,12 +16,16 @@ export class TopNavbarComponent implements OnInit {
     errors = [];
     messages = [];
 
+    server_error;
+
     loading = false;
     user;
 
     public constructor(
         private router: Router,
         private statusService: StatusService,
+        private webSocketService: WebSocketService,
+        private errorService: ErrorService,
         //private authenticationService: AuthenticationService
         ) {
         
@@ -28,9 +33,40 @@ export class TopNavbarComponent implements OnInit {
 
     ngOnInit() {
         let self = this;
-        self.statusService.ready.subscribe((date)=> {
+
+        self.webSocketService.open.subscribe(function() {
+            self.server_error = false;
+        })
+
+
+        self.statusService.ready.subscribe((date) => {
             self.user = this.statusService.user;
         });
+
+
+        for (let i in this.errorService.errors) {
+            this.errors.push(this.errorService.errors[i])
+        }
+        this.errorService.errors_update.subscribe(item => {
+            this.errors = [];
+            for (let i in this.errorService.errors) {
+                if (this.errorService.errors[i].code == 1000) {
+                    this.server_error = true;
+                    delete this.errorService.errors[i];
+                    continue;
+                }
+                this.errors.push(this.errorService.errors[i])
+            }
+        })
+        this.messages = this.errorService.messages;
+        this.errorService.messages_update.subscribe(item => {
+            this.messages = this.errorService.messages;
+        })
+    }
+
+    removeError(index) {
+        delete this.errorService.errors[this.errors[index].code];
+        this.errors.splice(index, 1)
     }
 
     removeMessage(index) {

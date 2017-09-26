@@ -3,6 +3,8 @@ from __future__ import unicode_literals, absolute_import
 
 import json
 
+from jsonfield import JSONField
+
 from django.db import models
 from django.conf import settings
 from django.contrib.auth import get_user_model
@@ -20,9 +22,12 @@ from dialogs.signals import activedialog_changed
 class Dialog(models.Model):
     created_at = models.DateTimeField(u'дата создания', auto_now_add=True)
     updated_at = models.DateTimeField(u'дата редактирования', auto_now=True)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL)
 
     name = models.CharField(u'имя диалога', max_length=255)
-    owner = models.ForeignKey(settings.AUTH_USER_MODEL)
+    description = models.TextField(u'описание диалога', null=True, blank=True)
+
+    scenario = JSONField(u'сценарий диалога', null=True, blank=True)
 
     def __str__(self):
         return self.name

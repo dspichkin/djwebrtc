@@ -10,6 +10,7 @@ import { ModeWaitPupilComponent } from '../components/mode_wait_pupil/mode_wait_
 import { ModeCallingComponent } from '../components/mode_calling/mode_calling.component';
 import { ModeDialogMasterComponent } from '../components/mode_dialog_master/mode_dialog_master.component';
 import { ModeDialogPupilComponent } from '../components/mode_dialog_pupil/mode_dialog_pupil.component';
+import { DialogViewComponent } from './dialogview.component';
 
 
 
@@ -20,7 +21,8 @@ import { ModeDialogPupilComponent } from '../components/mode_dialog_pupil/mode_d
     ModeWaitPupilComponent,
     ModeCallingComponent,
     ModeDialogMasterComponent,
-    ModeDialogPupilComponent
+    ModeDialogPupilComponent,
+    DialogViewComponent
   ],
   imports: [
     BrowserModule,
@@ -33,7 +35,8 @@ import { ModeDialogPupilComponent } from '../components/mode_dialog_pupil/mode_d
     ModeWaitPupilComponent,
     ModeCallingComponent,
     ModeDialogMasterComponent,
-    ModeDialogPupilComponent
+    ModeDialogPupilComponent,
+    DialogViewComponent
   ],
 })
 

@@ -9,7 +9,8 @@ from django.shortcuts import render
 
 
 def sredirect(request, url):
-    return HttpResponseRedirect("/dash/#/%s" % url)
+    # return HttpResponseRedirect("/")
+    return HttpResponseRedirect("/#/%s" % url)
 
 
 def app(request):
@@ -26,5 +27,5 @@ urlpatterns = [
     url(r'^dialogs/', include('dialogs.urls')),
     # JS-приложение
     url(r'^$', app, name='app'),
-    # url(r'^(?P<url>.*)$', sredirect),
+    url(r'^(?P<url>.*)$', sredirect),
 ]

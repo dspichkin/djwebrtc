@@ -2,15 +2,14 @@
 
 from django.conf.urls import url
 
-#from peerjs.views import (
-#)
 from dialogs.views import (
-    get_dialogs, get_activedialogs, get_activedialog,
+    get_dialog, get_dialogs, get_activedialogs, get_activedialog,
     run_dialog, stop_dialog, user_status, stop_activedialog)
 
 
 urlpatterns = [
     url(r'^api/dialogs/?$', get_dialogs, name="get_dialogs"),
+    url(r'^api/dialogs/(?P<dialog_pk>\d+)/?$', get_dialog, name="get_dialog"),
     url(r'^api/activedialogs/?$', get_activedialogs, name="get_activedialogs"),
     url(r'^api/activedialogs/(?P<activedialog_pk>\d+)/?$', get_activedialog, name="get_activedialog"),
     url(r'^api/run/(?P<dialog_pk>\d+)/?$', run_dialog, name="run_dialog"),

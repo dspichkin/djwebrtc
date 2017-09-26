@@ -30,3 +30,28 @@
     </div>
   </div>
 </nav>
+
+<div *ngIf="server_error" style="position: absolute;top:0;left:0;height: 100%;width: 100%;z-index: 100;">
+    <div style="position: absolute;opacity: 0.7;width:100%;height:100%;background-color: white;"></div>
+    <div style="position: relative;margin: auto;margin-top: 160px;text-align: center;color: darkred;">
+        <h1>Ошибка доступа к серверу...</h1>
+    </div>
+</div>
+
+<div *ngIf="errors.length > 0" style="position:absolute;width:100%;top:0;right:0;z-index:1000;">
+    <div *ngFor="let error of errors;let i=index" class="alert alert-danger" style="margin: 0 0 5px 0;max-height: 300px;overflow-y: auto;">
+        <button aria-hidden="true" data-dismiss="alert" class="close" type="button" (click)="removeError(i)" style="margin-top:-10px;margin-right: -10px;">×</button>
+        <span *ngIf="error?.host" style="font-weight: 800;">Host: {{error?.host}}</span> 
+        <span  *ngIf="error?.message"><pre>Описание: {{error?.message}} </pre></span>
+        <span  *ngIf="error?.rc">Код rc: {{error?.rc}}</span>
+    </div>
+</div>
+
+<div *ngIf="messages.length > 0" style="position:absolute;width:100%;top:0;right:0;z-index:1000;">
+    <div *ngFor="let message of messages;let i=index" class="alert alert-success" style="margin: 0 0 5px 0;max-height: 300px;overflow-y: auto;">
+        <button aria-hidden="true" data-dismiss="alert" class="close" type="button" (click)="removeMessage(i)" style="margin-top:-10px;margin-right: -10px;">×</button>
+        <span *ngIf="message?.host" style="font-weight: 800;">Host: {{message?.host}}</span> 
+        <span  *ngIf="message?.message"><pre>Описание: {{message?.message}} </pre></span>
+        <span  *ngIf="message?.rc">Код rc: {{message?.rc}}</span>
+    </div>
+</div>

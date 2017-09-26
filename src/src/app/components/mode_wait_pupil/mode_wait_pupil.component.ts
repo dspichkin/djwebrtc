@@ -37,14 +37,11 @@ export class ModeWaitPupilComponent implements OnInit, OnDestroy {
 
         self.webSocketService.message.subscribe((data) => {
             let message = JSON.parse(data);
-            //console.log("message", message)
-
             if (message.command == 'CALLING') {
                 if (message.target == 'TAKEPHONE') {
                     self._calling(message.user)
                 }
             }
-            
         })
 
     }

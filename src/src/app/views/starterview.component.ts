@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit, ViewChild, ChangeDetectorRef} from '@angu
 import { DomSanitizer } from '@angular/platform-browser';
 import { Http } from "@angular/http";
 import { Observable } from 'rxjs/Observable';
+import { Router } from '@angular/router';
 
 import { StatusService } from '../services/status.service';
 import { DialogsService } from '../services/dialogs.service';
@@ -38,7 +39,8 @@ export class StarterViewComponent implements OnInit  {
     public constructor(
         private statusService: StatusService,
         private dialogsService: DialogsService,
-        private webSocketService: WebSocketService) {
+        private webSocketService: WebSocketService,
+        private router: Router) {
         
     }
 
@@ -139,7 +141,7 @@ export class StarterViewComponent implements OnInit  {
         let self = this;
         self.loading = true;
         self.dialogsService.runDialog(dialog.id).subscribe((data) => {
-            console.log(data)
+            //console.log(data)
             self.loading = false;
             if (data.status) {
                 self.mode = AppSettings.MODE_WAIT_PUPIL;
@@ -219,6 +221,8 @@ export class StarterViewComponent implements OnInit  {
         self.webSocketService.sendCommand(command)
         this._updateActiveDialogs();
     }
+
+    
 
 
 }

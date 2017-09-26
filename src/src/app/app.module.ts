@@ -13,6 +13,8 @@ import { LayoutsModule } from "./components/common/layouts/layouts.module";
 
 import { DialogsService } from './services/dialogs.service';
 import { StatusService } from './services/status.service';
+import { ErrorService } from './services/error.service';
+import { AuthGuard } from './services/guards.service';
 
 
 
@@ -36,13 +38,15 @@ export const AppCSRF = {
         AppviewsModule,
         LayoutsModule,
         HttpModule,
-        RouterModule.forRoot(ROUTES),
+        RouterModule.forRoot(ROUTES, { useHash: true }),
     ],
     providers: [
         WebSocketService,
         AppCSRF,
         StatusService,
-        DialogsService
+        DialogsService,
+        ErrorService,
+        AuthGuard
     ],
     bootstrap: [AppComponent]
 })

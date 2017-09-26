@@ -15,7 +15,13 @@ export class DialogsService {
     constructor(private _http: Http) {}
 
     
-
+    getDialog(dialog_id): Observable<Dialog[]> {
+        return this._http.get(AppSettings.URL_DIALOGS + dialog_id + '/')
+            .map((response: Response) => {
+                return response.json();
+            })
+            .catch(this.handleError);
+    }
 
     getDialogs(): Observable<Dialog[]> {
         return this._http.get(AppSettings.URL_DIALOGS)

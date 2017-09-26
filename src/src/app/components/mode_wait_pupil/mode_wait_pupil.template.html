@@ -10,6 +10,7 @@
         </div>
     </div>
     <div class="panel-body">
+        <p>Запущен {{activedialog.created_at | date:"hh:mm dd-mm-yyyy"}}</p>
         <p *ngIf="callingfroms.length > 0">Входящие звонки</p>
         <callingfroms [listin]="callingfroms" (rejectfrom)="handlerRejectfrom($event)" (takecall)="handlerTakeCall($event)"></callingfroms>
         <div style="margin-top: 30px">
