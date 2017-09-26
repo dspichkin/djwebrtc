@@ -1,0 +1,50 @@
+<div class="row">
+    <div class="container">
+        <div class="panel panel-default">
+             <div class="panel-heading">
+                <div class="container">
+                    <div class="col-md-6" style="display: flex;">
+                        <div style="line-height: 2;">Выбор персонажа</div>
+                        <select class="form-control" [(ngModel)]="selectedPersonage" style="margin-left: 20px;width: 150px;" (ngModelChange)="onChangePersonage()">
+                            <option *ngFor="let pesonage of personages" [value]="pesonage.role">{{pesonage.name}}</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6" style="text-align: right;">
+                        <p style="margin: 0 40px;">{{dialog?.name}}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body">
+                <div *ngIf="dialog && dialog.scenario" class="panel panel-primary">
+                    <div class="panel-heading">
+                        Текущий шаг: {{index_step + 1}}
+                    </div>
+                    <div class="panel-body" style="min-height: 200px;">
+                        <span>Вам нужно сказать:</span> <h4 class="text-success">{{getTask()}}</h4>
+                        <div style="margin-top:40px">
+                            <button *ngIf="words.length == 0" class="btn btn-info btn-xs" type="button" (click)="getWords()">Посмотреть слова</button>
+                             <button *ngIf="words.length > 0" class="btn btn-info btn-xs" type="button" (click)="clearWords()">Скрыть слова</button>
+                            <button *ngIf="hints.length == 0"  class="btn btn-default btn-xs" type="button" (click)="getHints()">Посмотреть подсказку</button>
+                            <button *ngIf="hints.length > 0" class="btn btn-default btn-xs" type="button" (click)="clearHints()">Убрать подсказку</button>
+                        </div>
+
+
+                        <div *ngIf="words.length > 0" style="margin-top:20px;display: flex;justify-content: center;flex-wrap: wrap;">
+                            <span *ngFor="let item of words" class="label label-success" style="margin: 10px;padding: 10px;font-size: 16px;">{{item}}</span>
+                        </div>
+                        <div *ngIf="hints.length > 0" style="margin-top:20px;">
+                            <p *ngFor="let item of hints" class="alert alert-success" style="margin: 5px 0;">
+                                {{item}}
+                            </p>
+                            
+                        </div>
+                    </div>
+                    <div class="panel-footer" style="text-align: right;">
+                        <button *ngIf="index_step > 0" class="btn btn-info" type="button">Назад</button>
+                        <button *ngIf="index_step < dialog?.scenario?.steps.length"class="btn btn-info" type="button">Вперед</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

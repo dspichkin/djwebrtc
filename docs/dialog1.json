@@ -1,0 +1,72 @@
+{
+    "personages": [
+        {
+            "role": "master",
+            "name": "Receptionist"
+        }, {
+            "role": "pupil",
+            "name": "Mr Kent"
+        }
+    ],
+    "steps": [{
+        "start_personage": "pupil",
+        "master": {
+            "task": ["Да, сэр. Как вы сказали ваша фамилия?"],
+            "phrases" : ["Yes, sir. What did you say the name was, sir?"]
+        },
+        "pupil": {
+            "task": ["Добрый вечер. Моя фамилия Кент. Я заказывал номер на прошлой неделе для себя и своей семьи."],
+            "phrases": ["Good evening. My name is Kent. I booked a room last week for my family and myself."]
+        }
+    }, {
+        "start_personage": "pupil",
+        "master": {
+            "task": ["Ах да, вижу. Мы получили ваше письмо. Номера 11 и 12. Если вы подпишетесь в журнале регистраций я вызову носильщика, который покажет вам номер и поможет вам с багажом."],
+            "phrases" : ["Ah yes – here we are, sir. Yes – we got your letter. Rooms 11 and 12. If you’ll sign the register, I’ll ask the porter to show you the rooms and help you with your luggage."]
+        },
+        "pupil": {
+            "task": ["Кент. Я просил два двухместных номера - один для моей жены и меня и второй для двоих детей."],
+            "phrases": ["Kent. I asked for two double rooms – one for my wife and myself and one for the two children."]
+        }
+    }, {
+        "start_personage": "pupil",
+        "master": {
+            "task": ["Вот здесь, сэр - полное имя, домашний адрес, дата и подпись."],
+            "phrases" : ["Just here, sir – full name, home address, date and signature."]
+        },
+        "pupil": {
+            "task": ["Спасибо. Где мне расписаться?"],
+            "phrases": ["Thank you. Where do I sign?"]
+        }
+    }, {
+        "start_personage": "pupil",
+        "master": {
+            "task": ["Спасибо, сэр. Я надеюсь, вам понравяться номера. В одном из них есть ванная комната. Во второй, я боюсь, нет, но есть ванная комната совсем рядом по корридору. В каждом номере есть радио, и, конечно, обслуживание номеров доступно по телефону."],
+            "phrases" : ["Thank you, sir. I think you’ll find the rooms comfortable. One of them has a bathroom. The other hasn’t I’m afraid, but there’s a bathroom very near – just along the corridor. There’s a radio in each room and of course if you want Room Service just use the telephone."]
+        },
+        "pupil": {
+            "task": ["Готово"],
+            "phrases": ["Right – there we are."]
+        }
+    }, {
+        "start_personage": "pupil",
+        "master": {
+            "task": ["Ужин с 18.30 до 21.30. Завтраки мы накрываем начиная с 7.30. Вы так же можете заказать чай в номер с 6.30 если пожелаете. Столовая находиться вон там."],
+            "phrases" : ["Dinner is from 6.30 until 9.30. We start serving breakfast at 7.30 in the morning and you can have morning tea in your room if you wish - from 6.30 onwards. ... You’ll find the dining-room just over there."]
+        },
+        "pupil": {
+            "task": ["Что насчет приемов пищи? Мы хотели бы ужин и завтрак до нашего ухода."],
+            "phrases": ["Yes – now what about meal times? We’d like dinner of course – and breakfast in the morning before we leave."]
+        }
+    }, {
+        "start_personage": "pupil",
+        "master": {
+            "task": ["Ужин с 18.30 до 21.30. Завтраки мы накрываем начиная с 7.30. Вы так же можете заказать чай в номер с 6.30 если пожелаете. Столовая находиться вон там."],
+            "phrases" : ["Dinner is from 6.30 until 9.30. We start serving breakfast at 7.30 in the morning and you can have morning tea in your room if you wish - from 6.30 onwards. ... You’ll find the dining-room just over there."]
+        },
+        "pupil": {
+            "task": ["Большое спасибо."],
+            "phrases": ["Thank you very much."]
+        }
+    }]
+}
