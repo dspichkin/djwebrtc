@@ -22,10 +22,7 @@ export class DialogViewComponent implements OnInit  {
     public dialog;
     public personages = [];
     public selectedPersonage;
-    public index_step: number = 0;
     public current_step;
-    public words = [];
-    public hints = [];
 
     public constructor(
         private statusService: StatusService,
@@ -49,6 +46,7 @@ export class DialogViewComponent implements OnInit  {
     
     public onChangePersonage() {
         console.log('self.selectedPersonage', this.selectedPersonage)
+        this.nextStep(this.current_step.id);
     }
     
     
@@ -62,15 +60,10 @@ export class DialogViewComponent implements OnInit  {
                 
                 if (this.dialog.scenario && this.dialog.scenario.personages) {
                     self.personages = this.dialog.scenario.personages;
-                    self.index_step = 0;
                     self.selectedPersonage = self.dialog.scenario.steps[0].start_personage;
-                    self.current_step = self._getStep();
+                    self.nextStep();
                 }
             });
-    }
-
-    private _getStep() {
-        return this.dialog.scenario.steps[this.index_step][this.selectedPersonage];
     }
 
     private _shuffle(a) {
@@ -81,39 +74,41 @@ export class DialogViewComponent implements OnInit  {
     }
 
     public getTask() {
-        if (this.current_step.task.length < 2) {
-            return this.current_step.task[0];
+        let tasks = [];
+        for (let i = 0; i < this.current_step.variants.length; i++) {
+            tasks.push(this.current_step.variants[i])
         }
-        return this.current_step.task[0];
+        return tasks
     }
 
-    public getPhraseForHint() {
-        let phrase = "";
-        for (let i = 0; i < this.current_step.phrases.length; i++) {
-            phrase += this.current_step.phrases[i];
-            phrase += ' ';
+
+    public getWords(item) {
+        item.words = item.phrase.split(' ');
+        this._shuffle(item.words);
+        this._shuffle(item.words);
+    }
+
+    public clearWords(item) {
+        item.words = [];
+    }
+
+    public getHints(item) {
+        item.hints = item.phrase;
+    }
+    public clearHints(item) {
+        item.hints = null;
+    }
+
+    public nextStep(next_step_id?) {
+        if (next_step_id) {
+            for (var i = 0; i < this.dialog.scenario.steps.length; i++) {
+                if (this.dialog.scenario.steps[i].id == next_step_id) {
+                    this.current_step = this.dialog.scenario.steps[i][this.selectedPersonage];
+                    return;
+                } 
+            }
         }
-        return phrase;
-    }
-
-
-    public getWords() {
-        console.log('this.current_step[this.selectedPersonage]', this.current_step)
-        let phrase = this.getPhraseForHint();
-        this.words = phrase.split(' ');
-        this._shuffle(this.words);
-        this._shuffle(this.words);
-    }
-
-    public clearWords() {
-        this.words = [];
-    }
-
-    public getHints() {
-        this.hints = this.current_step.phrases;
-    }
-    public clearHints() {
-        this.hints = [];
+        this.current_step = this.dialog.scenario.steps[0][this.selectedPersonage];
     }
 
 

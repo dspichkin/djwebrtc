@@ -47,21 +47,21 @@ def ws_message(message):
             target = data.get("target")
             source = data.get("source")
             if target:
-                activedialog = get_object_or_404(ActiveDialog, pk=target)
-
-                presense = Presence.objects.filter(room__channel_name="Clients", user=activedialog.master).last()
-                source_user = Account.objects.filter(key_id=source).first()
-                if source_user and presense:
-                    Group("call-client-%s" % activedialog.master.key_id).send({
-                        'text': json.dumps({
-                            'command': "CALLING",
-                            'target': "TAKEPHONE",
-                            'user': {
-                                'fio': source_user.fio(),
-                                'key_id': source_user.key_id
-                            }
+                activedialog = ActiveDialog.objects.filter(pk=target).first()
+                if activedialog:
+                    presense = Presence.objects.filter(room__channel_name="Clients", user=activedialog.master).last()
+                    source_user = Account.objects.filter(key_id=source).first()
+                    if source_user and presense:
+                        Group("call-client-%s" % activedialog.master.key_id).send({
+                            'text': json.dumps({
+                                'command': "CALLING",
+                                'target': "TAKEPHONE",
+                                'user': {
+                                    'fio': source_user.fio(),
+                                    'key_id': source_user.key_id
+                                }
+                            })
                         })
-                    })
         if command == 'CALLING_MASTER_REJECT':
             target = data.get("target")
             source = data.get("source")
@@ -202,7 +202,6 @@ def ws_disconnect(message):
         if account:
             ad_master = ActiveDialog.objects.filter(master=account, status=DIALOG_ACTIVE).first()
             if ad_master:
-                print "send pupil", ad_master.pupil.key_id
                 Group("call-client-%s" % ad_master.pupil.key_id).send({
                     'text': json.dumps({
                         'dst': ad_master.pupil.key_id,
@@ -214,7 +213,6 @@ def ws_disconnect(message):
                 # ad_master.status = DIALOG_STOP
             ad_pupil = ActiveDialog.objects.filter(pupil=account, status=DIALOG_ACTIVE).first()
             if ad_pupil:
-                print "send master", ad_pupil.master.key_id
                 Group("call-client-%s" % ad_pupil.master.key_id).send({
                     'text': json.dumps({
                         'dst': ad_pupil.master.key_id,

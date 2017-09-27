@@ -11,14 +11,14 @@ import { AuthGuard } from './services/guards.service';
 
 export const ROUTES:Routes = [
   // Main redirect
-  {path: '', redirectTo: 'starterview', pathMatch: 'full'},
+  {path: '', redirectTo: 'dialogs', pathMatch: 'full'},
 
   // App views
   {
     path: '', component: BasicLayoutComponent,
     children: [
         {
-            path: '', 
+            path: 'dialogs', 
             component: StarterViewComponent,
             canActivate: [AuthGuard]
         }
@@ -46,8 +46,6 @@ export const ROUTES:Routes = [
     ]
   },
   */
-  
-
   // Handle all other routes
-  {path: '**',  redirectTo: '/'}
+  {path: '**',  redirectTo: 'dialogs'}
 ];

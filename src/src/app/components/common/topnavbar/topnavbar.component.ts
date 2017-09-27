@@ -80,4 +80,8 @@ export class TopNavbarComponent implements OnInit {
         this.router.navigate(['/login']);
     }
 
+    activeRoute(routename: string): boolean{
+        return this.router.url.indexOf(routename) > -1;
+    }
+
 }

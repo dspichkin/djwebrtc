@@ -181,13 +181,13 @@ AppModule = __decorate([
 
 var ROUTES = [
     // Main redirect
-    { path: '', redirectTo: 'starterview', pathMatch: 'full' },
+    { path: '', redirectTo: 'dialogs', pathMatch: 'full' },
     // App views
     {
         path: '', component: __WEBPACK_IMPORTED_MODULE_2__components_common_layouts_basicLayout_component__["a" /* BasicLayoutComponent */],
         children: [
             {
-                path: '',
+                path: 'dialogs',
                 component: __WEBPACK_IMPORTED_MODULE_0__views_starterview_component__["a" /* StarterViewComponent */],
                 canActivate: [__WEBPACK_IMPORTED_MODULE_3__services_guards_service__["a" /* AuthGuard */]]
             }
@@ -216,7 +216,7 @@ var ROUTES = [
     },
     */
     // Handle all other routes
-    { path: '**', redirectTo: '/' }
+    { path: '**', redirectTo: 'dialogs' }
 ];
 //# sourceMappingURL=app.routes.js.map
 
@@ -497,6 +497,9 @@ var TopNavbarComponent = (function () {
         //this.authenticationService.logout();
         this.router.navigate(['/login']);
     };
+    TopNavbarComponent.prototype.activeRoute = function (routename) {
+        return this.router.url.indexOf(routename) > -1;
+    };
     return TopNavbarComponent;
 }());
 TopNavbarComponent = __decorate([
@@ -515,7 +518,7 @@ var _a, _b, _c, _d;
 /***/ "../../../../../src/app/components/common/topnavbar/topnavbar.template.html":
 /***/ (function(module, exports) {
 
-module.exports = "<nav class=\"navbar navbar-default top-nav-collapse\" style=\"border-radius: 0px;\">\n  <div class=\"container\">\n    <div class=\"navbar-header\">\n      <button type=\"button\" class=\"navbar-toggle\" data-toggle=\"collapse\" data-target=\"#myNavbar\">\n        <span class=\"icon-bar\"></span>\n        <span class=\"icon-bar\"></span>\n        <span class=\"icon-bar\"></span>\n      </button>\n      <a class=\"navbar-brand\" href=\"#\">Ba<span class=\"logo-dec\">ker</span></a>\n    </div>\n    <div class=\"collapse navbar-collapse\" id=\"myNavbar\">\n      <ul class=\"nav navbar-nav navbar-right\">\n        <li class=\"active\"><a href=\"#main-header\">Home</a></li>\n        <li class=\"\"><a href=\"#feature\">About</a></li>\n        <li class=\"\"><a href=\"#service\">Services</a></li>\n        <li class=\"\"><a href=\"#portfolio\">Portfolio</a></li>\n        <li class=\"\"><a href=\"#testimonial\">Testimonial</a></li>\n        <li class=\"\"><a href=\"#blog\">Blog</a></li>\n        <li class=\"dropdown\">\n            <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\" role=\"button\" aria-haspopup=\"true\" aria-expanded=\"false\">{{user?.fio}} <span class=\"caret\"></span></a>\n              <ul class=\"dropdown-menu\">\n                <li><a href=\"#\">Action</a></li>\n                <li><a href=\"#\">Another action</a></li>\n                <li><a href=\"#\">Something else here</a></li>\n                <li role=\"separator\" class=\"divider\"></li>\n                <li><a href=\"/accounts/logout/?next=/\" target=\"_self\">Выход</a></li>\n              </ul>\n        </li>\n      </ul>\n    </div>\n  </div>\n</nav>\n\n<div *ngIf=\"server_error\" style=\"position: absolute;top:0;left:0;height: 100%;width: 100%;z-index: 100;\">\n    <div style=\"position: absolute;opacity: 0.7;width:100%;height:100%;background-color: white;\"></div>\n    <div style=\"position: relative;margin: auto;margin-top: 160px;text-align: center;color: darkred;\">\n        <h1>Ошибка доступа к серверу...</h1>\n    </div>\n</div>\n\n<div *ngIf=\"errors.length > 0\" style=\"position:absolute;width:100%;top:0;right:0;z-index:1000;\">\n    <div *ngFor=\"let error of errors;let i=index\" class=\"alert alert-danger\" style=\"margin: 0 0 5px 0;max-height: 300px;overflow-y: auto;\">\n        <button aria-hidden=\"true\" data-dismiss=\"alert\" class=\"close\" type=\"button\" (click)=\"removeError(i)\" style=\"margin-top:-10px;margin-right: -10px;\">×</button>\n        <span *ngIf=\"error?.host\" style=\"font-weight: 800;\">Host: {{error?.host}}</span> \n        <span  *ngIf=\"error?.message\"><pre>Описание: {{error?.message}} </pre></span>\n        <span  *ngIf=\"error?.rc\">Код rc: {{error?.rc}}</span>\n    </div>\n</div>\n\n<div *ngIf=\"messages.length > 0\" style=\"position:absolute;width:100%;top:0;right:0;z-index:1000;\">\n    <div *ngFor=\"let message of messages;let i=index\" class=\"alert alert-success\" style=\"margin: 0 0 5px 0;max-height: 300px;overflow-y: auto;\">\n        <button aria-hidden=\"true\" data-dismiss=\"alert\" class=\"close\" type=\"button\" (click)=\"removeMessage(i)\" style=\"margin-top:-10px;margin-right: -10px;\">×</button>\n        <span *ngIf=\"message?.host\" style=\"font-weight: 800;\">Host: {{message?.host}}</span> \n        <span  *ngIf=\"message?.message\"><pre>Описание: {{message?.message}} </pre></span>\n        <span  *ngIf=\"message?.rc\">Код rc: {{message?.rc}}</span>\n    </div>\n</div>"
+module.exports = "<nav class=\"navbar navbar-default top-nav-collapse\" style=\"border-radius: 0px;\">\n  <div class=\"container\">\n    <div class=\"navbar-header\">\n      <button type=\"button\" class=\"navbar-toggle\" data-toggle=\"collapse\" data-target=\"#myNavbar\">\n        <span class=\"icon-bar\"></span>\n        <span class=\"icon-bar\"></span>\n        <span class=\"icon-bar\"></span>\n      </button>\n      <a class=\"navbar-brand\" href=\"#\">Ba<span class=\"logo-dec\">ker</span></a>\n    </div>\n    <div class=\"collapse navbar-collapse\" id=\"myNavbar\">\n      <ul class=\"nav navbar-nav navbar-right\">\n        <li [ngClass]=\"{'active': activeRoute('dialogs')}\">\n            <a [routerLink]=\"['/#/dialogs/']\">Диалоги</a>\n        </li>\n        <li class=\"\"><a href=\"#service\">Services</a></li>\n        <li class=\"\"><a href=\"#portfolio\">Portfolio</a></li>\n        <li class=\"\"><a href=\"#testimonial\">Testimonial</a></li>\n        <li class=\"\"><a href=\"#blog\">Blog</a></li>\n        <li class=\"dropdown\">\n            <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\" role=\"button\" aria-haspopup=\"true\" aria-expanded=\"false\">{{user?.fio}} <span class=\"caret\"></span></a>\n              <ul class=\"dropdown-menu\">\n                <li><a href=\"#\">Action</a></li>\n                <li><a href=\"#\">Another action</a></li>\n                <li><a href=\"#\">Something else here</a></li>\n                <li role=\"separator\" class=\"divider\"></li>\n                <li><a href=\"/accounts/logout/?next=/\" target=\"_self\">Выход</a></li>\n              </ul>\n        </li>\n      </ul>\n    </div>\n  </div>\n</nav>\n\n<div *ngIf=\"server_error\" style=\"position: absolute;top:0;left:0;height: 100%;width: 100%;z-index: 100;\">\n    <div style=\"position: absolute;opacity: 0.7;width:100%;height:100%;background-color: white;\"></div>\n    <div style=\"position: relative;margin: auto;margin-top: 160px;text-align: center;color: darkred;\">\n        <h1>Опс... не могу получить доступ к серверу</h1>\n        <h4>Работа сайта возобновится после восстановления доступа к серверу</h4>\n    </div>\n</div>\n\n<div *ngIf=\"errors.length > 0\" style=\"position:absolute;width:100%;top:0;right:0;z-index:1000;\">\n    <div *ngFor=\"let error of errors;let i=index\" class=\"alert alert-danger\" style=\"margin: 0 0 5px 0;max-height: 300px;overflow-y: auto;\">\n        <button aria-hidden=\"true\" data-dismiss=\"alert\" class=\"close\" type=\"button\" (click)=\"removeError(i)\" style=\"margin-top:-10px;margin-right: -10px;\">×</button>\n        <span *ngIf=\"error?.host\" style=\"font-weight: 800;\">Host: {{error?.host}}</span> \n        <span  *ngIf=\"error?.message\"><pre>Описание: {{error?.message}} </pre></span>\n        <span  *ngIf=\"error?.rc\">Код rc: {{error?.rc}}</span>\n    </div>\n</div>\n\n<div *ngIf=\"messages.length > 0\" style=\"position:absolute;width:100%;top:0;right:0;z-index:1000;\">\n    <div *ngFor=\"let message of messages;let i=index\" class=\"alert alert-success\" style=\"margin: 0 0 5px 0;max-height: 300px;overflow-y: auto;\">\n        <button aria-hidden=\"true\" data-dismiss=\"alert\" class=\"close\" type=\"button\" (click)=\"removeMessage(i)\" style=\"margin-top:-10px;margin-right: -10px;\">×</button>\n        <span *ngIf=\"message?.host\" style=\"font-weight: 800;\">Host: {{message?.host}}</span> \n        <span  *ngIf=\"message?.message\"><pre>Описание: {{message?.message}} </pre></span>\n        <span  *ngIf=\"message?.rc\">Код rc: {{message?.rc}}</span>\n    </div>\n</div>"
 
 /***/ }),
 
@@ -638,6 +641,7 @@ var ModeDialogMasterComponent = (function () {
         self.dialogsService.getActiveDialog(self.activedialogid).subscribe(function (data) {
             self.activedialog = data;
             _this._startPeer();
+            console.log('self.activedialog', self.activedialog);
         });
         self.webSocketService.message.subscribe(function (data) {
             var message = JSON.parse(data);
@@ -846,7 +850,7 @@ var _a, _b, _c, _d, _e;
 /***/ "../../../../../src/app/components/mode_dialog_master/mode_dialog_master.template.html":
 /***/ (function(module, exports) {
 
-module.exports = " <div class=\"panel panel-default\">\n     <div class=\"panel-heading\">\n        <div class=\"container\">\n            <div class=\"col-md-6\">\n                <h4>Диалог мастер</h4>\n                <p *ngIf=\"status_activedialog=='run'\"  style=\"font-size: 12px;color:green;\">Диалог запущен</p>\n                <p *ngIf=\"status_activedialog=='stop'\" style=\"font-size: 12px;color:red;\">Диалог остановлен</p>\n                <p *ngIf=\"status_activedialog=='starting'\" style=\"font-size: 12px;color:blue;\">Диалог запускается</p>\n            </div>\n            <div class=\"col-md-6\" style=\"text-align: right;\">\n                <p *ngIf=\"activedialog\" style=\"margin: 0 20px;\">{{activedialog.dialog.name}}</p>\n                <p *ngIf=\"during_conversation\" style=\"margin: 0 20px;font-size: 8px;\">{{displayTime(during_conversation)}}</p>\n            </div>\n        </div>\n    </div>\n    <div class=\"panel-body\">\n\n        <div [hidden]=\"status_activedialog != 'run'\" class=\"row\">\n            <div class=\"container\" style=\"text-align: right;\">\n                <div class=\"pull-right\" style=\"display: flex;\">\n                    <div style=\"margin: 5px;\">\n                        <video #remoteVideo autoplay=\"\" style=\"border:2px solid red;width: 100px;\"></video>\n                        <p style=\"font-size: 8px;margin-top: -5px;\">Remote</p>\n                    </div>\n                    <div style=\"margin: 5px;\">\n                        <video #localVideo muted=\"true\" autoplay=\"\" style=\"border:2px solid green;width: 100px;\"></video>\n                        <p style=\"font-size: 8px;margin-top: -5px;\">Local</p>\n                    </div>\n                </div>\n            </div>\n        </div>\n        \n        <div style=\"margin-top: 30px\">\n            <button  *ngIf=\"status_activedialog=='run'\" class=\"btn btn-warning\" (click)=\"hangPhone()\"><span>Остановить диалог</span></button>\n            <button class=\"btn btn-warning\" (click)=\"exitDialog()\"><span>Выход из режима диалога</span></button>\n        </div>\n    </div>\n</div>"
+module.exports = " <div class=\"panel panel-default\">\n     <div class=\"panel-heading\">\n        <div class=\"container\">\n            <div class=\"col-md-6\">\n                <h4>Диалог мастер</h4>\n                <p *ngIf=\"status_activedialog=='run'\"  style=\"font-size: 12px;color:green;\">Диалог запущен</p>\n                <p *ngIf=\"status_activedialog=='stop'\" style=\"font-size: 12px;color:red;\">Диалог остановлен</p>\n                <p *ngIf=\"status_activedialog=='starting'\" style=\"font-size: 12px;color:blue;\">Диалог запускается</p>\n            </div>\n            <div class=\"col-md-6\" style=\"text-align: right;\">\n                <p *ngIf=\"activedialog\" style=\"margin: 0 40px;\">{{activedialog.dialog.name}}</p>\n                <p *ngIf=\"during_conversation\" style=\"margin: 0 40px;font-size: 8px;\">{{displayTime(during_conversation)}}</p>\n            </div>\n        </div>\n    </div>\n    <div class=\"panel-body\">\n\n        <div [hidden]=\"status_activedialog != 'run'\" class=\"row\">\n            <div class=\"pull-right\" style=\"display: flex;justify-content: flex-end;\">\n                <div class=\"pull-right\" style=\"display: flex;\">\n                    <div style=\"margin: 5px;\">\n                        <video #remoteVideo autoplay=\"\" style=\"border:2px solid red;width: 100px;\"></video>\n                        <p style=\"font-size: 8px;margin-top: -5px;\">Remote</p>\n                    </div>\n                    <div style=\"margin: 5px;\">\n                        <video #localVideo muted=\"true\" autoplay=\"\" style=\"border:2px solid green;width: 100px;\"></video>\n                        <p style=\"font-size: 8px;margin-top: -5px;\">Local</p>\n                    </div>\n                </div>\n            </div>\n        </div>\n\n        <div class=\"row\" *ngIf=\"activedialog\">\n            <playerdialogmaster [activedialog]=\"activedialog\"></playerdialogmaster>\n        </div>\n        \n        <div style=\"margin-top: 30px\">\n            <button  *ngIf=\"status_activedialog=='run'\" class=\"btn btn-warning\" (click)=\"hangPhone()\"><span>Остановить диалог</span></button>\n            <button class=\"btn btn-warning\" (click)=\"exitDialog()\"><span>Выход из режима диалога</span></button>\n        </div>\n    </div>\n</div>"
 
 /***/ }),
 
@@ -1103,7 +1107,7 @@ var _a, _b, _c, _d, _e;
 /***/ "../../../../../src/app/components/mode_dialog_pupil/mode_dialog_pupil.template.html":
 /***/ (function(module, exports) {
 
-module.exports = " <div class=\"panel panel-default\">\n     <div class=\"panel-heading\">\n        <div class=\"container\">\n            <div class=\"col-md-6\">\n                <h4>Диалог ученик </h4>\n                <p *ngIf=\"status_activedialog=='run'\"  style=\"font-size: 12px;color:green;\">Диалог запущен</p>\n                <p *ngIf=\"status_activedialog=='stop'\" style=\"font-size: 12px;color:red;\">Диалог остановлен</p>\n                <p *ngIf=\"status_activedialog=='starting'\" style=\"font-size: 12px;color:blue;\">Диалог запускается</p>\n            </div>\n            <div class=\"col-md-6\" style=\"text-align: right;\">\n                <p *ngIf=\"activedialog\" style=\"margin: 0 20px;\">{{activedialog.dialog.name}}</p>\n                <p *ngIf=\"during_conversation\" style=\"margin: 0 20px;font-size: 8px;\">{{displayTime(during_conversation)}}</p>\n            </div>\n        </div>\n    </div>\n    <div class=\"panel-body\">\n\n        <!-- Loading -->\n        <div *ngIf=\"loading\" style=\"position: absolute;top:0;left:0;width:100%;height:100%;z-index: 100;\">\n            <div style=\"position: absolute;opacity: 0.5;width:100%;height:100%;background-color: white;\">\n            </div>\n            <div style=\"width: 50px;margin: auto;margin-top: 60px;\">\n                <i class=\"fa fa-spin fa-gear\" style=\"font-size: 50px;\"></i>\n            </div>\n        </div>\n        <!-- END Loading -->\n\n        <div [hidden]=\"status_activedialog != 'run'\" class=\"row\">\n            <div class=\"container\" style=\"text-align: right;\">\n                <div class=\"pull-right\" style=\"display: flex;\">\n                    <div style=\"margin: 5px;\">\n                        <video #remoteVideo autoplay=\"\" style=\"border:2px solid red;width: 100px;\"></video>\n                        <p style=\"font-size: 8px;margin-top: -5px;\">Remote</p>\n                    </div>\n                    <div style=\"margin: 5px;\">\n                        <video #localVideo muted=\"true\" autoplay=\"\" style=\"border:2px solid green;width: 100px;\"></video>\n                        <p style=\"font-size: 8px;margin-top: -5px;\">Local</p>\n                    </div>\n                </div>\n            </div>\n        </div>\n        \n        <div style=\"margin-top: 30px\">\n             <button *ngIf=\"status_activedialog=='run'\" class=\"btn btn-warning\" (click)=\"hangPhone()\"><span>Остановить диалог</span></button>\n            <button class=\"btn btn-warning\" (click)=\"exitDialog()\"><span>Выход из режима диалога</span></button>\n        </div>\n    </div>\n</div>"
+module.exports = " <div class=\"panel panel-default\">\n     <div class=\"panel-heading\">\n        <div class=\"container\">\n            <div class=\"col-md-6\">\n                <h4>Диалог ученик </h4>\n                <p *ngIf=\"status_activedialog=='run'\"  style=\"font-size: 12px;color:green;\">Диалог запущен</p>\n                <p *ngIf=\"status_activedialog=='stop'\" style=\"font-size: 12px;color:red;\">Диалог остановлен</p>\n                <p *ngIf=\"status_activedialog=='starting'\" style=\"font-size: 12px;color:blue;\">Диалог запускается</p>\n            </div>\n            <div class=\"col-md-6\" style=\"text-align: right;\">\n                <p *ngIf=\"activedialog\" style=\"margin: 0 40px;\">{{activedialog.dialog.name}}</p>\n                <p *ngIf=\"during_conversation\" style=\"margin: 0 40px;font-size: 8px;\">{{displayTime(during_conversation)}}</p>\n            </div>\n        </div>\n    </div>\n    <div class=\"panel-body\">\n\n        <!-- Loading -->\n        <div *ngIf=\"loading\" style=\"position: absolute;top:0;left:0;width:100%;height:100%;z-index: 100;\">\n            <div style=\"position: absolute;opacity: 0.5;width:100%;height:100%;background-color: white;\">\n            </div>\n            <div style=\"width: 50px;margin: auto;margin-top: 60px;\">\n                <i class=\"fa fa-spin fa-gear\" style=\"font-size: 50px;\"></i>\n            </div>\n        </div>\n        <!-- END Loading -->\n\n        <div [hidden]=\"status_activedialog != 'run'\" class=\"row\">\n            <div class=\"pull-right\" style=\"display: flex;justify-content: flex-end;\">\n                <div style=\"margin: 5px;\">\n                    <video #remoteVideo autoplay=\"\" style=\"border:2px solid red;width: 100px;\"></video>\n                    <p style=\"font-size: 8px;margin-top: -5px;\">Remote</p>\n                </div>\n                <div style=\"margin: 5px;\">\n                    <video #localVideo muted=\"true\" autoplay=\"\" style=\"border:2px solid green;width: 100px;\"></video>\n                    <p style=\"font-size: 8px;margin-top: -5px;\">Local</p>\n                </div>\n            </div>\n        </div>\n\n        <div class=\"row\" *ngIf=\"activedialog\">\n            <playerdialogpupil [activedialog]=\"activedialog\"></playerdialogpupil>\n        </div>\n        \n        <div style=\"margin-top: 30px\">\n             <button *ngIf=\"status_activedialog=='run'\" class=\"btn btn-warning\" (click)=\"hangPhone()\"><span>Остановить диалог</span></button>\n            <button class=\"btn btn-warning\" (click)=\"exitDialog()\"><span>Выход из режима диалога</span></button>\n        </div>\n    </div>\n</div>"
 
 /***/ }),
 
@@ -1218,7 +1222,234 @@ var _a, _b;
 /***/ "../../../../../src/app/components/mode_wait_pupil/mode_wait_pupil.template.html":
 /***/ (function(module, exports) {
 
-module.exports = " <div class=\"panel panel-default\">\n     <div class=\"panel-heading\">\n        <div class=\"container\">\n            <div class=\"col-md-6\">\n                <h4>В ожидание звонка...</h4>\n            </div>\n            <div class=\"col-md-6\" style=\"text-align: right;\">\n                <p style=\"margin: 0 20px;\">{{activedialog.dialog.name}}</p>\n            </div>\n        </div>\n    </div>\n    <div class=\"panel-body\">\n        <p>Запущен {{activedialog.created_at | date:\"hh:mm dd-mm-yyyy\"}}</p>\n        <p *ngIf=\"callingfroms.length > 0\">Входящие звонки</p>\n        <callingfroms [listin]=\"callingfroms\" (rejectfrom)=\"handlerRejectfrom($event)\" (takecall)=\"handlerTakeCall($event)\"></callingfroms>\n        <div style=\"margin-top: 30px\">\n            <button class=\"btn btn-warning\" (click)=\"stopWaitCallDialog()\"><span>Отмена</span></button>\n        </div>\n    </div>\n</div>"
+module.exports = " <div class=\"panel panel-default\">\n     <div class=\"panel-heading\">\n        <div class=\"container\">\n            <div class=\"col-md-6\">\n                <h4>В ожидание звонка от ученика...</h4>\n            </div>\n            <div class=\"col-md-6\" style=\"text-align: right;\">\n                <p style=\"margin: 0 40px;\">{{activedialog.dialog.name}}</p>\n            </div>\n        </div>\n    </div>\n    <div class=\"panel-body\">\n        <p>Запущен {{activedialog.created_at | date:\"hh:mm dd-mm-yyyy\"}}</p>\n        <p *ngIf=\"callingfroms.length > 0\">Входящие звонки</p>\n        <callingfroms [listin]=\"callingfroms\" (rejectfrom)=\"handlerRejectfrom($event)\" (takecall)=\"handlerTakeCall($event)\"></callingfroms>\n        <div style=\"margin-top: 30px\">\n            <button class=\"btn btn-warning\" (click)=\"stopWaitCallDialog()\"><span>Отмена</span></button>\n        </div>\n    </div>\n</div>"
+
+/***/ }),
+
+/***/ "../../../../../src/app/components/player_dialog_master/player_dialog_master.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return PlayerDialogMasterComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services_status_service__ = __webpack_require__("../../../../../src/app/services/status.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_dialogs_service__ = __webpack_require__("../../../../../src/app/services/dialogs.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__services_websocket_service__ = __webpack_require__("../../../../../src/app/services/websocket.service.ts");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+var PlayerDialogMasterComponent = (function () {
+    function PlayerDialogMasterComponent(statusService, dialogsService, webSocketService) {
+        this.statusService = statusService;
+        this.dialogsService = dialogsService;
+        this.webSocketService = webSocketService;
+        this.stopdialog = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]();
+        this.current_mode = 1; // 1 - ожидание хода 2 - мой ход
+        var self = this;
+    }
+    PlayerDialogMasterComponent.prototype.ngOnInit = function () {
+        var self = this;
+        self.webSocketService.message.subscribe(function (data) {
+            var message = JSON.parse(data);
+        });
+        this.current_step_id = this.activedialog.dialog.scenario.steps[0].id;
+        this._setMode();
+        this.current_step = this.activedialog.dialog.scenario.steps[0][this.currentPersonage];
+        console.log('currest step', this.current_step);
+        console.log('selectedPersonage', this.currentPersonage);
+    };
+    PlayerDialogMasterComponent.prototype.ngAfterViewInit = function () {
+    };
+    PlayerDialogMasterComponent.prototype.ngOnDestroy = function () {
+    };
+    PlayerDialogMasterComponent.prototype._setMode = function () {
+        var step = this._getStep(this.current_step_id);
+        if (step.start_personage == 'pupil') {
+            this.current_mode = 1; // Ожидаем ход игрока
+            this.currentPersonage = 'pupil';
+        }
+        else if (step.start_personage == 'master') {
+            this.currentPersonage = 2;
+            this.currentPersonage = 'master';
+        }
+    };
+    PlayerDialogMasterComponent.prototype.getTask = function () {
+        var tasks = [];
+        for (var i = 0; i < this.current_step.variants.length; i++) {
+            tasks.push(this.current_step.variants[i]);
+        }
+        return tasks;
+    };
+    PlayerDialogMasterComponent.prototype._getNextStep = function (next_step_id) {
+        if (next_step_id) {
+            var step = this._getStep(next_step_id);
+            if (step) {
+                return step[this.currentPersonage];
+            }
+        }
+    };
+    PlayerDialogMasterComponent.prototype._getStep = function (step_id) {
+        for (var i = 0; i < this.activedialog.dialog.scenario.steps.length; i++) {
+            if (this.activedialog.dialog.scenario.steps[i].id == step_id) {
+                return this.activedialog.dialog.scenario.steps[i];
+            }
+        }
+    };
+    return PlayerDialogMasterComponent;
+}());
+__decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
+    __metadata("design:type", Object)
+], PlayerDialogMasterComponent.prototype, "activedialog", void 0);
+__decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Output"])(),
+    __metadata("design:type", Object)
+], PlayerDialogMasterComponent.prototype, "stopdialog", void 0);
+PlayerDialogMasterComponent = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+        selector: 'playerdialogmaster',
+        template: __webpack_require__("../../../../../src/app/components/player_dialog_master/player_dialog_master.template.html")
+    }),
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__services_status_service__["a" /* StatusService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__services_status_service__["a" /* StatusService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__services_dialogs_service__["a" /* DialogsService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__services_dialogs_service__["a" /* DialogsService */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_3__services_websocket_service__["a" /* WebSocketService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__services_websocket_service__["a" /* WebSocketService */]) === "function" && _c || Object])
+], PlayerDialogMasterComponent);
+
+var _a, _b, _c;
+//# sourceMappingURL=player_dialog_master.component.js.map
+
+/***/ }),
+
+/***/ "../../../../../src/app/components/player_dialog_master/player_dialog_master.template.html":
+/***/ (function(module, exports) {
+
+module.exports = "<div class=\"row\">\n    <div class=\"container\">\n        <div style=\"margin: 20px;\">\n            <div *ngIf=\"activedialog.dialog && activedialog.dialog.scenario\" class=\"panel panel-primary\">\n                <div class=\"panel-heading\">\n                    Текущий шаг: {{current_step.number}} {{current_mode}}\n                </div>\n                <div *ngIf=\"current_mode == 2\" class=\"panel-body\" style=\"min-height: 200px;\">\n                    <span>Вам нужно сказать:</span> \n                    <div *ngFor=\"let item of getTask()\">\n                        <h4 class=\"text-success\">{{item.task}}</h4>\n\n                        <button *ngIf=\"item.prev_step > 0\" class=\"btn btn-info\" type=\"button\" (click)=\"nextStep(item.prev_step)\">Назад</button>\n                        <button *ngIf=\"item.next_step > 0\" class=\"btn btn-success\" type=\"button\" (click)=\"nextStep(item.next_step)\">Следуюйщий шаг</button>\n                    \n                        <div style=\"margin-top:40px\">\n                            <button *ngIf=\"!item.words || (item.words && item.words.length == 0)\" class=\"btn btn-info btn-xs\" type=\"button\" (click)=\"getWords(item)\">Посмотреть слова</button>\n                             <button *ngIf=\"item.words && item.words.length > 0\" class=\"btn btn-info btn-xs\" type=\"button\" (click)=\"clearWords(item)\">Скрыть слова</button>\n                            <button *ngIf=\"!item.hints\"  class=\"btn btn-default btn-xs\" type=\"button\" (click)=\"getHints(item)\">Посмотреть подсказку</button>\n                            <button *ngIf=\"item.hints\" class=\"btn btn-default btn-xs\" type=\"button\" (click)=\"clearHints(item)\">Убрать подсказку</button>\n                        </div>\n\n                        <div *ngIf=\"item.words && item.words.length > 0\" style=\"margin-top:20px;display: flex;justify-content: center;flex-wrap: wrap;\">\n                            <span *ngFor=\"let item of item.words\" class=\"label label-success\" style=\"margin: 10px;padding: 10px;font-size: 16px;\">{{item}}</span>\n                        </div>\n                        <div *ngIf=\"item.hints\" style=\"margin-top:20px;\">\n                            <p class=\"alert alert-success\" style=\"margin: 5px 0;\">\n                                {{item.hints}}\n                            </p>\n                        </div>\n                    </div> \n                </div>\n                <div *ngIf=\"current_mode == 1\" class=\"panel-body\" style=\"min-height: 200px;\">\n                    <h3 style=\"text-align: center;\">Ожидаем ход игрока</h3>\n                    <span>Ему нужно сказать:</span> \n                    <div *ngFor=\"let item of getTask()\">\n                        <p class=\"text-success\">{{item.task}}</p>\n                        <p class=\"\" style=\"margin: 5px 0;\">{{item.phrase}}</p>\n\n                        <button *ngIf=\"item.prev_step > 0\" class=\"btn btn-info\" type=\"button\" (click)=\"nextStep(item.prev_step)\">Назад</button>\n                        <button *ngIf=\"item.next_step > 0\" class=\"btn btn-success\" type=\"button\" (click)=\"nextStep(item.next_step)\">Следуюйщий шаг</button>\n                        \n                        \n                    </div> \n                </div>\n            </div>\n        </div>\n    </div>\n</div>"
+
+/***/ }),
+
+/***/ "../../../../../src/app/components/player_dialog_pupil/player_dialog_player.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return PlayerDialogPupilComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services_status_service__ = __webpack_require__("../../../../../src/app/services/status.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_dialogs_service__ = __webpack_require__("../../../../../src/app/services/dialogs.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__services_websocket_service__ = __webpack_require__("../../../../../src/app/services/websocket.service.ts");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+var PlayerDialogPupilComponent = (function () {
+    function PlayerDialogPupilComponent(statusService, dialogsService, webSocketService) {
+        this.statusService = statusService;
+        this.dialogsService = dialogsService;
+        this.webSocketService = webSocketService;
+        this.stopdialog = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]();
+        var self = this;
+    }
+    PlayerDialogPupilComponent.prototype.ngOnInit = function () {
+        var self = this;
+        self.webSocketService.message.subscribe(function (data) {
+            var message = JSON.parse(data);
+        });
+        console.log('currest step', this.current_step);
+        console.log('selectedPersonage', this.selectedPersonage);
+        console.log("!!!!!this.current_mode0", this.current_mode);
+    };
+    PlayerDialogPupilComponent.prototype.ngAfterViewInit = function () {
+    };
+    PlayerDialogPupilComponent.prototype.ngOnDestroy = function () {
+    };
+    PlayerDialogPupilComponent.prototype._setMode = function () {
+        var step = this._getStep(this.current_step_id);
+        console.log("!!!!!this.current_mode1", step);
+        if (step.start_personage == 'pupil') {
+            this.current_mode = 2;
+            this.selectedPersonage = 'pupil';
+        }
+        else if (step.start_personage == 'master') {
+            this.current_mode = 1;
+            this.selectedPersonage = 'master';
+        }
+    };
+    PlayerDialogPupilComponent.prototype.ngOnChanges = function (changes) {
+        console.log("!!!!!", changes);
+        if (changes.activedialog && !changes.activedialog.previousValue) {
+            this.current_step_id = this.activedialog.dialog.scenario.steps[0].id;
+            //this.selectedPersonage = this.activedialog.dialog.scenario.steps[0].start_personage;
+            this._setMode();
+            this.current_step = this.activedialog.dialog.scenario.steps[0][this.selectedPersonage];
+            console.log("!!!!!this.selectedPersonage3", this.selectedPersonage);
+            console.log("!!!!!this.current_mode1", this.current_mode);
+        }
+    };
+    PlayerDialogPupilComponent.prototype.getTask = function () {
+        var tasks = [];
+        for (var i = 0; i < this.current_step.variants.length; i++) {
+            tasks.push(this.current_step.variants[i]);
+        }
+        return tasks;
+    };
+    PlayerDialogPupilComponent.prototype._getNextStep = function (next_step_id) {
+        if (next_step_id) {
+            var step = this._getStep(next_step_id);
+            if (step) {
+                return step[this.selectedPersonage];
+            }
+        }
+    };
+    PlayerDialogPupilComponent.prototype._getStep = function (step_id) {
+        for (var i = 0; i < this.activedialog.dialog.scenario.steps.length; i++) {
+            if (this.activedialog.dialog.scenario.steps[i].id == step_id) {
+                return this.activedialog.dialog.scenario.steps[i];
+            }
+        }
+    };
+    return PlayerDialogPupilComponent;
+}());
+__decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
+    __metadata("design:type", Object)
+], PlayerDialogPupilComponent.prototype, "activedialog", void 0);
+__decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Output"])(),
+    __metadata("design:type", Object)
+], PlayerDialogPupilComponent.prototype, "stopdialog", void 0);
+PlayerDialogPupilComponent = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+        selector: 'playerdialogpupil',
+        template: __webpack_require__("../../../../../src/app/components/player_dialog_pupil/player_dialog_pupil.template.html")
+    }),
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__services_status_service__["a" /* StatusService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__services_status_service__["a" /* StatusService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__services_dialogs_service__["a" /* DialogsService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__services_dialogs_service__["a" /* DialogsService */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_3__services_websocket_service__["a" /* WebSocketService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__services_websocket_service__["a" /* WebSocketService */]) === "function" && _c || Object])
+], PlayerDialogPupilComponent);
+
+var _a, _b, _c;
+//# sourceMappingURL=player_dialog_player.component.js.map
+
+/***/ }),
+
+/***/ "../../../../../src/app/components/player_dialog_pupil/player_dialog_pupil.template.html":
+/***/ (function(module, exports) {
+
+module.exports = "<div class=\"row\">\n    <div class=\"container\">\n        <div style=\"margin: 20px;\">\n            <div *ngIf=\"activedialog && activedialog.dialog && activedialog.dialog.scenario\" class=\"panel panel-primary\">\n                <div class=\"panel-heading\">\n                    Текущий шаг: {{current_step.number}} {{current_mode}}\n                </div>\n                <div *ngIf=\"current_mode == 2\" class=\"panel-body\" style=\"min-height: 200px;\">\n                    <span>Вам нужно сказать:</span> \n                    <div *ngFor=\"let item of getTask()\">\n                        <h4 class=\"text-success\">{{item.task}}</h4>\n\n                        <button *ngIf=\"item.prev_step > 0\" class=\"btn btn-info\" type=\"button\" (click)=\"nextStep(item.prev_step)\">Назад</button>\n                        <button *ngIf=\"item.next_step > 0\" class=\"btn btn-success\" type=\"button\" (click)=\"nextStep(item.next_step)\">Следуюйщий шаг</button>\n                    \n                        <div style=\"margin-top:40px\">\n                            <button *ngIf=\"!item.words || (item.words && item.words.length == 0)\" class=\"btn btn-info btn-xs\" type=\"button\" (click)=\"getWords(item)\">Посмотреть слова</button>\n                             <button *ngIf=\"item.words && item.words.length > 0\" class=\"btn btn-info btn-xs\" type=\"button\" (click)=\"clearWords(item)\">Скрыть слова</button>\n                            <button *ngIf=\"!item.hints\"  class=\"btn btn-default btn-xs\" type=\"button\" (click)=\"getHints(item)\">Посмотреть подсказку</button>\n                            <button *ngIf=\"item.hints\" class=\"btn btn-default btn-xs\" type=\"button\" (click)=\"clearHints(item)\">Убрать подсказку</button>\n                        </div>\n\n                        <div *ngIf=\"item.words && item.words.length > 0\" style=\"margin-top:20px;display: flex;justify-content: center;flex-wrap: wrap;\">\n                            <span *ngFor=\"let item of item.words\" class=\"label label-success\" style=\"margin: 10px;padding: 10px;font-size: 16px;\">{{item}}</span>\n                        </div>\n                        <div *ngIf=\"item.hints\" style=\"margin-top:20px;\">\n                            <p class=\"alert alert-success\" style=\"margin: 5px 0;\">\n                                {{item.hints}}\n                            </p>\n                        </div>\n                    </div> \n                </div>\n                \n                <!-- ход ведущего -->\n                <div *ngIf=\"current_mode == 1\" class=\"panel-body\" style=\"min-height: 200px;\">\n                    <h3 style=\"text-align: center;\">Ожидаем ход ведущего</h3>\n                    <span>Ему нужно сказать:</span> \n                    <div *ngFor=\"let item of getTask()\">\n                        <p class=\"text-success\">{{item.task}}</p>\n                        <p class=\"\" style=\"margin: 5px 0;\">{{item.phrase}}</p>\n\n                        <button *ngIf=\"item.prev_step > 0\" class=\"btn btn-info\" type=\"button\" (click)=\"nextStep(item.prev_step)\">Назад</button>\n                        <button *ngIf=\"item.next_step > 0\" class=\"btn btn-success\" type=\"button\" (click)=\"nextStep(item.next_step)\">Следуюйщий шаг</button>\n                        \n                        \n                    </div> \n                </div>\n            </div>\n        </div>\n    </div>\n</div>"
 
 /***/ }),
 
@@ -1689,12 +1920,16 @@ var _a;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__components_mode_dialog_master_mode_dialog_master_component__ = __webpack_require__("../../../../../src/app/components/mode_dialog_master/mode_dialog_master.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__components_mode_dialog_pupil_mode_dialog_pupil_component__ = __webpack_require__("../../../../../src/app/components/mode_dialog_pupil/mode_dialog_pupil.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__dialogview_component__ = __webpack_require__("../../../../../src/app/views/dialogview.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__components_player_dialog_master_player_dialog_master_component__ = __webpack_require__("../../../../../src/app/components/player_dialog_master/player_dialog_master.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__components_player_dialog_pupil_player_dialog_player_component__ = __webpack_require__("../../../../../src/app/components/player_dialog_pupil/player_dialog_player.component.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
+
 
 
 
@@ -1720,7 +1955,9 @@ AppviewsModule = __decorate([
             __WEBPACK_IMPORTED_MODULE_7__components_mode_calling_mode_calling_component__["a" /* ModeCallingComponent */],
             __WEBPACK_IMPORTED_MODULE_8__components_mode_dialog_master_mode_dialog_master_component__["a" /* ModeDialogMasterComponent */],
             __WEBPACK_IMPORTED_MODULE_9__components_mode_dialog_pupil_mode_dialog_pupil_component__["a" /* ModeDialogPupilComponent */],
-            __WEBPACK_IMPORTED_MODULE_10__dialogview_component__["a" /* DialogViewComponent */]
+            __WEBPACK_IMPORTED_MODULE_10__dialogview_component__["a" /* DialogViewComponent */],
+            __WEBPACK_IMPORTED_MODULE_11__components_player_dialog_master_player_dialog_master_component__["a" /* PlayerDialogMasterComponent */],
+            __WEBPACK_IMPORTED_MODULE_12__components_player_dialog_pupil_player_dialog_player_component__["a" /* PlayerDialogPupilComponent */],
         ],
         imports: [
             __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser__["a" /* BrowserModule */],
@@ -1734,7 +1971,9 @@ AppviewsModule = __decorate([
             __WEBPACK_IMPORTED_MODULE_7__components_mode_calling_mode_calling_component__["a" /* ModeCallingComponent */],
             __WEBPACK_IMPORTED_MODULE_8__components_mode_dialog_master_mode_dialog_master_component__["a" /* ModeDialogMasterComponent */],
             __WEBPACK_IMPORTED_MODULE_9__components_mode_dialog_pupil_mode_dialog_pupil_component__["a" /* ModeDialogPupilComponent */],
-            __WEBPACK_IMPORTED_MODULE_10__dialogview_component__["a" /* DialogViewComponent */]
+            __WEBPACK_IMPORTED_MODULE_10__dialogview_component__["a" /* DialogViewComponent */],
+            __WEBPACK_IMPORTED_MODULE_11__components_player_dialog_master_player_dialog_master_component__["a" /* PlayerDialogMasterComponent */],
+            __WEBPACK_IMPORTED_MODULE_12__components_player_dialog_pupil_player_dialog_player_component__["a" /* PlayerDialogPupilComponent */]
         ],
     })
 ], AppviewsModule);
@@ -1777,9 +2016,6 @@ var DialogViewComponent = (function () {
         this.router = router;
         this.activatedRoute = activatedRoute;
         this.personages = [];
-        this.index_step = 0;
-        this.words = [];
-        this.hints = [];
     }
     DialogViewComponent.prototype.ngOnInit = function () {
         this._getDialog();
@@ -1788,6 +2024,7 @@ var DialogViewComponent = (function () {
     };
     DialogViewComponent.prototype.onChangePersonage = function () {
         console.log('self.selectedPersonage', this.selectedPersonage);
+        this.nextStep(this.current_step.id);
     };
     DialogViewComponent.prototype._getDialog = function () {
         var _this = this;
@@ -1799,14 +2036,10 @@ var DialogViewComponent = (function () {
             self.dialog = dialog;
             if (_this.dialog.scenario && _this.dialog.scenario.personages) {
                 self.personages = _this.dialog.scenario.personages;
-                self.index_step = 0;
                 self.selectedPersonage = self.dialog.scenario.steps[0].start_personage;
-                self.current_step = self._getStep();
+                self.nextStep();
             }
         });
-    };
-    DialogViewComponent.prototype._getStep = function () {
-        return this.dialog.scenario.steps[this.index_step][this.selectedPersonage];
     };
     DialogViewComponent.prototype._shuffle = function (a) {
         for (var i = a.length; i; i--) {
@@ -1816,34 +2049,36 @@ var DialogViewComponent = (function () {
         var _a;
     };
     DialogViewComponent.prototype.getTask = function () {
-        if (this.current_step.task.length < 2) {
-            return this.current_step.task[0];
+        var tasks = [];
+        for (var i = 0; i < this.current_step.variants.length; i++) {
+            tasks.push(this.current_step.variants[i]);
         }
-        return this.current_step.task[0];
+        return tasks;
     };
-    DialogViewComponent.prototype.getPhraseForHint = function () {
-        var phrase = "";
-        for (var i = 0; i < this.current_step.phrases.length; i++) {
-            phrase += this.current_step.phrases[i];
-            phrase += ' ';
+    DialogViewComponent.prototype.getWords = function (item) {
+        item.words = item.phrase.split(' ');
+        this._shuffle(item.words);
+        this._shuffle(item.words);
+    };
+    DialogViewComponent.prototype.clearWords = function (item) {
+        item.words = [];
+    };
+    DialogViewComponent.prototype.getHints = function (item) {
+        item.hints = item.phrase;
+    };
+    DialogViewComponent.prototype.clearHints = function (item) {
+        item.hints = null;
+    };
+    DialogViewComponent.prototype.nextStep = function (next_step_id) {
+        if (next_step_id) {
+            for (var i = 0; i < this.dialog.scenario.steps.length; i++) {
+                if (this.dialog.scenario.steps[i].id == next_step_id) {
+                    this.current_step = this.dialog.scenario.steps[i][this.selectedPersonage];
+                    return;
+                }
+            }
         }
-        return phrase;
-    };
-    DialogViewComponent.prototype.getWords = function () {
-        console.log('this.current_step[this.selectedPersonage]', this.current_step);
-        var phrase = this.getPhraseForHint();
-        this.words = phrase.split(' ');
-        this._shuffle(this.words);
-        this._shuffle(this.words);
-    };
-    DialogViewComponent.prototype.clearWords = function () {
-        this.words = [];
-    };
-    DialogViewComponent.prototype.getHints = function () {
-        this.hints = this.current_step.phrases;
-    };
-    DialogViewComponent.prototype.clearHints = function () {
-        this.hints = [];
+        this.current_step = this.dialog.scenario.steps[0][this.selectedPersonage];
     };
     return DialogViewComponent;
 }());
@@ -1863,7 +2098,7 @@ var _a, _b, _c, _d, _e;
 /***/ "../../../../../src/app/views/dialogview.template.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"row\">\n    <div class=\"container\">\n        <div class=\"panel panel-default\">\n             <div class=\"panel-heading\">\n                <div class=\"container\">\n                    <div class=\"col-md-6\" style=\"display: flex;\">\n                        <div style=\"line-height: 2;\">Выбор персонажа</div>\n                        <select class=\"form-control\" [(ngModel)]=\"selectedPersonage\" style=\"margin-left: 20px;width: 150px;\" (ngModelChange)=\"onChangePersonage()\">\n                            <option *ngFor=\"let pesonage of personages\" [value]=\"pesonage.role\">{{pesonage.name}}</option>\n                        </select>\n                    </div>\n                    <div class=\"col-md-6\" style=\"text-align: right;\">\n                        <p style=\"margin: 0 40px;\">{{dialog?.name}}</p>\n                    </div>\n                </div>\n            </div>\n            <div class=\"panel-body\">\n                <div *ngIf=\"dialog && dialog.scenario\" class=\"panel panel-primary\">\n                    <div class=\"panel-heading\">\n                        Текущий шаг: {{index_step + 1}}\n                    </div>\n                    <div class=\"panel-body\" style=\"min-height: 200px;\">\n                        <span>Вам нужно сказать:</span> <h4 class=\"text-success\">{{getTask()}}</h4>\n                        <div style=\"margin-top:40px\">\n                            <button *ngIf=\"words.length == 0\" class=\"btn btn-info btn-xs\" type=\"button\" (click)=\"getWords()\">Посмотреть слова</button>\n                             <button *ngIf=\"words.length > 0\" class=\"btn btn-info btn-xs\" type=\"button\" (click)=\"clearWords()\">Скрыть слова</button>\n                            <button *ngIf=\"hints.length == 0\"  class=\"btn btn-default btn-xs\" type=\"button\" (click)=\"getHints()\">Посмотреть подсказку</button>\n                            <button *ngIf=\"hints.length > 0\" class=\"btn btn-default btn-xs\" type=\"button\" (click)=\"clearHints()\">Убрать подсказку</button>\n                        </div>\n\n\n                        <div *ngIf=\"words.length > 0\" style=\"margin-top:20px;display: flex;justify-content: center;flex-wrap: wrap;\">\n                            <span *ngFor=\"let item of words\" class=\"label label-success\" style=\"margin: 10px;padding: 10px;font-size: 16px;\">{{item}}</span>\n                        </div>\n                        <div *ngIf=\"hints.length > 0\" style=\"margin-top:20px;\">\n                            <p *ngFor=\"let item of hints\" class=\"alert alert-success\" style=\"margin: 5px 0;\">\n                                {{item}}\n                            </p>\n                            \n                        </div>\n                    </div>\n                    <div class=\"panel-footer\" style=\"text-align: right;\">\n                        <button *ngIf=\"index_step > 0\" class=\"btn btn-info\" type=\"button\">Назад</button>\n                        <button *ngIf=\"index_step < dialog?.scenario?.steps.length\"class=\"btn btn-info\" type=\"button\">Вперед</button>\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n</div>"
+module.exports = "<div class=\"row\">\n    <div class=\"container\">\n        <div class=\"panel panel-default\">\n             <div class=\"panel-heading\">\n                <div class=\"container\">\n                    <div class=\"col-md-6\" style=\"display: flex;\">\n                        <div style=\"line-height: 2;\">Выбор персонажа</div>\n                        <select class=\"form-control\" [(ngModel)]=\"selectedPersonage\" style=\"margin-left: 20px;width: 150px;\" (ngModelChange)=\"onChangePersonage()\">\n                            <option *ngFor=\"let pesonage of personages\" [value]=\"pesonage.role\">{{pesonage.name}}</option>\n                        </select>\n                    </div>\n                    <div class=\"col-md-6\" style=\"text-align: right;\">\n                        <p style=\"margin: 0 40px;\">{{dialog?.name}}</p>\n                    </div>\n                </div>\n            </div>\n            <div class=\"panel-body\">\n                <div *ngIf=\"dialog && dialog.scenario\" class=\"panel panel-primary\">\n                    <div class=\"panel-heading\">\n                        Текущий шаг: {{current_step.number}}\n                    </div>\n                    <div class=\"panel-body\" style=\"min-height: 200px;\">\n                        <span>Вам нужно сказать:</span> \n                        <div *ngFor=\"let item of getTask()\">\n                            <h4 class=\"text-success\">{{item.task}}</h4>\n\n                            <button *ngIf=\"item.prev_step > 0\" class=\"btn btn-info\" type=\"button\" (click)=\"nextStep(item.prev_step)\">Назад</button>\n                            <button *ngIf=\"item.next_step > 0\" class=\"btn btn-success\" type=\"button\" (click)=\"nextStep(item.next_step)\">Следуюйщий шаг</button>\n                        \n                            <div style=\"margin-top:40px\">\n                                <button *ngIf=\"!item.words || (item.words && item.words.length == 0)\" class=\"btn btn-info btn-xs\" type=\"button\" (click)=\"getWords(item)\">Посмотреть слова</button>\n                                 <button *ngIf=\"item.words && item.words.length > 0\" class=\"btn btn-info btn-xs\" type=\"button\" (click)=\"clearWords(item)\">Скрыть слова</button>\n                                <button *ngIf=\"!item.hints\"  class=\"btn btn-default btn-xs\" type=\"button\" (click)=\"getHints(item)\">Посмотреть подсказку</button>\n                                <button *ngIf=\"item.hints\" class=\"btn btn-default btn-xs\" type=\"button\" (click)=\"clearHints(item)\">Убрать подсказку</button>\n                            </div>\n\n                            <div *ngIf=\"item.words && item.words.length > 0\" style=\"margin-top:20px;display: flex;justify-content: center;flex-wrap: wrap;\">\n                                <span *ngFor=\"let item of item.words\" class=\"label label-success\" style=\"margin: 10px;padding: 10px;font-size: 16px;\">{{item}}</span>\n                            </div>\n                            <div *ngIf=\"item.hints\" style=\"margin-top:20px;\">\n                                <p class=\"alert alert-success\" style=\"margin: 5px 0;\">\n                                    {{item.hints}}\n                                </p>\n                                \n                            </div>\n                        </div> \n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n</div>"
 
 /***/ }),
 
@@ -1937,10 +2172,12 @@ var StarterViewComponent = (function () {
                 self.mode = __WEBPACK_IMPORTED_MODULE_5__app_settings__["a" /* AppSettings */].MODE_DIALOG_PUPIL;
             }
             if (message.command == "EXIT_FROM_ACTIVE_DIALOG_BY_PUPIL") {
+                console.log("EXIT_FROM_ACTIVE_DIALOG_BY_PUPIL");
                 self.mode = __WEBPACK_IMPORTED_MODULE_5__app_settings__["a" /* AppSettings */].MODE_LIST;
                 self.statusService.init();
             }
             if (message.command == "EXIT_FROM_ACTIVE_DIALOG_BY_MASTER") {
+                console.log("EXIT_FROM_ACTIVE_DIALOG_BY_MASTER");
                 self.mode = __WEBPACK_IMPORTED_MODULE_5__app_settings__["a" /* AppSettings */].MODE_LIST;
                 self.statusService.init();
             }
@@ -1948,7 +2185,14 @@ var StarterViewComponent = (function () {
         self.webSocketService.error.subscribe(function (err) {
             console.log("Error", err);
         });
-        //self._runGetActiveDialogs();
+        if (self.loading) {
+            if (self.mode_select_dialog == 1) {
+                self._updateDialogs();
+            }
+            else {
+                self._updateActiveDialogs();
+            }
+        }
     };
     StarterViewComponent.prototype.ngOnDestroy = function () {
     };

@@ -11,6 +11,8 @@ import { ModeCallingComponent } from '../components/mode_calling/mode_calling.co
 import { ModeDialogMasterComponent } from '../components/mode_dialog_master/mode_dialog_master.component';
 import { ModeDialogPupilComponent } from '../components/mode_dialog_pupil/mode_dialog_pupil.component';
 import { DialogViewComponent } from './dialogview.component';
+import { PlayerDialogMasterComponent } from '../components/player_dialog_master/player_dialog_master.component';
+import { PlayerDialogPupilComponent } from '../components/player_dialog_pupil/player_dialog_player.component';
 
 
 
@@ -22,7 +24,9 @@ import { DialogViewComponent } from './dialogview.component';
     ModeCallingComponent,
     ModeDialogMasterComponent,
     ModeDialogPupilComponent,
-    DialogViewComponent
+    DialogViewComponent,
+    PlayerDialogMasterComponent,
+    PlayerDialogPupilComponent,
   ],
   imports: [
     BrowserModule,
@@ -36,7 +40,9 @@ import { DialogViewComponent } from './dialogview.component';
     ModeCallingComponent,
     ModeDialogMasterComponent,
     ModeDialogPupilComponent,
-    DialogViewComponent
+    DialogViewComponent,
+    PlayerDialogMasterComponent,
+    PlayerDialogPupilComponent
   ],
 })
 

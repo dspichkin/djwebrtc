@@ -57,6 +57,8 @@ export class ModeDialogMasterComponent implements OnInit, OnDestroy {
         self.dialogsService.getActiveDialog(self.activedialogid).subscribe((data) => {
             self.activedialog = data;
             this._startPeer();
+
+            console.log('self.activedialog', self.activedialog)
         })
         self.webSocketService.message.subscribe((data) => {
             let message = JSON.parse(data);

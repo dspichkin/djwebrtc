@@ -1,0 +1,49 @@
+<div class="row">
+    <div class="container">
+        <div style="margin: 20px;">
+            <div *ngIf="activedialog.dialog && activedialog.dialog.scenario" class="panel panel-primary">
+                <div class="panel-heading">
+                    Текущий шаг: {{current_step.number}} {{current_mode}}
+                </div>
+                <div *ngIf="current_mode == 2" class="panel-body" style="min-height: 200px;">
+                    <span>Вам нужно сказать:</span> 
+                    <div *ngFor="let item of getTask()">
+                        <h4 class="text-success">{{item.task}}</h4>
+
+                        <button *ngIf="item.prev_step > 0" class="btn btn-info" type="button" (click)="nextStep(item.prev_step)">Назад</button>
+                        <button *ngIf="item.next_step > 0" class="btn btn-success" type="button" (click)="nextStep(item.next_step)">Следуюйщий шаг</button>
+                    
+                        <div style="margin-top:40px">
+                            <button *ngIf="!item.words || (item.words && item.words.length == 0)" class="btn btn-info btn-xs" type="button" (click)="getWords(item)">Посмотреть слова</button>
+                             <button *ngIf="item.words && item.words.length > 0" class="btn btn-info btn-xs" type="button" (click)="clearWords(item)">Скрыть слова</button>
+                            <button *ngIf="!item.hints"  class="btn btn-default btn-xs" type="button" (click)="getHints(item)">Посмотреть подсказку</button>
+                            <button *ngIf="item.hints" class="btn btn-default btn-xs" type="button" (click)="clearHints(item)">Убрать подсказку</button>
+                        </div>
+
+                        <div *ngIf="item.words && item.words.length > 0" style="margin-top:20px;display: flex;justify-content: center;flex-wrap: wrap;">
+                            <span *ngFor="let item of item.words" class="label label-success" style="margin: 10px;padding: 10px;font-size: 16px;">{{item}}</span>
+                        </div>
+                        <div *ngIf="item.hints" style="margin-top:20px;">
+                            <p class="alert alert-success" style="margin: 5px 0;">
+                                {{item.hints}}
+                            </p>
+                        </div>
+                    </div> 
+                </div>
+                <div *ngIf="current_mode == 1" class="panel-body" style="min-height: 200px;">
+                    <h3 style="text-align: center;">Ожидаем ход игрока</h3>
+                    <span>Ему нужно сказать:</span> 
+                    <div *ngFor="let item of getTask()">
+                        <p class="text-success">{{item.task}}</p>
+                        <p class="" style="margin: 5px 0;">{{item.phrase}}</p>
+
+                        <button *ngIf="item.prev_step > 0" class="btn btn-info" type="button" (click)="nextStep(item.prev_step)">Назад</button>
+                        <button *ngIf="item.next_step > 0" class="btn btn-success" type="button" (click)="nextStep(item.next_step)">Следуюйщий шаг</button>
+                        
+                        
+                    </div> 
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

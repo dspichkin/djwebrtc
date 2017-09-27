@@ -17,31 +17,33 @@
             <div class="panel-body">
                 <div *ngIf="dialog && dialog.scenario" class="panel panel-primary">
                     <div class="panel-heading">
-                        Текущий шаг: {{index_step + 1}}
+                        Текущий шаг: {{current_step.number}}
                     </div>
                     <div class="panel-body" style="min-height: 200px;">
-                        <span>Вам нужно сказать:</span> <h4 class="text-success">{{getTask()}}</h4>
-                        <div style="margin-top:40px">
-                            <button *ngIf="words.length == 0" class="btn btn-info btn-xs" type="button" (click)="getWords()">Посмотреть слова</button>
-                             <button *ngIf="words.length > 0" class="btn btn-info btn-xs" type="button" (click)="clearWords()">Скрыть слова</button>
-                            <button *ngIf="hints.length == 0"  class="btn btn-default btn-xs" type="button" (click)="getHints()">Посмотреть подсказку</button>
-                            <button *ngIf="hints.length > 0" class="btn btn-default btn-xs" type="button" (click)="clearHints()">Убрать подсказку</button>
-                        </div>
+                        <span>Вам нужно сказать:</span> 
+                        <div *ngFor="let item of getTask()">
+                            <h4 class="text-success">{{item.task}}</h4>
 
+                            <button *ngIf="item.prev_step > 0" class="btn btn-info" type="button" (click)="nextStep(item.prev_step)">Назад</button>
+                            <button *ngIf="item.next_step > 0" class="btn btn-success" type="button" (click)="nextStep(item.next_step)">Следуюйщий шаг</button>
+                        
+                            <div style="margin-top:40px">
+                                <button *ngIf="!item.words || (item.words && item.words.length == 0)" class="btn btn-info btn-xs" type="button" (click)="getWords(item)">Посмотреть слова</button>
+                                 <button *ngIf="item.words && item.words.length > 0" class="btn btn-info btn-xs" type="button" (click)="clearWords(item)">Скрыть слова</button>
+                                <button *ngIf="!item.hints"  class="btn btn-default btn-xs" type="button" (click)="getHints(item)">Посмотреть подсказку</button>
+                                <button *ngIf="item.hints" class="btn btn-default btn-xs" type="button" (click)="clearHints(item)">Убрать подсказку</button>
+                            </div>
 
-                        <div *ngIf="words.length > 0" style="margin-top:20px;display: flex;justify-content: center;flex-wrap: wrap;">
-                            <span *ngFor="let item of words" class="label label-success" style="margin: 10px;padding: 10px;font-size: 16px;">{{item}}</span>
-                        </div>
-                        <div *ngIf="hints.length > 0" style="margin-top:20px;">
-                            <p *ngFor="let item of hints" class="alert alert-success" style="margin: 5px 0;">
-                                {{item}}
-                            </p>
-                            
-                        </div>
-                    </div>
-                    <div class="panel-footer" style="text-align: right;">
-                        <button *ngIf="index_step > 0" class="btn btn-info" type="button">Назад</button>
-                        <button *ngIf="index_step < dialog?.scenario?.steps.length"class="btn btn-info" type="button">Вперед</button>
+                            <div *ngIf="item.words && item.words.length > 0" style="margin-top:20px;display: flex;justify-content: center;flex-wrap: wrap;">
+                                <span *ngFor="let item of item.words" class="label label-success" style="margin: 10px;padding: 10px;font-size: 16px;">{{item}}</span>
+                            </div>
+                            <div *ngIf="item.hints" style="margin-top:20px;">
+                                <p class="alert alert-success" style="margin: 5px 0;">
+                                    {{item.hints}}
+                                </p>
+                                
+                            </div>
+                        </div> 
                     </div>
                 </div>
             </div>

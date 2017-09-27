@@ -8,15 +8,15 @@
                 <p *ngIf="status_activedialog=='starting'" style="font-size: 12px;color:blue;">Диалог запускается</p>
             </div>
             <div class="col-md-6" style="text-align: right;">
-                <p *ngIf="activedialog" style="margin: 0 20px;">{{activedialog.dialog.name}}</p>
-                <p *ngIf="during_conversation" style="margin: 0 20px;font-size: 8px;">{{displayTime(during_conversation)}}</p>
+                <p *ngIf="activedialog" style="margin: 0 40px;">{{activedialog.dialog.name}}</p>
+                <p *ngIf="during_conversation" style="margin: 0 40px;font-size: 8px;">{{displayTime(during_conversation)}}</p>
             </div>
         </div>
     </div>
     <div class="panel-body">
 
         <div [hidden]="status_activedialog != 'run'" class="row">
-            <div class="container" style="text-align: right;">
+            <div class="pull-right" style="display: flex;justify-content: flex-end;">
                 <div class="pull-right" style="display: flex;">
                     <div style="margin: 5px;">
                         <video #remoteVideo autoplay="" style="border:2px solid red;width: 100px;"></video>
@@ -28,6 +28,10 @@
                     </div>
                 </div>
             </div>
+        </div>
+
+        <div class="row" *ngIf="activedialog">
+            <playerdialogmaster [activedialog]="activedialog"></playerdialogmaster>
         </div>
         
         <div style="margin-top: 30px">
