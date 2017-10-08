@@ -41,7 +41,7 @@
             "number": 2,
             "variants": [
                 {
-                    "task": "Ах да, вижу. Мы получили ваше письмо. Номера 11 и 12. Если вы подпишетесь в журнале регистраций я вызову носильщика, который покажет вам номер и поможет вам с багажом.",
+                    "task": "Ах да, вот оно. Да - мы получили ваше письмо. Номера 11 и 12. Если вы подпишетесь в журнале регистраций я попрошу носильщика  показать вам номер и помочь вам с багажом.",
                     "phrase" : "Ah yes – here we are, sir. Yes – we got your letter. Rooms 11 and 12. If you’ll sign the register, I’ll ask the porter to show you the rooms and help you with your luggage.",
                     "next_step": 3,
                     "prev_step": 1
@@ -52,8 +52,8 @@
             "number": 2,
             "variants": [
                 {
-                    "task": "Я просил два двухместных номера - один для моей жены и меня и второй для двоих детей.",
-                    "phrase": "I asked for two double rooms – one for my wife and myself and one for the two children.",
+                    "task": "Кент. Я просил два двухместных номера - один для моей жены и меня и второй для двоих детей.",
+                    "phrase": "Kent. I asked for two double rooms – one for my wife and myself and one for the two children.",
                     "next_step": 3,
                     "prev_step": 1
                 }
@@ -117,7 +117,7 @@
             "number": 5,
             "variants": [
                 {
-                    "task": "Ужин с 18.30 до 21.30. Завтраки мы накрываем начиная с 7.30. Вы так же можете заказать чай в номер с 6.30 если пожелаете. Столовая находиться вон там.",
+                    "task": "Ужин с 18.30 до 21.30. Завтраки мы накрываем начиная с 7.30 утра и вы так же можете заказать чай в номер с 6.30 если пожелаете. Столовая находиться вон там.",
                     "phrase" : "Dinner is from 6.30 until 9.30. We start serving breakfast at 7.30 in the morning and you can have morning tea in your room if you wish - from 6.30 onwards. ... You’ll find the dining-room just over there.",
                     "next_step": 6,
                     "prev_step": 4
@@ -139,15 +139,7 @@
         "id": 6,
         "start_personage": "pupil",
         "master": {
-            "number": 6,
-            "variants": [
-                {
-                    "task": "Ужин с 18.30 до 21.30. Завтраки мы накрываем начиная с 7.30. Вы так же можете заказать чай в номер с 6.30 если пожелаете. Столовая находиться вон там.",
-                    "phrase" : "Dinner is from 6.30 until 9.30. We start serving breakfast at 7.30 in the morning and you can have morning tea in your room if you wish - from 6.30 onwards. ... You’ll find the dining-room just over there.",
-                    "next_step": -1,
-                    "prev_step": 5
-                }
-            ]
+            "number": 6
         },
         "pupil": {
             "number": 6,

@@ -1,8 +1,10 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { Http, HttpModule, XSRFStrategy, CookieXSRFStrategy } from '@angular/http';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { RouterModule } from "@angular/router";
+import { JWBootstrapSwitchModule } from '../../node_modules/jw-bootstrap-switch-ng2';
 
 import { WebSocketService } from "./services/websocket.service";
 
@@ -38,7 +40,9 @@ export const AppCSRF = {
         AppviewsModule,
         LayoutsModule,
         HttpModule,
+        BrowserAnimationsModule,
         RouterModule.forRoot(ROUTES, { useHash: true }),
+        JWBootstrapSwitchModule,
     ],
     providers: [
         WebSocketService,

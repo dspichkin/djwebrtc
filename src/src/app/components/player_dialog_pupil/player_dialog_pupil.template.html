@@ -3,15 +3,15 @@
         <div style="margin: 20px;">
             <div *ngIf="activedialog && activedialog.dialog && activedialog.dialog.scenario" class="panel panel-primary">
                 <div class="panel-heading">
-                    Текущий шаг: {{current_step.number}} {{current_mode}}
+                    Текущий шаг: {{current_step.number}}
                 </div>
                 <div *ngIf="current_mode == 2" class="panel-body" style="min-height: 200px;">
+                    <h3 style="text-align: center;">Ваш ход</h3>
+                    
                     <span>Вам нужно сказать:</span> 
-                    <div *ngFor="let item of getTask()">
+                    <div *ngFor="let item of current_step.variants">
                         <h4 class="text-success">{{item.task}}</h4>
 
-                        <button *ngIf="item.prev_step > 0" class="btn btn-info" type="button" (click)="nextStep(item.prev_step)">Назад</button>
-                        <button *ngIf="item.next_step > 0" class="btn btn-success" type="button" (click)="nextStep(item.next_step)">Следуюйщий шаг</button>
                     
                         <div style="margin-top:40px">
                             <button *ngIf="!item.words || (item.words && item.words.length == 0)" class="btn btn-info btn-xs" type="button" (click)="getWords(item)">Посмотреть слова</button>
@@ -34,16 +34,14 @@
                 <!-- ход ведущего -->
                 <div *ngIf="current_mode == 1" class="panel-body" style="min-height: 200px;">
                     <h3 style="text-align: center;">Ожидаем ход ведущего</h3>
-                    <span>Ему нужно сказать:</span> 
-                    <div *ngFor="let item of getTask()">
-                        <p class="text-success">{{item.task}}</p>
-                        <p class="" style="margin: 5px 0;">{{item.phrase}}</p>
-
-                        <button *ngIf="item.prev_step > 0" class="btn btn-info" type="button" (click)="nextStep(item.prev_step)">Назад</button>
-                        <button *ngIf="item.next_step > 0" class="btn btn-success" type="button" (click)="nextStep(item.next_step)">Следуюйщий шаг</button>
-                        
-                        
-                    </div> 
+                    <button class="btn btn-info btn-xs" type="button" (click)="show_master_text=!show_master_text">Посмотреть слова</button>
+                    <div *ngIf="show_master_text">
+                        <span>Ему нужно сказать:</span> 
+                        <div *ngFor="let item of current_step.variants">
+                            <p class="text-success">{{item.task}}</p>
+                            <p class="" style="margin: 5px 0;">{{item.phrase}}</p>
+                        </div> 
+                    </div>
                 </div>
             </div>
         </div>

@@ -25,28 +25,30 @@ export class ModeDialogMasterComponent implements OnInit, OnDestroy {
     @ViewChild('remoteVideo') private remoteVideo: ElementRef;
     @ViewChild('localVideo') private localVideo: ElementRef;
 
-    public userMedia = <any>navigator;
-    activedialog;
-    peer;
-    peerid;
-    user;
-    loading: boolean = false;
-    localStream;
-    answeringCall;
-    last_message_from_pupil;
-    status_activedialog = 'starting'; //starting, run, stop
-    last_hearbeat_from_pupil;
+    private userMedia = <any>navigator;
+    private activedialog;
+    private peer;
+    private peerid;
+    private user;
+    private loading: boolean = false;
+    private localStream;
+    private answeringCall;
+    private last_message_from_pupil;
+    private status_activedialog = 'starting'; //starting, run, stop
+    private last_hearbeat_from_pupil;
 
     // продолжительность диалога
-    during_conversation;
-    start_converstion;
+    private during_conversation;
+    private start_converstion;
 
+    private personageName;
     private _timeout;
 
     constructor(
         private statusService: StatusService,
         private dialogsService: DialogsService,
-        private webSocketService: WebSocketService
+        private webSocketService: WebSocketService,
+        private router: Router,
         ) {
         var self = this;
     }
@@ -56,10 +58,14 @@ export class ModeDialogMasterComponent implements OnInit, OnDestroy {
         self.user = self.statusService.user;
         self.dialogsService.getActiveDialog(self.activedialogid).subscribe((data) => {
             self.activedialog = data;
-            this._startPeer();
+            self._getPersonageName();
+            self._startPeer();
 
-            console.log('self.activedialog', self.activedialog)
+
+            //console.log('self.activedialog', self.activedialog)
         })
+
+        
         self.webSocketService.message.subscribe((data) => {
             let message = JSON.parse(data);
             if (message.command == "DIALOG_STOP") {
@@ -76,6 +82,7 @@ export class ModeDialogMasterComponent implements OnInit, OnDestroy {
         });
 
         self._runHearbeatPupil();
+        
     }
 
     ngAfterViewInit() {
@@ -89,6 +96,13 @@ export class ModeDialogMasterComponent implements OnInit, OnDestroy {
     ngOnDestroy() {
     }
 
+    private _getPersonageName() {
+        for (let i = 0; i < this.activedialog.dialog.scenario.personages.length; i++) {
+            if (this.activedialog.dialog.scenario.personages[i].role == 'master') {
+                this.personageName = this.activedialog.dialog.scenario.personages[i].name;
+            }
+        }
+    }
 
     private _startPeer() {
         let self = this;
@@ -129,10 +143,8 @@ export class ModeDialogMasterComponent implements OnInit, OnDestroy {
             this.userMedia.cancelAnimationFrame = navigator.webkitCancelAnimationFrame || navigator.mozCancelAnimationFrame;
         if (!navigator.requestAnimationFrame)
             this.userMedia.requestAnimationFrame = navigator.webkitRequestAnimationFrame || navigator.mozRequestAnimationFrame;
-   
-        this.userMedia.getUserMedia(
-            {
-                audio: {
+       /*
+       {
                     "mandatory": {
                         "googEchoCancellation": "false",
                         "googAutoGainControl": "false",
@@ -140,7 +152,12 @@ export class ModeDialogMasterComponent implements OnInit, OnDestroy {
                         "googHighpassFilter": "false"
                     },
                     "optional": []
-                },video: true
+                }
+       */
+        this.userMedia.getUserMedia(
+            {
+                audio: true,
+                video: false
             }, (stream)=>{
                 self.localVideo.nativeElement.src = URL.createObjectURL(stream);
                 self.localStream = stream;
@@ -201,6 +218,12 @@ export class ModeDialogMasterComponent implements OnInit, OnDestroy {
             activedialogid: this.activedialogid,
             type: 'master'
         });
+        let self = this;
+        setTimeout(function() {
+            if (self.router.url == '/wait') {
+                self.router.navigate(['/dialogs']);
+            }
+        }, 2000);
     }   
 
 
@@ -268,5 +291,10 @@ export class ModeDialogMasterComponent implements OnInit, OnDestroy {
             return false;
         }
         return true;
+    }
+
+    private handlerChangeActiveDialog(activedialog) {
+        this.activedialog = activedialog;
+        this.activedialogid = activedialog.id;
     }
 }

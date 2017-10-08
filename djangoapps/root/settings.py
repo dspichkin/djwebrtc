@@ -28,12 +28,14 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
+ADMIN_LIST_EMAILS = ['user783@gmail.com']
 
 # Application definition
 
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
+    'django.contrib.sites',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
@@ -43,11 +45,19 @@ INSTALLED_APPS = [
     'djcelery',
     'sslchannels',
     'rest_framework',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.facebook',
+    'allauth.socialaccount.providers.vk',
+
     'accounts',
     'djwebrtc',
     'peerjs',
     'dialogs',
 ]
+
+SITE_ID = 1
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -92,7 +102,7 @@ DATABASES = {
 
 AUTH_USER_MODEL = 'accounts.Account'
 
-AUTHENTICATION_BACKENDS = ['accounts.backends.EmailBackend']
+AUTHENTICATION_BACKENDS = ['accounts.backends.EmailBackend', 'allauth.account.auth_backends.AuthenticationBackend', ]
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
@@ -125,6 +135,19 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+
+"""
+EMAIL_SUBJECT_PREFIX = '[Elastic/Local] '
+EMAIL_USE_TLS = False
+EMAIL_USE_SSL = True
+
+EMAIL_HOST = 'smtp.yandex.ru'
+EMAIL_HOST_USER = 'noreply@e-lastic.ru'
+EMAIL_HOST_PASSWORD = 'elastic2016'
+EMAIL_PORT = 465
+SERVER_EMAIL = 'noreply@e-lastic.ru'
+"""
+DEFAULT_FROM_EMAIL = 'noreply@dialogs.ru'
 
 
 # Static files (CSS, JavaScript, Images)
@@ -178,6 +201,59 @@ CELERYBEAT_SCHEDULE = {
     }
 }
 
+
+ACCOUNT_USER_MODEL_USERNAME_FIELD = 'username'
+ACCOUNT_EMAIL_VERIFICATION = "optional"
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_USER_MODEL_EMAIL_FIELD = "email"
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_SIGNUP_FORM_CLASS = 'accounts.forms.DiscounterSignupFrom'
+SOCIALACCOUNT_AUTO_SIGNUP = True
+
+SOCIALACCOUNT_ADAPTER = 'accounts.myadapter.MyAdapter'
+
+SOCIALACCOUNT_PROVIDERS = {
+    'facebook': {
+        'METHOD': 'oauth2',
+        'SCOPE': ['email', 'public_profile'],
+        'FIELDS': [
+            'id',
+            'email',
+            'name',
+            'first_name',
+            'last_name',
+            'verified',
+            'locale',
+            'timezone',
+            'link',
+            'gender',
+            'updated_time'
+        ],
+        'EXCHANGE_TOKEN': True,
+        'LOCALE_FUNC': lambda request: 'ru_RU',
+        'VERIFIED_EMAIL': False,
+        'VERSION': 'v2.4',
+    },
+    'vk': {
+        'METHOD': 'oauth2',
+        'SCOPE': ['email'],
+        'FIELDS': [
+            'id',
+            'email',
+            'name',
+            'first_name',
+            'last_name',
+            'verified',
+            'locale',
+            'timezone',
+            'link',
+            'gender',
+            'updated_time',
+        ],
+    }
+}
 
 LOGGING = {
     'version': 1,

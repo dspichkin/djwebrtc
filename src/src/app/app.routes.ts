@@ -1,12 +1,15 @@
-import {Routes} from "@angular/router";
+import { Routes } from "@angular/router";
 
-import {StarterViewComponent} from "./views/starterview.component";
-import {DialogViewComponent} from "./views/dialogview.component";
-//import {LoginComponent} from "./views/login.component";
+import { DialogsViewComponent } from "./views/dialogsview.component";
+import { ActiveDialogsViewComponent } from "./views/activedialogsview.component";
+import { DialogViewComponent } from "./views/dialogview.component";
 
 //import {BlankLayoutComponent} from "./components/common/layouts/blankLayout.component";
-import {BasicLayoutComponent} from "./components/common/layouts/basicLayout.component";
-//import {TopNavigationLayoutComponent} from "./components/common/layouts/topNavigationlayout.component";
+import { BasicLayoutComponent } from "./components/common/layouts/basicLayout.component";
+import { ModeWaitPupilViewComponent } from "./views/view_mode_wait_pupil/view_mode_wait_pupil.component";
+import { ModeCallingViewComponent } from "./views/view_mode_calling/view_mode_calling.component";
+import { MessageViewComponent } from "./views/view_message/view_message.component";
+
 import { AuthGuard } from './services/guards.service';
 
 export const ROUTES:Routes = [
@@ -19,7 +22,17 @@ export const ROUTES:Routes = [
     children: [
         {
             path: 'dialogs', 
-            component: StarterViewComponent,
+            component: DialogsViewComponent,
+            canActivate: [AuthGuard]
+        }
+    ]
+  },
+  {
+    path: '', component: BasicLayoutComponent,
+    children: [
+        {
+            path: 'activedialogs', 
+            component: ActiveDialogsViewComponent,
             canActivate: [AuthGuard]
         }
     ]
@@ -33,6 +46,26 @@ export const ROUTES:Routes = [
             canActivate: [AuthGuard]
         }
     ]
+  },
+  {
+    path: '', component: BasicLayoutComponent,
+    children: [
+        {
+            path: 'message', 
+            component: MessageViewComponent,
+            canActivate: [AuthGuard]
+        }
+    ]
+  },
+  {
+    path: 'wait', 
+    component: ModeWaitPupilViewComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'calling/:id', 
+    component: ModeCallingViewComponent,
+    canActivate: [AuthGuard]
   },
   /*
   {

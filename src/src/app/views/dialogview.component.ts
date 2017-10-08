@@ -23,6 +23,7 @@ export class DialogViewComponent implements OnInit  {
     public personages = [];
     public selectedPersonage;
     public current_step;
+    public current_step_id;
 
     public constructor(
         private statusService: StatusService,
@@ -45,8 +46,7 @@ export class DialogViewComponent implements OnInit  {
 
     
     public onChangePersonage() {
-        console.log('self.selectedPersonage', this.selectedPersonage)
-        this.nextStep(this.current_step.id);
+        this.nextStep(this.current_step_id);
     }
     
     
@@ -104,11 +104,13 @@ export class DialogViewComponent implements OnInit  {
             for (var i = 0; i < this.dialog.scenario.steps.length; i++) {
                 if (this.dialog.scenario.steps[i].id == next_step_id) {
                     this.current_step = this.dialog.scenario.steps[i][this.selectedPersonage];
+                    this.current_step_id = this.dialog.scenario.steps[i].id;
                     return;
                 } 
             }
         }
         this.current_step = this.dialog.scenario.steps[0][this.selectedPersonage];
+        this.current_step_id = this.dialog.scenario.steps[0].id;
     }
 
 

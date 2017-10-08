@@ -2,13 +2,17 @@
      <div class="panel-heading">
         <div class="container">
             <div class="col-md-6">
-                <h4>Диалог ученик </h4>
+                <h4>Диалог 
+                    <span *ngIf="activedialog">{{activedialog.dialog.name}}</span>
+                    <span *ngIf="!activedialog">загружается</span>
+                </h4>
+                <p>Роль: ученик</p>
                 <p *ngIf="status_activedialog=='run'"  style="font-size: 12px;color:green;">Диалог запущен</p>
                 <p *ngIf="status_activedialog=='stop'" style="font-size: 12px;color:red;">Диалог остановлен</p>
                 <p *ngIf="status_activedialog=='starting'" style="font-size: 12px;color:blue;">Диалог запускается</p>
             </div>
             <div class="col-md-6" style="text-align: right;">
-                <p *ngIf="activedialog" style="margin: 0 40px;">{{activedialog.dialog.name}}</p>
+                <p *ngIf="personageName" style="margin: 0 40px;">Персонаж: {{personageName}}</p>
                 <p *ngIf="during_conversation" style="margin: 0 40px;font-size: 8px;">{{displayTime(during_conversation)}}</p>
             </div>
         </div>
@@ -26,7 +30,7 @@
         <!-- END Loading -->
 
         <div [hidden]="status_activedialog != 'run'" class="row">
-            <div class="pull-right" style="display: flex;justify-content: flex-end;">
+            <div class="pull-right" style="display: flex;justify-content: flex-end;opacity: 0;height: 0;">
                 <div style="margin: 5px;">
                     <video #remoteVideo autoplay="" style="border:2px solid red;width: 100px;"></video>
                     <p style="font-size: 8px;margin-top: -5px;">Remote</p>
@@ -36,14 +40,19 @@
                     <p style="font-size: 8px;margin-top: -5px;">Local</p>
                 </div>
             </div>
+            <button  *ngIf="status_activedialog=='run'" class="btn btn-warning" (click)="hangPhone()">
+                <i class="fa fa-microphone-slash" aria-hidden="true" style="margin-right: 10px;"></i><span>Остановить диалог</span>
+            </button>
         </div>
 
         <div class="row" *ngIf="activedialog">
-            <playerdialogpupil [activedialog]="activedialog"></playerdialogpupil>
+            <playerdialogpupil [activedialog]="activedialog" (changeactivedialog)="handlerChangeActiveDialog($event)"></playerdialogpupil>
         </div>
         
         <div style="margin-top: 30px">
+            <!--
              <button *ngIf="status_activedialog=='run'" class="btn btn-warning" (click)="hangPhone()"><span>Остановить диалог</span></button>
+         -->
             <button class="btn btn-warning" (click)="exitDialog()"><span>Выход из режима диалога</span></button>
         </div>
     </div>

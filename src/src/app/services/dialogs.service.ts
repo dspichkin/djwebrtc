@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Subject, BehaviorSubject, Observable } from 'rxjs';
 import { Http, Response } from '@angular/http';
+import { Router } from '@angular/router';
+import 'rxjs/add/operator/catch';
+
 
 import { AppSettings } from '../app.settings';
 import { Dialog } from '../models/dialog';
@@ -12,7 +15,9 @@ export class DialogsService {
 
     //updates: Subject<any> = new Subject<any>();
 
-    constructor(private _http: Http) {}
+    constructor(
+        private _http: Http,
+        private router: Router) {}
 
     
     getDialog(dialog_id): Observable<Dialog[]> {
@@ -20,7 +25,7 @@ export class DialogsService {
             .map((response: Response) => {
                 return response.json();
             })
-            .catch(this.handleError);
+            .catch(this.handleError.bind(this));
     }
 
     getDialogs(): Observable<Dialog[]> {
@@ -28,7 +33,7 @@ export class DialogsService {
             .map((response: Response) => {
                 return response.json();
             })
-            .catch(this.handleError);
+            .catch(this.handleError.bind(this));
     }
 
     getActiveDialog(activedialog_id): Observable<Dialog[]> {
@@ -36,7 +41,7 @@ export class DialogsService {
             .map((response: Response) => {
                 return response.json();
             })
-            .catch(this.handleError);
+            .catch(this.handleError.bind(this));
     }
 
     getActiveDialogs(): Observable<Dialog[]> {
@@ -44,7 +49,15 @@ export class DialogsService {
             .map((response: Response) => {
                 return response.json();
             })
-            .catch(this.handleError);
+            .catch(this.handleError.bind(this));
+    }
+
+    getMyActiveDialogs(): Observable<Dialog[]> {
+        return this._http.get(AppSettings.URL_MYACTIVEDIALOGS)
+            .map((response: Response) => {
+                return response.json();
+            })
+            .catch(this.handleError.bind(this));
     }
 
     runDialog(dialog_id):any {
@@ -52,7 +65,7 @@ export class DialogsService {
             .map((response: Response) => {
                 return response.json();
             })
-            .catch(this.handleError);
+            .catch(this.handleError.bind(this));
     }
 
     stopDialog():any {
@@ -60,7 +73,7 @@ export class DialogsService {
             .map((response: Response) => {
                 return response.json();
             })
-            .catch(this.handleError);
+            .catch(this.handleError.bind(this));
     }
 
     runIntoDialog(dialog_id):any {
@@ -68,7 +81,7 @@ export class DialogsService {
             .map((response: Response) => {
                 return response.json();
             })
-            .catch(this.handleError);
+            .catch(this.handleError.bind(this));
     }
 
     stopActiveDialog(dialog_id):any {
@@ -76,12 +89,19 @@ export class DialogsService {
             .map((response: Response) => {
                 return response.json();
             })
-            .catch(this.handleError);
+            .catch(this.handleError.bind(this));
     }
 
 
     private handleError(error: Response) {
         console.error(error);
+        if (error.status == 403) {
+            console.log("XXXX")
+            this.router.navigate(['/accounts/login/']);
+        }
+        if (error.status == 404) {
+            this.router.navigate(['/dialogs/']);
+        }
         //error.json().error || 
         return Observable.throw('Server error');
     }

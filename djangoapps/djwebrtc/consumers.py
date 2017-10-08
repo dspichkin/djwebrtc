@@ -14,7 +14,8 @@ from django.utils import timezone
 from channels_presence.models import Room, Presence
 
 from accounts.models import Account
-from dialogs.models import ActiveDialog, DIALOG_ACTIVE, DIALOG_STOP
+from dialogs.models import (
+    ActiveDialog, DIALOG_WAIT, DIALOG_ACTIVE, DIALOG_STOP, DIALOG_CANCEL)
 
 
 @channel_session_user_from_http
@@ -34,6 +35,7 @@ def ws_connect(message):
 
 @channel_session_user_from_http
 def ws_message(message):
+
     Presence.objects.touch(message.reply_channel.name)
 
     data = message.content.get('text')
@@ -43,44 +45,136 @@ def ws_message(message):
 
     command = data.get("command")
     if command:
-        if command == 'CALLING':
-            target = data.get("target")
+
+        if command == 'CHANGE_PERSONAGE':
+            activedialogid = data.get("activedialogid")
             source = data.get("source")
-            if target:
-                activedialog = ActiveDialog.objects.filter(pk=target).first()
+            activedialog = ActiveDialog.objects.filter(pk=activedialogid).first()
+            if activedialog:
+                Group("call-client-%s" % activedialog.master.key_id).send({
+                    'text': json.dumps({
+                        'command': "CHANGE_PERSONAGE"
+                    })
+                })
+                Group("call-client-%s" % activedialog.pupil.key_id).send({
+                    'text': json.dumps({
+                        'command': "CHANGE_PERSONAGE"
+                    })
+                })
+            else:
+                Group("call-client-%s" % source).send({
+                    'text': json.dumps({
+                        'command': "STOP_CALLING",
+                        'reason': "NOT FOUND"
+                    })
+                })
+
+        if command == 'NEXTSTEP':
+            nextstep = data.get("nextstep")
+            activedialogid = data.get("activedialogid")
+            source = data.get("source")
+
+            activedialog = ActiveDialog.objects.filter(pk=activedialogid).first()
+            if activedialog:
+                Group("call-client-%s" % activedialog.master.key_id).send({
+                    'text': json.dumps({
+                        'command': "SET_STEP",
+                        'STEP_ID': nextstep
+                    })
+                })
+                Group("call-client-%s" % activedialog.pupil.key_id).send({
+                    'text': json.dumps({
+                        'command': "SET_STEP",
+                        'STEP_ID': nextstep
+                    })
+                })
+            else:
+                Group("call-client-%s" % source).send({
+                    'text': json.dumps({
+                        'command': "STOP_CALLING",
+                        'reason': "NOT FOUND"
+                    })
+                })
+
+        if command == 'CALLING':
+            activedialogid = data.get("target")
+            source = data.get("source")
+            if activedialogid:
+                activedialog = ActiveDialog.objects.filter(pk=activedialogid).first()
                 if activedialog:
-                    presense = Presence.objects.filter(room__channel_name="Clients", user=activedialog.master).last()
-                    source_user = Account.objects.filter(key_id=source).first()
-                    if source_user and presense:
-                        Group("call-client-%s" % activedialog.master.key_id).send({
+                    if activedialog.status == DIALOG_WAIT:
+                        presense = Presence.objects.filter(room__channel_name="Clients", user=activedialog.master).last()
+                        source_user = Account.objects.filter(key_id=source).first()
+                        if source_user and presense:
+                            Group("call-client-%s" % activedialog.master.key_id).send({
+                                'text': json.dumps({
+                                    'command': "CALLING",
+                                    'target': "TAKEPHONE",
+                                    'activedialogid': activedialog.id,
+                                    'user': {
+                                        'fio': source_user.fio(),
+                                        'key_id': source_user.key_id
+                                    }
+                                })
+                            })
+                    elif activedialog.status == DIALOG_STOP:
+                        Group("call-client-%s" % source).send({
                             'text': json.dumps({
-                                'command': "CALLING",
-                                'target': "TAKEPHONE",
-                                'user': {
-                                    'fio': source_user.fio(),
-                                    'key_id': source_user.key_id
-                                }
+                                'command': "STOP_CALLING",
+                                'reason': "DIALOG_STOP"
                             })
                         })
+                    #elif activedialog.status == DIALOG_ACTIVE:
+                    #    Group("call-client-%s" % source).send({
+                    #        'text': json.dumps({
+                    #            'command': "STOP_CALLING",
+                    #            'reason': "DIALOG_ACTIVE"
+                    #        })
+                    #    })
+                else:
+                    Group("call-client-%s" % source).send({
+                        'text': json.dumps({
+                            'command': "STOP_CALLING",
+                            'reason': "NOT FOUND"
+                        })
+                    })
         if command == 'CALLING_MASTER_REJECT':
-            target = data.get("target")
-            source = data.get("source")
-            if target:
-                Group("call-client-%s" % target).send({
+            # activedialigid = data.get("activedialigid")
+            user_pupil = data.get("target")
+            user_master = data.get("source")
+            if user_pupil:
+                # activedialog = ActiveDialog.objects.filter(pk=activedialigid).first()
+                Group("call-client-%s" % user_pupil).send({
                     'text': json.dumps({
                         'command': "CALLING_MASTER_REJECT",
                         'target': "TAKEPHONE",
                     })
                 })
+                Group("call-client-%s" % user_master).send({
+                    'text': json.dumps({
+                        'command': "CALLING_MASTER_REJECT",
+                        'pupil': user_pupil,
+                    })
+                })
+        if command == 'CALLING_REJECT':
+            target = data.get("target")
+            if target:
+                activedialog = ActiveDialog.objects.filter(pk=target).first()
+                Group("call-client-%s" % activedialog.master.key_id).send({
+                    'text': json.dumps({
+                        'command': "CALLING_REJECT",
+                        'target': "TAKEPHONE",
+                    })
+                })
+                # activedialog.status = DIALOG_CANCEL
+                # activedialog.save()
+
         if command == 'START_DIALOG':
             target = data.get("target")
             master = data.get("master")
             pupil = data.get("pupil")
             if target and master and pupil:
                 ac = get_object_or_404(ActiveDialog, pk=target)
-                ac.status = DIALOG_ACTIVE
-                ac.save()
-
                 if ac.run_dialog(pupil):
                     Group("call-client-%s" % master).send({
                         'text': json.dumps({
@@ -99,8 +193,8 @@ def ws_message(message):
             target = data.get("target")
             if target:
                 ac = get_object_or_404(ActiveDialog, pk=target)
-                ac.status = DIALOG_STOP
-                ac.save()
+                # ac.status = DIALOG_STOP
+                # ac.save()
                 Group("call-client-%s" % ac.master.key_id).send({
                     'text': json.dumps({
                         'command': "DIALOG_STOP",
@@ -114,12 +208,33 @@ def ws_message(message):
                     })
                 })
 
+        if command == 'CHANGE_DIALOG':
+            old_activedialogid = data.get("current_activedialogid")
+            next_activedialogid = data.get("next_activedialogid")
+            old_ac = get_object_or_404(ActiveDialog, pk=old_activedialogid)
+            next_ac = get_object_or_404(ActiveDialog, pk=next_activedialogid)
+            if old_ac and next_ac:
+                next_ac.pupil = old_ac.pupil
+                next_ac.save()
+                Group("call-client-%s" % next_ac.master.key_id).send({
+                    'text': json.dumps({
+                        'command': "CHANGE_DIALOG",
+                        'activedialodid': next_ac.pk,
+                    })
+                })
+                Group("call-client-%s" % next_ac.pupil.key_id).send({
+                    'text': json.dumps({
+                        'command': "CHANGE_DIALOG",
+                        'activedialodid': next_ac.pk,
+                    })
+                })
+
         if command == 'EXIT_FROM_ACTIVE_DIALOG_BY_PUPIL':
             target = data.get("target")
             if target:
                 ac = get_object_or_404(ActiveDialog, pk=target)
-                ac.status = DIALOG_STOP
-                ac.save()
+                # ac.status = DIALOG_STOP
+                # ac.save()
 
                 Group("call-client-%s" % ac.master.key_id).send({
                     'text': json.dumps({
@@ -137,8 +252,8 @@ def ws_message(message):
             target = data.get("target")
             if target:
                 ac = get_object_or_404(ActiveDialog, pk=target)
-                ac.status = DIALOG_STOP
-                ac.save()
+                # ac.status = DIALOG_STOP
+                # ac.save()
 
                 Group("call-client-%s" % ac.master.key_id).send({
                     'text': json.dumps({
@@ -199,9 +314,9 @@ def ws_disconnect(message):
     if 'client_id' in message.channel_session:
         client_id = message.channel_session['client_id']
         account = Account.objects.filter(key_id=client_id).first()
+        """
         if account:
-            ad_master = ActiveDialog.objects.filter(master=account, status=DIALOG_ACTIVE).first()
-            if ad_master:
+            for ad_master in ActiveDialog.objects.filter(master=account, status=DIALOG_WAIT):
                 Group("call-client-%s" % ad_master.pupil.key_id).send({
                     'text': json.dumps({
                         'dst': ad_master.pupil.key_id,
@@ -211,8 +326,7 @@ def ws_disconnect(message):
                     })
                 })
                 # ad_master.status = DIALOG_STOP
-            ad_pupil = ActiveDialog.objects.filter(pupil=account, status=DIALOG_ACTIVE).first()
-            if ad_pupil:
+            for ad_pupil in ActiveDialog.objects.filter(pupil=account, status=DIALOG_WAIT):
                 Group("call-client-%s" % ad_pupil.master.key_id).send({
                     'text': json.dumps({
                         'dst': ad_pupil.master.key_id,
@@ -222,7 +336,7 @@ def ws_disconnect(message):
                     })
                 })
                 # ad_pupil.status = DIALOG_STOP
-
+        """
         Group("call-client-%s" % client_id).discard(message.reply_channel)
     Room.objects.remove("Clients", message.reply_channel.name)
 
@@ -230,7 +344,7 @@ def ws_disconnect(message):
 
 
 
-
+"""
 
 
 @channel_session_user_from_http
@@ -421,7 +535,7 @@ def ws_disconnect_call(message):
     Group("call-client-%s" % client_id).discard(message.reply_channel)
 
 
-
+"""
 
 def run_broadcast_clients():
     clients = []

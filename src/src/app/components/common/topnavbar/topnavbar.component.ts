@@ -20,6 +20,7 @@ export class TopNavbarComponent implements OnInit {
 
     loading = false;
     user;
+    state_input_call = false;
 
     public constructor(
         private router: Router,
@@ -41,6 +42,7 @@ export class TopNavbarComponent implements OnInit {
 
         self.statusService.ready.subscribe((date) => {
             self.user = this.statusService.user;
+            self.state_input_call = self.user.is_accept_call;
         });
 
 
@@ -62,6 +64,14 @@ export class TopNavbarComponent implements OnInit {
         this.errorService.messages_update.subscribe(item => {
             this.messages = this.errorService.messages;
         })
+
+
+        if (!self.user) {
+            self.user = self.statusService.user;
+            if (!self.user) {
+                self.statusService.getStatus();
+            }
+        }
     }
 
     removeError(index) {
@@ -76,12 +86,16 @@ export class TopNavbarComponent implements OnInit {
     logout() {
         console.log('logout')
         this.loading = true;
-        //this.authenticationService.logout();
         this.router.navigate(['/login']);
     }
 
     activeRoute(routename: string): boolean{
-        return this.router.url.indexOf(routename) > -1;
+        return this.router.url == routename;
+    }
+
+    onChangeInputCall() {
+        this.statusService.changeAcceptCall(!this.state_input_call).subscribe((data) => {
+        })
     }
 
 }

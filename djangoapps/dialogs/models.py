@@ -2,6 +2,8 @@
 from __future__ import unicode_literals, absolute_import
 
 import json
+import os
+from uuid import uuid4
 
 from jsonfield import JSONField
 
@@ -10,12 +12,60 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.utils.encoding import python_2_unicode_compatible
 from django.db.models.signals import pre_save, post_save, post_delete
+from django.utils.deconstruct import deconstructible
 from django.dispatch import receiver
 from django.utils import timezone
 
 from channels import Group
 
 from dialogs.signals import activedialog_changed
+
+
+@python_2_unicode_compatible
+class Tag(models.Model):
+    name = models.CharField(u'имя метки', max_length=255)
+
+    class Meta:
+        verbose_name = 'Метка'
+        verbose_name_plural = 'Метки'
+
+        ordering = ('name', )
+
+    def __str__(self):
+        return self.name
+
+
+ENGLISH_LEVELS = (
+    (10, u'Beginner, Elementary'),
+    (20, u'Pre-Intermediate'),
+    (30, u'Intermediate'),
+    (40, u'Upper-Intermediate'),
+    (50, u'Advanced'),
+    (60, u'Proficiency'),
+)
+
+
+@deconstructible
+class PathAndRename(object):
+    """
+    формирование имение файла вложения
+    """
+
+    def __init__(self, sub_path):
+        self.path = sub_path
+
+    def __call__(self, instance, filename):
+        ext = filename.split('.')[-1]
+        if instance.pk:
+            filename = '{}_{}.{}'.format(instance.pk, uuid4().hex[:10], ext)
+        else:
+            # set filename as random string
+            filename = '{}.{}'.format(uuid4().hex, ext)
+        # return the whole path to the file
+        return os.path.join(self.path, filename)
+
+
+path_and_rename_bg_images = PathAndRename("dialog_bg_images")
 
 
 @python_2_unicode_compatible
@@ -28,6 +78,11 @@ class Dialog(models.Model):
     description = models.TextField(u'описание диалога', null=True, blank=True)
 
     scenario = JSONField(u'сценарий диалога', null=True, blank=True)
+
+    level = models.SmallIntegerField(u' требуемый уровень знания', choices=ENGLISH_LEVELS, null=True, blank=True)
+    tags = models.ManyToManyField(Tag, verbose_name=u'метки', blank=True)
+
+    background_image = models.ImageField(upload_to=path_and_rename_bg_images, blank=True, null=True)
 
     def __str__(self):
         return self.name
@@ -79,12 +134,12 @@ class ActiveDialog(models.Model):
 
     dialog = models.ForeignKey(Dialog, verbose_name=u'диалог')
     master = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=u'ведущий', related_name='master',)
-    pupil = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=u'ведомый', related_name='pupil',
+    pupil = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=u'последний ученик', related_name='pupil',
                               blank=True, null=True)
 
     status = models.SmallIntegerField(u'статус диалога', default=1, choices=DIALOG_STATUS)
 
-    objects = ActiveDialogManager()
+    # objects = ActiveDialogManager()
 
     class Meta:
         verbose_name = 'Запущенный диалог'
@@ -115,6 +170,7 @@ class ActiveDialog(models.Model):
         userpupil = Account.objects.filter(key_id=pupil_key_id).first()
         if not userpupil:
             return False
+        # self.status = DIALOG_ACTIVE
         self.pupil = userpupil
         self.running_at = timezone.now()
         self.save()
@@ -124,12 +180,12 @@ class ActiveDialog(models.Model):
 @receiver(post_save, sender=ActiveDialog)
 def activedialog_post_save(sender, instance, created, **kwargs):
     if created:
-        instance.broadcast_changed(update=instance)
+        instance.broadcast_changed(update=True)
 
 
 @receiver(post_delete, sender=ActiveDialog)
 def activedialog_post_delete(sender, instance, **kwargs):
-    instance.broadcast_changed(update=instance, removed=True)
+    instance.broadcast_changed(update=True, removed=True)
 
 
 @receiver(activedialog_changed)

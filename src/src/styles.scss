@@ -1,2 +1,15 @@
 /* You can add global styles to this file, and also import other style files */
 @import "assets/styles/themes.css";
+@import "assets/styles/bootstrap-switch.css";
+
+.bg-color-begin {
+    background-color: chocolate !important;
+}
+
+.bg-color-preintermediate {
+    background-color: darkkhaki !important;
+}
+
+.bg-color-intermediate {
+    background-color: darkgreen !important;
+}

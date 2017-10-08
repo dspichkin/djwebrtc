@@ -6,6 +6,12 @@ from django.http import HttpResponseRedirect
 from django.contrib import admin
 from django.views.generic.base import TemplateView
 from django.shortcuts import render
+from django.conf import settings
+from django.conf.urls.static import static
+
+
+def closepopup(request):
+    return render(request, 'account/close_popup.html', {})
 
 
 def sredirect(request, url):
@@ -18,8 +24,12 @@ def app(request):
         return render(request, 'index.html')
     return HttpResponseRedirect("/accounts/login/")
 
+urlpatterns = []
 
-urlpatterns = [
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+urlpatterns += [
     url(r'^admin/', admin.site.urls),
 
     url(r'^accounts/', include('accounts.urls')),
@@ -27,5 +37,6 @@ urlpatterns = [
     url(r'^dialogs/', include('dialogs.urls')),
     # JS-приложение
     url(r'^$', app, name='app'),
+    url(r'^close/', closepopup, name="login_popup_close"),
     url(r'^(?P<url>.*)$', sredirect),
 ]

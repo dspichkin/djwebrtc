@@ -1,18 +1,32 @@
 <div class="row">
     <div class="container">
-        <div style="margin: 20px;">
+        <button *ngIf="activedialog" type="button" class="btn btn-info pull-right" style="margin: 0 20px 20px 20px;" (click)="openChangeDialog()">Сменить текущий диалог</button>
+        <div style="margin: 20px;clear: both">
             <div *ngIf="activedialog.dialog && activedialog.dialog.scenario" class="panel panel-primary">
                 <div class="panel-heading">
-                    Текущий шаг: {{current_step.number}} {{current_mode}}
+                    Текущий шаг: {{current_step.number}}
                 </div>
                 <div *ngIf="current_mode == 2" class="panel-body" style="min-height: 200px;">
-                    <span>Вам нужно сказать:</span> 
-                    <div *ngFor="let item of getTask()">
-                        <h4 class="text-success">{{item.task}}</h4>
+                    <h3 style="text-align: center;">Ваш ход</h3>
 
-                        <button *ngIf="item.prev_step > 0" class="btn btn-info" type="button" (click)="nextStep(item.prev_step)">Назад</button>
-                        <button *ngIf="item.next_step > 0" class="btn btn-success" type="button" (click)="nextStep(item.next_step)">Следуюйщий шаг</button>
-                    
+                    <span>Вам нужно сказать:</span> 
+                    <div *ngFor="let item of current_step.variants">
+                        <div class="well">
+                            <h4 class="text-success">{{item.task}}</h4>
+                        </div>
+                        <div>
+                            <h4 *ngIf="!passed_turns.pupil" class="text-warning" style="text-align: center;">Ход игрока еще не был сделан</h4>
+                           
+                            <button *ngIf="item.prev_step > 0" class="btn btn-info" type="button" (click)="nextStep(item.prev_step)">Назад</button>
+                            
+                            <button class="btn btn-warning" type="button" (click)="pupilTurn()">Ход игрока</button>
+
+                            <button *ngIf="hasNextTurn(item)" class="btn btn-success pull-right" type="button" (click)="nextStep(item.next_step)">Следуюйщий шаг</button>
+                        </div>
+
+                        <h2 *ngIf="!hasNextTurn(item)" class="text-warning" style="text-align: center;">Это последний шаг диалога</h2>
+                        
+
                         <div style="margin-top:40px">
                             <button *ngIf="!item.words || (item.words && item.words.length == 0)" class="btn btn-info btn-xs" type="button" (click)="getWords(item)">Посмотреть слова</button>
                              <button *ngIf="item.words && item.words.length > 0" class="btn btn-info btn-xs" type="button" (click)="clearWords(item)">Скрыть слова</button>
@@ -20,7 +34,8 @@
                             <button *ngIf="item.hints" class="btn btn-default btn-xs" type="button" (click)="clearHints(item)">Убрать подсказку</button>
                         </div>
 
-                        <div *ngIf="item.words && item.words.length > 0" style="margin-top:20px;display: flex;justify-content: center;flex-wrap: wrap;">
+                        <div *ngIf="item.words && item.words.length > 0" 
+                            style="margin-top:20px;display: flex;justify-content: center;flex-wrap: wrap;">
                             <span *ngFor="let item of item.words" class="label label-success" style="margin: 10px;padding: 10px;font-size: 16px;">{{item}}</span>
                         </div>
                         <div *ngIf="item.hints" style="margin-top:20px;">
@@ -33,17 +48,30 @@
                 <div *ngIf="current_mode == 1" class="panel-body" style="min-height: 200px;">
                     <h3 style="text-align: center;">Ожидаем ход игрока</h3>
                     <span>Ему нужно сказать:</span> 
-                    <div *ngFor="let item of getTask()">
-                        <p class="text-success">{{item.task}}</p>
-                        <p class="" style="margin: 5px 0;">{{item.phrase}}</p>
+                    <div *ngFor="let item of current_step.variants">
+                        <div class="well">
+                            <p class="text-success">{{item.task}}</p>
+                        </div>
+                        <div class="well">
+                            <p class="" style="margin: 5px 0;">{{item.phrase}}</p>
+                        </div>
 
-                        <button *ngIf="item.prev_step > 0" class="btn btn-info" type="button" (click)="nextStep(item.prev_step)">Назад</button>
-                        <button *ngIf="item.next_step > 0" class="btn btn-success" type="button" (click)="nextStep(item.next_step)">Следуюйщий шаг</button>
-                        
+                         <h4 *ngIf="hasNextTurn(item) && !passed_turns.master" class="text-warning" style="text-align: center;">Ваш ход еще не был сделан</h4>
+
+
+                        <button *ngIf="hasMyTurn()" class="btn btn-warning" type="button" (click)="myTurn()">Теперь мой ход</button>
+                        <button *ngIf="hasNextTurn(item)" class="btn btn-success pull-right" type="button" (click)="nextStep(item.next_step)">Следуюйщий шаг</button>
+
+                        <h2 *ngIf="!hasPlayerTurn(item)" class="text-warning" style="text-align: center;">Это последний шаг диалога</h2>
+                        <button *ngIf="!hasPlayerTurn(item) && item.prev_step > 0" class="btn btn-info" type="button" (click)="nextStep(item.prev_step)">Назад</button>
                         
                     </div> 
                 </div>
             </div>
         </div>
     </div>
+</div>
+
+<div *ngIf="open_change_dialog">
+    <changecurrentdialog (close_dialog)="handlerCloseChangeCurrentDialog($event)" (selected_dialog)="handlerSelectDialog($event)"></changecurrentdialog>
 </div>

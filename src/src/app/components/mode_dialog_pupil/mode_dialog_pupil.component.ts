@@ -40,6 +40,9 @@ export class ModeDialogPupilComponent implements OnInit, OnDestroy {
     during_conversation;
     start_converstion;
 
+    private personageName;
+
+
     private _timeout;
 
     constructor(
@@ -55,6 +58,7 @@ export class ModeDialogPupilComponent implements OnInit, OnDestroy {
         self.user = self.statusService.user;
         self.dialogsService.getActiveDialog(self.activedialogid).subscribe((data) => {
             self.activedialog = data;
+            self._getPersonageName();
             self._startPeer();
         })
 
@@ -75,6 +79,8 @@ export class ModeDialogPupilComponent implements OnInit, OnDestroy {
 
 
         self._runHearbeatPupil();
+
+
         
     }
 
@@ -90,6 +96,13 @@ export class ModeDialogPupilComponent implements OnInit, OnDestroy {
     ngOnDestroy() {
     }
 
+    private _getPersonageName() {
+        for (let i = 0; i < this.activedialog.dialog.scenario.personages.length; i++) {
+            if (this.activedialog.dialog.scenario.personages[i].role == 'pupil') {
+                this.personageName = this.activedialog.dialog.scenario.personages[i].name;
+            }
+        }
+    }
 
     private _startPeer() {
         let self = this;
@@ -135,11 +148,8 @@ export class ModeDialogPupilComponent implements OnInit, OnDestroy {
         if (!navigator.requestAnimationFrame)
             this.userMedia.requestAnimationFrame = navigator.webkitRequestAnimationFrame || navigator.mozRequestAnimationFrame;
 
-
-
-        this.userMedia.getUserMedia(
-            {
-                audio: {
+        /*
+        {
                     "mandatory": {
                         "googEchoCancellation": "false",
                         "googAutoGainControl": "false",
@@ -147,7 +157,13 @@ export class ModeDialogPupilComponent implements OnInit, OnDestroy {
                         "googHighpassFilter": "false"
                     },
                     "optional": []
-                },video: true
+                }
+        */
+
+        this.userMedia.getUserMedia(
+            {
+                audio: true,
+                video: false
             }, (stream)=>{
                 self.localVideo.nativeElement.src =  URL.createObjectURL(stream);
                 self.localStream = stream;
@@ -275,5 +291,12 @@ export class ModeDialogPupilComponent implements OnInit, OnDestroy {
             return false;
         }
         return true;
+    }
+
+
+    private handlerChangeActiveDialog(activedialog) {
+        this.activedialog = activedialog;
+        this.activedialogid = activedialog.id;
+        console.log('this.activedialog ', this.activedialog )
     }
 }

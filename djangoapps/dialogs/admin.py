@@ -2,16 +2,25 @@
 
 from django.contrib import admin
 
-from dialogs.models import (Dialog, ActiveDialog)
+from dialogs.models import (Dialog, ActiveDialog, Tag)
 
 
 class DialogAdmin(admin.ModelAdmin):
-    pass
+    list_display = (
+        'name', 'level', )
+
+    filter_horizontal = ('tags', )
 
 
 class ActiveDialogAdmin(admin.ModelAdmin):
-    pass
+    list_display = (
+        'running_at', 'dialog', 'status', 'master', 'pupil',)
+    list_filter = ('master', )
 
+
+class TagAdmin(admin.ModelAdmin):
+    pass
 
 admin.site.register(Dialog, DialogAdmin)
 admin.site.register(ActiveDialog, ActiveDialogAdmin)
+admin.site.register(Tag, TagAdmin)

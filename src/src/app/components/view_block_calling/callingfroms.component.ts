@@ -52,7 +52,7 @@ export class CallingFromsComponent implements OnInit, OnDestroy {
 
     rejectCall(item) {
         this.loading = true;
-        this.rejectfrom.emit(item.key_id);
+        this.rejectfrom.emit(item);
     }
 
     takeCall(item) {
