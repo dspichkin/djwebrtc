@@ -1,0 +1,132 @@
+{
+    "personages": [
+        {
+            "role": "master",
+            "name": "Person A"
+        }, {
+            "role": "pupil",
+            "name": "Person B"
+        }
+    ],
+    "steps": [{
+        "id": 1,
+        "start_personage": "pupil",
+        "master": {
+            "number": 1,
+            "variants": [
+                {
+                    "task": "Привет.",
+                    "phrase" : "Hello",
+                    "next_step": 2,
+                    "prev_step": -1
+                }
+            ]
+            
+        },
+        "pupil": {
+            "number": 1,
+            "variants": [
+                {
+                    "task": "Привет Джейн.",
+                    "phrase": "Hi Jane",
+                    "next_step": 2,
+                    "prev_step": -1
+                }
+            ]
+        }
+    }, {
+        "id": 2,
+        "start_personage": "pupil",
+        "master": {
+            "number": 2,
+            "variants": [
+                {
+                    "task": "О, привет Джилл",
+                    "phrase" : "Oh, hi Jill.",
+                    "next_step": 3,
+                    "prev_step": 1
+                }
+            ]
+        },
+        "pupil": {
+            "number": 2,
+            "variants": [
+                {
+                    "task": "Как дела?",
+                    "phrase": "What are you doing?",
+                    "next_step": 3,
+                    "prev_step": 1
+                }
+            ]
+        }
+    }, {
+        "id": 3,
+        "start_personage": "pupil",
+        "master": {
+            "number": 3,
+            "variants": [
+                {
+                    "task": "В в прачечной",
+                    "phrase" : "I'm doing the laundry.",
+                    "next_step": 4,
+                    "prev_step": 2
+                }
+            ]
+        },
+        "pupil": {
+            "number": 3,
+            "variants": [
+                {
+                    "task": "Я скучаю мне нечем занятся",
+                    "phrase": "I'm so bored. I have nothing to do.",
+                    "next_step": 4,
+                    "prev_step": 2
+                }
+            ]
+        }
+    }, {
+        "id": 4,
+        "start_personage": "pupil",
+        "master": {
+            "number": 4,
+            "variants": [
+                {
+                    "task": "Почему бы тебе не прийти ко мне и не помочь со стиркой?",
+                    "phrase" : "Why don't you come over and help me with the laundry?",
+                    "next_step": 5,
+                    "prev_step": 3
+                }
+            ]
+        
+        },
+        "pupil": {
+            "number": 4,
+            "variants": [
+                {
+                    "task": "Я бы предпочел сделать свои делать по дому. Слушай, ты не хочешь сделать перерыв в твой домашней работе и не пойти со мной за кофе в Старкбарк кофе",
+                    "phrase": "I'd rather do my own house chores. Hey, you wanna take a break from your house work and have coffee at Starbucks with me?",
+                    "next_step": 5,
+                    "prev_step": 3
+                }
+            ]
+        }
+    }, {
+        "id": 5,
+        "start_personage": "pupil",
+        "master": {
+            "number": 5,
+            "variants": [
+                {
+                    "task": "Это хорошая идея. Встретимся через 30 минут.",
+                    "phrase" : "Sure, that sounds great. I'll meet you there in thirty minutes.",
+                    "next_step": -1,
+                    "prev_step": 4
+                }
+            ]
+        
+        },
+        "pupil": {
+            "number": 5
+        }
+    }]
+}

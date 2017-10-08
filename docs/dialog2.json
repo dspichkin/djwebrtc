@@ -1,0 +1,114 @@
+{
+    "personages": [
+        {
+            "role": "master",
+            "name": "Person A"
+        }, {
+            "role": "pupil",
+            "name": "Person B"
+        }
+    ],
+    "steps": [{
+        "id": 1,
+        "start_personage": "master",
+        "master": {
+            "number": 1,
+            "variants": [
+                {
+                    "task": "Привет. Чем занимался?",
+                    "phrase" : "Hey there. What have you been up to?",
+                    "next_step": 2,
+                    "prev_step": -1
+                }
+            ]
+            
+        },
+        "pupil": {
+            "number": 1,
+            "variants": [
+                {
+                    "task": "Ничем.",
+                    "phrase": "Nothing really.",
+                    "next_step": 2,
+                    "prev_step": -1
+                }
+            ]
+        }
+    }, {
+        "id": 2,
+        "start_personage": "master",
+        "master": {
+            "number": 2,
+            "variants": [
+                {
+                    "task": "Как насчет твоей работы?",
+                    "phrase" : "How about your work?",
+                    "next_step": 3,
+                    "prev_step": 1
+                }
+            ]
+        },
+        "pupil": {
+            "number": 2,
+            "variants": [
+                {
+                    "task": "Там очень скучно. Я мечтаю а другой работе",
+                    "phrase": "It's so boring there. I really wish I had a different job.",
+                    "next_step": 3,
+                    "prev_step": 1
+                }
+            ]
+        }
+    }, {
+        "id": 3,
+        "start_personage": "master",
+        "master": {
+            "number": 3,
+            "variants": [
+                {
+                    "task": "Что так все плохо",
+                    "phrase" : "Is it really that bad?",
+                    "next_step": 4,
+                    "prev_step": 2
+                }
+            ]
+        },
+        "pupil": {
+            "number": 3,
+            "variants": [
+                {
+                    "task": "Да. Большую часть времени мне нечего делать. Но всякий раз, когда появляется какая нибудь задача, это очень скучно, потому что это всегда одно и тоже",
+                    "phrase": "Yeah. Most of the time, I have nothing to do. But whenever I have something to do, it's boring work because it is the same old thing",
+                    "next_step": 4,
+                    "prev_step": 2
+                }
+            ]
+        }
+    }, {
+        "id": 4,
+        "start_personage": "master",
+        "master": {
+            "number": 4,
+            "variants": [
+                {
+                    "task": "Тогда почему бы тебе не найти другую работу?",
+                    "phrase" : "Why don't you find a different job then?",
+                    "next_step": -1,
+                    "prev_step": 3
+                }
+            ]
+        
+        },
+        "pupil": {
+            "number": 4,
+            "variants": [
+                {
+                    "task": "Да наверно я должен это сделать",
+                    "phrase": "Maybe I should.",
+                    "next_step": -1,
+                    "prev_step": 3
+                }
+            ]
+        }
+    }]
+}

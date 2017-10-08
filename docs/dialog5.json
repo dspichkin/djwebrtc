@@ -1,0 +1,214 @@
+{
+    "personages": [
+        {
+            "role": "master",
+            "name": "Clerk"
+        }, {
+            "role": "pupil",
+            "name": "Martin"
+        }
+    ],
+    "steps": [{
+        "id": 1,
+        "start_personage": "pupil",
+        "master": {
+            "number": 1,
+            "variants": [
+                {
+                    "task": "Я могу вам помочь?",
+                    "phrase" : "Hi! Can I help you?",
+                    "next_step": 2,
+                    "prev_step": -1
+                }
+            ]
+            
+        },
+        "pupil": {
+            "number": 1,
+            "variants": [
+                {
+                    "task": "Да, у нас бронь на выходные.",
+                    "phrase": "Yes, we had a reservation for this weekend.",
+                    "next_step": 2,
+                    "prev_step": -1
+                }
+            ]
+        }
+    }, {
+        "id": 2,
+        "start_personage": "pupil",
+        "master": {
+            "number": 2,
+            "variants": [
+                {
+                    "task": "Как ваша фамилия, сэр?",
+                    "phrase" : "All right, what was the name, sir?",
+                    "next_step": 3,
+                    "prev_step": 1
+                }
+            ]
+        },
+        "pupil": {
+            "number": 2,
+            "variants": [
+                {
+                    "task": "Баум, Мартин Баум.",
+                    "phrase": "Baum, Martin Baum.",
+                    "next_step": 3,
+                    "prev_step": 1
+                }
+            ]
+        }
+    }, {
+        "id": 3,
+        "start_personage": "pupil",
+        "master": {
+            "number": 3,
+            "variants": [
+                {
+                    "task": "Баум ... Баум ... ах да, вот, нашел. Двухместный номер на два дня.",
+                    "phrase" : "Baum . . . Baum . . . oh, yes, here it is. A double for two nights?",
+                    "next_step": 4,
+                    "prev_step": 2
+                }
+            ]
+        },
+        "pupil": {
+            "number": 3,
+            "variants": [
+                {
+                    "task": "Верно. Но , может быть у вас найдется номер люкс с кухней на выходные.",
+                    "phrase": "Yes, that’s right. But we were wondering . . . would you happen to have a suite available this weekend, something with a living area and a kitchenette?",
+                    "next_step": 4,
+                    "prev_step": 2
+                }
+            ]
+        }
+    }, {
+        "id": 4,
+        "start_personage": "pupil",
+        "master": {
+            "number": 4,
+            "variants": [
+                {
+                    "task": "Ну, свободен только административный люкс, который будет вам стоить 140 долларов за ночь.",
+                    "phrase" : "Well, the only one that’s available this weekend is the executive suite, and that’ll run you $140 a night.",
+                    "next_step": 5,
+                    "prev_step": 3
+                }
+            ]
+        
+        },
+        "pupil": {
+            "number": 4,
+            "variants": [
+                {
+                    "task": "Понятно. Довольно дорого.",
+                    "phrase": "I see. That’s pretty high . . .",
+                    "next_step": 5,
+                    "prev_step": 3
+                }
+            ]
+        }
+    }, {
+        "id": 5,
+        "start_personage": "pupil",
+        "master": {
+            "number": 5,
+            "variants": [
+                {
+                    "task": "Знаете, этот номер более 20 футов квадратных в площади и с холодильником.",
+                    "phrase" : "You know, sir, this double is more than twenty feet square, and it has a refrigerator.",
+                    "next_step": 6,
+                    "prev_step": 4
+                }
+            ]
+        },
+        "pupil": {
+            "number": 5,
+            "variants": [
+                {
+                    "task": "Действительно? Звучит заманчиво. Что скажешь, Салли.",
+                    "phrase": "Oh, really? That sounds fine, then. What do you say, Sally?",
+                     "next_step": 6,
+                     "prev_step": 4
+                 }
+            ]
+        }
+    }, {
+        "id": 6,
+        "start_personage": "pupil",
+        "master": {
+            "number": 6,
+            "variants": [
+                {
+                    "task": "Хорошо, двухместный номер. У вас кредитная карта?",
+                    "phrase": "Good, the double then. Do you have a credit card, sir?",
+                    "next_step": 7,
+                    "prev_step": 5
+                }
+            ]
+        },
+        "pupil": {
+            "number": 6,
+            "variants": [
+                {
+                    "task": "Нет, я заплачу наличными.",
+                    "phrase": "No, I’ll be paying cash",
+                    "next_step": 7,
+                    "prev_step": 5
+                }
+            ]
+        }
+    }, {
+        "id": 7,
+        "start_personage": "pupil",
+        "master": {
+            "number": 7,
+            "variants": [
+                {
+                    "task": "Тогда мы вынуждены попросить вас заплатить вперед. 55 за ночь, плюс 8 долларов налог. всего 126 долларов. Заполните пожалуйста регистрационную форму. Вот ручка. Напишиет ваше имя, адрес, и номер вашего автомобиля.",
+                    "phrase": "Then I’ll have to ask you to pay in advance. Fifty-five a night, plus $8 tax comes to $126. And would you fill out this registration form, please? Here’s a pen. Just your name, address, and the make and license number of your car.",
+                    "next_step": 5,
+                    "prev_step": 8
+                }
+            ]
+        },
+        "pupil": {
+            "number": 7,
+            "variants": [
+                {
+                    "task": "Хорошо ... вот. Дорожные чеки.",
+                    "phrase": "OK . . . here you are. And travelers checks for $130.",
+                    "next_step": 5,
+                    "prev_step": 8
+                }
+            ]
+        }
+    }, {
+        "id": 8,
+        "start_personage": "pupil",
+        "master": {
+            "number": 8,
+            "variants": [
+                {
+                    "task": "Замечательно, мистер Баум. Вот сдача, 4 доллара. Время съезда 12 часов дня. Корридорный ответет вас ... Харви! Номер 615. Если вам что-нибудь понадобиться, дайте мне знать.",
+                    "phrase": "Fine, Mr. Baum. Here’s $4 change. Check-out time is 12:00 noon. The bellman will take you up ... Harvey! Room 615 ... If you need anything, just let me know.",
+                    "next_step": -1,
+                    "prev_step": 6
+                }
+            ]
+        },
+        "pupil": {
+            "number": 8,
+            "variants": [
+                {
+                    "task": "Спасибо, спокойной ночи.",
+                    "phrase": "Thank you. Good night.",
+                    "next_step": -1,
+                    "prev_step": 5
+                }
+            ]
+        }
+    }]
+}

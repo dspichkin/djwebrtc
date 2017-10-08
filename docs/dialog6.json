@@ -1,0 +1,156 @@
+{
+    "personages": [
+        {
+            "role": "master",
+            "name": "Clerk"
+        }, {
+            "role": "pupil",
+            "name": "Martin"
+        }
+    ],
+    "steps": [{
+        "id": 1,
+        "start_personage": "pupil",
+        "master": {
+            "number": 1,
+            "variants": [
+                {
+                    "task": "Стойка регистрации.",
+                    "phrase" : "Front desk.",
+                    "next_step": 2,
+                    "prev_step": -1
+                }
+            ]
+            
+        },
+        "pupil": {
+            "number": 1,
+            "variants": [
+                {
+                    "task": "Привет. Это Мартин Баум. Свет в моей ванной не работает. Не могли бы послать кого-нибудь взглянуть на него?",
+                    "phrase": "Hello. This is Martin Baum. The bathroom light in my room doesn’t work. Could you have somebody come up and take a look at it, please?",
+                    "next_step": 2,
+                    "prev_step": -1
+                }
+            ]
+        }
+    }, {
+        "id": 2,
+        "start_personage": "pupil",
+        "master": {
+            "number": 2,
+            "variants": [
+                {
+                    "task": "Конечно, мистер Баум. Какой у вас номер?",
+                    "phrase" : "Oh, of course, Mr. Baum. What room number was that, please?",
+                    "next_step": 3,
+                    "prev_step": 1
+                }
+            ]
+        },
+        "pupil": {
+            "number": 2,
+            "variants": [
+                {
+                    "task": "Номер 615.",
+                    "phrase": "Room 615.",
+                    "next_step": 3,
+                    "prev_step": 1
+                }
+            ]
+        }
+    }, {
+        "id": 3,
+        "start_personage": "pupil",
+        "master": {
+            "number": 3,
+            "variants": [
+                {
+                    "task": "Хорошо, через минуту у вас будет человек.",
+                    "phrase" : "Okay, I’ll have a man up there in a minute. ",
+                    "next_step": 4,
+                    "prev_step": 2
+                }
+            ]
+        },
+        "pupil": {
+            "number": 3,
+            "variants": [
+                {
+                    "task": "Замечательно. И еще - у меня в номере, по - моему, нет меню обслуживания номеров. У вас есть обслуживание?",
+                    "phrase": "Fine. And another thing -I don’t seem to have a room service menu. Is there one?",
+                    "next_step": 4,
+                    "prev_step": 2
+                }
+            ]
+        }
+    }, {
+        "id": 4,
+        "start_personage": "pupil",
+        "master": {
+            "number": 4,
+            "variants": [
+                {
+                    "task": "Да, конечно. У нас круглосуточное обслуживание. Извините за неудобства. Официант по обслуживанию номеров принесет вам меню прямо сейчас.",
+                    "phrase" : "Yes, there is. We have 24-hour room service. I’m sorry about that. I’ll have a room service waiter bring you a menu up right away.",
+                    "next_step": 5,
+                    "prev_step": 3
+                }
+            ]
+        
+        },
+        "pupil": {
+            "number": 4,
+            "variants": [
+                {
+                    "task": "Спасибо",
+                    "phrase": "Thanks.",
+                    "next_step": 5,
+                    "prev_step": 3
+                }
+            ]
+        }
+    }, {
+        "id": 5,
+        "start_personage": "pupil",
+        "master": {
+            "number": 5,
+            "variants": [
+                {
+                    "task": "Если вам понадобиться что=либо еще, просто дайте мне знать.",
+                    "phrase" : "If you need anything else, just let me know.",
+                    "next_step": 6,
+                    "prev_step": 4
+                }
+            ]
+        },
+        "pupil": {
+            "number": 5,
+            "variants": [
+                {
+                    "task": "Хорошо, спокойной ночи.",
+                    "phrase": "I will. Good night.",
+                     "next_step": 6,
+                     "prev_step": 4
+                 }
+            ]
+        }
+    }, {
+        "id": 6,
+        "start_personage": "pupil",
+        "master": {
+            "number": 6,
+            "variants": [
+                {
+                    "task": "Спокойной ночи.",
+                    "phrase": "Good night.",
+                    "next_step": -1,
+                    "prev_step": 5
+                }
+            ]
+        },
+        "pupil": {
+            "number": 6
+        }
+    }]
+}

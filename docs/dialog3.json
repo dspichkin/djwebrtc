@@ -1,0 +1,140 @@
+{
+    "personages": [
+        {
+            "role": "master",
+            "name": "Person A"
+        }, {
+            "role": "pupil",
+            "name": "Person B"
+        }
+    ],
+    "steps": [{
+        "id": 1,
+        "start_personage": "master",
+        "master": {
+            "number": 1,
+            "variants": [
+                {
+                    "task": "Привет Стив. Какие планы на вечер?",
+                    "phrase" : "Hi Steve, what's your plan for tonight?",
+                    "next_step": 2,
+                    "prev_step": -1
+                }
+            ]
+            
+        },
+        "pupil": {
+            "number": 1,
+            "variants": [
+                {
+                    "task": "У меня нет ни каких идей. Ты чем нибудь сейчас занят?",
+                    "phrase": "I don't have any plans. Are you doing anything special?",
+                    "next_step": 2,
+                    "prev_step": -1
+                }
+            ]
+        }
+    }, {
+        "id": 2,
+        "start_personage": "master",
+        "master": {
+            "number": 2,
+            "variants": [
+                {
+                    "task": "Отлично, если ты скучаешь, давай встретимся сегодня вечером.",
+                    "phrase" : "Well, if you're bored, let's plan on meeting up tonight.",
+                    "next_step": 3,
+                    "prev_step": 1
+                }
+            ]
+        },
+        "pupil": {
+            "number": 2,
+            "variants": [
+                {
+                    "task": "Это хорошая идея. Может пригласим Боба?",
+                    "phrase": "That sounds like a good idea. Should we invite Bob?",
+                    "next_step": 3,
+                    "prev_step": 1
+                }
+            ]
+        }
+    }, {
+        "id": 3,
+        "start_personage": "master",
+        "master": {
+            "number": 3,
+            "variants": [
+                {
+                    "task": "Он немного скучный",
+                    "phrase" : "He's a little boring.",
+                    "next_step": 4,
+                    "prev_step": 2
+                }
+            ]
+        },
+        "pupil": {
+            "number": 3,
+            "variants": [
+                {
+                    "task": "Что ты имеешь ввиду?",
+                    "phrase": "What do you mean?",
+                    "next_step": 4,
+                    "prev_step": 2
+                }
+            ]
+        }
+    }, {
+        "id": 4,
+        "start_personage": "master",
+        "master": {
+            "number": 4,
+            "variants": [
+                {
+                    "task": "Он не пьет, не играет в видео игры, бильярд или что нибудь подобное. Он только говорит о истории.",
+                    "phrase" : "Well, he doesn't drink, play video games, pool, or really anything. The only thing he talks about is history.",
+                    "next_step": -1,
+                    "prev_step": 3
+                }
+            ]
+        
+        },
+        "pupil": {
+            "number": 4,
+            "variants": [
+                {
+                    "task": "Да это имеет смысл. Давай без него.",
+                    "phrase": "You do have a point. We'll leave him out tonight.",
+                    "next_step": -1,
+                    "prev_step": 3
+                }
+            ]
+        }
+    }, {
+        "id": 5,
+        "start_personage": "master",
+        "master": {
+            "number": 5,
+            "variants": [
+                {
+                    "task": "Хорошо. Давай встетимся в 8:30 перед университетским книжным магазином.",
+                    "phrase" : "Alright. Let's meet at 8:30 in front of the university bookstore.",
+                    "next_step": -1,
+                    "prev_step": 3
+                }
+            ]
+        
+        },
+        "pupil": {
+            "number": 5,
+            "variants": [
+                {
+                    "task": "Олично. Увидимся позже вечером.",
+                    "phrase": "Perfect. I'll see you later tonight.",
+                    "next_step": -1,
+                    "prev_step": 3
+                }
+            ]
+        }
+    }]
+}

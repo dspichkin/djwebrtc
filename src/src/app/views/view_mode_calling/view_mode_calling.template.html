@@ -1,0 +1,41 @@
+<div class="container" *ngIf="mode == 'calling'">
+    <div class="row">
+        <div class="panel panel-default" style="margin:40px;">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h4>Звоним...</h4>
+                    </div>
+                    <div class="col-md-6" style="text-align: right;">
+                        <p *ngIf="callingdialog" style="margin: 0 20px;">{{callingdialog.dialog.name}}
+                            <i *ngIf="audio_enable" class="fa fa-volume-up" aria-hidden="true" style="font-size: 30px;margin-left:20px;cursor:pointer;" (click)="audio_enable=!audio_enable"></i>
+                            <i *ngIf="!audio_enable" class="fa fa-volume-off" aria-hidden="true" style="font-size: 30px;margin-left:20px;cursor:pointer;"  (click)="audio_enable=!audio_enable"></i>
+                        </p>
+
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body">
+                Звонок запущен: {{start_calling_time | date:"hh:mm dd-mm-yyyy"}}
+                
+                <div class="row" style="text-align: center;">
+                    <img src="/static/assets/images/progress.gif" style="width: 100px;margin: 0 auto;">
+                </div>
+                <div class="row" style="text-align: center;margin-top: 40px;">
+                    <button class="btn btn-warning" (click)="stopCallingDialog()">
+                        <span>Отмена</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="container" *ngIf="mode == 'mode_dialog_pupil'">
+    <div class="row">
+        <div *ngIf="mode == 'mode_dialog_pupil'">
+            <modedialogpupil [activedialogid]="activedialogid" (stopdialog)="handelerStopDialog($event)"></modedialogpupil>
+        </div>
+    </div>
+</div>

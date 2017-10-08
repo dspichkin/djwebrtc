@@ -1,0 +1,156 @@
+{
+    "personages": [
+        {
+            "role": "master",
+            "name": "Visitor"
+        }, {
+            "role": "pupil",
+            "name": "Policeman"
+        }
+    ],
+    "steps": [{
+        "id": 1,
+        "start_personage": "master",
+        "master": {
+            "number": 1,
+            "variants": [
+                {
+                    "task": "Подскажите пожалуйста, как мне попасть в банк?",
+                    "phrase" : "Can you tell me how to reach the bank please?",
+                    "next_step": 2,
+                    "prev_step": -1
+                }
+            ]
+            
+        },
+        "pupil": {
+            "number": 1,
+            "variants": [
+                {
+                    "task": "Какой банк? Здесь их два: Союзный ирландский банк и Банк ирландии.",
+                    "phrase": "Which bank? There are two: the Allied Irish Bank and the Bank of Ireland.",
+                    "next_step": 2,
+                    "prev_step": -1
+                }
+            ]
+        }
+    }, {
+        "id": 2,
+        "start_personage": "master",
+        "master": {
+            "number": 2,
+            "variants": [
+                {
+                    "task": "У меня карта СИБ и я хотел снять денги в банке.",
+                    "phrase" : "I have an AIB pass card and I want to withdraw money from the bank.",
+                    "next_step": 3,
+                    "prev_step": 1
+                }
+            ]
+        },
+        "pupil": {
+            "number": 2,
+            "variants": [
+                {
+                    "task": "Тогда вам нужно в Союзный ирландский банк, что возле местного торгового центра Даннес.",
+                    "phrase": "You need to go to the Allied Irish Bank which is near the local shopping centre, Dunnes Stores.",
+                    "next_step": 3,
+                    "prev_step": 1
+                }
+            ]
+        }
+    }, {
+        "id": 3,
+        "start_personage": "master",
+        "master": {
+            "number": 3,
+            "variants": [
+                {
+                    "task": "Как мне туда попасть? Я не знаю этот район.",
+                    "phrase" : "How do I get there? I have no knowledge of this area.",
+                    "next_step": 4,
+                    "prev_step": 2
+                }
+            ]
+        },
+        "pupil": {
+            "number": 3,
+            "variants": [
+                {
+                    "task": "Перейдит через дорогу и поверните на лево. Идите по тратуару до светофора. Вы увидите торговый центр по правой стороне. Перейдите через дорогу и поверните направо за торговым центром. Пройдите прямо около 100 метров и банк будет справа от вас.",
+                    "phrase": "Cross the road and turn left at the other side. Walk along the footpath until you reach the traffic lights. You will see a shopping centre on the right hand side. Walk across the road and turn right after the shopping centre. Keep going straight for about 100m and the bank is to your left.",
+                    "next_step": 4,
+                    "prev_step": 2
+                }
+            ]
+        }
+    }, {
+        "id": 4,
+        "start_personage": "master",
+        "master": {
+            "number": 4,
+            "variants": [
+                {
+                    "task": "Звучит очень сложно. Это далеко?",
+                    "phrase" : "It sounds very complicated. How far is it from here?",
+                    "next_step": 5,
+                    "prev_step": 3
+                }
+            ]
+        
+        },
+        "pupil": {
+            "number": 4,
+            "variants": [
+                {
+                    "task": "Это не так сложно. Путь отсюда займет около пяти минут. Я могу нарисовать карту для вас если хотите.",
+                    "phrase": "It's not so complicated. It's about five minutes walk from here. I can draw a map for you if you wish.",
+                    "next_step": 5,
+                    "prev_step": 3
+                }
+            ]
+        }
+    }, {
+        "id": 5,
+        "start_personage": "master",
+        "master": {
+            "number": 5,
+            "variants": [
+                {
+                    "task": "О, это было бы замечательно! Ксати, мне нужно идти на севр или на юг?",
+                    "phrase" : "Oh, I would really appreciate that. By the way will I be going North or South?",
+                    "next_step": 6,
+                    "prev_step": 4
+                }
+            ]
+        },
+        "pupil": {
+            "number": 5,
+            "variants": [
+                {
+                    "task": "Вам нужно на север. Вы находитесь в западной части города, а банк находиться в северо-восточной.",
+                    "phrase": "You will be going northwards. You are now in the Western part of the city and the Allied Irish Bank is situated in the North East. Here's a rough sketch of the area.",
+                     "next_step": 6,
+                     "prev_step": 4
+                 }
+            ]
+        }
+    }, {
+        "id": 6,
+        "start_personage": "master",
+        "master": {
+            "number": 6,
+            "variants": [
+                {
+                    "task": "Большое спасибо.",
+                    "phrase": "Thank you very much.",
+                    "next_step": -1,
+                    "prev_step": 5
+                }
+            ]
+        },
+        "pupil": {
+            "number": 6
+        }
+    }]
+}

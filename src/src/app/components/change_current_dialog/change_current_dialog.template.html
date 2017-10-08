@@ -1,0 +1,45 @@
+<div style="position: fixed;top:0;left:0;width: 100%; height: 100%">
+    <div style="width: 100%;height: 100%;background-color: black;opacity: 0.5;"></div>
+
+    <div style="width: 600px;height: 500px;position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: 50px auto;">
+
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                Выберите новый диалог
+            </div>
+            <div class="panel-body" style="min-height: 200px;max-height: 300px;overflow: auto;">
+
+                <ul class="list-group">
+                    <li *ngFor="let item of mydialogs" class="list-group-item" style="display:flex;cursor: pointer;justify-content: space-between;" (click)="changeSelectedDialog(item)">
+                        <div style="margin-right: 20px;flex:0;">
+                            <input type="radio" [(ngModel)]="item.select" name="dialog" [value]="true">
+                        </div>
+                        <div style="flex: 3;">
+                            <p>{{item.dialog.name}}</p>
+                            <p style="font-size: 9px;">{{item.dialog.description}}</p>
+                        </div>
+                        <div *ngIf="item.dialog.background_image" style="flex:0;width: 50px;height:50px">
+                            <div *ngIf="item.dialog.background_image" 
+                                [ngStyle]="{'background-image': 'url(' + item.dialog.background_image + ')'}"
+                                style="
+                                    height: 50px; 
+                                    width: 50px; 
+                                    background-size: cover;
+                                    display: block;"></div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="panel-footer" style="">
+                <button type="button" class="btn btn-primary" (click)="selectDialog()">Выбрать диалог</button>
+                <button type="button" class="btn btn-default" (click)="closeChangeDialog()">Закрыть</button>
+            </div>
+        </div>
+        
+    </div>
+</div>
