@@ -19,9 +19,9 @@ class PresenceManager(models.Manager):
         if presense:
             presense.update(last_seen=now())
         elif channel_name:
-            room = Room.objects.filter('Clients').first()
+            room = Room.objects.filter(channel_name='Clients').first()
             if room:
-                Presence.objects.create(room=room, channel_name=channel_name)
+                presense = Presence.objects.create(room=room, channel_name=channel_name)
                 presense.last_seen = now()
                 presense.save()
         # self.filter(channel_name=channel_name).update(last_seen=now())

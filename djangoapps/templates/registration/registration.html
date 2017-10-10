@@ -1,0 +1,74 @@
+{% extends "registration/base.html" %}
+{% load socialaccount %}
+{% providers_media_js %}
+
+{% block content %}
+
+
+<div class="row">
+    <div class="container login">
+        {% if form.errors %}
+        <p class="alert alert-danger">Введенный email или пароль неверны. Попробуйте еще раз.</p>
+        {% endif %}
+
+        {% if next %}
+            {% if user.is_authenticated %}
+            <p>Your account doesn't have access to this page. To proceed,
+            please login with an account that has access.</p>
+            {% endif %}
+        {% endif %}
+        {% if not user.is_authenticated %}
+        <form class="form-horizontal" method="post" action="{% url 'registration' %}" style="width: 500px;margin: 5% auto;">
+            {% csrf_token %}
+            <h1 class="login__form-header" style="text-align: center;">Регистрация</h1>
+            <div class="form-group">
+                <label for="exampleInputName">Ваше имя * <span style="font-size: 10px;font-weight: 200;">(будет отображаться другим пользователям)</span>
+                </label>
+                <input type="text" name="reg_first_name" class="form-control" id="exampleInputName" value="{{reg_first_name | default:""}}">
+                <p class="text-danger pull-right" style="margin:0">{{reg_first_name_error}}</p>
+            </div>
+            <div class="form-group">
+                <label for="exampleInputEmail">Ваш email *</label>
+                <input type="email" name="reg_email" class="form-control" id="exampleInputEmail" value="{{reg_email | default:""}}">
+                <p class="text-danger pull-right" style="margin:0">{{reg_email_error}}</p>
+            </div>
+            <div class="form-group">
+                <label for="exampleInputLevel">Ваш уровень английского *</label>
+                <select name="reg_level" class="form-control" id="exampleInputLevel">
+                    <option value="10" {% if reg_level == '10' %} selected {% endif %}>Beginner, Elementary</option>
+                    <option value="20" {% if reg_level == '20' %} selected {% endif %}>Pre-Intermediate</option>
+                    <option value="30" {% if reg_level == '30' %} selected {% endif %}>Intermediate</option>
+                    <option value="40" {% if reg_level == '40' %} selected {% endif %}>Upper-Intermediate</option>
+                    <option value="50" {% if reg_level == '50' %} selected {% endif %}>Advanced</option>
+                    <option value="60" {% if reg_level == '60' %} selected {% endif %}>Proficiency</option>
+                </select>
+                <p class="text-danger pull-right" style="margin:0">{{reg_level_error}}</p>
+            </div>
+
+            <div class="form-group">
+                <label for="exampleInputPassword1">Пароль</label>
+                <input type="password" name="reg_password" class="form-control" id="exampleInputPassword1" value="{{password | default:""}}">
+                <p class="text-danger pull-right" style="margin:0">{{reg_password_error}}</p>
+            </div>
+            <div class="form-group">
+                <label for="exampleInputPassword2">Подтверждение пароля</label>
+                <input type="password" name="reg_password1" class="form-control" id="exampleInputPassword2" value="{{password1 | default:""}}">
+                <p class="text-danger pull-right" style="margin:0">{{reg_password1_error}}</p>
+            </div>
+
+
+            
+            <div class="form-group">
+                <input type="submit" class="btn btn-primary btn-lg login__submit" value="Зарегистрироватся" />
+                <a href="/accounts/login/" class="btn btn-default" style="float: right;">Отмена</a>
+                <input type="hidden" name="next" value="/" />
+            </div>
+            <!-- <p><a href="{% url 'password_reset' %}">Lost password?</a></p> -->
+        </form>
+        
+         {% endif %}
+
+    </div>
+</div>
+
+{% endblock %}

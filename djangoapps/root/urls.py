@@ -21,6 +21,8 @@ def sredirect(request, url):
 
 def app(request):
     if request.user.is_authenticated():
+        if not request.user.is_superuser and not request.user.is_confirm:
+            return HttpResponseRedirect("/accounts/confirm/")
         return render(request, 'index.html')
     return HttpResponseRedirect("/accounts/login/")
 

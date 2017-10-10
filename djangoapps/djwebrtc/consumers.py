@@ -100,7 +100,7 @@ def ws_message(message):
             activedialogid = data.get("target")
             source = data.get("source")
             if activedialogid:
-                activedialog = ActiveDialog.objects.filter(pk=activedialogid).first()
+                activedialog = ActiveDialog.objects.filter(pk=activedialogid, master__is_accept_call=True).first()
                 if activedialog:
                     if activedialog.status == DIALOG_WAIT:
                         presense = Presence.objects.filter(room__channel_name="Clients", user=activedialog.master).last()
@@ -174,8 +174,8 @@ def ws_message(message):
             master = data.get("master")
             pupil = data.get("pupil")
             if target and master and pupil:
-                ac = get_object_or_404(ActiveDialog, pk=target)
-                if ac.run_dialog(pupil):
+                ac = ActiveDialog.objects.filter(pk=target, master__is_accept_call=True).first()
+                if ac and ac.run_dialog(pupil):
                     Group("call-client-%s" % master).send({
                         'text': json.dumps({
                             'command': "START_DIALOG_MASTER",

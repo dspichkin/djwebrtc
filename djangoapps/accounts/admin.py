@@ -5,7 +5,7 @@ from django.contrib.auth.models import Group
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.sessions.models import Session
 
-from accounts.models import (Account)
+from accounts.models import (Account, ConfirmationCode)
 
 
 class UserAdmin(BaseUserAdmin):
@@ -19,7 +19,7 @@ class UserAdmin(BaseUserAdmin):
             'first_name', 'last_name', 'key', 'key_id')}),
 
 
-        ('Permissions', {'fields': ('is_active', 'is_superuser', 'is_staff')}),
+        ('Permissions', {'fields': ('is_active', 'is_confirm', 'is_superuser', 'is_staff')}),
     )
     add_fieldsets = (
         (None, {
@@ -37,6 +37,11 @@ class SessionAdmin(admin.ModelAdmin):
     list_display = ('session_key', 'expire_date',)
 
 
+class ConfirmationCodeAdmin(admin.ModelAdmin):
+    pass
+
+
 admin.site.register(Session, SessionAdmin)
 admin.site.register(Account, UserAdmin)
 admin.site.unregister(Group)
+admin.site.register(ConfirmationCode, ConfirmationCodeAdmin)
