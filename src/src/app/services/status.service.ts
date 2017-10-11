@@ -114,6 +114,14 @@ export class StatusService {
             .catch(this.handleError);
     }
 
+    saveUser(params) {
+        return this._http.post(AppSettings.URL_USER_SETTING, params)
+            .map((response: Response) => {
+                return response.json();
+            })
+            .catch(this.handleError);
+    }
+
     private handleError(error: Response) {
         console.error(error);
         //error.json().error || 

@@ -20,7 +20,6 @@ import { AuthGuard } from './services/guards.service';
 
 
 
-
 export function CookieXSRFStrategyFactory() {
     return  new CookieXSRFStrategy('csrftoken', 'X-CSRFToken');
 }

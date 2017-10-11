@@ -9,6 +9,8 @@ import { BasicLayoutComponent } from "./components/common/layouts/basicLayout.co
 import { ModeWaitPupilViewComponent } from "./views/view_mode_wait_pupil/view_mode_wait_pupil.component";
 import { ModeCallingViewComponent } from "./views/view_mode_calling/view_mode_calling.component";
 import { MessageViewComponent } from "./views/view_message/view_message.component";
+import { ProfileViewComponent } from "./views/view_profile/view_profile.component";
+
 
 import { AuthGuard } from './services/guards.service';
 
@@ -53,6 +55,16 @@ export const ROUTES:Routes = [
         {
             path: 'message', 
             component: MessageViewComponent,
+            canActivate: [AuthGuard]
+        }
+    ]
+  },
+  {
+    path: '', component: BasicLayoutComponent,
+    children: [
+        {
+            path: 'profile', 
+            component: ProfileViewComponent,
             canActivate: [AuthGuard]
         }
     ]

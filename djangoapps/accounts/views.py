@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import re
+import json
 
 from rest_framework.response import Response
 from rest_framework import status
@@ -294,6 +295,31 @@ def check_user(request):
         return Response({
             "status": True
             }, status.HTTP_200_OK)
+    return Response({
+        "status": False
+        }, status.HTTP_200_OK)
+
+
+@api_view(['POST'])
+@permission_classes((IsConfirmAndIsAuthenticated,))
+def user(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        first_name = data.get("first_name")
+        selectedLevel = data.get("selectedLevel")
+        password = data.get("password")
+        is_dirty = False
+        if first_name and request.user.first_name != first_name:
+            request.user.first_name = first_name
+            is_dirty = True
+        if selectedLevel and request.user.level != int(selectedLevel):
+            request.user.level = selectedLevel
+            is_dirty = True
+        if password:
+            request.user.set_password(password)
+            is_dirty = True
+        if is_dirty is True:
+            request.user.save()
     return Response({
         "status": False
         }, status.HTTP_200_OK)

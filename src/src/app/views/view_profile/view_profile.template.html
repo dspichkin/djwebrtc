@@ -1,0 +1,60 @@
+<div class="container">
+    <div class="row">
+        <div class="panel panel-default" style="margin:40px;">
+            <div class="panel-heading">
+                <h3>Профиль пользователя <span class="pull-right">{{user?.email}}</span></h3>
+            </div>
+            <div class="panel-body">
+                <form #frm="ngForm" (ngSubmit)="submit()" style="max-width: 400px;margin: auto;">
+                    <div class="form-group">
+                        <label for="exampleInputName">Ваше имя * <span style="font-size: 10px;font-weight: 200;">(будет отображаться другим пользователям)</span>
+                        </label>
+
+                        <input #frm_first_name="ngModel" type="text" name="frm_first_name" class="form-control" id="exampleInputName" [(ngModel)]="first_name" required="required">
+                        <small *ngIf="!frm_first_name.valid && !frm_first_name.pristine" class="text-danger pull-right" style="margin:0">Имя обязательное для ввода</small>
+                        
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputLevel">Ваш уровень английского *</label>
+                        <select name="frm_level" class="form-control" [(ngModel)]="selectedLevel" style="" (ngModelChange)="onChangePersonage()" required="required">
+                             <option *ngFor="let pesonage of levels" [value]="pesonage.id">{{pesonage.title}}</option>
+                         </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="exampleInputPassword1">Новый пароль</label>
+                        <input type="password" name="frm_password" class="form-control" id="exampleInputPassword1" [(ngModel)]="password" required="required" #frm_password="ngModel" reverse="false" (ngModelChange)="changePassword($event)">
+                        <small *ngIf="frm_password.errors && frm_password.errors.required && !frm_password.pristine" class="text-danger pull-right">
+                            Требуется ввести пароль
+                        </small>
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputPassword2">Подтверждение пароля</label>
+                        <input type="password" name="frm_password1" class="form-control" id="exampleInputPassword2" [(ngModel)]="password1" validateEqual="frm_password" #frm_password1="ngModel" reverse="false" required="required">
+                            <small *ngIf="frm_password1.errors && frm_password1.errors.validateEqual==false && !frm_password1.pristine" class="text-danger pull-right">
+                                Пароли не совпадают
+                            </small>
+                    </div>
+
+
+                    
+                    <div class="form-group">
+                        <input type="submit" class="btn btn-primary" value="Сохранить" [disabled]="!frm.valid"/>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Loading -->
+        <div *ngIf="loading" style="position: absolute;top:0;left:0;width:100%;height:100%;z-index: 100;">
+            <div style="position: absolute;opacity: 0.5;width:100%;height:100%;background-color: white;">
+            </div>
+            <div style="width: 50px;margin: auto;margin-top: 160px;">
+                <i class="fa fa-spin fa-gear" style="font-size: 50px;"></i>
+            </div>
+        </div>
+        <!-- END Loading -->
+
+
+    </div>
+</div>

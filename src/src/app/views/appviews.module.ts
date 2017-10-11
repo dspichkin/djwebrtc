@@ -16,7 +16,9 @@ import { ModeWaitPupilViewComponent } from "./view_mode_wait_pupil/view_mode_wai
 import { ModeCallingViewComponent } from "./view_mode_calling/view_mode_calling.component";
 import { ChangeCurrentDialogComponent } from "../components/change_current_dialog/change_current_dialog.component";
 import { MessageViewComponent } from "./view_message/view_message.component";
+import { ProfileViewComponent } from "./view_profile/view_profile.component";
 
+import { EqualValidator } from './view_profile/equal_validator.directive';
 
 @NgModule({
   declarations: [
@@ -32,6 +34,8 @@ import { MessageViewComponent } from "./view_message/view_message.component";
     ModeCallingViewComponent,
     ChangeCurrentDialogComponent,
     MessageViewComponent,
+    ProfileViewComponent,
+    EqualValidator,
   ],
   imports: [
     BrowserModule,
@@ -51,6 +55,8 @@ import { MessageViewComponent } from "./view_message/view_message.component";
     ModeCallingViewComponent,
     ChangeCurrentDialogComponent,
     MessageViewComponent,
+    ProfileViewComponent,
+    EqualValidator,
   ],
 })
 

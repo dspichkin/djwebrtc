@@ -195,11 +195,13 @@ AppModule = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__views_view_mode_wait_pupil_view_mode_wait_pupil_component__ = __webpack_require__("../../../../../src/app/views/view_mode_wait_pupil/view_mode_wait_pupil.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__views_view_mode_calling_view_mode_calling_component__ = __webpack_require__("../../../../../src/app/views/view_mode_calling/view_mode_calling.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__views_view_message_view_message_component__ = __webpack_require__("../../../../../src/app/views/view_message/view_message.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__services_guards_service__ = __webpack_require__("../../../../../src/app/services/guards.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__views_view_profile_view_profile_component__ = __webpack_require__("../../../../../src/app/views/view_profile/view_profile.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__services_guards_service__ = __webpack_require__("../../../../../src/app/services/guards.service.ts");
 
 
 
 //import {BlankLayoutComponent} from "./components/common/layouts/blankLayout.component";
+
 
 
 
@@ -215,7 +217,7 @@ var ROUTES = [
             {
                 path: 'dialogs',
                 component: __WEBPACK_IMPORTED_MODULE_0__views_dialogsview_component__["a" /* DialogsViewComponent */],
-                canActivate: [__WEBPACK_IMPORTED_MODULE_7__services_guards_service__["a" /* AuthGuard */]]
+                canActivate: [__WEBPACK_IMPORTED_MODULE_8__services_guards_service__["a" /* AuthGuard */]]
             }
         ]
     },
@@ -225,7 +227,7 @@ var ROUTES = [
             {
                 path: 'activedialogs',
                 component: __WEBPACK_IMPORTED_MODULE_1__views_activedialogsview_component__["a" /* ActiveDialogsViewComponent */],
-                canActivate: [__WEBPACK_IMPORTED_MODULE_7__services_guards_service__["a" /* AuthGuard */]]
+                canActivate: [__WEBPACK_IMPORTED_MODULE_8__services_guards_service__["a" /* AuthGuard */]]
             }
         ]
     },
@@ -235,7 +237,7 @@ var ROUTES = [
             {
                 path: 'dialog/:dialog_id',
                 component: __WEBPACK_IMPORTED_MODULE_2__views_dialogview_component__["a" /* DialogViewComponent */],
-                canActivate: [__WEBPACK_IMPORTED_MODULE_7__services_guards_service__["a" /* AuthGuard */]]
+                canActivate: [__WEBPACK_IMPORTED_MODULE_8__services_guards_service__["a" /* AuthGuard */]]
             }
         ]
     },
@@ -245,19 +247,29 @@ var ROUTES = [
             {
                 path: 'message',
                 component: __WEBPACK_IMPORTED_MODULE_6__views_view_message_view_message_component__["a" /* MessageViewComponent */],
-                canActivate: [__WEBPACK_IMPORTED_MODULE_7__services_guards_service__["a" /* AuthGuard */]]
+                canActivate: [__WEBPACK_IMPORTED_MODULE_8__services_guards_service__["a" /* AuthGuard */]]
+            }
+        ]
+    },
+    {
+        path: '', component: __WEBPACK_IMPORTED_MODULE_3__components_common_layouts_basicLayout_component__["a" /* BasicLayoutComponent */],
+        children: [
+            {
+                path: 'profile',
+                component: __WEBPACK_IMPORTED_MODULE_7__views_view_profile_view_profile_component__["a" /* ProfileViewComponent */],
+                canActivate: [__WEBPACK_IMPORTED_MODULE_8__services_guards_service__["a" /* AuthGuard */]]
             }
         ]
     },
     {
         path: 'wait',
         component: __WEBPACK_IMPORTED_MODULE_4__views_view_mode_wait_pupil_view_mode_wait_pupil_component__["a" /* ModeWaitPupilViewComponent */],
-        canActivate: [__WEBPACK_IMPORTED_MODULE_7__services_guards_service__["a" /* AuthGuard */]]
+        canActivate: [__WEBPACK_IMPORTED_MODULE_8__services_guards_service__["a" /* AuthGuard */]]
     },
     {
         path: 'calling/:id',
         component: __WEBPACK_IMPORTED_MODULE_5__views_view_mode_calling_view_mode_calling_component__["a" /* ModeCallingViewComponent */],
-        canActivate: [__WEBPACK_IMPORTED_MODULE_7__services_guards_service__["a" /* AuthGuard */]]
+        canActivate: [__WEBPACK_IMPORTED_MODULE_8__services_guards_service__["a" /* AuthGuard */]]
     },
     /*
     {
@@ -300,7 +312,8 @@ AppSettings.URL_DIALOG_ACTIVESTOP = AppSettings.base_url + "/dialogs/api/stop/";
 AppSettings.URL_DIALOG_STOP = AppSettings.base_url + "/dialogs/api/stop/";
 AppSettings.URL_CHANGE_ACCEPT_CALL = AppSettings.base_url + "/accounts/accept_call/";
 AppSettings.URL_MESSAGE = AppSettings.base_url + "/accounts/message/";
-AppSettings.URL_CHECK_USER = AppSettings.base_url + "/accounts/user/";
+AppSettings.URL_CHECK_USER = AppSettings.base_url + "/accounts/check_user/";
+AppSettings.URL_USER_SETTING = AppSettings.base_url + "/accounts/user/";
 AppSettings.URL_WEBSOKET = "wss://" + document.location.hostname + ':8000/peerjs';
 AppSettings.URL_WEBSOKET_PEER = document.location.hostname;
 AppSettings.CALLING_TIME_INTERVAL = 5000;
@@ -731,7 +744,7 @@ var _a, _b, _c, _d;
 /***/ "../../../../../src/app/components/common/topnavbar/topnavbar.template.html":
 /***/ (function(module, exports) {
 
-module.exports = "<nav class=\"navbar navbar-default top-nav-collapse\" style=\"border-radius: 0px;\">\n  <div class=\"container\">\n    <div class=\"navbar-header\">\n        <button type=\"button\" class=\"navbar-toggle\" data-toggle=\"collapse\" data-target=\"#myNavbar\">\n            <span class=\"icon-bar\"></span>\n            <span class=\"icon-bar\"></span>\n            <span class=\"icon-bar\"></span>\n        </button>\n        <a class=\"navbar-brand\" href=\"#\" style=\"margin-left: 0;\">Ди<span class=\"logo-dec\">алоги</span></a>\n    </div>\n    <div class=\"collapse navbar-collapse\" id=\"myNavbar\">\n      <ul class=\"nav navbar-nav navbar-right\">\n        <li [ngClass]=\"{'active': activeRoute('/dialogs')}\">\n            <a [routerLink]=\"['/dialogs']\">Все диалоги</a>\n        </li>\n        <li [ngClass]=\"{'active': activeRoute('/activedialogs')}\">\n            <a [routerLink]=\"['/activedialogs']\">Диалоги в ожидание ученика</a>\n        </li>\n        <li class=\"dropdown\">\n            <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\" role=\"button\" aria-haspopup=\"true\" aria-expanded=\"false\">Настройки<span class=\"caret\"></span></a>\n              <ul class=\"dropdown-menu\">\n                <li><a href=\"#\">Профиль</a></li>\n                <li role=\"separator\" class=\"divider\"></li>\n                <li><a href=\"/accounts/logout/?next=/\" target=\"_self\">Выход</a></li>\n              </ul>\n        </li>\n      </ul>\n    </div>\n    <div style=\"width: 100%;margin: 0 0 10px 0;\">\n            <bSwitch [switch-size]=\"'small'\" [switch-animate]=\"true\" [(ngModel)]=\"state_input_call\" (onChangeState)=\"onChangeInputCall($event)\" [switch-off-text]=\"'Выкл'\"\n          [switch-on-text]=\"'Вкл'\"></bSwitch>\n            <span style=\"color:beige;margin-left: 18px;\">Принимать входящие звонки</span>\n        </div>\n  </div>\n</nav>\n\n<div *ngIf=\"server_error\" style=\"position: absolute;top:0;left:0;height: 100%;width: 100%;z-index: 100;\">\n    <div style=\"position: absolute;opacity: 0.7;width:100%;height:200%;background-color: white;\"></div>\n    <div style=\"position: relative;margin: auto;margin-top: 160px;text-align: center;color: darkred;\">\n        <h1>Опс... не могу получить доступ к серверу</h1>\n        <h4>Работа сайта возобновится после восстановления доступа к серверу</h4>\n    </div>\n</div>\n\n<div *ngIf=\"errors.length > 0\" style=\"position:absolute;width:100%;top:0;right:0;z-index:1000;\">\n    <div *ngFor=\"let error of errors;let i=index\" class=\"alert alert-danger\" style=\"margin: 0 0 5px 0;max-height: 300px;overflow-y: auto;\">\n        <button aria-hidden=\"true\" data-dismiss=\"alert\" class=\"close\" type=\"button\" (click)=\"removeError(i)\" style=\"margin-top:-10px;margin-right: -10px;\">×</button>\n        <span *ngIf=\"error?.host\" style=\"font-weight: 800;\">Host: {{error?.host}}</span> \n        <span  *ngIf=\"error?.message\"><pre>Описание: {{error?.message}} </pre></span>\n        <span  *ngIf=\"error?.rc\">Код rc: {{error?.rc}}</span>\n    </div>\n</div>\n\n<div *ngIf=\"messages.length > 0\" style=\"position:absolute;width:100%;top:0;right:0;z-index:1000;\">\n    <div *ngFor=\"let message of messages;let i=index\" class=\"alert alert-success\" style=\"margin: 0 0 5px 0;max-height: 300px;overflow-y: auto;\">\n        <button aria-hidden=\"true\" data-dismiss=\"alert\" class=\"close\" type=\"button\" (click)=\"removeMessage(i)\" style=\"margin-top:-10px;margin-right: -10px;\">×</button>\n        <span *ngIf=\"message?.host\" style=\"font-weight: 800;\">Host: {{message?.host}}</span> \n        <span  *ngIf=\"message?.message\"><pre>Описание: {{message?.message}} </pre></span>\n        <span  *ngIf=\"message?.rc\">Код rc: {{message?.rc}}</span>\n    </div>\n</div>"
+module.exports = "<nav class=\"navbar navbar-default top-nav-collapse\" style=\"border-radius: 0px;\">\n  <div class=\"container\">\n    <div class=\"navbar-header\">\n        <button type=\"button\" class=\"navbar-toggle\" data-toggle=\"collapse\" data-target=\"#myNavbar\">\n            <span class=\"icon-bar\"></span>\n            <span class=\"icon-bar\"></span>\n            <span class=\"icon-bar\"></span>\n        </button>\n        <a class=\"navbar-brand\" href=\"#\" style=\"margin-left: 0;\">Ди<span class=\"logo-dec\">алоги</span></a>\n    </div>\n    <div class=\"collapse navbar-collapse\" id=\"myNavbar\">\n      <ul class=\"nav navbar-nav navbar-right\">\n        <li [ngClass]=\"{'active': activeRoute('/dialogs')}\">\n            <a [routerLink]=\"['/dialogs']\">Все диалоги</a>\n        </li>\n        <li [ngClass]=\"{'active': activeRoute('/activedialogs')}\">\n            <a [routerLink]=\"['/activedialogs']\">Диалоги в ожидание ученика</a>\n        </li>\n        <li class=\"dropdown\">\n            <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\" role=\"button\" aria-haspopup=\"true\" aria-expanded=\"false\">Настройки<span class=\"caret\"></span></a>\n              <ul class=\"dropdown-menu\">\n                <li><a [routerLink]=\"['/profile']\" >Профиль</a></li>\n                <li role=\"separator\" class=\"divider\"></li>\n                <li><a href=\"/accounts/logout/?next=/\" target=\"_self\">Выход</a></li>\n              </ul>\n        </li>\n      </ul>\n    </div>\n    <div style=\"width: 100%;margin: 0 0 10px 0;\">\n            <bSwitch [switch-size]=\"'small'\" [switch-animate]=\"true\" [(ngModel)]=\"state_input_call\" (onChangeState)=\"onChangeInputCall($event)\" [switch-off-text]=\"'Выкл'\"\n          [switch-on-text]=\"'Вкл'\"></bSwitch>\n            <span style=\"color:beige;margin-left: 18px;\">Принимать входящие звонки</span>\n        </div>\n  </div>\n</nav>\n\n<div *ngIf=\"server_error\" style=\"position: absolute;top:0;left:0;height: 100%;width: 100%;z-index: 100;\">\n    <div style=\"position: absolute;opacity: 0.7;width:100%;height:200%;background-color: white;\"></div>\n    <div style=\"position: relative;margin: auto;margin-top: 160px;text-align: center;color: darkred;\">\n        <h1>Опс... не могу получить доступ к серверу</h1>\n        <h4>Работа сайта возобновится после восстановления доступа к серверу</h4>\n    </div>\n</div>\n\n<div *ngIf=\"errors.length > 0\" style=\"position:absolute;width:100%;top:0;right:0;z-index:1000;\">\n    <div *ngFor=\"let error of errors;let i=index\" class=\"alert alert-danger\" style=\"margin: 0 0 5px 0;max-height: 300px;overflow-y: auto;\">\n        <button aria-hidden=\"true\" data-dismiss=\"alert\" class=\"close\" type=\"button\" (click)=\"removeError(i)\" style=\"margin-top:-10px;margin-right: -10px;\">×</button>\n        <span *ngIf=\"error?.host\" style=\"font-weight: 800;\">Host: {{error?.host}}</span> \n        <span  *ngIf=\"error?.message\"><pre>Описание: {{error?.message}} </pre></span>\n        <span  *ngIf=\"error?.rc\">Код rc: {{error?.rc}}</span>\n    </div>\n</div>\n\n<div *ngIf=\"messages.length > 0\" style=\"position:absolute;width:100%;top:0;right:0;z-index:1000;\">\n    <div *ngFor=\"let message of messages;let i=index\" class=\"alert alert-success\" style=\"margin: 0 0 5px 0;max-height: 300px;overflow-y: auto;\">\n        <button aria-hidden=\"true\" data-dismiss=\"alert\" class=\"close\" type=\"button\" (click)=\"removeMessage(i)\" style=\"margin-top:-10px;margin-right: -10px;\">×</button>\n        <span *ngIf=\"message?.host\" style=\"font-weight: 800;\">Host: {{message?.host}}</span> \n        <span  *ngIf=\"message?.message\"><pre>Описание: {{message?.message}} </pre></span>\n        <span  *ngIf=\"message?.rc\">Код rc: {{message?.rc}}</span>\n    </div>\n</div>"
 
 /***/ }),
 
@@ -2255,6 +2268,13 @@ var StatusService = (function () {
         })
             .catch(this.handleError);
     };
+    StatusService.prototype.saveUser = function (params) {
+        return this._http.post(__WEBPACK_IMPORTED_MODULE_4__app_settings__["a" /* AppSettings */].URL_USER_SETTING, params)
+            .map(function (response) {
+            return response.json();
+        })
+            .catch(this.handleError);
+    };
     StatusService.prototype.handleError = function (error) {
         console.error(error);
         //error.json().error || 
@@ -2478,12 +2498,16 @@ module.exports = "<div class=\"row\">\n    <div class=\"container\">\n        <d
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__view_mode_calling_view_mode_calling_component__ = __webpack_require__("../../../../../src/app/views/view_mode_calling/view_mode_calling.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__components_change_current_dialog_change_current_dialog_component__ = __webpack_require__("../../../../../src/app/components/change_current_dialog/change_current_dialog.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__view_message_view_message_component__ = __webpack_require__("../../../../../src/app/views/view_message/view_message.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__view_profile_view_profile_component__ = __webpack_require__("../../../../../src/app/views/view_profile/view_profile.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__view_profile_equal_validator_directive__ = __webpack_require__("../../../../../src/app/views/view_profile/equal_validator.directive.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
+
 
 
 
@@ -2520,6 +2544,8 @@ AppviewsModule = __decorate([
             __WEBPACK_IMPORTED_MODULE_13__view_mode_calling_view_mode_calling_component__["a" /* ModeCallingViewComponent */],
             __WEBPACK_IMPORTED_MODULE_14__components_change_current_dialog_change_current_dialog_component__["a" /* ChangeCurrentDialogComponent */],
             __WEBPACK_IMPORTED_MODULE_15__view_message_view_message_component__["a" /* MessageViewComponent */],
+            __WEBPACK_IMPORTED_MODULE_16__view_profile_view_profile_component__["a" /* ProfileViewComponent */],
+            __WEBPACK_IMPORTED_MODULE_17__view_profile_equal_validator_directive__["a" /* EqualValidator */],
         ],
         imports: [
             __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser__["a" /* BrowserModule */],
@@ -2539,6 +2565,8 @@ AppviewsModule = __decorate([
             __WEBPACK_IMPORTED_MODULE_13__view_mode_calling_view_mode_calling_component__["a" /* ModeCallingViewComponent */],
             __WEBPACK_IMPORTED_MODULE_14__components_change_current_dialog_change_current_dialog_component__["a" /* ChangeCurrentDialogComponent */],
             __WEBPACK_IMPORTED_MODULE_15__view_message_view_message_component__["a" /* MessageViewComponent */],
+            __WEBPACK_IMPORTED_MODULE_16__view_profile_view_profile_component__["a" /* ProfileViewComponent */],
+            __WEBPACK_IMPORTED_MODULE_17__view_profile_equal_validator_directive__["a" /* EqualValidator */],
         ],
     })
 ], AppviewsModule);
@@ -3367,6 +3395,198 @@ var _a, _b, _c, _d, _e;
 /***/ (function(module, exports) {
 
 module.exports = "<div class=\"container\" *ngIf=\"mode == 'wait'\">\n    <div class=\"row\">\n        <div *ngIf=\"activedialog\" class=\"panel panel-default\" style=\"margin:40px;\">\n             <div class=\"panel-heading\">\n                <div class=\"row\">\n                    <div class=\"col-md-6\">\n                        <h4>Входящий звонок от ученика...</h4>\n                    </div>\n                    <div class=\"col-md-6\" style=\"text-align: right;\">\n                        <p style=\"margin: 0 20px;\">Имя диалога: {{activedialog.dialog.name}}\n                            <i *ngIf=\"audio_enable\" class=\"fa fa-volume-up\" aria-hidden=\"true\" style=\"font-size: 30px;margin-left:20px;cursor:pointer;\" (click)=\"audio_enable=!audio_enable\"></i>\n                            <i *ngIf=\"!audio_enable\" class=\"fa fa-volume-off\" aria-hidden=\"true\" style=\"font-size: 30px;margin-left:20px;cursor:pointer;\"  (click)=\"audio_enable=!audio_enable\"></i>\n                        </p>\n                    </div>\n                </div>\n            </div>\n            <div class=\"panel-body\">\n                <!-- <p>Запущен {{activedialog.created_at | date:\"hh:mm dd-mm-yyyy\"}}</p> -->\n                <p *ngIf=\"callingfroms.length > 0\">Входящие звонки</p>\n                <callingfroms [listin]=\"callingfroms\" (rejectfrom)=\"handlerRejectfrom($event)\" (takecall)=\"handlerTakeCall($event)\"></callingfroms>\n                <div style=\"margin-top: 30px\">\n                    <button class=\"btn btn-warning\" (click)=\"stopWaitCallDialog()\"><span>Отмена</span></button>\n                </div>\n            </div>\n        </div>\n        <div *ngIf=\"!activedialog\" style=\"width: 100%;height: 100%;\">\n            <h4 style=\"text-align: center;margin-top: 30px;\">Подготовка к получения входящего звонока от ученика...</h4>\n            <img src=\"/static/assets/images/progress.gif\" style=\"display: block;width: 100px;margin: 40px auto;\">\n        </div>\n    </div>\n</div>\n\n<div class=\"container\" *ngIf=\"mode == 'mode_dialog_master'\">\n    <div class=\"row\">\n        <modedialogmaster [activedialogid]=\"activedialog.id\" (stopdialog)=\"handelerStopDialog($event)\"></modedialogmaster>\n    </div>\n</div>\n"
+
+/***/ }),
+
+/***/ "../../../../../src/app/views/view_profile/equal_validator.directive.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return EqualValidator; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_forms__ = __webpack_require__("../../../forms/@angular/forms.es5.js");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+
+
+var EqualValidator = EqualValidator_1 = (function () {
+    function EqualValidator(validateEqual, reverse) {
+        this.validateEqual = validateEqual;
+        this.reverse = reverse;
+    }
+    Object.defineProperty(EqualValidator.prototype, "isReverse", {
+        get: function () {
+            if (!this.reverse)
+                return false;
+            return this.reverse === 'true' ? true : false;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    EqualValidator.prototype.validate = function (c) {
+        // self value
+        var v = c.value;
+        // control vlaue
+        var e = c.root.get(this.validateEqual);
+        // value not equal
+        if (e && v !== e.value && !this.isReverse) {
+            return {
+                validateEqual: false
+            };
+        }
+        // value equal and reverse
+        if (e && v === e.value && this.isReverse) {
+            delete e.errors['validateEqual'];
+            if (!Object.keys(e.errors).length)
+                e.setErrors(null);
+        }
+        // value not equal and reverse
+        if (e && v !== e.value && this.isReverse) {
+            e.setErrors({
+                validateEqual: false
+            });
+        }
+        return null;
+    };
+    return EqualValidator;
+}());
+EqualValidator = EqualValidator_1 = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Directive"])({
+        selector: '[validateEqual][formControlName],[validateEqual][formControl],[validateEqual][ngModel]',
+        providers: [
+            { provide: __WEBPACK_IMPORTED_MODULE_1__angular_forms__["NG_VALIDATORS"], useExisting: Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["forwardRef"])(function () { return EqualValidator_1; }), multi: true }
+        ]
+    }),
+    __param(0, Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Attribute"])('validateEqual')),
+    __param(1, Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Attribute"])('reverse')),
+    __metadata("design:paramtypes", [String, String])
+], EqualValidator);
+
+var EqualValidator_1;
+//# sourceMappingURL=equal_validator.directive.js.map
+
+/***/ }),
+
+/***/ "../../../../../src/app/views/view_profile/view_profile.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ProfileViewComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_router__ = __webpack_require__("../../../router/@angular/router.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_status_service__ = __webpack_require__("../../../../../src/app/services/status.service.ts");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+var ProfileViewComponent = (function () {
+    function ProfileViewComponent(statusService, router) {
+        this.statusService = statusService;
+        this.router = router;
+        this.levels = [
+            {
+                id: 10,
+                title: "Beginner, Elementary"
+            }, {
+                id: 20,
+                title: "Pre-Intermediate"
+            }, {
+                id: 30,
+                title: "Intermediate"
+            }, {
+                id: 40,
+                title: "Upper-Intermediate"
+            }, {
+                id: 50,
+                title: "Advanced"
+            }, {
+                id: 60,
+                title: "Proficiency"
+            },
+        ];
+        this.loading = false;
+    }
+    ProfileViewComponent.prototype.ngOnInit = function () {
+        var self = this;
+        self.statusService.ready.subscribe(function (date) {
+            self.user = self.statusService.user;
+            if (!self.user) {
+                return;
+            }
+            self.setVars();
+        });
+        if (self.statusService.user) {
+            self.user = self.statusService.user;
+            self.setVars();
+        }
+        else {
+            self.statusService.getStatus();
+        }
+    };
+    ProfileViewComponent.prototype.ngAfterViewInit = function () {
+    };
+    ProfileViewComponent.prototype.setVars = function () {
+        this.first_name = this.user.first_name;
+        this.selectedLevel = this.user.level;
+    };
+    ProfileViewComponent.prototype.changePassword = function ($event) {
+        if (this.password1) {
+            this.password1 = "";
+        }
+    };
+    ProfileViewComponent.prototype.submit = function () {
+        if (this.first_name && this.selectedLevel && this.password && this.password1 &&
+            this.password == this.password1) {
+            var params = {
+                first_name: this.first_name,
+                selectedLevel: this.selectedLevel,
+                password: this.password
+            };
+            console.log('para', params);
+            this.loading = true;
+            var self_1 = this;
+            this.statusService.saveUser(params).subscribe(function (data) {
+                self_1.loading = false;
+            });
+        }
+    };
+    return ProfileViewComponent;
+}());
+ProfileViewComponent = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+        selector: 'modecalling',
+        template: __webpack_require__("../../../../../src/app/views/view_profile/view_profile.template.html")
+    }),
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__services_status_service__["a" /* StatusService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__services_status_service__["a" /* StatusService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1__angular_router__["b" /* Router */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_router__["b" /* Router */]) === "function" && _b || Object])
+], ProfileViewComponent);
+
+var _a, _b;
+//# sourceMappingURL=view_profile.component.js.map
+
+/***/ }),
+
+/***/ "../../../../../src/app/views/view_profile/view_profile.template.html":
+/***/ (function(module, exports) {
+
+module.exports = "<div class=\"container\">\n    <div class=\"row\">\n        <div class=\"panel panel-default\" style=\"margin:40px;\">\n            <div class=\"panel-heading\">\n                <h3>Профиль пользователя <span class=\"pull-right\">{{user?.email}}</span></h3>\n            </div>\n            <div class=\"panel-body\">\n                <form #frm=\"ngForm\" (ngSubmit)=\"submit()\" style=\"max-width: 400px;margin: auto;\">\n                    <div class=\"form-group\">\n                        <label for=\"exampleInputName\">Ваше имя * <span style=\"font-size: 10px;font-weight: 200;\">(будет отображаться другим пользователям)</span>\n                        </label>\n\n                        <input #frm_first_name=\"ngModel\" type=\"text\" name=\"frm_first_name\" class=\"form-control\" id=\"exampleInputName\" [(ngModel)]=\"first_name\" required=\"required\">\n                        <small *ngIf=\"!frm_first_name.valid && !frm_first_name.pristine\" class=\"text-danger pull-right\" style=\"margin:0\">Имя обязательное для ввода</small>\n                        \n                    </div>\n                    <div class=\"form-group\">\n                        <label for=\"exampleInputLevel\">Ваш уровень английского *</label>\n                        <select name=\"frm_level\" class=\"form-control\" [(ngModel)]=\"selectedLevel\" style=\"\" (ngModelChange)=\"onChangePersonage()\" required=\"required\">\n                             <option *ngFor=\"let pesonage of levels\" [value]=\"pesonage.id\">{{pesonage.title}}</option>\n                         </select>\n                    </div>\n\n                    <div class=\"form-group\">\n                        <label for=\"exampleInputPassword1\">Новый пароль</label>\n                        <input type=\"password\" name=\"frm_password\" class=\"form-control\" id=\"exampleInputPassword1\" [(ngModel)]=\"password\" required=\"required\" #frm_password=\"ngModel\" reverse=\"false\" (ngModelChange)=\"changePassword($event)\">\n                        <small *ngIf=\"frm_password.errors && frm_password.errors.required && !frm_password.pristine\" class=\"text-danger pull-right\">\n                            Требуется ввести пароль\n                        </small>\n                    </div>\n                    <div class=\"form-group\">\n                        <label for=\"exampleInputPassword2\">Подтверждение пароля</label>\n                        <input type=\"password\" name=\"frm_password1\" class=\"form-control\" id=\"exampleInputPassword2\" [(ngModel)]=\"password1\" validateEqual=\"frm_password\" #frm_password1=\"ngModel\" reverse=\"false\" required=\"required\">\n                            <small *ngIf=\"frm_password1.errors && frm_password1.errors.validateEqual==false && !frm_password1.pristine\" class=\"text-danger pull-right\">\n                                Пароли не совпадают\n                            </small>\n                    </div>\n\n\n                    \n                    <div class=\"form-group\">\n                        <input type=\"submit\" class=\"btn btn-primary\" value=\"Сохранить\" [disabled]=\"!frm.valid\"/>\n                    </div>\n                </form>\n            </div>\n        </div>\n\n        <!-- Loading -->\n        <div *ngIf=\"loading\" style=\"position: absolute;top:0;left:0;width:100%;height:100%;z-index: 100;\">\n            <div style=\"position: absolute;opacity: 0.5;width:100%;height:100%;background-color: white;\">\n            </div>\n            <div style=\"width: 50px;margin: auto;margin-top: 160px;\">\n                <i class=\"fa fa-spin fa-gear\" style=\"font-size: 50px;\"></i>\n            </div>\n        </div>\n        <!-- END Loading -->\n\n\n    </div>\n</div>\n"
 
 /***/ }),
 

@@ -11,7 +11,8 @@ export class AppSettings {
     public static URL_DIALOG_STOP = AppSettings.base_url + "/dialogs/api/stop/";
     public static URL_CHANGE_ACCEPT_CALL = AppSettings.base_url + "/accounts/accept_call/";
     public static URL_MESSAGE = AppSettings.base_url + "/accounts/message/";
-    public static URL_CHECK_USER  = AppSettings.base_url + "/accounts/user/";
+    public static URL_CHECK_USER  = AppSettings.base_url + "/accounts/check_user/";
+    public static URL_USER_SETTING = AppSettings.base_url + "/accounts/user/";
 
     public static URL_WEBSOKET = "wss://" + document.location.hostname + ':8000/peerjs';
     public static URL_WEBSOKET_PEER = document.location.hostname;
