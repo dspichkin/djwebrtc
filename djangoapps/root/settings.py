@@ -29,7 +29,9 @@ DEBUG = True
 ALLOWED_HOSTS = ['*']
 
 ADMIN_LIST_EMAILS = ['user783@gmail.com']
-
+ADMINS = (
+    ('user783', 'user783@gmail.com'),
+)
 # Application definition
 
 INSTALLED_APPS = [
@@ -138,8 +140,8 @@ USE_TZ = True
 
 BASEURL = 'www.dialogs.ru'
 
-"""
-EMAIL_SUBJECT_PREFIX = '[Elastic/Local] '
+
+EMAIL_SUBJECT_PREFIX = '[mydialogs/Local] '
 EMAIL_USE_TLS = False
 EMAIL_USE_SSL = True
 
@@ -148,12 +150,9 @@ EMAIL_HOST_USER = 'noreply@e-lastic.ru'
 EMAIL_HOST_PASSWORD = 'elastic2016'
 EMAIL_PORT = 465
 SERVER_EMAIL = 'noreply@e-lastic.ru'
-"""
+
 DEFAULT_FROM_EMAIL = 'noreply@dialogs.ru'
 
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (
@@ -257,24 +256,55 @@ SOCIALACCOUNT_PROVIDERS = {
     }
 }
 
+LOGS_ROOT = os.path.join(BASE_DIR, 'logs')
+if not os.path.exists(LOGS_ROOT):
+    os.mkdir(LOGS_ROOT)
+
 LOGGING = {
     'version': 1,
+    'disable_existing_loggers': False,
     'formatters': {
         'default': {
             'format': '%(asctime)s %(levelname)s %(message)s',
-            'datefmt': '%m-%d %H:%M:%S'
+            'datefmt': '%m-%d %H:%M:%S'},
         },
+
+    'filters': {'require_debug_false': {
+        '()': 'django.utils.log.RequireDebugFalse'}
     },
-    'disable_existing_loggers': False,
     'handlers': {
-        'console': {
-            'level': 'DEBUG',
-            'class': 'logging.StreamHandler',
+        'mail_admins': {
+            'level': 'ERROR',
+            'filters': ['require_debug_false'],
+            'class': 'django.utils.log.AdminEmailHandler',
+            'include_html': True
         },
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'formatter': 'default',
+            'filename': os.path.join(LOGS_ROOT, 'debug.log')
+        },
+        'file_celery': {
+            'level': 'DEBUG',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'formatter': 'default',
+            'filename': os.path.join(LOGS_ROOT, 'celery.log')
+        }
     },
     'loggers': {
-        'page_processors': {
-            'handlers': ['console', ],
+        'django.request': {
+            'handlers': ['mail_admins', 'file'],
+            'level': 'ERROR',
+            'propagate': True
+        },
+        'celery_log': {
+            'handlers': ['file_celery'],
+            'level': 'DEBUG',
+            'propagate': True
+        },
+        'dialogs': {
+            'handlers': ['file'],
             'level': 'DEBUG',
             'propagate': True
         }
