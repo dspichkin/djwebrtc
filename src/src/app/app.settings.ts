@@ -35,7 +35,8 @@ export class AppSettings {
 
         if (AppSettings.host.indexOf('localhost') > -1 || AppSettings.host.indexOf('127.0.0.1') > -1) {
             AppSettings.base_url = AppSettings.protocol + '//' + AppSettings.host + ':8000';
-            if (AppSettings.protocol.indexOf('https') > -1) {
+
+            if (AppSettings.protocol == "https:") {
                 AppSettings.URL_WEBSOKET = "wss://" + document.location.hostname + ':8000/peerjs';
             } else {
                 AppSettings.URL_WEBSOKET = "ws://" + document.location.hostname + ':8000/peerjs';
@@ -43,7 +44,7 @@ export class AppSettings {
             
         } else {
             AppSettings.base_url = AppSettings.protocol + '//' + AppSettings.host;
-            if (AppSettings.protocol.indexOf('https') > -1) {
+            if (AppSettings.protocol == "https:") {
                 AppSettings.URL_WEBSOKET = "wss://" + document.location.hostname + '/peerjs';
             } else {
                 AppSettings.URL_WEBSOKET = "ws://" + document.location.hostname + '/peerjs';

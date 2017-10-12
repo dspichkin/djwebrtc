@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from root.settings import *
 
-DEBUG = False
+DEBUG = True
 TEMPLATE_DEBUG = False
 BASE_URL = 'https://www.mydialogs.ru/'
 
