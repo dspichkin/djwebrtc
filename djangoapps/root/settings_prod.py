@@ -8,7 +8,7 @@ BASE_URL = 'https://www.mydialogs.ru/'
 ALLOWED_HOSTS = ['*']
 
 ADMINS = (
-    ('Denis Spichkin', 'user783@gmail.ru'),
+    ('Denis Spichkin', 'user783@gmail.com'),
 )
 
 EMAIL_SUBJECT_PREFIX = '[mydialogs.ru] '
