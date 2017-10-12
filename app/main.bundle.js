@@ -304,11 +304,21 @@ var AppSettings = (function () {
     AppSettings.initialized = function () {
         if (AppSettings.host.indexOf('localhost') > -1 || AppSettings.host.indexOf('127.0.0.1') > -1) {
             AppSettings.base_url = AppSettings.protocol + '//' + AppSettings.host + ':8000';
-            AppSettings.URL_WEBSOKET = "wss://" + document.location.hostname + ':8000/peerjs';
+            if (AppSettings.protocol.indexOf('https') > -1) {
+                AppSettings.URL_WEBSOKET = "wss://" + document.location.hostname + ':8000/peerjs';
+            }
+            else {
+                AppSettings.URL_WEBSOKET = "ws://" + document.location.hostname + ':8000/peerjs';
+            }
         }
         else {
             AppSettings.base_url = AppSettings.protocol + '//' + AppSettings.host;
-            AppSettings.URL_WEBSOKET = "wss://" + document.location.hostname + '/peerjs';
+            if (AppSettings.protocol.indexOf('https') > -1) {
+                AppSettings.URL_WEBSOKET = "wss://" + document.location.hostname + '/peerjs';
+            }
+            else {
+                AppSettings.URL_WEBSOKET = "ws://" + document.location.hostname + '/peerjs';
+            }
         }
         AppSettings.URL_STATUS = AppSettings.base_url + "/dialogs/api/status/";
         AppSettings.URL_DIALOGS = AppSettings.base_url + "/dialogs/api/dialogs/";
