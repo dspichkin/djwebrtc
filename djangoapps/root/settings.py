@@ -275,9 +275,9 @@ LOGGING = {
     'handlers': {
         'mail_admins': {
             'level': 'ERROR',
-            'filters': ['require_debug_false'],
+            # 'filters': ['require_debug_false'],
             'class': 'django.utils.log.AdminEmailHandler',
-            'include_html': True
+            'include_html': True,
         },
         'file': {
             'level': 'DEBUG',
@@ -285,11 +285,11 @@ LOGGING = {
             'formatter': 'default',
             'filename': os.path.join(LOGS_ROOT, 'debug.log')
         },
-        'file_celery': {
+        'file_wallet': {
             'level': 'DEBUG',
             'class': 'logging.handlers.RotatingFileHandler',
             'formatter': 'default',
-            'filename': os.path.join(LOGS_ROOT, 'celery.log')
+            'filename': os.path.join(LOGS_ROOT, 'wallet.log')
         }
     },
     'loggers': {
@@ -298,15 +298,16 @@ LOGGING = {
             'level': 'ERROR',
             'propagate': True
         },
-        'celery_log': {
-            'handlers': ['file_celery'],
-            'level': 'DEBUG',
-            'propagate': True
-        },
-        'dialogs': {
+        'mydialogs': {
             'handlers': ['file'],
             'level': 'DEBUG',
             'propagate': True
         }
     }
 }
+
+
+TEMP_DIR = os.path.join(BASE_DIR, 'temp')
+if not os.path.exists(TEMP_DIR):
+    os.mkdir(TEMP_DIR)
+
