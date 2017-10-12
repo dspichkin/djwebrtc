@@ -25,6 +25,8 @@ ipaddress==1.0.18
 jsonfield==2.0.2
 kombu==3.0.37
 msgpack-python==0.4.8
+olefile==0.44
+Pillow==4.3.0
 pycparser==2.18
 pyOpenSSL==17.3.0
 pytz==2017.2
@@ -32,5 +34,6 @@ redis==2.10.6
 six==1.10.0
 Twisted==17.5.0
 txaio==2.8.2
+uWSGI==2.0.15
 vine==1.1.4
 zope.interface==4.4.2
