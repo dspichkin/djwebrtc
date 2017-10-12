@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { StatusService } from './services/status.service';
+import { AppSettings } from './app.settings';
 
 @Component({
   selector: 'app-root',
@@ -19,6 +20,9 @@ export class AppComponent {
     }
     public ngOnInit():any {
         let self = this;
+
+        AppSettings.initialized();
+
         this.statusService.init();
 
         this.statusService.calling.subscribe((message) => {

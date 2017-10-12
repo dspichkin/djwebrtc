@@ -50,6 +50,7 @@ module.exports = "<!-- Main view/routes wrapper-->\n<router-outlet></router-outl
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_router__ = __webpack_require__("../../../router/@angular/router.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_status_service__ = __webpack_require__("../../../../../src/app/services/status.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__app_settings__ = __webpack_require__("../../../../../src/app/app.settings.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -62,6 +63,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 var AppComponent = (function () {
     function AppComponent(statusService, router) {
         this.statusService = statusService;
@@ -71,6 +73,7 @@ var AppComponent = (function () {
     AppComponent.prototype.ngOnInit = function () {
         var _this = this;
         var self = this;
+        __WEBPACK_IMPORTED_MODULE_3__app_settings__["a" /* AppSettings */].initialized();
         this.statusService.init();
         this.statusService.calling.subscribe(function (message) {
             if (self.router.url != '/wait') {
@@ -298,24 +301,34 @@ var ROUTES = [
 var AppSettings = (function () {
     function AppSettings() {
     }
+    AppSettings.initialized = function () {
+        if (AppSettings.host.indexOf('localhost') > -1 || AppSettings.host.indexOf('127.0.0.1') > -1) {
+            AppSettings.base_url = AppSettings.protocol + '//' + AppSettings.host + ':8000';
+            AppSettings.URL_WEBSOKET = "wss://" + document.location.hostname + ':8000/peerjs';
+        }
+        else {
+            AppSettings.base_url = AppSettings.protocol + '//' + AppSettings.host;
+            AppSettings.URL_WEBSOKET = "wss://" + document.location.hostname + '/peerjs';
+        }
+        AppSettings.URL_STATUS = AppSettings.base_url + "/dialogs/api/status/";
+        AppSettings.URL_DIALOGS = AppSettings.base_url + "/dialogs/api/dialogs/";
+        AppSettings.URL_ACTIVEDIALOGS = AppSettings.base_url + "/dialogs/api/activedialogs/";
+        AppSettings.URL_MYACTIVEDIALOGS = AppSettings.base_url + "/dialogs/api/myactivedialogs/";
+        AppSettings.URL_DIALOG_RUN = AppSettings.base_url + "/dialogs/api/run/";
+        AppSettings.URL_DIALOG_RUNINTO = AppSettings.base_url + "/dialogs/api/runinto/";
+        AppSettings.URL_DIALOG_ACTIVESTOP = AppSettings.base_url + "/dialogs/api/stop/";
+        AppSettings.URL_DIALOG_STOP = AppSettings.base_url + "/dialogs/api/stop/";
+        AppSettings.URL_CHANGE_ACCEPT_CALL = AppSettings.base_url + "/accounts/accept_call/";
+        AppSettings.URL_MESSAGE = AppSettings.base_url + "/accounts/message/";
+        AppSettings.URL_CHECK_USER = AppSettings.base_url + "/accounts/check_user/";
+        AppSettings.URL_USER_SETTING = AppSettings.base_url + "/accounts/user/";
+        AppSettings.URL_WEBSOKET_PEER = document.location.hostname;
+    };
     return AppSettings;
 }());
 
-AppSettings.base_url = 'https://' + document.location.hostname + ':8000';
-AppSettings.URL_STATUS = AppSettings.base_url + "/dialogs/api/status/";
-AppSettings.URL_DIALOGS = AppSettings.base_url + "/dialogs/api/dialogs/";
-AppSettings.URL_ACTIVEDIALOGS = AppSettings.base_url + "/dialogs/api/activedialogs/";
-AppSettings.URL_MYACTIVEDIALOGS = AppSettings.base_url + "/dialogs/api/myactivedialogs/";
-AppSettings.URL_DIALOG_RUN = AppSettings.base_url + "/dialogs/api/run/";
-AppSettings.URL_DIALOG_RUNINTO = AppSettings.base_url + "/dialogs/api/runinto/";
-AppSettings.URL_DIALOG_ACTIVESTOP = AppSettings.base_url + "/dialogs/api/stop/";
-AppSettings.URL_DIALOG_STOP = AppSettings.base_url + "/dialogs/api/stop/";
-AppSettings.URL_CHANGE_ACCEPT_CALL = AppSettings.base_url + "/accounts/accept_call/";
-AppSettings.URL_MESSAGE = AppSettings.base_url + "/accounts/message/";
-AppSettings.URL_CHECK_USER = AppSettings.base_url + "/accounts/check_user/";
-AppSettings.URL_USER_SETTING = AppSettings.base_url + "/accounts/user/";
-AppSettings.URL_WEBSOKET = "wss://" + document.location.hostname + ':8000/peerjs';
-AppSettings.URL_WEBSOKET_PEER = document.location.hostname;
+AppSettings.host = document.location.hostname;
+AppSettings.protocol = document.location.protocol;
 AppSettings.CALLING_TIME_INTERVAL = 5000;
 AppSettings.HEARTBEAT_DIALOG_TIMEOUT = 10000;
 AppSettings.MODE_LIST = 'mode_list';
