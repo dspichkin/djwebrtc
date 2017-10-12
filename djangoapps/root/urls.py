@@ -41,5 +41,5 @@ urlpatterns += [
     # JS-приложение
     url(r'^$', app, name='app'),
     url(r'^close/', closepopup, name="login_popup_close"),
-    url(r'^(?P<url>.*)$', sredirect),
+    # url(r'^(?P<url>.*)$', sredirect),
 ]

@@ -7,7 +7,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 
-from djwebrtc.redis_utils import set_clients, get_clients
+# from djwebrtc.redis_utils import set_clients, get_clients
 from accounts.models import Account
 # from rest_framework.decorators import api_view, permission_classes
 # from rest_framework.response import Response
@@ -15,7 +15,7 @@ from accounts.models import Account
 # from rest_framework.permissions import AllowAny, IsAuthenticated
 
 
-r = redis.StrictRedis(host='localhost', port=6379, db=0)
+# r = redis.StrictRedis(host='localhost', port=6379, db=0)
 
 
 def return_id(request):

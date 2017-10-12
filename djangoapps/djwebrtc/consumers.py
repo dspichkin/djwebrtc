@@ -313,7 +313,7 @@ def ws_disconnect(message):
     # print "XXXXX ws_disconnect"
     if 'client_id' in message.channel_session:
         client_id = message.channel_session['client_id']
-        account = Account.objects.filter(key_id=client_id).first()
+        # account = Account.objects.filter(key_id=client_id).first()
         """
         if account:
             for ad_master in ActiveDialog.objects.filter(master=account, status=DIALOG_WAIT):
