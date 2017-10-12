@@ -308,7 +308,7 @@ var AppSettings = (function () {
                 AppSettings.URL_WEBSOKET = "wss://" + document.location.hostname + ':8000/peerjs';
             }
             else {
-                AppSettings.URL_WEBSOKET = "ws://" + document.location.hostname + ':8000/peerjs';
+                AppSettings.URL_WEBSOKET = "wss://" + document.location.hostname + ':8000/peerjs';
             }
         }
         else {
@@ -317,7 +317,7 @@ var AppSettings = (function () {
                 AppSettings.URL_WEBSOKET = "wss://" + document.location.hostname + '/peerjs';
             }
             else {
-                AppSettings.URL_WEBSOKET = "ws://" + document.location.hostname + '/peerjs';
+                AppSettings.URL_WEBSOKET = "wss://" + document.location.hostname + '/peerjs';
             }
         }
         AppSettings.URL_STATUS = AppSettings.base_url + "/dialogs/api/status/";
