@@ -5,9 +5,9 @@ import { AppSettings } from "../app.settings";
 import { ErrorService } from './error.service';
 
 const webSocketConfig = { 
-    reconnectIfNotNormalClose: false,
-    initialTimeout: 1000,
-    maxTimeout: 1000
+    reconnectIfNotNormalClose: true,
+    initialTimeout: 5000,
+    maxTimeout: 10000
 } as WebSocketConfig;
 
 @Injectable()
