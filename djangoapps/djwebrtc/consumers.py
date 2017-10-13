@@ -20,7 +20,7 @@ from dialogs.models import (
 
 @channel_session_user_from_http
 def ws_connect(message):
-    print "WS_CONNECT"
+    print "!!!! WS_CONNECT"
     message.reply_channel.send({"accept": True})
     params = urlparse.parse_qs(message.content['query_string'])
     id_list = params.get('id')
