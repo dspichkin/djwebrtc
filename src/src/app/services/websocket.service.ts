@@ -5,8 +5,8 @@ import { AppSettings } from "../app.settings";
 import { ErrorService } from './error.service';
 
 const webSocketConfig = { 
-    reconnectIfNotNormalClose: true,
-    initialTimeout: 10,
+    reconnectIfNotNormalClose: false,
+    initialTimeout: 1000,
     maxTimeout: 1000
 } as WebSocketConfig;
 
