@@ -19,7 +19,7 @@ case "$1" in
             --max-requests=4000 --vacuum --home=$WORKON_HOME/$prefix \
             --daemonize=$errlog
         chmod o+w $socket
-        daphne -b 0.0.0.0 root.asgi:channel_layer
+        daphne -b 0.0.0.0 root.asgi:channel_layer &
         ;;
     "stop")
         kill -9 `cat $pidfile`
