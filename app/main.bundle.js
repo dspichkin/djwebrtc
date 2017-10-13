@@ -2333,8 +2333,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 var webSocketConfig = {
-    reconnectIfNotNormalClose: true,
-    initialTimeout: 10,
+    reconnectIfNotNormalClose: false,
+    initialTimeout: 1000,
     maxTimeout: 1000
 };
 var WebSocketService = (function () {
