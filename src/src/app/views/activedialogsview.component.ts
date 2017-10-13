@@ -45,7 +45,7 @@ export class ActiveDialogsViewComponent implements OnInit  {
         let self = this;
         self.statusService.ready.subscribe((date)=> {
             self.user = this.statusService.user;
-            console.log('self.user', self.user)
+            //console.log('self.user', self.user)
             if (!self.user) {
                 return;
             }

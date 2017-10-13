@@ -57,7 +57,7 @@ export class DialogViewComponent implements OnInit  {
             .switchMap(dialog_id => this.dialogsService.getDialog(dialog_id))
             .subscribe((dialog) => {
                 self.dialog = dialog
-                
+                console.log('this.dialog', this.dialog)
                 if (this.dialog.scenario && this.dialog.scenario.personages) {
                     self.personages = this.dialog.scenario.personages;
                     self.selectedPersonage = self.dialog.scenario.steps[0].start_personage;
