@@ -167,11 +167,11 @@ MEDIA_URL = '/media/'
 
 CHANNEL_LAYERS = {
     'default': {
-        'BACKEND': 'asgiref.inmemory.ChannelLayer',  # 'asgi_redis.RedisChannelLayer',
+        'BACKEND': 'asgi_redis.RedisChannelLayer',  # 'asgi_redis.RedisChannelLayer',
         'ROUTING': 'djwebrtc.routing.channel_routing',
-        #"CONFIG": {
-        #    "hosts": [("127.0.0.1", 6379), ],
-        #},
+        "CONFIG": {
+            "hosts": [("127.0.0.1", 6379), ],
+        },
     },
 }
 
