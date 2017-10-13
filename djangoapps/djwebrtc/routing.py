@@ -5,7 +5,11 @@ from djwebrtc.consumers import (
 
 
 channel_routing = [
-    route('websocket.connect', ws_connect, path=r"^/peerjs/?$"),
-    route('websocket.receive', ws_message, path=r"^/peerjs/?$"),
-    route('websocket.disconnect', ws_disconnect, path=r"^/peerjs/?$"),
+    #route('websocket.connect', ws_connect, path=r"^/peerjs/?$"),
+    #route('websocket.receive', ws_message, path=r"^/peerjs/?$"),
+    #route('websocket.disconnect', ws_disconnect, path=r"^/peerjs/?$"),
+
+    route('websocket.connect', ws_connect),
+    route('websocket.receive', ws_message),
+    route('websocket.disconnect', ws_disconnect),
 ]
