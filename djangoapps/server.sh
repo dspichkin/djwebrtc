@@ -19,11 +19,12 @@ case "$1" in
             --max-requests=4000 --vacuum --home=$WORKON_HOME/$prefix \
             --daemonize=$errlog
         chmod o+w $socket
-        daphne -e ssl:8000:privateKey=/home/ubuntu/webrtc/ssl/private.pem:certKey=/home/ubuntu/webrtc/ssl/cert.pem -b 0.0.0.0 root.asgi:channel_layer &
+        daphne -e ssl:8000:privateKey=/home/ubuntu/webrtc/ssl/private.pem:certKey=/home/ubuntu/webrtc/ssl/cert.pem -b 0.0.0.0 root.asgi:channel_layer -u /tmp/daphne.sock --access-log=/home/ubuntu/webrtc/djangoapps/logs/daphne.log &
         ;;
     "stop")
         kill -9 `cat $pidfile`
-        ;;
+	ps aux | grep -i daphne | awk {'print $2'} | xargs kill -9        
+	;;
     "restart")
         ./server.sh stop
         ./server.sh start
