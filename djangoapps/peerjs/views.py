@@ -22,7 +22,7 @@ def return_id(request):
     return HttpResponse(request.user.key_id)
 
 
-def get_id(request, key):
+def get_id(request, key, token=None):
     user = get_object_or_404(Account, key=key)
     hash_object = hashlib.sha256(key)
     hex_dig = hash_object.hexdigest()[:15]
