@@ -308,7 +308,7 @@ var AppSettings = (function () {
         }
         else {
             AppSettings.base_url = AppSettings.protocol + '//' + AppSettings.host;
-            AppSettings.URL_WEBSOKET = "wss://" + document.location.hostname + '/peerjs';
+            AppSettings.URL_WEBSOKET = "wss://" + document.location.hostname + ':443/peerjs';
         }
         AppSettings.URL_STATUS = AppSettings.base_url + "/dialogs/api/status/";
         AppSettings.URL_DIALOGS = AppSettings.base_url + "/dialogs/api/dialogs/";
