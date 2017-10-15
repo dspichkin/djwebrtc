@@ -21,7 +21,7 @@ class UserAdmin(BaseUserAdmin):
 
         ('Permissions', {'fields': ('is_active', 'is_confirm', 'is_superuser', 'is_staff')}),
 
-        ('Dialog activity', {'fields': ('last_dialog_active', 'last_dialog_started', 'last_dialog_active')}),
+        ('Dialog activity', {'fields': ('last_dialog_active', 'last_dialog_started', 'last_dialog_end')}),
     )
     add_fieldsets = (
         (None, {
