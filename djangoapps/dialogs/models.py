@@ -174,6 +174,9 @@ class ActiveDialog(models.Model):
         self.pupil = userpupil
         self.running_at = timezone.now()
         self.save()
+
+        self.master.start_dialog()
+        self.pupil.start_dialog()
         return True
 
 

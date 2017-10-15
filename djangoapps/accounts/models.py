@@ -54,6 +54,10 @@ class Account(AbstractUser):
     is_confirm = models.BooleanField(u'email подтвержден', default=False)
     is_accept_call = models.BooleanField(u'принимать входящие звонки', default=False)
 
+    last_dialog_started = models.DateTimeField(u'дата старта последнего диалога', blank=True, null=True)
+    last_dialog_end = models.DateTimeField(u'дата окончания последнего диалога', blank=True, null=True)
+    last_dialog_active = models.BooleanField(u'в процессе диалога', default=False)
+
     class Meta(AbstractUser.Meta):
         verbose_name = u'Пользователь'
         verbose_name_plural = u'Пользователи'
@@ -72,6 +76,20 @@ class Account(AbstractUser):
     def serialize(self):
         from accounts.serializers import AccountSerializer
         return AccountSerializer(self).data
+
+    def start_dialog(self):
+        self.last_dialog_started = timezone.now()
+        self.last_dialog_active = True
+        self.save()
+
+    def stop_dialog(self):
+        self.last_dialog_end = timezone.now()
+        self.last_dialog_active = False
+        self.save()
+
+    def check_activity(self):
+        if self.last_dialog_active:
+            self.stop_dialog()
 
 
 @python_2_unicode_compatible

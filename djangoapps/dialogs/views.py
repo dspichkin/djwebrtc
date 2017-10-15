@@ -13,8 +13,7 @@ from channels_presence.models import Presence
 from accounts.serializers import AccountSerializer
 # from dialogs.signals import activedialog_changed
 from dialogs.models import (
-    Dialog, ActiveDialog, DIALOG_STOP, DIALOG_WAIT,
-    DIALOG_CANCEL, DIALOG_ACTIVE)
+    Dialog, ActiveDialog, DIALOG_STOP, DIALOG_WAIT)
 from dialogs.serializers import (DialogSerializer, ActiveDialogSerializer)
 from dialogs.utils import IsConfirmAndIsAuthenticated
 
@@ -31,6 +30,7 @@ def get_dialog(request, dialog_pk):
 @api_view(['GET'])
 @permission_classes((IsConfirmAndIsAuthenticated,))
 def get_dialogs(request):
+    request.user.check_activity()
 
     queryset = Dialog.objects.all()
     dialogs = []
@@ -46,6 +46,7 @@ def get_dialogs(request):
 @api_view(['GET'])
 @permission_classes((IsConfirmAndIsAuthenticated,))
 def get_activedialogs(request):
+    request.user.check_activity()
 
     activedialogs = []
     for activedialig in ActiveDialog.objects.filter(status=DIALOG_WAIT, master__is_accept_call=True).exclude(master=request.user):
