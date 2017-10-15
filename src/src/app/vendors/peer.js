@@ -1316,6 +1316,8 @@
             var wsProtocol = secure ? 'wss://' : 'ws://';
             // this._httpUrl = httpProtocol + host + ':' + port + path + key;
             this._httpUrl = httpProtocol + host + ':' + http_port + http_path + key;
+            console.log('http_path', http_path)
+            console.log('this._httpUrl', this._httpUrl)
             this._wsUrl = wsProtocol + host + ':' + port + path + 'peerjs?key=' + key;
             this.asocket = asocket;
 
