@@ -17,11 +17,11 @@
             <div class="panel-body">
                 <div *ngIf="dialog && dialog.scenario" class="panel panel-primary">
                     <div class="panel-heading">
-                        Текущий шаг: {{current_step.number}}
+                        Текущий шаг: {{current_step.number}} / {{dialog.scenario.steps.length}}
                     </div>
                     <div class="panel-body" style="min-height: 200px;">
                         <div class="col-md-8">
-                            <span>Вам нужно сказать:</span> 
+                            <span *ngIf="getTask().length > 0">Вам нужно сказать:</span> 
                             <div *ngFor="let item of getTask()">
                                 <h4 class="text-success">{{item.task}}</h4>
 
@@ -45,6 +45,7 @@
                                     
                                 </div>
                             </div> 
+                            <p *ngIf="getTask().length == 0">Последний шаг диалога</p>
                         </div>
                         <div class="col-md-4">
                             <div *ngIf="dialog.background_image" 

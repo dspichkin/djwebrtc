@@ -4,7 +4,7 @@
         <div style="margin: 20px;clear: both">
             <div *ngIf="activedialog.dialog && activedialog.dialog.scenario" class="panel panel-primary">
                 <div class="panel-heading">
-                    Текущий шаг: {{current_step.number}}
+                    Текущий шаг: {{current_step.number}} / {{activedialog.dialog.scenario.steps.length}}
                 </div>
                 <div *ngIf="current_mode == 2" class="panel-body" style="min-height: 200px;">
                     <h3 style="text-align: center;">Ваш ход</h3>

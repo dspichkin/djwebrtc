@@ -26,11 +26,14 @@
         </li>
       </ul>
     </div>
-    <div style="width: 100%;margin: 0 0 10px 0;">
+    <div class="col-md-12">
+        <div class="col-md-10" style="margin: 0 0 10px 0;">
             <bSwitch [switch-size]="'small'" [switch-animate]="true" [(ngModel)]="state_input_call" (onChangeState)="onChangeInputCall($event)" [switch-off-text]="'Выкл'"
-          [switch-on-text]="'Вкл'"></bSwitch>
+              [switch-on-text]="'Вкл'"></bSwitch>
             <span style="color:beige;margin-left: 18px;">Принимать входящие звонки</span>
         </div>
+        <div class="col-md-2" style="text-align: right;color:white;">{{user?.fio}}</div>
+    </div>
   </div>
 </nav>
 

@@ -57,7 +57,6 @@ export class DialogViewComponent implements OnInit  {
             .switchMap(dialog_id => this.dialogsService.getDialog(dialog_id))
             .subscribe((dialog) => {
                 self.dialog = dialog
-                console.log('this.dialog', this.dialog)
                 if (this.dialog.scenario && this.dialog.scenario.personages) {
                     self.personages = this.dialog.scenario.personages;
                     self.selectedPersonage = self.dialog.scenario.steps[0].start_personage;
@@ -75,8 +74,10 @@ export class DialogViewComponent implements OnInit  {
 
     public getTask() {
         let tasks = [];
-        for (let i = 0; i < this.current_step.variants.length; i++) {
-            tasks.push(this.current_step.variants[i])
+        if (this.current_step.variants) {
+            for (let i = 0; i < this.current_step.variants.length; i++) {
+                tasks.push(this.current_step.variants[i])
+            }
         }
         return tasks
     }
