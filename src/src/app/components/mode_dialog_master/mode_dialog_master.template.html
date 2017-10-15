@@ -23,10 +23,8 @@
     <div class="panel-body">
 
         <div [hidden]="status_activedialog != 'run'" class="row">
-            <div class="pull-right" style="display1: flex;justify-content: flex-end;">
-                
-
-                <div class="pull-right1" style="display: flex;opacity: 0;height: 0;">
+            <div style="display: flex;justify-content: flex-start;">
+                <div style="display: flex;opacity: 0;height: 0;">
                     <div style="margin: 5px;">
                         <video #remoteVideo autoplay="" style="border:2px solid red;width: 100px;"></video>
                         <p style="font-size: 8px;margin-top: -5px;">Remote</p>
@@ -36,8 +34,6 @@
                         <p style="font-size: 8px;margin-top: -5px;">Local</p>
                     </div>
                 </div>
-
-               
             </div>
         </div>
 
