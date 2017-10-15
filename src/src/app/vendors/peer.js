@@ -799,6 +799,7 @@
                 http_port: util.CLOUD_HTTP_PORT,
                 key: 'peerjs',
                 path: '/',
+                http_path: '/pj',
                 token: util.randomToken(),
                 config: util.defaultConfig
             }, options);
@@ -885,6 +886,7 @@
                 this.options.port, 
                 this.options.http_port,
                 this.options.path, 
+                this.options.http_path,
                 this.options.key, 
                 this.options.socket,
                 this.options.id);
@@ -1301,7 +1303,7 @@
          * An abstraction on top of WebSockets and XHR streaming to provide fastest
          * possible connection for peers.
          */
-        function Socket(secure, host, port, http_port, path, key, asocket, id) {
+        function Socket(secure, host, port, http_port, path, http_path, key, asocket, id) {
             //if (!(this instanceof Socket)) return new Socket(secure, host, port, path, key);
 
             EventEmitter.call(this);
@@ -1313,7 +1315,7 @@
             var httpProtocol = secure ? 'https://' : 'http://';
             var wsProtocol = secure ? 'wss://' : 'ws://';
             // this._httpUrl = httpProtocol + host + ':' + port + path + key;
-            this._httpUrl = httpProtocol + host + ':' + http_port + path + key;
+            this._httpUrl = httpProtocol + host + ':' + http_port + http_path + key;
             this._wsUrl = wsProtocol + host + ':' + port + path + 'peerjs?key=' + key;
             this.asocket = asocket;
 
