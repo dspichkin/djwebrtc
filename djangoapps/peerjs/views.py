@@ -33,7 +33,7 @@ def get_id(request, key, token=None):
 
 
 @csrf_exempt
-def set_streaming(request, id, token):
+def set_streaming(request, key, token):
     pad = '00'
     for i in range(0, 10):
         pad += pad
@@ -46,9 +46,9 @@ def set_streaming(request, id, token):
 
     return HttpResponse(content, content_type='application/octet-stream')
 
-
+"""
 @csrf_exempt
-def set_streaming1(request, id, token):
+def set_streaming1(request, key, token):
     pad = '00'
     for i in range(0, 10):
         pad += pad
@@ -60,10 +60,10 @@ def set_streaming1(request, id, token):
     content += '\n'
 
     return HttpResponse(content, content_type='application/octet-stream')
-
+"""
 
 @csrf_exempt
-def handle(request, id, token):
+def handle(request, key, token):
     raw_data = request.body
     data = json.loads(raw_data)
     data["src"] = id
