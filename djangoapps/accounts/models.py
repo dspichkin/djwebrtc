@@ -137,10 +137,10 @@ class ConfirmationCode(models.Model):
 
         msg = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [self.account.email])
         msg.attach_alternative(html_content, "text/html")
-        try:
-            msg.send()
-        except:
-            pass
+        #try:
+        msg.send()
+        #except:
+        #    pass
 
         self.sent = timezone.now()
         self.save()
@@ -160,10 +160,10 @@ class ConfirmationCode(models.Model):
 
         msg = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [self.account.email])
         msg.attach_alternative(html_content, "text/html")
-        try:
-            msg.send()
-        except:
-            pass
+        #try:
+        msg.send()
+        #except:
+        #    pass
 
         self.sent = timezone.now()
         self.save()
