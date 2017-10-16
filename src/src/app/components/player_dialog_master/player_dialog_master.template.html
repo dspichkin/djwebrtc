@@ -47,7 +47,7 @@
                 </div>
                 <div *ngIf="current_mode == 1" class="panel-body" style="min-height: 200px;">
                     <h3 style="text-align: center;">Ожидаем ход игрока</h3>
-                    <span>Ему нужно сказать:</span> 
+                    <span *ngIf="current_step.variants && current_step.variants.length > 0">Ему нужно сказать:</span> 
                     <div *ngFor="let item of current_step.variants">
                         <div class="well">
                             <p class="text-success">{{item.task}}</p>

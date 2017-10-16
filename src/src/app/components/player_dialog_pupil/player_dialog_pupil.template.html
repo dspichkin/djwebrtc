@@ -6,7 +6,7 @@
                     Текущий шаг: {{current_step.number}} / {{activedialog.dialog.scenario.steps.length}}
                 </div>
                 <div *ngIf="current_mode == 2" class="panel-body" style="min-height: 200px;">
-                    <h3 style="text-align: center;">Ваш ход</h3>
+                    <h3 *ngIf="current_step.variants && current_step.variants.length > 0" style="text-align: center;">Ваш ход</h3>
                     
                     <span>Вам нужно сказать:</span> 
                     <div *ngFor="let item of current_step.variants">
