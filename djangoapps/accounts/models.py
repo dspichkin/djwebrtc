@@ -133,7 +133,7 @@ class ConfirmationCode(models.Model):
         html_content = html_template.render(email_data)
         text_content = text_template.render(email_data)
 
-        subject = 'www.dialogs.ru'
+        subject = 'www.mydialogs.ru'
 
         msg = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [self.account.email])
         msg.attach_alternative(html_content, "text/html")
