@@ -250,6 +250,7 @@ export class PlayerDialogMasterComponent implements OnInit, OnDestroy {
                 return true;
             }
         }
+        
         return false;
     }
 
