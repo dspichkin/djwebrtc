@@ -9,6 +9,8 @@ from django.contrib.auth import get_user_model
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.timezone import now
 
+from django.core.mail import EmailMessage
+
 from channels import Group
 from channels_presence.signals import presence_changed
 
@@ -106,6 +108,11 @@ class Room(models.Model):
             room=self,
             last_seen__lt=now() - timedelta(seconds=age_in_seconds)
         ).delete()
+        
+        msg = u"num_deleted: %s" % (num_deleted)
+        mail = EmailMessage(u"Test on mydialogs", msg, settings.DEFAULT_FROM_EMAIL, settings.ADMIN_LIST_EMAILS)
+        mail.send()
+
         if num_deleted > 0:
             self.broadcast_changed(bulk_change=True)
 
