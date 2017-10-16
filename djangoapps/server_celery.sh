@@ -11,7 +11,7 @@ case "$1" in
         # celery -A djwebrtc worker -l info &
         # celery -A djwebrtc worker -B -l info
         # celery -A djwebrtc beat -s /home/ubuntu/webrtc/djangoapps/logs/celerybeat &
-        python manage.py celery worker --beat -f /home/ubuntu/webrtc/djangoapps/logs/celery.log
+        python manage.py celery worker --beat -f /home/ubuntu/webrtc/djangoapps/logs/celery.log &
         ;;
     "stop")
         echo "Stop celery ..."
