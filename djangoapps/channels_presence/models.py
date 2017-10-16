@@ -16,16 +16,17 @@ from channels_presence.signals import presence_changed
 
 
 class PresenceManager(models.Manager):
-    def touch(self, channel_name):
+    def touch(self, channel_name, user=None):
         presense = Presence.objects.filter(channel_name=channel_name)
         if presense:
             presense.update(last_seen=now())
         elif channel_name:
             room = Room.objects.filter(channel_name='Clients').first()
             if room:
-                presense = Presence.objects.create(room=room, channel_name=channel_name)
-                presense.last_seen = now()
-                presense.save()
+                if user:
+                    presense = Presence.objects.create(room=room, channel_name=channel_name, user=user)
+                    presense.last_seen = now()
+                    presense.save()
         # self.filter(channel_name=channel_name).update(last_seen=now())
 
     def leave_all(self, channel_name):
