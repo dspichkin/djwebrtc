@@ -27,7 +27,7 @@
             {% csrf_token %}
             <h4 class="login__form-header"></h4>
             <div class="form-group">
-                {{ form.username.label_tag }}
+                <label for="id_username">Ваш email:</label>
                 <input autofocus="" id="id_username" maxlength="254" name="username" type="email" class="form-control login__input" required="" value="{{ form.username.value | default:"" }}" placeholder="pochta@pochta.com">
             </div>
             <div class="form-group">
