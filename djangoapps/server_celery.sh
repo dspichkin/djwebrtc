@@ -8,9 +8,9 @@ case "$1" in
     "start")
         
         echo "Running 'celery' command:"
-        celery -A djwebrtc worker -l info &
-        #celery -A djwebrtc worker -B -l info
-        
+        # celery -A djwebrtc worker -l info &
+        # celery -A djwebrtc worker -B -l info
+        celery -A djwebrtc beat -s /home/ubuntu/webrtc/djangoapps/logs/celerybeat &
         ;;
     "stop")
         echo "Stop celery ..."
