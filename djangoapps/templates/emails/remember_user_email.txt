@@ -1,6 +1,6 @@
 Рады приветствовать Вас на сайте www.mydialogs.ru. Для доступа к функционалу сайта подтвердите e-mail.
 \n
-\nhttps://{{baseserver}}/accounts/confirm-email/{{key}}
+\nhttps://{{baseserver}}/accounts/remember/{{key}}
 
 \n\n
 С уважением, команда MyDialogs.ru
