@@ -9,7 +9,7 @@ logs/
 temp/
 media/*
 
-root/settings_local.py
+djangoapps/root/settings_local.py
 node_modules/
 bower_components/*
 www
