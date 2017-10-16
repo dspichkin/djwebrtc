@@ -288,12 +288,6 @@ LOGGING = {
             'formatter': 'default',
             'filename': os.path.join(LOGS_ROOT, 'debug.log')
         },
-        'file_wallet': {
-            'level': 'DEBUG',
-            'class': 'logging.handlers.RotatingFileHandler',
-            'formatter': 'default',
-            'filename': os.path.join(LOGS_ROOT, 'wallet.log')
-        }
     },
     'loggers': {
         'django.request': {
@@ -305,12 +299,28 @@ LOGGING = {
             'handlers': ['file'],
             'level': 'DEBUG',
             'propagate': True
-        }
+        },
+        'celery.task': {
+            'handlers': ['console', 'file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'celery': {
+            'handlers': ['console', 'file'],
+            'level': 'DEBUG',
+        },
     }
 }
 
 
-# TEMP_DIR = os.path.join(BASE_DIR, 'temp')
-# if not os.path.exists(TEMP_DIR):
-#    os.mkdir(TEMP_DIR)
+TEMP_DIR = os.path.join(BASE_DIR, '..', 'temp')
+if not os.path.exists(TEMP_DIR):
+    os.mkdir(TEMP_DIR)
 
+import djcelery
+djcelery.setup_loader()
+
+try:
+    from settings_local import *
+except ImportError:
+    pass
