@@ -101,9 +101,9 @@ class Room(models.Model):
         self.broadcast_changed(removed=presence)
 
     def prune_presences(self, age_in_seconds=None):
-        msg = u"test"
-        mail = EmailMessage(u"Test on mydialogs", msg, settings.DEFAULT_FROM_EMAIL, settings.ADMIN_LIST_EMAILS)
-        mail.send()
+        # msg = u"test"
+        # mail = EmailMessage(u"Test on mydialogs", msg, settings.DEFAULT_FROM_EMAIL, settings.ADMIN_LIST_EMAILS)
+        # mail.send()
 
         if age_in_seconds is None:
             age_in_seconds = getattr(settings, "CHANNELS_PRESENCE_MAX_AGE", 60)
@@ -112,8 +112,6 @@ class Room(models.Model):
             room=self,
             last_seen__lt=now() - timedelta(seconds=age_in_seconds)
         ).delete()
-
-        
 
         if num_deleted > 0:
             self.broadcast_changed(bulk_change=True)
