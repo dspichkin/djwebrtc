@@ -1,0 +1,19 @@
+{% extends "registration/base.html" %}
+
+{% load i18n %}
+
+{% block head_title %}{% trans "Verify Your E-mail Address" %}{% endblock %}
+
+{% block content %}
+
+    <h3 style="text-align: center;">Требуется подтверждения Email указанного при регистрации</h3>
+    <div class="well" style="margin:30px;padding:15px;">
+        <p>
+            Мы отправили вам электронное письмо для проверки. Перейдите по ссылке, чтобы завершить процесс регистрации. Пожалуйста, свяжитесь с нами, если вы не получите его в течение нескольких минут.
+        </p>
+        <div style="width: 100%;text-align: center;">
+            <a href="/" class="btn btn-default">Перейти на главную страницу</a>
+        </div>
+    </div>
+
+{% endblock %}
