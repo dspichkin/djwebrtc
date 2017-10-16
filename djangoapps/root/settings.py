@@ -153,9 +153,9 @@ EMAIL_HOST = 'smtp.yandex.ru'
 EMAIL_HOST_USER = 'noreply@e-lastic.ru'
 EMAIL_HOST_PASSWORD = 'elastic2016'
 EMAIL_PORT = 465
-SERVER_EMAIL = 'noreply@e-lastic.ru'
+SERVER_EMAIL = 'noreply@mydialogs.ru'
 
-DEFAULT_FROM_EMAIL = 'noreply@dialogs.ru'
+DEFAULT_FROM_EMAIL = 'noreply@mydialogs.ru'
 
 
 STATIC_URL = '/static/'
