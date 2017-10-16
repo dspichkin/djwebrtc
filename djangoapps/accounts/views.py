@@ -149,6 +149,7 @@ def confirm_email(request, key=None):
                 error_message = u"Указанный email не найден"
             if not key:
                 ccode.send()
+                success_message = u"Ссылка отправлена на указанный почтовый адрес "
 
     return render(
         request, 'registration/confirm_email.html', {
@@ -217,7 +218,7 @@ def remember(request, key=None):
                     request, 'registration/remember.html', {
                         "key": key,
                         "email": email,
-                        error_message: u"Указан неверный код смены пароля"
+                        "error_message": u"Указан неверный код смены пароля"
                     })
 
             if password and password1:
