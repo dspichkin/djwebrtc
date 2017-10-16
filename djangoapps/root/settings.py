@@ -150,8 +150,8 @@ EMAIL_USE_TLS = False
 EMAIL_USE_SSL = True
 
 EMAIL_HOST = 'smtp.yandex.ru'
-EMAIL_HOST_USER = 'noreply@e-lastic.ru'
-EMAIL_HOST_PASSWORD = 'elastic2016'
+EMAIL_HOST_USER = 'noreply@mydialogs.ru'
+EMAIL_HOST_PASSWORD = 'fgtkmcby!@'
 EMAIL_PORT = 465
 SERVER_EMAIL = 'noreply@mydialogs.ru'
 
