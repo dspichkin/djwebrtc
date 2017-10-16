@@ -125,6 +125,13 @@ export class StatusService {
     private handleError(error: Response) {
         console.error(error);
         //error.json().error || 
+        if (error.status == 403) {
+            console.log("XXXX")
+            this.router.navigate(['/accounts/login/']);
+        }
+        if (error.status == 404) {
+            this.router.navigate(['/dialogs/']);
+        }
         return Observable.throw('Server error');
     }
 }

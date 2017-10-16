@@ -2291,6 +2291,13 @@ var StatusService = (function () {
     StatusService.prototype.handleError = function (error) {
         console.error(error);
         //error.json().error || 
+        if (error.status == 403) {
+            console.log("XXXX");
+            this.router.navigate(['/accounts/login/']);
+        }
+        if (error.status == 404) {
+            this.router.navigate(['/dialogs/']);
+        }
         return __WEBPACK_IMPORTED_MODULE_1_rxjs__["Observable"].throw('Server error');
     };
     return StatusService;
