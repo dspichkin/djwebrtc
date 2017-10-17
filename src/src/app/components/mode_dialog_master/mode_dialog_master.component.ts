@@ -62,7 +62,7 @@ export class ModeDialogMasterComponent implements OnInit, OnDestroy {
             self._startPeer();
 
 
-            //console.log('self.activedialog', self.activedialog)
+            console.log('self.activedialog', self.activedialog)
         })
 
         
