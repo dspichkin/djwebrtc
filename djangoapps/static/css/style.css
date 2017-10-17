@@ -604,8 +604,8 @@ contact
 }
 
 #sendmessage {
-    color: green;
-    border:1px solid green;
+    color: aquamarine;
+    border:1px solid aquamarine;
     display:none;
     text-align:center;
     padding:15px;
@@ -700,6 +700,20 @@ cta
     display: inline-block;
     transition: all 0.5s ease-in 0s;
 }
+
+.error {
+    color: red;
+    font-size: 14px;
+}
+.alert-message {
+    background-color: cadetblue;
+}
+
+.btn-close {
+    cursor: pointer;
+}
+
+
 /***********************************
 ************************************
 Responsive media queries
@@ -722,61 +736,61 @@ Responsive media queries
 }
 }
 @media (min-width: 20px) and (max-width: 450px) {
-.navbar-default .navbar-brand {
-    padding-left: 16px;
-    margin-top: 0px;
-}
-.banner-info {
-    padding-top: 40px;
-}
-h1.bnr-title {
-    font-size: 16px;
-}
-h2.bnr-sub-title {
-    font-size: 33px;
-}
-body{
-    font-size: 14px;
-}
-.btn-download, .btn-more, .btn-download:hover, .btn-more:hover, .btn-download:focus, .btn-more:focus {
-    font-size: 12px;
-    padding: 7px 18px;
-}
-.wrap-item h3 {
-    font-size: 18px;
-}
-.title, .service-title {
-    font-size: 28px;
-}
-.sub-title {
-    font-size: 15px;
-}
-.service-item, .blog-sec, .wrap-item, .loction-info{
-    margin-bottom: 15px;
-}
-.loction-info{
-    padding: 0px 15px;
-}
-.portfolio-item figure figcaption {
-    padding: 30px 30px;
-}
-.padding-right-zero{
-    padding-right: 15px !important;
-}
-.portfolio-item figure p{
-    font-size: 14px;
-}
-.portfolio-item figure h2{
-    font-size: 18px;
-}
-.testimonial-item ul li blockquote {
-    font-size: 14px;
-    line-height: 22px;
-    margin: 10px 0;
-    padding: 0 40px;
-}
-.navbar-default .navbar-nav > li > a{
-    line-height: 22px;
-    text-align: center;
-}
+    .navbar-default .navbar-brand {
+        padding-left: 16px;
+        margin-top: 0px;
+    }
+    .banner-info {
+        padding-top: 40px;
+    }
+    h1.bnr-title {
+        font-size: 16px;
+    }
+    h2.bnr-sub-title {
+        font-size: 33px;
+    }
+    body{
+        font-size: 14px;
+    }
+    .btn-download, .btn-more, .btn-download:hover, .btn-more:hover, .btn-download:focus, .btn-more:focus {
+        font-size: 12px;
+        padding: 7px 18px;
+    }
+    .wrap-item h3 {
+        font-size: 18px;
+    }
+    .title, .service-title {
+        font-size: 28px;
+    }
+    .sub-title {
+        font-size: 15px;
+    }
+    .service-item, .blog-sec, .wrap-item, .loction-info{
+        margin-bottom: 15px;
+    }
+    .loction-info{
+        padding: 0px 15px;
+    }
+    .portfolio-item figure figcaption {
+        padding: 30px 30px;
+    }
+    .padding-right-zero{
+        padding-right: 15px !important;
+    }
+    .portfolio-item figure p{
+        font-size: 14px;
+    }
+    .portfolio-item figure h2{
+        font-size: 18px;
+    }
+    .testimonial-item ul li blockquote {
+        font-size: 14px;
+        line-height: 22px;
+        margin: 10px 0;
+        padding: 0 40px;
+    }
+    .navbar-default .navbar-nav > li > a {
+        line-height: 22px;
+        text-align: center;
+    }
 }

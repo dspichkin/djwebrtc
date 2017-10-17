@@ -75,6 +75,9 @@ export class ModeDialogPupilComponent implements OnInit, OnDestroy {
                    self.during_conversation = value;
                 }
             }
+            if (message.command == "DIALOG_STOP_ERROR") {
+                self.status_activedialog = 'error_connection';
+            }
         });
 
 
@@ -130,6 +133,10 @@ export class ModeDialogPupilComponent implements OnInit, OnDestroy {
 
         self.peer.on('error', function(err) {
             console.log("ERROR:", err.message);
+            self.webSocketService.sendCommand({
+                command: "DIALOG_STOP_ERROR",
+                target: self.activedialog.id,
+            })
         });
 
         // Receiving a call

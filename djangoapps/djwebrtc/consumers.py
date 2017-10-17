@@ -192,8 +192,6 @@ def ws_message(message):
             target = data.get("target")
             if target:
                 ac = get_object_or_404(ActiveDialog, pk=target)
-                # ac.status = DIALOG_STOP
-                # ac.save()
                 ac.master.stop_dialog()
                 ac.pupil.stop_dialog()
                 Group("call-client-%s" % ac.master.key_id).send({
@@ -208,6 +206,23 @@ def ws_message(message):
                         'dialog': target,
                     })
                 })
+        if command == 'DIALOG_STOP_ERROR':
+            target = data.get("target")
+            ac = get_object_or_404(ActiveDialog, pk=target)
+            ac.master.stop_dialog()
+            ac.pupil.stop_dialog()
+            Group("call-client-%s" % ac.master.key_id).send({
+                'text': json.dumps({
+                    'command': "DIALOG_STOP_ERROR",
+                    'dialog': target,
+                })
+            })
+            Group("call-client-%s" % ac.pupil.key_id).send({
+                'text': json.dumps({
+                    'command': "DIALOG_STOP_ERROR",
+                    'dialog': target,
+                })
+            })
 
         if command == 'CHANGE_DIALOG':
             old_activedialogid = data.get("current_activedialogid")

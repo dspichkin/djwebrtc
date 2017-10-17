@@ -32,6 +32,7 @@ def registration(request):
     reg_first_name = ""
     reg_level = ""
     reg_email = ""
+    reg_skypeid = ""
     password = ""
     password1 = ""
 
@@ -39,6 +40,7 @@ def registration(request):
         reg_first_name = request.POST.get('reg_first_name')
         reg_email = request.POST.get('reg_email')
         reg_level = request.POST.get('reg_level')
+        reg_skypeid = request.POST.get('reg_skypeid')
         password = request.POST.get('reg_password')
         password1 = request.POST.get('reg_password1')
 
@@ -47,16 +49,17 @@ def registration(request):
             reg_email = reg_email.lower()
             email_error = email_has_error(reg_email)
 
+        data = {
+            "reg_first_name": reg_first_name,
+            "reg_level": reg_level,
+            "reg_email": reg_email,
+            "reg_skypeid": reg_skypeid,
+            "password": password,
+            "password1": password1
+        }
+
         if not reg_first_name or not reg_level or not password or password != password1 \
                 or not reg_email or email_error:
-            data = {
-                "reg_first_name": reg_first_name,
-                "reg_level": reg_level,
-                "reg_email": reg_email,
-                "password": password,
-                "password1": password1
-            }
-
             if not reg_first_name:
                 data["reg_first_name_error"] = "Поле имени обязательно"
             if not reg_email:
@@ -75,14 +78,7 @@ def registration(request):
             return render(request, 'registration/registration.html', data)
 
         if Account.objects.filter(email=reg_email).exists():
-            data = {
-                "reg_email_error": u"Указанный email уже используется",
-                "reg_first_name": reg_first_name,
-                "reg_level": reg_level,
-                "reg_email": reg_email,
-                "password": password,
-                "password1": password1
-            }
+            data["reg_email_error"] = u"Указанный email уже используется"
             return render(request, 'registration/registration.html', data)
 
         username = reg_email
@@ -95,6 +91,8 @@ def registration(request):
             level=reg_level
         )
         account.set_password(password)
+        if reg_skypeid:
+            account.skypeid = reg_skypeid
         account.save()
 
         aconf = ConfirmationCode.objects.create(
@@ -118,6 +116,7 @@ def registration(request):
             "reg_first_name": reg_first_name,
             "reg_level": reg_level,
             "reg_email": reg_email,
+            "reg_skypeid": reg_skypeid,
             "password": password,
             "password1": password1
         })
@@ -288,6 +287,25 @@ def message(request):
         print(e)
 
     return Response(status.HTTP_200_OK)
+
+
+@api_view(['POST'])
+def lendingmessage(request):
+    data = request.data
+    dsubject = data.get("subject")
+    message = data.get("message")
+    email = data.get("email")
+    name = data.get("name")
+    if dsubject and message and email and name:
+        msg = u"Сообщение с лендинга www.mydialogs.ru пользователь:%s \nsubject: %s\nmessage:%s" % (email, dsubject, message)
+    try:
+        subject = u"Сообщение с лендинга www.mydialogs.ru"
+        mail = EmailMessage(subject, msg, settings.DEFAULT_FROM_EMAIL, settings.ADMIN_LIST_EMAILS)
+        mail.send()
+    except Exception as e:
+        print(e)
+    return Response(status.HTTP_200_OK)
+    # return render(request, 'landing.html')
 
 
 @api_view(['GET'])

@@ -121,6 +121,10 @@ export class ModeDialogMasterComponent implements OnInit, OnDestroy {
 
         self.peer.on('error', function(err) {
             console.log("ERROR:", err.message);
+            self.webSocketService.sendCommand({
+                command: "DIALOG_STOP_ERROR",
+                target: self.activedialog.id,
+            })
         });
 
         // Receiving a call

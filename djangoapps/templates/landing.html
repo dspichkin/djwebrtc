@@ -116,13 +116,62 @@
                 </div>
             </section>
             
+
+            <section id="contact" class="section-padding wow fadeInUp delay-05s">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12 text-center white">
+                            <h2 class="service-title pad-bt15">Есть вопросы? Хотите связаться с нами?</h2>
+                            <p class="sub-title pad-bt15">Напишите все что хотите спросить.</p>
+                            <hr class="bottom-line white-bg">
+                        </div>
+                        <div class="col-md-12">
+                            <div class="contact-form" style="max-width: 600px;margin: 0 auto;">
+                                <div id="sendmessage" class="alert-message">
+                                    <span class="btn-close pull-right" aria-hidden="true">&times;</span>
+                                    Ваше сообщение было отправленно. Спасибо!
+                                </div>
+                                <form id="contactForm" action="/accounts/lendingmessage/" method="post" role="form" class="contactForm">
+                                    {% csrf_token %}
+                                    <div class="col-md-6 padding-right-zero">
+                                        <div class="form-group">
+                                            <input type="text" name="name" class="form-control" id="name" placeholder="Ваше имя" data-rule-required="true" data-rule-minlength="4" data-msg="Пожалуйста введите минимум 4 символов" />
+                                            <div class="validation"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <input type="email" class="form-control" name="email" id="email" placeholder="Ваш email для обратной связи" data-rule="email" data-msg="Введите корректный email" data-rule-required="true" />
+                                            <div class="validation"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <input type="text" class="form-control" name="subject" id="subject" placeholder="Тема сообщения" data-rule-required="true"/>
+                                            <div class="validation"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <textarea class="form-control" name="message" id="message" rows="5" data-rule="required" data-msg="Пожалуйста напишите что нибудь" placeholder="Сообщение" data-rule-required="true" data-rule-minlength="8" data-msg-minlength="Пожалуйста введите минимум 8 символов" ></textarea>
+                                            <div class="validation"></div>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary btn-submit">ОТПРАВИТЬ</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!---->
             
             
             <!---->
             <footer id="footer">
                 <div class="container">
                     <div class="row text-center">
-                        <p>&copy; Диалоги. All Rights Reserved.</p>
+                        <p>&copy; Диалоговый тренажер. All Rights Reserved 2017.</p>
                         <!--
                         <div class="credits">
                             Designed  by <a href="https://bootstrapmade.com/">Bootstrap Themes</a>
@@ -139,7 +188,26 @@
         <script src="/static/js/bootstrap.min.js"></script>
         <script src="/static/js/wow.js"></script>
         <script src="/static/js/jquery.bxslider.min.js"></script>
+        <script src="/static/js/jquery.validate.min.js"></script>
         <script src="/static/js/custom.js"></script>
+        <script type="text/javascript">
+            $(document).ready(function() {
+                var frm = $("#contactForm").validate({
+                    submitHandler: function(form) {
+                        $.post('/accounts/lendingmessage/', $('#contactForm').serialize());
+                        $('#sendmessage').show();
+                        $('#name').val('');
+                        $('#email').val('');
+                        $('#subject').val('');
+                        $('#message').val('');
+                    }
+                });
+
+                $('.btn-close').click(function() {
+                    $(this).parents('.alert-message').hide();
+                });
+            });
+        </script>
 
     </body>
 </html>

@@ -5,7 +5,7 @@ from django.contrib.auth.views import LoginView
 from django.http import HttpResponseRedirect
 
 from accounts.views import (
-    accept_call, message, check_user, registration, confirm_email,
+    accept_call, message, lendingmessage, check_user, registration, confirm_email,
     remember, user
     )
 
@@ -25,6 +25,7 @@ urlpatterns = [
     url(r'^registration/', registration, name="registration"),
     url(r'^accept_call/', accept_call, name="accept_call"),
     url(r'^message/', message, name="message"),
+    url(r'^lendingmessage/', lendingmessage, name="lendingmessage"),
     url(r'^check_user/?', check_user, name="check_user"),
     url(r'^user/?', user, name="user"),
     url(r'^confirm/(?P<key>\w+)/?$', confirm_email, name="confirm_key"),

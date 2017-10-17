@@ -53,6 +53,7 @@ class Account(AbstractUser):
     level = models.SmallIntegerField(u'уровень знания', choices=ENGLISH_LEVELS, default=10)
     is_confirm = models.BooleanField(u'email подтвержден', default=False)
     is_accept_call = models.BooleanField(u'принимать входящие звонки', default=False)
+    skypeid = models.CharField(u'скайп id', max_length=50, blank=True, null=True)
 
     last_dialog_started = models.DateTimeField(u'дата старта последнего диалога', blank=True, null=True)
     last_dialog_end = models.DateTimeField(u'дата окончания последнего диалога', blank=True, null=True)
