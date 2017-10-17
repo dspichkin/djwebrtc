@@ -1275,7 +1275,7 @@ var ModeDialogPupilComponent = (function () {
             self.start_converstion = new Date();
         });
         call.on('close', function () {
-            console.log("CLOSE");
+            //console.log("CLOSE");
             self._closeDialog();
         });
     };
@@ -3141,7 +3141,7 @@ var ModeCallingViewComponent = (function () {
         });
     };
     ModeCallingViewComponent.prototype._callingDialog = function (activedialog_id) {
-        console.log('_callingDialog');
+        //console.log('_callingDialog')
         var self = this;
         if (self.running_call) {
             self.calling_time = new Date();

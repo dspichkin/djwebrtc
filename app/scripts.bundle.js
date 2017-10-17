@@ -1381,7 +1381,9 @@ this.activeTarget=b,this.clear();var c=this.selector+'[data-target="'+b+'"],'+th
                 if (self._timeout) {
                     clearTimeout(self._timeout);
                     setTimeout(function() {
-                        self._http.abort();
+                        if (self._http && self._http.abort) {
+                            self._http.abort();
+                        }
                         self._http = null;
                     }, 5000);
                 }

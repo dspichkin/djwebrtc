@@ -192,7 +192,7 @@ export class ModeDialogPupilComponent implements OnInit, OnDestroy {
         });
         
         call.on('close', function() {
-            console.log("CLOSE");
+            //console.log("CLOSE");
             self._closeDialog();
         });
 

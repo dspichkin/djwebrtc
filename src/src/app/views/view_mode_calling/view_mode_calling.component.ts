@@ -159,7 +159,7 @@ export class ModeCallingViewComponent implements OnInit, OnDestroy {
     }
 
     private _callingDialog(activedialog_id) {
-        console.log('_callingDialog')
+        //console.log('_callingDialog')
 
         let self = this;
         if (self.running_call) {
