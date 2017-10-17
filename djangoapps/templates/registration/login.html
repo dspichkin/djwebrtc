@@ -23,25 +23,25 @@
             {% endif %}
         {% endif %}
         {% if not user.is_authenticated %}
-        <form class="form-horizontal" method="post" action="{% url 'login' %}" style="width: 500px;margin: 10% auto;">
+        <form class="form-horizontal" method="post" action="{% url 'login' %}" style="max-width: 500px;margin: 10px auto;padding:40px;">
             {% csrf_token %}
             <h4 class="login__form-header"></h4>
             <div class="form-group">
-                <label for="id_username">Ваш email:</label>
+                <label for="id_username" style="color:white;">Ваш email:</label>
                 <input autofocus="" id="id_username" maxlength="254" name="username" type="email" class="form-control login__input" required="" value="{{ form.username.value | default:"" }}" placeholder="pochta@pochta.com">
             </div>
             <div class="form-group">
-                {{ form.password.label_tag }}
+                <label for="id_password" style="color:white;">Ваш пароль:</label>
                 <input class="form-control login__input" id="id_password" name="password" type="password" required="" value="{{ form.password.value | default:"" }}">
 
 
                 <div class="main-social" style="">
                     <div style="float: left;width: 100%;">
                         <a href="/accounts/registration/" style="font-size: 16px;">
-                            <span style="margin-left: 10px;margin-top: 5px;">Регистрация</span>
+                            <span class="logo-dec" style="margin-left: 10px;margin-top: 5px;">Регистрация</span>
                         </a>
                         <a href="/accounts/remember/" style="font-size: 11px;float: right;margin-right: 10px;margin-top: 5px;">
-                            <span style="margin-left: 10px;margin-top: 5px;">Забыли пароль?</span>
+                            <span class="logo-dec" style="margin-left: 10px;margin-top: 5px;">Забыли пароль?</span>
                         </a>
                     </div>
                     {% comment %}

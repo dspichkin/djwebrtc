@@ -18,22 +18,22 @@
             {% endif %}
         {% endif %}
         {% if not user.is_authenticated %}
-        <form class="form-horizontal" method="post" action="{% url 'registration' %}" style="width: 500px;margin: 5% auto;">
+        <form class="form-horizontal" method="post" action="{% url 'registration' %}" style="max-width: 500px;margin: 10px auto;padding:0 40px;">
             {% csrf_token %}
-            <h1 class="login__form-header" style="text-align: center;">Регистрация</h1>
+            <h1 class="login__form-header" style="text-align: center;color:white;">Регистрация</h1>
             <div class="form-group">
-                <label for="exampleInputName">Ваше имя * <span style="font-size: 10px;font-weight: 200;">(будет отображаться другим пользователям)</span>
+                <label for="exampleInputName" style="color:white;">Ваше имя * <span style="font-size: 10px;font-weight: 200;">(будет отображаться другим пользователям)</span>
                 </label>
                 <input type="text" name="reg_first_name" class="form-control" id="exampleInputName" value="{{reg_first_name | default:""}}">
                 <p class="text-danger pull-right" style="margin:0">{{reg_first_name_error}}</p>
             </div>
             <div class="form-group">
-                <label for="exampleInputEmail">Ваш email *</label>
+                <label for="exampleInputEmail" style="color:white;">Ваш email *</label>
                 <input type="email" name="reg_email" class="form-control" id="exampleInputEmail" value="{{reg_email | default:""}}">
                 <p class="text-danger pull-right" style="margin:0">{{reg_email_error}}</p>
             </div>
             <div class="form-group">
-                <label for="exampleInputLevel">Ваш уровень английского *</label>
+                <label for="exampleInputLevel" style="color:white;">Ваш уровень английского *</label>
                 <select name="reg_level" class="form-control" id="exampleInputLevel">
                     <option value="10" {% if reg_level == '10' %} selected {% endif %}>Beginner, Elementary</option>
                     <option value="20" {% if reg_level == '20' %} selected {% endif %}>Pre-Intermediate</option>
@@ -46,12 +46,12 @@
             </div>
 
             <div class="form-group">
-                <label for="exampleInputPassword1">Пароль</label>
+                <label for="exampleInputPassword1" style="color:white;">Пароль</label>
                 <input type="password" name="reg_password" class="form-control" id="exampleInputPassword1" value="{{password | default:""}}">
                 <p class="text-danger pull-right" style="margin:0">{{reg_password_error}}</p>
             </div>
             <div class="form-group">
-                <label for="exampleInputPassword2">Подтверждение пароля</label>
+                <label for="exampleInputPassword2" style="color:white;">Подтверждение пароля</label>
                 <input type="password" name="reg_password1" class="form-control" id="exampleInputPassword2" value="{{password1 | default:""}}">
                 <p class="text-danger pull-right" style="margin:0">{{reg_password1_error}}</p>
             </div>

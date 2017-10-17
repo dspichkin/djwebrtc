@@ -1368,7 +1368,9 @@
                 if (self._timeout) {
                     clearTimeout(self._timeout);
                     setTimeout(function() {
-                        self._http.abort();
+                        if (self._http && self._http.abort) {
+                            self._http.abort();
+                        }
                         self._http = null;
                     }, 5000);
                 }
