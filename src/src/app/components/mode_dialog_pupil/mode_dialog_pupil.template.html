@@ -12,10 +12,10 @@
                 <p *ngIf="status_activedialog=='starting'" style="font-size: 16px;color:blue;font-weight: 400;margin:0;">Диалог запускается</p>
                 <p *ngIf="status_activedialog=='error_connection'" style="font-size: 16px;color:red;font-weight: 400;margin:0;">Ошибка установки голосовой связи
                 </p>
-                <p *ngIf="activedialog.master.skypeid" style="font-size: 14px;color:red;">
+                <p *ngIf="status_activedialog=='error_connection' && activedialog.master.skypeid" style="font-size: 14px;color:red;">
                     Попробуйте установить связь через скайп (скайп id собеседника {{activedialog.master.skypeid}})
                 </p>
-                <p *ngIf="!activedialog.master.skypeid" style="font-size: 14px;color:red;">
+                <p *ngIf="status_activedialog=='error_connection' && !activedialog.master.skypeid" style="font-size: 14px;color:red;">
                     Попробуйте связаться через другие программы например скайп
                 </p>
             </div>
