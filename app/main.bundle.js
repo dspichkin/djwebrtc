@@ -779,6 +779,7 @@ var TopNavbarComponent = (function () {
         self.statusService.ready.subscribe(function (date) {
             self.user = _this.statusService.user;
             self.state_input_call = self.user.is_accept_call;
+            self.initVars();
         });
         for (var i in this.errorService.errors) {
             this.errors.push(this.errorService.errors[i]);
@@ -800,9 +801,17 @@ var TopNavbarComponent = (function () {
         });
         if (!self.user) {
             self.user = self.statusService.user;
+            self.initVars();
             if (!self.user) {
                 self.statusService.getStatus();
+                self.initVars();
             }
+        }
+        self.initVars();
+    };
+    TopNavbarComponent.prototype.initVars = function () {
+        if (this.user) {
+            this.state_input_call = this.user.is_accept_call;
         }
     };
     TopNavbarComponent.prototype.removeError = function (index) {

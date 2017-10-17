@@ -43,6 +43,7 @@ export class TopNavbarComponent implements OnInit {
         self.statusService.ready.subscribe((date) => {
             self.user = this.statusService.user;
             self.state_input_call = self.user.is_accept_call;
+            self.initVars();
         });
 
 
@@ -68,9 +69,20 @@ export class TopNavbarComponent implements OnInit {
 
         if (!self.user) {
             self.user = self.statusService.user;
+            self.initVars();
             if (!self.user) {
                 self.statusService.getStatus();
+                self.initVars();
             }
+        }
+
+        self.initVars();
+        
+    }
+
+    initVars() {
+        if (this.user) {
+            this.state_input_call = this.user.is_accept_call;
         }
     }
 
