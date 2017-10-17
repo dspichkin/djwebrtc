@@ -10,7 +10,9 @@
                 <p *ngIf="status_activedialog=='run'"  style="font-size: 16px;color:green;font-weight: 400;margin:0;">Диалог запущен</p>
                 <p *ngIf="status_activedialog=='stop'" style="font-size: 16px;color:red;margin:0;">Диалог остановлен</p>
                 <p *ngIf="status_activedialog=='starting'" style="font-size: 16px;color:blue;font-weight: 400;margin:0;">Диалог запускается</p>
-                <p *ngIf="status_activedialog=='error_connection'" style="font-size: 16px;color:red;font-weight: 400;margin:0;">Ошибка связи</p>
+                <p *ngIf="status_activedialog=='error_connection'" style="font-size: 16px;color:red;font-weight: 400;margin:0;">Ошибка установки голосовой связи
+                     <span *ngIf="activedialog.master.skypeid" style="font-size: 14px;">(попробуйте установить связь через скайп {{activedialog.master.skypeid}})</span>
+                </p>
             </div>
             <div class="col-md-6" style="text-align: right;">
                 <p *ngIf="personageName" style="margin: 0 40px;">Персонаж: {{personageName}}</p>
