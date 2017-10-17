@@ -326,6 +326,7 @@ def user(request):
         data = json.loads(request.body)
         first_name = data.get("first_name")
         selectedLevel = data.get("selectedLevel")
+        skypeid = data.get("skypeid")
         password = data.get("password")
         is_dirty = False
         if first_name and request.user.first_name != first_name:
@@ -334,7 +335,10 @@ def user(request):
         if selectedLevel and request.user.level != int(selectedLevel):
             request.user.level = selectedLevel
             is_dirty = True
-        if password:
+        if skypeid is not None and request.user.skypeid != skypeid:
+            request.user.skypeid = skypeid
+            is_dirty = True
+        if password is not None:
             request.user.set_password(password)
             is_dirty = True
         if is_dirty is True:

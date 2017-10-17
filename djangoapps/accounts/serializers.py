@@ -10,7 +10,9 @@ class AccountSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Account
-        fields = ('fio', 'key', 'key_id', 'email', 'level', 'level_display', 'avatar', 'is_accept_call', 'first_name')
+        fields = (
+            'fio', 'key', 'key_id', 'email', 'level', 'level_display',
+            'avatar', 'is_accept_call', 'first_name', 'skypeid')
 
     def get_level_display(self, obj):
         return obj.get_level_display()

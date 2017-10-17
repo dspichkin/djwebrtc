@@ -123,12 +123,14 @@ var _a, _b;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__services_status_service__ = __webpack_require__("../../../../../src/app/services/status.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__services_error_service__ = __webpack_require__("../../../../../src/app/services/error.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__services_guards_service__ = __webpack_require__("../../../../../src/app/services/guards.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__services_notification_service__ = __webpack_require__("../../../../../src/app/services/notification.service.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
 
 
 
@@ -176,7 +178,8 @@ AppModule = __decorate([
             __WEBPACK_IMPORTED_MODULE_12__services_status_service__["a" /* StatusService */],
             __WEBPACK_IMPORTED_MODULE_11__services_dialogs_service__["a" /* DialogsService */],
             __WEBPACK_IMPORTED_MODULE_13__services_error_service__["a" /* ErrorService */],
-            __WEBPACK_IMPORTED_MODULE_14__services_guards_service__["a" /* AuthGuard */]
+            __WEBPACK_IMPORTED_MODULE_14__services_guards_service__["a" /* AuthGuard */],
+            __WEBPACK_IMPORTED_MODULE_15__services_notification_service__["a" /* NotificationService */]
         ],
         bootstrap: [__WEBPACK_IMPORTED_MODULE_8__app_component__["a" /* AppComponent */]]
     })
@@ -648,6 +651,88 @@ module.exports = ""
 
 /***/ }),
 
+/***/ "../../../../../src/app/components/common/notification/notification.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return NotificationComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services_notification_service__ = __webpack_require__("../../../../../src/app/services/notification.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__models_notification_model__ = __webpack_require__("../../../../../src/app/models/notification.model.ts");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+var NotificationComponent = (function () {
+    function NotificationComponent(_notifications) {
+        var _this = this;
+        this._notifications = _notifications;
+        this.closable = true;
+        this.visible = false;
+        this.visibleChange = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]();
+        this.loading = false;
+        this.note = new __WEBPACK_IMPORTED_MODULE_2__models_notification_model__["a" /* Notification */]();
+        _notifications.noteAdded.subscribe(function (_note) {
+            _this.note = _note;
+            _this.visible = true;
+        });
+    }
+    NotificationComponent.prototype.ngOnChanges = function () {
+        if (this.visible) {
+            var body = document.getElementsByTagName('body')[0];
+            body.classList.add("modal-open");
+        }
+        else {
+            var body = document.getElementsByTagName('body')[0];
+            body.classList.remove("modal-open");
+        }
+    };
+    NotificationComponent.prototype.close = function (note) {
+        this.visible = false;
+        this.visibleChange.emit(this.visible);
+    };
+    return NotificationComponent;
+}());
+__decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
+    __metadata("design:type", Object)
+], NotificationComponent.prototype, "closable", void 0);
+__decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
+    __metadata("design:type", Boolean)
+], NotificationComponent.prototype, "visible", void 0);
+__decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Output"])(),
+    __metadata("design:type", typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]) === "function" && _a || Object)
+], NotificationComponent.prototype, "visibleChange", void 0);
+NotificationComponent = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+        selector: 'notifications',
+        template: __webpack_require__("../../../../../src/app/components/common/notification/notifications.template.html")
+    }),
+    __metadata("design:paramtypes", [typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1__services_notification_service__["a" /* NotificationService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__services_notification_service__["a" /* NotificationService */]) === "function" && _b || Object])
+], NotificationComponent);
+
+var _a, _b;
+//# sourceMappingURL=notification.component.js.map
+
+/***/ }),
+
+/***/ "../../../../../src/app/components/common/notification/notifications.template.html":
+/***/ (function(module, exports) {
+
+module.exports = "<div *ngIf=\"visible\" class=\"notification\" style=\"\">\n    <div style=\"position: fixed;width: 100%;height: 100%;opacity: 0.5;top:0;left:0;background-color: black;\"></div>\n    <!-- <button (click)=\"close()\" aria-label=\"Close\" class=\"btn btn-primary pull-right\">X</button> -->\n    <p *ngIf=\"loading\">Loading ...</p>\n    <div *ngIf=\"!loading\" style=\"position: absolute;\n    width: 80%;\n    top: 0;\n    left: 0;\n    right: 0;\n    margin: 200px auto;\n    border: 1px solid #ddd;\n    border-radius: 6px;\n    box-shadow: 0px 0px 14px 0px;\">\n            <div class=\"panel\" style=\"margin: 0;\">\n                <div class=\"panel-heading panel-info\">\n                     <h4>{{note.title}}</h4>\n                </div>\n                <div class=\"panel-body\" style=\"overflow-y: auto;max-height: 400px;\">\n                    <div class=\"col-md-12\">\n                        <div class=\"panel\">\n                            <div class=\"panel-body\" style=\"padding: 0;\">\n                                <div class=\"{{ note.classes }}\" style=\"min-height: 50px;text-align: center;display: flex;justify-content: center;align-items: center;\">\n                                    <h4>{{ note.message }}</h4>\n                                </div>\n                            </div>\n                        </div>\n\n                        <!-- Loading -->\n                        <div *ngIf=\"loading\" style=\"position: absolute;top:0;left:0;width:100%;height:100%;z-index: 100;\">\n                            <div style=\"position: absolute;opacity: 0.5;width:100%;height:100%;background-color: white;\">\n                            </div>\n                            <div style=\"width: 50px;margin: auto;margin-top: 60px;\">\n                                <i class=\"fa fa-spin fa-gear\" style=\"font-size: 50px;\"></i>\n                            </div>\n                        </div>\n                        <!-- END Loading -->\n                \n                    </div>\n                </div>\n                <div class=\"panel-footer\" style=\"text-align: center;\">\n                    <button type=\"button\" class=\"btn btn-primary btn-lg\" style=\"width: 100px;\" (click)=\"close()\">OK</button>\n                </div>\n            </div>\n    </div>\n</div>\n<div *ngIf=\"visible\" class=\"overlay\"></div>"
+
+/***/ }),
+
 /***/ "../../../../../src/app/components/common/topnavbar/topnavbar.component.ts":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -910,6 +995,9 @@ var ModeDialogMasterComponent = (function () {
                 if (value) {
                     self.during_conversation = value;
                 }
+            }
+            if (message.command == "DIALOG_STOP_ERROR") {
+                self.status_activedialog = 'error_connection';
             }
         });
         self._runHearbeatPupil();
@@ -1975,6 +2063,27 @@ module.exports = "<div class=\"\" *ngFor=\"let item of listin\">\n    <div style
 
 /***/ }),
 
+/***/ "../../../../../src/app/models/notification.model.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Notification; });
+var Notification = (function () {
+    function Notification(title, classes, message) {
+        if (title === void 0) { title = ''; }
+        if (classes === void 0) { classes = ''; }
+        if (message === void 0) { message = ''; }
+        this.title = title;
+        this.classes = classes;
+        this.message = message;
+    }
+    return Notification;
+}());
+
+//# sourceMappingURL=notification.model.js.map
+
+/***/ }),
+
 /***/ "../../../../../src/app/services/dialogs.service.ts":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -2177,6 +2286,44 @@ AuthGuard = __decorate([
 
 var _a, _b;
 //# sourceMappingURL=guards.service.js.map
+
+/***/ }),
+
+/***/ "../../../../../src/app/services/notification.service.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return NotificationService; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_Subject__ = __webpack_require__("../../../../rxjs/Subject.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_Subject___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_rxjs_Subject__);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+var NotificationService = (function () {
+    function NotificationService() {
+        this._notifications = new __WEBPACK_IMPORTED_MODULE_1_rxjs_Subject__["Subject"]();
+        this.noteAdded = this._notifications.asObservable();
+    }
+    NotificationService.prototype.add = function (notification) {
+        this._notifications.next(notification);
+    };
+    return NotificationService;
+}());
+NotificationService = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(),
+    __metadata("design:paramtypes", [])
+], NotificationService);
+
+//# sourceMappingURL=notification.service.js.map
 
 /***/ }),
 
@@ -2530,13 +2677,15 @@ module.exports = "<div class=\"row\">\n    <div class=\"container\">\n        <d
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__components_change_current_dialog_change_current_dialog_component__ = __webpack_require__("../../../../../src/app/components/change_current_dialog/change_current_dialog.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__view_message_view_message_component__ = __webpack_require__("../../../../../src/app/views/view_message/view_message.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__view_profile_view_profile_component__ = __webpack_require__("../../../../../src/app/views/view_profile/view_profile.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__view_profile_equal_validator_directive__ = __webpack_require__("../../../../../src/app/views/view_profile/equal_validator.directive.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__components_common_notification_notification_component__ = __webpack_require__("../../../../../src/app/components/common/notification/notification.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__view_profile_equal_validator_directive__ = __webpack_require__("../../../../../src/app/views/view_profile/equal_validator.directive.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
 
 
 
@@ -2576,7 +2725,8 @@ AppviewsModule = __decorate([
             __WEBPACK_IMPORTED_MODULE_14__components_change_current_dialog_change_current_dialog_component__["a" /* ChangeCurrentDialogComponent */],
             __WEBPACK_IMPORTED_MODULE_15__view_message_view_message_component__["a" /* MessageViewComponent */],
             __WEBPACK_IMPORTED_MODULE_16__view_profile_view_profile_component__["a" /* ProfileViewComponent */],
-            __WEBPACK_IMPORTED_MODULE_17__view_profile_equal_validator_directive__["a" /* EqualValidator */],
+            __WEBPACK_IMPORTED_MODULE_18__view_profile_equal_validator_directive__["a" /* EqualValidator */],
+            __WEBPACK_IMPORTED_MODULE_17__components_common_notification_notification_component__["a" /* NotificationComponent */],
         ],
         imports: [
             __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser__["a" /* BrowserModule */],
@@ -2597,7 +2747,8 @@ AppviewsModule = __decorate([
             __WEBPACK_IMPORTED_MODULE_14__components_change_current_dialog_change_current_dialog_component__["a" /* ChangeCurrentDialogComponent */],
             __WEBPACK_IMPORTED_MODULE_15__view_message_view_message_component__["a" /* MessageViewComponent */],
             __WEBPACK_IMPORTED_MODULE_16__view_profile_view_profile_component__["a" /* ProfileViewComponent */],
-            __WEBPACK_IMPORTED_MODULE_17__view_profile_equal_validator_directive__["a" /* EqualValidator */],
+            __WEBPACK_IMPORTED_MODULE_18__view_profile_equal_validator_directive__["a" /* EqualValidator */],
+            __WEBPACK_IMPORTED_MODULE_17__components_common_notification_notification_component__["a" /* NotificationComponent */],
         ],
     })
 ], AppviewsModule);
@@ -3518,6 +3669,8 @@ var EqualValidator_1;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_router__ = __webpack_require__("../../../router/@angular/router.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_status_service__ = __webpack_require__("../../../../../src/app/services/status.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__models_notification_model__ = __webpack_require__("../../../../../src/app/models/notification.model.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__services_notification_service__ = __webpack_require__("../../../../../src/app/services/notification.service.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -3530,10 +3683,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
+
 var ProfileViewComponent = (function () {
-    function ProfileViewComponent(statusService, router) {
+    function ProfileViewComponent(statusService, router, notificationService) {
         this.statusService = statusService;
         this.router = router;
+        this.notificationService = notificationService;
         this.levels = [
             {
                 id: 10,
@@ -3579,6 +3735,7 @@ var ProfileViewComponent = (function () {
     ProfileViewComponent.prototype.setVars = function () {
         this.first_name = this.user.first_name;
         this.selectedLevel = this.user.level;
+        this.skypeid = this.user.skypeid;
     };
     ProfileViewComponent.prototype.changePassword = function ($event) {
         if (this.password1) {
@@ -3586,18 +3743,21 @@ var ProfileViewComponent = (function () {
         }
     };
     ProfileViewComponent.prototype.submit = function () {
-        if (this.first_name && this.selectedLevel && this.password && this.password1 &&
-            this.password == this.password1) {
+        if (this.first_name && this.selectedLevel) {
+            if (this.password && (this.password != this.password1)) {
+                return;
+            }
             var params = {
                 first_name: this.first_name,
                 selectedLevel: this.selectedLevel,
-                password: this.password
+                password: this.password,
+                skypeid: this.skypeid
             };
-            console.log('para', params);
             this.loading = true;
             var self_1 = this;
             this.statusService.saveUser(params).subscribe(function (data) {
                 self_1.loading = false;
+                self_1.notificationService.add(new __WEBPACK_IMPORTED_MODULE_3__models_notification_model__["a" /* Notification */]('Сообщение', 'alert-success', 'Настройки сохранены'));
             });
         }
     };
@@ -3608,10 +3768,10 @@ ProfileViewComponent = __decorate([
         selector: 'modecalling',
         template: __webpack_require__("../../../../../src/app/views/view_profile/view_profile.template.html")
     }),
-    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__services_status_service__["a" /* StatusService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__services_status_service__["a" /* StatusService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1__angular_router__["b" /* Router */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_router__["b" /* Router */]) === "function" && _b || Object])
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__services_status_service__["a" /* StatusService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__services_status_service__["a" /* StatusService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1__angular_router__["b" /* Router */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_router__["b" /* Router */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_4__services_notification_service__["a" /* NotificationService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__services_notification_service__["a" /* NotificationService */]) === "function" && _c || Object])
 ], ProfileViewComponent);
 
-var _a, _b;
+var _a, _b, _c;
 //# sourceMappingURL=view_profile.component.js.map
 
 /***/ }),
@@ -3619,7 +3779,7 @@ var _a, _b;
 /***/ "../../../../../src/app/views/view_profile/view_profile.template.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container\">\n    <div class=\"row\">\n        <div class=\"panel panel-default\" style=\"margin:40px;\">\n            <div class=\"panel-heading\">\n                <h3>Профиль пользователя <span class=\"pull-right\">{{user?.email}}</span></h3>\n            </div>\n            <div class=\"panel-body\">\n                <form #frm=\"ngForm\" (ngSubmit)=\"submit()\" style=\"max-width: 400px;margin: auto;\">\n                    <div class=\"form-group\">\n                        <label for=\"exampleInputName\">Ваше имя * <span style=\"font-size: 10px;font-weight: 200;\">(будет отображаться другим пользователям)</span>\n                        </label>\n\n                        <input #frm_first_name=\"ngModel\" type=\"text\" name=\"frm_first_name\" class=\"form-control\" id=\"exampleInputName\" [(ngModel)]=\"first_name\" required=\"required\">\n                        <small *ngIf=\"!frm_first_name.valid && !frm_first_name.pristine\" class=\"text-danger pull-right\" style=\"margin:0\">Имя обязательное для ввода</small>\n                        \n                    </div>\n                    <div class=\"form-group\">\n                        <label for=\"exampleInputLevel\">Ваш уровень английского *</label>\n                        <select name=\"frm_level\" class=\"form-control\" [(ngModel)]=\"selectedLevel\" style=\"\" (ngModelChange)=\"onChangePersonage()\" required=\"required\">\n                             <option *ngFor=\"let pesonage of levels\" [value]=\"pesonage.id\">{{pesonage.title}}</option>\n                         </select>\n                    </div>\n\n                    <div class=\"form-group\">\n                        <label for=\"exampleInputPassword1\">Новый пароль</label>\n                        <input type=\"password\" name=\"frm_password\" class=\"form-control\" id=\"exampleInputPassword1\" [(ngModel)]=\"password\" required=\"required\" #frm_password=\"ngModel\" reverse=\"false\" (ngModelChange)=\"changePassword($event)\">\n                        <small *ngIf=\"frm_password.errors && frm_password.errors.required && !frm_password.pristine\" class=\"text-danger pull-right\">\n                            Требуется ввести пароль\n                        </small>\n                    </div>\n                    <div class=\"form-group\">\n                        <label for=\"exampleInputPassword2\">Подтверждение пароля</label>\n                        <input type=\"password\" name=\"frm_password1\" class=\"form-control\" id=\"exampleInputPassword2\" [(ngModel)]=\"password1\" validateEqual=\"frm_password\" #frm_password1=\"ngModel\" reverse=\"false\" required=\"required\">\n                            <small *ngIf=\"frm_password1.errors && frm_password1.errors.validateEqual==false && !frm_password1.pristine\" class=\"text-danger pull-right\">\n                                Пароли не совпадают\n                            </small>\n                    </div>\n\n\n                    \n                    <div class=\"form-group\">\n                        <input type=\"submit\" class=\"btn btn-primary\" value=\"Сохранить\" [disabled]=\"!frm.valid\"/>\n                    </div>\n                </form>\n            </div>\n        </div>\n\n        <!-- Loading -->\n        <div *ngIf=\"loading\" style=\"position: absolute;top:0;left:0;width:100%;height:100%;z-index: 100;\">\n            <div style=\"position: absolute;opacity: 0.5;width:100%;height:100%;background-color: white;\">\n            </div>\n            <div style=\"width: 50px;margin: auto;margin-top: 160px;\">\n                <i class=\"fa fa-spin fa-gear\" style=\"font-size: 50px;\"></i>\n            </div>\n        </div>\n        <!-- END Loading -->\n\n\n    </div>\n</div>\n"
+module.exports = "<notifications></notifications>\n\n<div class=\"container\">\n    <div class=\"row\">\n        <div class=\"panel panel-default\" style=\"margin:40px;\">\n            <div class=\"panel-heading\">\n                <h3>Профиль пользователя <span class=\"pull-right\">{{user?.email}}</span></h3>\n            </div>\n            <div class=\"panel-body\">\n                <form #frm=\"ngForm\" (ngSubmit)=\"submit()\" style=\"max-width: 400px;margin: auto;\">\n                    <div class=\"form-group\">\n                        <label for=\"exampleInputName\">Ваше имя * <span style=\"font-size: 10px;font-weight: 200;\">(будет отображаться другим пользователям)</span>\n                        </label>\n\n                        <input #frm_first_name=\"ngModel\" type=\"text\" name=\"frm_first_name\" class=\"form-control\" id=\"exampleInputName\" [(ngModel)]=\"first_name\" required=\"required\">\n                        <small *ngIf=\"!frm_first_name.valid && !frm_first_name.pristine\" class=\"text-danger pull-right\" style=\"margin:0\">Имя обязательное для ввода</small>\n                        \n                    </div>\n                    <div class=\"form-group\">\n                        <label for=\"exampleInputLevel\">Ваш уровень английского *</label>\n                        <select name=\"frm_level\" class=\"form-control\" [(ngModel)]=\"selectedLevel\" style=\"\" (ngModelChange)=\"onChangePersonage()\" required=\"required\">\n                             <option *ngFor=\"let pesonage of levels\" [value]=\"pesonage.id\">{{pesonage.title}}</option>\n                         </select>\n                    </div>\n\n                    <div class=\"form-group\">\n                        <label for=\"skypeid\">Skype Id <span style=\"font-size: 10px;font-weight: 200;\">(будет отображаться при ошибки соединения с партнером по диалогу)</span></label>\n                       <input #frm_skypeid=\"ngModel\" type=\"text\" name=\"frm_skypeid\" class=\"form-control\" id=\"skypeid\" [(ngModel)]=\"skypeid\">\n                    </div>\n\n                    <div class=\"form-group\">\n                        <label for=\"exampleInputPassword1\">Новый пароль</label>\n                        <input type=\"password\" name=\"frm_password\" class=\"form-control\" id=\"exampleInputPassword1\" [(ngModel)]=\"password\" #frm_password=\"ngModel\" reverse=\"false\" (ngModelChange)=\"changePassword($event)\">\n                        <small *ngIf=\"frm_password.errors && frm_password.errors.required && !frm_password.pristine\" class=\"text-danger pull-right\">\n                            Требуется ввести пароль\n                        </small>\n                    </div>\n                    <div class=\"form-group\">\n                        <label for=\"exampleInputPassword2\">Подтверждение пароля</label>\n                        <input type=\"password\" name=\"frm_password1\" class=\"form-control\" id=\"exampleInputPassword2\" [(ngModel)]=\"password1\" validateEqual=\"frm_password\" #frm_password1=\"ngModel\" reverse=\"false\">\n                            <small *ngIf=\"frm_password1.errors && frm_password1.errors.validateEqual==false && !frm_password1.pristine\" class=\"text-danger pull-right\">\n                                Пароли не совпадают\n                            </small>\n                    </div>\n\n\n                    \n                    <div class=\"form-group\">\n                        <input type=\"submit\" class=\"btn btn-primary\" value=\"Сохранить\" [disabled]=\"!frm.valid\"/>\n                    </div>\n                </form>\n            </div>\n        </div>\n\n        <!-- Loading -->\n        <div *ngIf=\"loading\" style=\"position: absolute;top:0;left:0;width:100%;height:100%;z-index: 100;\">\n            <div style=\"position: absolute;opacity: 0.5;width:100%;height:100%;background-color: white;\">\n            </div>\n            <div style=\"width: 50px;margin: auto;margin-top: 160px;\">\n                <i class=\"fa fa-spin fa-gear\" style=\"font-size: 50px;\"></i>\n            </div>\n        </div>\n        <!-- END Loading -->\n\n\n    </div>\n</div>\n"
 
 /***/ }),
 

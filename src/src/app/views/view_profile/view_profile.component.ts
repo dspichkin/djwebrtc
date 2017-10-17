@@ -6,6 +6,10 @@ import { WebSocketService } from '../../services/websocket.service';
 import { DialogsService } from '../../services/dialogs.service';
 import { StatusService } from '../../services/status.service';
 
+
+import { Notification } from '../../models/notification.model';
+import { NotificationService } from '../../services/notification.service';
+
 import { AppSettings } from '../../app.settings';
 
 @Component({
@@ -17,6 +21,7 @@ export class ProfileViewComponent implements OnInit {
     private user;
     private first_name;
     private selectedLevel;
+    private skypeid;
     private password;
     private password1;
 
@@ -47,6 +52,7 @@ export class ProfileViewComponent implements OnInit {
     constructor(
         private statusService: StatusService,
         private router: Router,
+        private notificationService: NotificationService,
         ) {
     }
 
@@ -77,6 +83,7 @@ export class ProfileViewComponent implements OnInit {
     setVars() {
         this.first_name = this.user.first_name;
         this.selectedLevel = this.user.level;
+        this.skypeid = this.user.skypeid;
     }
     
     changePassword($event) {
@@ -87,18 +94,22 @@ export class ProfileViewComponent implements OnInit {
 
     submit() {
 
-        if (this.first_name && this.selectedLevel && this.password && this.password1 && 
-            this.password == this.password1) {
+        if (this.first_name && this.selectedLevel) {
+            if (this.password && (this.password != this.password1)) {
+                return;
+            }
+
             let params = {
                 first_name: this.first_name,
                 selectedLevel: this.selectedLevel,
-                password: this.password
+                password: this.password,
+                skypeid: this.skypeid
             }
-            console.log('para', params)
             this.loading = true;
             let self = this;
             this.statusService.saveUser(params).subscribe((data)=>{
                 self.loading = false;
+                self.notificationService.add(new Notification('Сообщение', 'alert-success', 'Настройки сохранены'));
             })
         }
     }

@@ -79,6 +79,9 @@ export class ModeDialogMasterComponent implements OnInit, OnDestroy {
                    self.during_conversation = value;
                 }
             }
+            if (message.command == "DIALOG_STOP_ERROR") {
+                self.status_activedialog = 'error_connection';
+            }
         });
 
         self._runHearbeatPupil();

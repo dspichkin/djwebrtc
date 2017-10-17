@@ -17,7 +17,7 @@ import { DialogsService } from './services/dialogs.service';
 import { StatusService } from './services/status.service';
 import { ErrorService } from './services/error.service';
 import { AuthGuard } from './services/guards.service';
-
+import { NotificationService } from './services/notification.service';
 
 
 export function CookieXSRFStrategyFactory() {
@@ -49,7 +49,8 @@ export const AppCSRF = {
         StatusService,
         DialogsService,
         ErrorService,
-        AuthGuard
+        AuthGuard,
+        NotificationService
     ],
     bootstrap: [AppComponent]
 })

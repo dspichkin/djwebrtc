@@ -17,6 +17,7 @@ import { ModeCallingViewComponent } from "./view_mode_calling/view_mode_calling.
 import { ChangeCurrentDialogComponent } from "../components/change_current_dialog/change_current_dialog.component";
 import { MessageViewComponent } from "./view_message/view_message.component";
 import { ProfileViewComponent } from "./view_profile/view_profile.component";
+import { NotificationComponent } from "../components/common/notification/notification.component";
 
 import { EqualValidator } from './view_profile/equal_validator.directive';
 
@@ -36,6 +37,7 @@ import { EqualValidator } from './view_profile/equal_validator.directive';
     MessageViewComponent,
     ProfileViewComponent,
     EqualValidator,
+    NotificationComponent,
   ],
   imports: [
     BrowserModule,
@@ -57,6 +59,7 @@ import { EqualValidator } from './view_profile/equal_validator.directive';
     MessageViewComponent,
     ProfileViewComponent,
     EqualValidator,
+    NotificationComponent,
   ],
 })
 
