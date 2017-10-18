@@ -243,11 +243,6 @@ export class ModeDialogMasterComponent implements OnInit, OnDestroy {
     public hangPhone() {
         let self = this;
         this._closeDialog();
-        self.webSocketService.sendCommand({
-            command: "DIALOG_STOP",
-            target: self.activedialog.id,
-        })
-
     } 
 
     public displayTime(_seconds) {

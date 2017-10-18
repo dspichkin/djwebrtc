@@ -103,7 +103,7 @@ export class ModeDialogPupilComponent implements OnInit, OnDestroy {
     private callPhone() {
          this._startPeer();
     }
-    
+
     private _getPersonageName() {
         for (let i = 0; i < this.activedialog.dialog.scenario.personages.length; i++) {
             if (this.activedialog.dialog.scenario.personages[i].role == 'pupil') {
@@ -248,10 +248,12 @@ export class ModeDialogPupilComponent implements OnInit, OnDestroy {
     public hangPhone() {
         let self = this;
         this._closeDialog();
+        /*
         self.webSocketService.sendCommand({
             command: "DIALOG_STOP",
             target: self.activedialog.id,
         })
+        */
     } 
 
     public displayTime(_seconds) {

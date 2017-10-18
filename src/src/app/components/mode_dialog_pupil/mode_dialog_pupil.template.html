@@ -24,7 +24,7 @@
                 <p *ngIf="personageName" style="margin: 0 40px;">Персонаж: {{personageName}}</p>
                 <p *ngIf="during_conversation" style="margin: 0 40px;font-size: 8px;">{{displayTime(during_conversation)}}</p>
                 <button  *ngIf="status_activedialog=='run'" class="btn btn-warning" (click)="hangPhone()" style="margin-right: 25px;margin-top: 10px;">
-                    <i class="fa fa-microphone-slash" aria-hidden="true" style="margin-right: 10px;"></i><span>Остановить диалог</span>
+                    <i class="fa fa-microphone-slash" aria-hidden="true" style="margin-right: 10px;"></i><span>Сбросить голосовую связь</span>
                 </button>
                 <button  *ngIf="status_activedialog!='run'" class="btn btn-info" (click)="callPhone()" style="margin-right: 25px;margin-top: 10px;">
                     <i class="fa fa-microphone" aria-hidden="true" style="margin-right: 10px;"></i><span>Установить голосовую связь</span>
