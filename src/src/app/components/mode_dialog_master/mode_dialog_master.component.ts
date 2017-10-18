@@ -35,7 +35,7 @@ export class ModeDialogMasterComponent implements OnInit, OnDestroy {
     private answeringCall;
     private last_message_from_pupil;
     private status_activedialog = 'starting'; //starting, run, stop
-    private status_voice_connection = 'starting'; //starting, run, stop
+    private status_voice_connection = 'starting'; //starting, run, stop, error_connection
     private last_hearbeat_from_pupil;
     private connection_error_message;
 
@@ -131,7 +131,7 @@ export class ModeDialogMasterComponent implements OnInit, OnDestroy {
 
         self.peer.on('error', function(err) {
             console.log("ERROR:", err.message);
-            self.status_voice_connection = 'stop';
+            self.status_voice_connection = 'error_connection';
             if (err.message) {
                 self.connection_error_message = err.message;
             }

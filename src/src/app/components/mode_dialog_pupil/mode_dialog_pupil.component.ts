@@ -35,7 +35,7 @@ export class ModeDialogPupilComponent implements OnInit, OnDestroy {
     private localStream;
     private callingCall;
     private status_activedialog = 'starting';
-    private status_voice_connection = 'starting'; //starting, run, stop
+    private status_voice_connection = 'starting'; //starting, run, stop, error_connection
     private last_hearbeat_from_master;
     // продолжительность диалога
     private during_conversation;
@@ -138,7 +138,7 @@ export class ModeDialogPupilComponent implements OnInit, OnDestroy {
         });
 
         self.peer.on('error', function(err) {
-            self.status_voice_connection = 'stop';
+            self.status_voice_connection = 'error_connection';
             console.log("ERROR:", err.message);
             if (err.message) {
                 self.connection_error_message = err.message;
