@@ -535,7 +535,7 @@ var _a, _b, _c;
 /***/ "../../../../../src/app/components/chat/chat.template.html":
 /***/ (function(module, exports) {
 
-module.exports = "\n<div #chatContent style=\"min-height: 300px;height: 300px;width: 100%;margin-top: 20px;overflow-y: scroll;\">\n    <div style=\"height: 100%;width: 100%;\">\n        <div *ngFor=\"let item of activedialog.chat_messages\">\n            <div *ngIf=\"item.source.type == 'master'\" style=\"background-color: bisque;padding: 10px 20px;min-width: 300px;max-width: 300px;padding: 10px 20px;border-radius: 10px;margin: 5px;\">\n                <div style=\"font-size: 10px;\">\n                    <p style=\"margin:0;float: left;margin: 0 10px 0px 0px;\">{{item.source.fio}}</p>\n                    <p style=\"margin:0 10px;\">{{item.date}}</p>\n                </div>\n                <p style=\"margin:0;\">{{item.message}}</p>\n                \n            </div>\n            <div *ngIf=\"item.source.type == 'pupil'\" style=\"width:100%;display: inline-block;\">\n                <div class=\"pull-right\" style=\"background-color: brown;color: white;min-width: 300px;max-width: 300px;padding: 10px 20px;border-radius: 10px;margin: 5px;\">\n                    <div style=\"font-size: 10px;\">\n                        <p style=\"margin:0;float: left;margin: 0 10px 0px 0px;\">{{item.source.fio}}</p>\n                        <p style=\"margin:0 10px;\">{{item.date}}</p>\n                    </div>\n                    <p style=\"margin:0;\">{{item.message}}</p>\n                </div>\n            </div>\n        </div>\n    </div>\n</div>\n\n\n<div class=\"input-group\" style=\"position: absolute;bottom: -20px;\">\n    <input type=\"text\" class=\"form-control\" placeholder=\"Ваше сообщение\" style=\"height: 40px;background-color: white;\"\n        (keyup.enter)=\"send()\" [(ngModel)]=\"message\" maxlength=\"100\">\n    <div class=\"input-group-addon\" style=\"padding: 0;\">\n        <button class=\"btn btn-info\" style=\"height: 38px;border-radius: 0;\" (click)=\"send()\" [disabled]=\"!message\">Отправить</button>\n    </div>\n</div>\n\n<div [ngStyle]=\"{'background-image': 'url(' + activedialog.dialog.background_image + ')'}\"\n    style=\"\n        position: absolute;\n        height: 100%;\n        width: 100%;\n        background-size: cover;\n        background-repeat: no-repeat;\n        opacity: 0.2;\n        left: 0;\n        top: 20px;\n        right: 0;\">\n</div>\n"
+module.exports = "\n<div #chatContent style=\"min-height: 300px;height: 300px;width: 100%;margin-top: 20px;overflow-y: scroll;z-index: 1;\n    position: relative;\">\n    <div style=\"height: 100%;width: 100%;\">\n        <div *ngFor=\"let item of activedialog.chat_messages\">\n            <div *ngIf=\"item.source.type == 'master'\" style=\"background-color: bisque;padding: 10px 20px;min-width: 300px;max-width: 300px;padding: 10px 20px;border-radius: 10px;margin: 5px;\">\n                <div style=\"font-size: 10px;\">\n                    <p style=\"margin:0;float: left;margin: 0 10px 0px 0px;\">{{item.source.fio}}</p>\n                    <p style=\"margin:0 10px;\">{{item.date}}</p>\n                </div>\n                <p style=\"margin:0;\">{{item.message}}</p>\n                \n            </div>\n            <div *ngIf=\"item.source.type == 'pupil'\" style=\"width:100%;display: inline-block;\">\n                <div class=\"pull-right\" style=\"background-color: brown;color: white;min-width: 300px;max-width: 300px;padding: 10px 20px;border-radius: 10px;margin: 5px;\">\n                    <div style=\"font-size: 10px;\">\n                        <p style=\"margin:0;float: left;margin: 0 10px 0px 0px;\">{{item.source.fio}}</p>\n                        <p style=\"margin:0 10px;\">{{item.date}}</p>\n                    </div>\n                    <p style=\"margin:0;\">{{item.message}}</p>\n                </div>\n            </div>\n        </div>\n    </div>\n</div>\n\n\n<div class=\"input-group\" style=\"position: absolute;bottom: -20px;z-index: 1;\">\n    <input type=\"text\" class=\"form-control\" placeholder=\"Ваше сообщение\" style=\"height: 40px;background-color: white;\"\n        (keyup.enter)=\"send()\" [(ngModel)]=\"message\" maxlength=\"100\">\n    <div class=\"input-group-addon\" style=\"padding: 0;\">\n        <button class=\"btn btn-info\" style=\"height: 38px;border-radius: 0;\" (click)=\"send()\" [disabled]=\"!message\">Отправить</button>\n    </div>\n</div>\n\n<div [ngStyle]=\"{'background-image': 'url(' + activedialog.dialog.background_image + ')'}\"\n    style=\"\n        position: absolute;\n        height: 100%;\n        width: 100%;\n        background-size: cover;\n        background-repeat: no-repeat;\n        opacity: 0.2;\n        left: 0;\n        top: 20px;\n        right: 0;\">\n</div>\n"
 
 /***/ }),
 
@@ -1102,6 +1102,9 @@ var ModeDialogMasterComponent = (function () {
                 self._closeVoiceConnection();
                 self.status_activedialog = 'stop';
             }
+            if (message.command == "DIALOG_STOP_VOICE_CONNECTION") {
+                self._closeVoiceConnection();
+            }
             if (message.command == "HEARBEAT_DIALOG_PUPIL") {
                 self.status_activedialog = 'run';
                 self.last_hearbeat_from_pupil = new Date();
@@ -1246,6 +1249,10 @@ var ModeDialogMasterComponent = (function () {
     ModeDialogMasterComponent.prototype.hangPhone = function () {
         var self = this;
         this._closeVoiceConnection();
+        self.webSocketService.sendCommand({
+            command: "DIALOG_STOP_VOICE_CONNECTION",
+            target: self.activedialog.id,
+        });
     };
     ModeDialogMasterComponent.prototype.displayTime = function (_seconds) {
         var hours = Math.floor(_seconds / 3600);
@@ -1391,6 +1398,9 @@ var ModeDialogPupilComponent = (function () {
                 self._closeVoiceConnection();
                 self.status_activedialog = 'stop';
             }
+            if (message.command == "DIALOG_STOP_VOICE_CONNECTION") {
+                self._closeVoiceConnection();
+            }
             if (message.command == "HEARBEAT_DIALOG_MASTER") {
                 self.status_activedialog = 'run';
                 self.last_hearbeat_from_master = new Date();
@@ -1532,12 +1542,10 @@ var ModeDialogPupilComponent = (function () {
     ModeDialogPupilComponent.prototype.hangPhone = function () {
         var self = this;
         this._closeVoiceConnection();
-        /*
         self.webSocketService.sendCommand({
-            command: "DIALOG_STOP",
+            command: "DIALOG_STOP_VOICE_CONNECTION",
             target: self.activedialog.id,
-        })
-        */
+        });
     };
     ModeDialogPupilComponent.prototype.displayTime = function (_seconds) {
         var hours = Math.floor(_seconds / 3600);

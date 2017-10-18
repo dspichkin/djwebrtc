@@ -241,6 +241,24 @@ def ws_message(message):
                         'dialog': target,
                     })
                 })
+        if command == 'DIALOG_STOP_VOICE_CONNECTION':
+            target = data.get("target")
+            if target:
+                ac = get_object_or_404(ActiveDialog, pk=target)
+                ac.master.stop_dialog()
+                ac.pupil.stop_dialog()
+                Group("call-client-%s" % ac.master.key_id).send({
+                    'text': json.dumps({
+                        'command': "DIALOG_STOP_VOICE_CONNECTION",
+                        'dialog': target,
+                    })
+                })
+                Group("call-client-%s" % ac.pupil.key_id).send({
+                    'text': json.dumps({
+                        'command': "DIALOG_STOP_VOICE_CONNECTION",
+                        'dialog': target,
+                    })
+                })
         if command == 'DIALOG_STOP_ERROR':
             target = data.get("target")
             ac = get_object_or_404(ActiveDialog, pk=target)
