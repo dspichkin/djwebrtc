@@ -61,7 +61,7 @@ export class ModeDialogMasterComponent implements OnInit, OnDestroy {
             self.activedialog = data;
             self._getPersonageName();
             self._startPeer();
-            console.log('self.activedialog', self.activedialog)
+            //console.log('self.activedialog', self.activedialog)
         })
 
         
@@ -193,7 +193,6 @@ export class ModeDialogMasterComponent implements OnInit, OnDestroy {
 
         call.on('stream', function(stream) {
             // get call stream from remote host
-
             self.remoteVideo.nativeElement.src = URL.createObjectURL(stream);
         });
         
