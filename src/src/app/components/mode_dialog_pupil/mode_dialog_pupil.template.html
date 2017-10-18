@@ -29,10 +29,10 @@
             <div class="col-md-6" style="text-align: right;">
                 <p *ngIf="personageName" style="margin: 0 40px;">Персонаж: {{personageName}}</p>
                 <p *ngIf="during_conversation" style="margin: 0 40px;font-size: 8px;">{{displayTime(during_conversation)}}</p>
-                <button  *ngIf="status_activedialog=='run'" class="btn btn-warning" (click)="hangPhone()" style="margin-right: 25px;margin-top: 10px;">
+                <button  *ngIf="status_voice_connection == 'run'" class="btn btn-warning" (click)="hangPhone()" style="margin-right: 25px;margin-top: 10px;">
                     <i class="fa fa-microphone-slash" aria-hidden="true" style="margin-right: 10px;"></i><span>Сбросить голосовую связь</span>
                 </button>
-                <button  *ngIf="status_activedialog!='run' && status_activedialog!='starting'" class="btn btn-info" (click)="callPhone()" style="margin-right: 25px;margin-top: 10px;">
+                <button  *ngIf="status_voice_connection != 'run'" class="btn btn-info" (click)="callPhone()" style="margin-right: 25px;margin-top: 10px;">
                     <i class="fa fa-microphone" aria-hidden="true" style="margin-right: 10px;"></i><span>Попытаться установить голосовую связь</span>
                 </button>
             </div>

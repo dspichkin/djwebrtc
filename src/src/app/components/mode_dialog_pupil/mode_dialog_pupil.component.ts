@@ -219,6 +219,8 @@ export class ModeDialogPupilComponent implements OnInit, OnDestroy {
     private _closeVoiceConnection() {
         let self = this;
 
+        self.status_voice_connection = 'stop';
+
         if (self.callingCall) {
             self.callingCall.close();
         }
