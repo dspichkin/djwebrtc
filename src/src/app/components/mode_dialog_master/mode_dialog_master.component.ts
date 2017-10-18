@@ -197,7 +197,7 @@ export class ModeDialogMasterComponent implements OnInit, OnDestroy {
         });
         
         call.on('close', function() {
-            console.log("CLOSE");
+            //console.log("CLOSE");
             self._closeDialog();
             
         });

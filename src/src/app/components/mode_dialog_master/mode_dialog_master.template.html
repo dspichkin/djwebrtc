@@ -8,7 +8,7 @@
                 </h4>
                 <p>Роль: ведущий</p>
                 <p *ngIf="status_activedialog=='run'"  style="font-size: 16px;color:green;font-weight: 400;margin:0;">Голосовая связь установлена</p>
-                <p *ngIf="status_activedialog=='stop'" style="font-size: 16px;color:red;font-weight: 400;margin:0;">Голосовая связь остановлена</p>
+                <p *ngIf="status_activedialog=='stop'" style="font-size: 16px;color:red;font-weight: 400;margin:0;">Связь с партнером остановлена</p>
                 <p *ngIf="status_activedialog=='starting'" style="font-size: 16px;color:blue;font-weight: 400;margin:0;">Устанавливаем голосовую связь</p>
                 <p *ngIf="status_activedialog=='error_connection'" style="font-size: 16px;color:red;font-weight: 400;margin:0;">Ошибка установки голосовой связи</p>
                 <p *ngIf="connection_error_message" style="font-size: 12px;color:red;">{{connection_error_message}}</p>
@@ -26,7 +26,7 @@
                     <i class="fa fa-microphone-slash" aria-hidden="true" style="margin-right: 10px;"></i><span>Сбросить голосовую связь</span>
                 </button>
                 <button  *ngIf="status_activedialog!='run'" class="btn btn-info" (click)="callPhone()" style="margin-right: 25px;margin-top: 10px;">
-                    <i class="fa fa-microphone" aria-hidden="true" style="margin-right: 10px;"></i><span>Установить голосовую связь</span>
+                    <i class="fa fa-microphone" aria-hidden="true" style="margin-right: 10px;"></i><span>Попытаться установить голосовую связь</span>
                 </button>
             </div>
         </div>
