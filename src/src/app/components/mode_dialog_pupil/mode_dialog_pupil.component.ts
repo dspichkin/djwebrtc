@@ -66,7 +66,7 @@ export class ModeDialogPupilComponent implements OnInit, OnDestroy {
         self.webSocketService.message.subscribe((data) => {
             let message = JSON.parse(data);
             if (message.command == "DIALOG_STOP") {
-                self._closeDialog();
+                self._closeVoiceConnection();
                 self.status_activedialog = 'stop';
             }
             if (message.command == "HEARBEAT_DIALOG_MASTER") {
@@ -209,15 +209,13 @@ export class ModeDialogPupilComponent implements OnInit, OnDestroy {
         
         call.on('close', function() {
             //console.log("CLOSE");
-            self._closeDialog();
+            self._closeVoiceConnection();
         });
 
     }
 
-    private _closeDialog() {
+    private _closeVoiceConnection() {
         let self = this;
-
-        self.status_activedialog = 'stop';
 
         if (self.callingCall) {
             self.callingCall.close();
@@ -237,7 +235,7 @@ export class ModeDialogPupilComponent implements OnInit, OnDestroy {
 
 
     public exitDialog() {
-        this._closeDialog();
+        this._closeVoiceConnection();
         this.stopdialog.emit({
             activedialogid: this.activedialogid,
             type: 'pupil'
@@ -247,7 +245,7 @@ export class ModeDialogPupilComponent implements OnInit, OnDestroy {
 
     public hangPhone() {
         let self = this;
-        this._closeDialog();
+        this._closeVoiceConnection();
         /*
         self.webSocketService.sendCommand({
             command: "DIALOG_STOP",
