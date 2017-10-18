@@ -24,12 +24,12 @@
             <div class="form-group">
                 <label for="exampleInputName" style="color:white;">Ваше имя * <span style="font-size: 10px;font-weight: 200;">(будет отображаться другим пользователям)</span>
                 </label>
-                <input type="text" name="reg_first_name" class="form-control" id="exampleInputName" value="{{reg_first_name | default:""}}">
+                <input type="text" name="reg_first_name" class="form-control" id="exampleInputName" value="{{reg_first_name | default:""}}" maxlength="25">
                 <p class="text-danger pull-right" style="margin:0">{{reg_first_name_error}}</p>
             </div>
             <div class="form-group">
                 <label for="exampleInputEmail" style="color:white;">Ваш email *</label>
-                <input type="email" name="reg_email" class="form-control" id="exampleInputEmail" value="{{reg_email | default:""}}">
+                <input type="email" name="reg_email" class="form-control" id="exampleInputEmail" value="{{reg_email | default:""}}" maxlength="40">
                 <p class="text-danger pull-right" style="margin:0">{{reg_email_error}}</p>
             </div>
             <div class="form-group">
@@ -46,26 +46,26 @@
             </div>
             <div class="form-group">
                 <label for="skypeid" style="color:white;">Skype id <span style="font-size: 10px;font-weight: 200;">(будет отображаться при ошибки соединения с партнером по диалогу)</label>
-                <input type="text" name="reg_skypeid" class="form-control" id="skypeid" value="{{reg_skypeid | default:""}}">
+                <input type="text" name="reg_skypeid" class="form-control" id="skypeid" value="{{reg_skypeid | default:""}}"  maxlength="20">
                 <p class="text-danger pull-right" style="margin:0">{{reg_skypeid_error}}</p>
             </div>
 
             <div class="form-group">
                 <label for="exampleInputPassword1" style="color:white;">Пароль</label>
-                <input type="password" name="reg_password" class="form-control" id="exampleInputPassword1" value="{{password | default:""}}">
+                <input type="password" name="reg_password" class="form-control" id="exampleInputPassword1" value="{{password | default:""}}" maxlength="20">
                 <p class="text-danger pull-right" style="margin:0">{{reg_password_error}}</p>
             </div>
             <div class="form-group">
                 <label for="exampleInputPassword2" style="color:white;">Подтверждение пароля</label>
-                <input type="password" name="reg_password1" class="form-control" id="exampleInputPassword2" value="{{password1 | default:""}}">
+                <input type="password" name="reg_password1" class="form-control" id="exampleInputPassword2" value="{{password1 | default:""}}" maxlength="20">
                 <p class="text-danger pull-right" style="margin:0">{{reg_password1_error}}</p>
             </div>
 
 
             
-            <div class="form-group">
-                <input type="submit" class="btn btn-primary btn-lg login__submit" value="Зарегистрироватся" />
-                <a href="/" class="btn btn-default btn-lg " style="float: right;">Отмена</a>
+            <div class="form-group" style="margin-bottom: 40px;">
+                <input type="submit" class="btn btn-primary login__submit" value="Зарегистрироватся" />
+                <a href="/" class="btn btn-default" style="float: right;">Отмена</a>
                 <input type="hidden" name="next" value="/" />
             </div>
             <!-- <p><a href="{% url 'password_reset' %}">Lost password?</a></p> -->

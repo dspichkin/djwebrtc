@@ -39,6 +39,7 @@ export class ModeDialogPupilComponent implements OnInit, OnDestroy {
     // продолжительность диалога
     during_conversation;
     start_converstion;
+    connection_error_message = "";
 
     private personageName;
 
@@ -99,6 +100,10 @@ export class ModeDialogPupilComponent implements OnInit, OnDestroy {
     ngOnDestroy() {
     }
 
+    private callPhone() {
+         this._startPeer();
+    }
+    
     private _getPersonageName() {
         for (let i = 0; i < this.activedialog.dialog.scenario.personages.length; i++) {
             if (this.activedialog.dialog.scenario.personages[i].role == 'pupil') {
@@ -133,6 +138,10 @@ export class ModeDialogPupilComponent implements OnInit, OnDestroy {
 
         self.peer.on('error', function(err) {
             console.log("ERROR:", err.message);
+            if (err.message) {
+                self.connection_error_message = err.message;
+            }
+            
             self.webSocketService.sendCommand({
                 command: "DIALOG_STOP_ERROR",
                 target: self.activedialog.id,
@@ -304,6 +313,6 @@ export class ModeDialogPupilComponent implements OnInit, OnDestroy {
     private handlerChangeActiveDialog(activedialog) {
         this.activedialog = activedialog;
         this.activedialogid = activedialog.id;
-        console.log('this.activedialog ', this.activedialog )
+        //console.log('this.activedialog ', this.activedialog )
     }
 }

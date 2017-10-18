@@ -5,43 +5,48 @@
                 <div class="panel-heading">
                     Текущий шаг: {{current_step.number}} / {{activedialog.dialog.scenario.steps.length}}
                 </div>
-                <div *ngIf="current_mode == 2" class="panel-body" style="min-height: 200px;">
-                    <h3 *ngIf="current_step.variants && current_step.variants.length > 0" style="text-align: center;">Ваш ход</h3>
-                    
-                    <span>Вам нужно сказать:</span> 
-                    <div *ngFor="let item of current_step.variants">
-                        <h4 class="text-success">{{item.task}}</h4>
-
-                    
-                        <div style="margin-top:40px">
-                            <button *ngIf="!item.words || (item.words && item.words.length == 0)" class="btn btn-info btn-xs" type="button" (click)="getWords(item)">Посмотреть слова</button>
-                             <button *ngIf="item.words && item.words.length > 0" class="btn btn-info btn-xs" type="button" (click)="clearWords(item)">Скрыть слова</button>
-                            <button *ngIf="!item.hints"  class="btn btn-default btn-xs" type="button" (click)="getHints(item)">Посмотреть подсказку</button>
-                            <button *ngIf="item.hints" class="btn btn-default btn-xs" type="button" (click)="clearHints(item)">Убрать подсказку</button>
-                        </div>
-
-                        <div *ngIf="item.words && item.words.length > 0" style="margin-top:20px;display: flex;justify-content: center;flex-wrap: wrap;">
-                            <span *ngFor="let item of item.words" class="label label-success" style="margin: 10px;padding: 10px;font-size: 16px;">{{item}}</span>
-                        </div>
-                        <div *ngIf="item.hints" style="margin-top:20px;">
-                            <p class="alert alert-success" style="margin: 5px 0;">
-                                {{item.hints}}
-                            </p>
-                        </div>
-                    </div> 
-                </div>
-                
-                <!-- ход ведущего -->
-                <div *ngIf="current_mode == 1" class="panel-body" style="min-height: 200px;">
-                    <h3 style="text-align: center;">Ожидаем ход ведущего</h3>
-                    <button class="btn btn-info btn-xs" type="button" (click)="show_master_text=!show_master_text">Посмотреть слова</button>
-                    <div *ngIf="show_master_text">
-                        <span>Ему нужно сказать:</span> 
+                <div class="col-md-6">
+                    <div *ngIf="current_mode == 2" class="panel-body" style="min-height: 200px;">
+                        <h3 *ngIf="current_step.variants && current_step.variants.length > 0" style="text-align: center;">Ваш ход</h3>
+                        
+                        <span>Вам нужно сказать:</span> 
                         <div *ngFor="let item of current_step.variants">
-                            <p class="text-success">{{item.task}}</p>
-                            <p class="" style="margin: 5px 0;">{{item.phrase}}</p>
+                            <h4 class="text-success">{{item.task}}</h4>
+
+                        
+                            <div style="margin-top:40px">
+                                <button *ngIf="!item.words || (item.words && item.words.length == 0)" class="btn btn-info btn-xs" type="button" (click)="getWords(item)">Посмотреть слова</button>
+                                 <button *ngIf="item.words && item.words.length > 0" class="btn btn-info btn-xs" type="button" (click)="clearWords(item)">Скрыть слова</button>
+                                <button *ngIf="!item.hints"  class="btn btn-default btn-xs" type="button" (click)="getHints(item)">Посмотреть подсказку</button>
+                                <button *ngIf="item.hints" class="btn btn-default btn-xs" type="button" (click)="clearHints(item)">Убрать подсказку</button>
+                            </div>
+
+                            <div *ngIf="item.words && item.words.length > 0" style="margin-top:20px;display: flex;justify-content: center;flex-wrap: wrap;">
+                                <span *ngFor="let item of item.words" class="label label-success" style="margin: 10px;padding: 10px;font-size: 16px;">{{item}}</span>
+                            </div>
+                            <div *ngIf="item.hints" style="margin-top:20px;">
+                                <p class="alert alert-success" style="margin: 5px 0;">
+                                    {{item.hints}}
+                                </p>
+                            </div>
                         </div> 
                     </div>
+
+                    <!-- ход ведущего -->
+                    <div *ngIf="current_mode == 1" class="panel-body" style="min-height: 200px;">
+                        <h3 style="text-align: center;">Ожидаем ход ведущего</h3>
+                        <button class="btn btn-info btn-xs" type="button" (click)="show_master_text=!show_master_text">Посмотреть слова</button>
+                        <div *ngIf="show_master_text">
+                            <span>Ему нужно сказать:</span> 
+                            <div *ngFor="let item of current_step.variants">
+                                <p class="text-success">{{item.task}}</p>
+                                <p class="" style="margin: 5px 0;">{{item.phrase}}</p>
+                            </div> 
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6" style="min-height: 300px;height: 100%;padding: 20px 0;position: relative;">
+                    <chat [activedialog]="activedialog" [user]="user"></chat>
                 </div>
             </div>
         </div>

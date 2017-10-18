@@ -12,10 +12,11 @@
                 <p *ngIf="status_activedialog=='starting'" style="font-size: 16px;color:blue;font-weight: 400;margin:0;">Диалог запускается</p>
                 <p *ngIf="status_activedialog=='error_connection'" style="font-size: 16px;color:red;font-weight: 400;margin:0;">Ошибка установки голосовой связи
                 </p>
-                <p *ngIf="status_activedialog=='error_connection' && activedialog.master.skypeid" style="font-size: 14px;color:red;">
+                <p *ngIf="connection_error_message" style="font-size: 12px;color:red;">{{connection_error_message}}</p>
+                <p *ngIf="status_activedialog=='error_connection' && activedialog.master.skypeid" style="font-size: 14px;color:darkcyan;">
                     Попробуйте установить связь через скайп (скайп id собеседника {{activedialog.master.skypeid}})
                 </p>
-                <p *ngIf="status_activedialog=='error_connection' && !activedialog.master.skypeid" style="font-size: 14px;color:red;">
+                <p *ngIf="status_activedialog=='error_connection' && !activedialog.master.skypeid" style="font-size: 14px;color:darkcyan;">
                     Попробуйте связаться через другие программы например скайп
                 </p>
             </div>
@@ -24,7 +25,10 @@
                 <p *ngIf="during_conversation" style="margin: 0 40px;font-size: 8px;">{{displayTime(during_conversation)}}</p>
                 <button  *ngIf="status_activedialog=='run'" class="btn btn-warning" (click)="hangPhone()" style="margin-right: 25px;margin-top: 10px;">
                     <i class="fa fa-microphone-slash" aria-hidden="true" style="margin-right: 10px;"></i><span>Остановить диалог</span>
-            </button>
+                </button>
+                <button  *ngIf="status_activedialog!='run'" class="btn btn-info" (click)="callPhone()" style="margin-right: 25px;margin-top: 10px;">
+                    <i class="fa fa-microphone" aria-hidden="true" style="margin-right: 10px;"></i><span>Установить голосовую связь</span>
+                </button>
             </div>
         </div>
     </div>
@@ -54,7 +58,7 @@
         </div>
 
         <div class="row" *ngIf="activedialog">
-            <playerdialogpupil [activedialog]="activedialog" (changeactivedialog)="handlerChangeActiveDialog($event)"></playerdialogpupil>
+            <playerdialogpupil [activedialog]="activedialog" (changeactivedialog)="handlerChangeActiveDialog($event)" [user]="user"></playerdialogpupil>
         </div>
         
         <div style="margin-top: 30px">

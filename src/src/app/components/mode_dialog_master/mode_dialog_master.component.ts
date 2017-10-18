@@ -36,6 +36,7 @@ export class ModeDialogMasterComponent implements OnInit, OnDestroy {
     private last_message_from_pupil;
     private status_activedialog = 'starting'; //starting, run, stop
     private last_hearbeat_from_pupil;
+    private connection_error_message;
 
     // продолжительность диалога
     private during_conversation;
@@ -60,8 +61,6 @@ export class ModeDialogMasterComponent implements OnInit, OnDestroy {
             self.activedialog = data;
             self._getPersonageName();
             self._startPeer();
-
-
             console.log('self.activedialog', self.activedialog)
         })
 
@@ -99,6 +98,10 @@ export class ModeDialogMasterComponent implements OnInit, OnDestroy {
     ngOnDestroy() {
     }
 
+    private callPhone() {
+         this._startPeer();
+    }
+
     private _getPersonageName() {
         for (let i = 0; i < this.activedialog.dialog.scenario.personages.length; i++) {
             if (this.activedialog.dialog.scenario.personages[i].role == 'master') {
@@ -124,6 +127,9 @@ export class ModeDialogMasterComponent implements OnInit, OnDestroy {
 
         self.peer.on('error', function(err) {
             console.log("ERROR:", err.message);
+            if (err.message) {
+                self.connection_error_message = err.message;
+            }
             self.webSocketService.sendCommand({
                 command: "DIALOG_STOP_ERROR",
                 target: self.activedialog.id,

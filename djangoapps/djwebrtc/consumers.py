@@ -45,6 +45,41 @@ def ws_message(message):
     command = data.get("command")
     if command:
 
+        if command == 'CHAT_SEND_MESSAGE':
+            activedialogid = data.get("activedialogid")
+            chat_message = data.get("message")
+            user_key = data.get("source")
+            activedialog = ActiveDialog.objects.filter(pk=activedialogid).first()
+            if activedialog:
+                new_message = {
+                    "message": chat_message,
+                    "date": timezone.now().strftime('%H:%M %d.%m.%Y')
+                }
+                if activedialog.master.key_id == user_key:
+                    new_message["source"] = {
+                        "type": 'master',
+                        "fio": activedialog.master.fio()
+                    }
+                if activedialog.pupil.key_id == user_key:
+                    new_message["source"] = {
+                        "type": 'pupil',
+                        "fio": activedialog.pupil.fio()
+                    }
+                activedialog.chat_messages.append(new_message)
+                activedialog.save()
+                Group("call-client-%s" % activedialog.master.key_id).send({
+                    'text': json.dumps({
+                        'command': "CHAT_UPDATE",
+                        'chat_messages': activedialog.chat_messages
+                    })
+                })
+                Group("call-client-%s" % activedialog.pupil.key_id).send({
+                    'text': json.dumps({
+                        'command': "CHAT_UPDATE",
+                        'chat_messages': activedialog.chat_messages
+                    })
+                })
+
         if command == 'CHANGE_PERSONAGE':
             activedialogid = data.get("activedialogid")
             source = data.get("source")

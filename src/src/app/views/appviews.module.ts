@@ -18,6 +18,7 @@ import { ChangeCurrentDialogComponent } from "../components/change_current_dialo
 import { MessageViewComponent } from "./view_message/view_message.component";
 import { ProfileViewComponent } from "./view_profile/view_profile.component";
 import { NotificationComponent } from "../components/common/notification/notification.component";
+import { ChatComponent } from "../components/chat/chat.component";
 
 import { EqualValidator } from './view_profile/equal_validator.directive';
 
@@ -38,6 +39,7 @@ import { EqualValidator } from './view_profile/equal_validator.directive';
     ProfileViewComponent,
     EqualValidator,
     NotificationComponent,
+    ChatComponent,
   ],
   imports: [
     BrowserModule,
@@ -60,6 +62,7 @@ import { EqualValidator } from './view_profile/equal_validator.directive';
     ProfileViewComponent,
     EqualValidator,
     NotificationComponent,
+    ChatComponent,
   ],
 })
 

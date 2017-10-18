@@ -37,12 +37,12 @@ def registration(request):
     password1 = ""
 
     if request.method == 'POST':
-        reg_first_name = request.POST.get('reg_first_name')
-        reg_email = request.POST.get('reg_email')
-        reg_level = request.POST.get('reg_level')
-        reg_skypeid = request.POST.get('reg_skypeid')
-        password = request.POST.get('reg_password')
-        password1 = request.POST.get('reg_password1')
+        reg_first_name = request.POST.get('reg_first_name')[:30]
+        reg_email = request.POST.get('reg_email')[:30]
+        reg_level = request.POST.get('reg_level')[:30]
+        reg_skypeid = request.POST.get('reg_skypeid')[:30]
+        password = request.POST.get('reg_password')[:30]
+        password1 = request.POST.get('reg_password1')[:30]
 
         email_error = None
         if reg_email:
@@ -77,12 +77,16 @@ def registration(request):
 
             return render(request, 'registration/registration.html', data)
 
-        if Account.objects.filter(email=reg_email).exists():
-            data["reg_email_error"] = u"Указанный email уже используется"
+        if Account.objects.filter(first_name__iexact=reg_first_name.lower()).exists():
+            data["reg_first_name_error"] = u"Указанное имя уже используется. Выберите другое."
+            return render(request, 'registration/registration.html', data)
+
+        if Account.objects.filter(email__iexact=reg_email.lower()).exists():
+            data["reg_email_error"] = u"Указанный email уже используется. Выберите другой."
             return render(request, 'registration/registration.html', data)
 
         username = reg_email
-        if Account.objects.filter(username=reg_email).exists():
+        if Account.objects.filter(username__iexact=reg_email.lower()).exists():
             username += '' + str(Account.objects.filter(username=reg_email).count() + 1)
         account = Account.objects.create(
             username=username,
@@ -330,6 +334,11 @@ def user(request):
         password = data.get("password")
         is_dirty = False
         if first_name and request.user.first_name != first_name:
+            if Account.objects.filter(first_name__iexact=first_name.lower()).exists():
+                return Response({
+                    "status": False,
+                    "first_name_error": u"Указанное имя уже используется. Выберите другое."
+                }, status.HTTP_200_OK)
             request.user.first_name = first_name
             is_dirty = True
         if selectedLevel and request.user.level != int(selectedLevel):
@@ -344,7 +353,7 @@ def user(request):
         if is_dirty is True:
             request.user.save()
     return Response({
-        "status": False
+        "status": True
         }, status.HTTP_200_OK)
 
 

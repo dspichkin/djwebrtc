@@ -1,0 +1,46 @@
+
+<div #chatContent style="min-height: 300px;height: 300px;width: 100%;margin-top: 20px;overflow-y: scroll;">
+    <div style="height: 100%;width: 100%;">
+        <div *ngFor="let item of activedialog.chat_messages">
+            <div *ngIf="item.source.type == 'master'" style="background-color: bisque;padding: 10px 20px;min-width: 300px;max-width: 300px;padding: 10px 20px;border-radius: 10px;margin: 5px;">
+                <div style="font-size: 10px;">
+                    <p style="margin:0;float: left;margin: 0 10px 0px 0px;">{{item.source.fio}}</p>
+                    <p style="margin:0 10px;">{{item.date}}</p>
+                </div>
+                <p style="margin:0;">{{item.message}}</p>
+                
+            </div>
+            <div *ngIf="item.source.type == 'pupil'" style="width:100%;display: inline-block;">
+                <div class="pull-right" style="background-color: brown;color: white;min-width: 300px;max-width: 300px;padding: 10px 20px;border-radius: 10px;margin: 5px;">
+                    <div style="font-size: 10px;">
+                        <p style="margin:0;float: left;margin: 0 10px 0px 0px;">{{item.source.fio}}</p>
+                        <p style="margin:0 10px;">{{item.date}}</p>
+                    </div>
+                    <p style="margin:0;">{{item.message}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="input-group" style="position: absolute;bottom: -20px;">
+    <input type="text" class="form-control" placeholder="Ваше сообщение" style="height: 40px;background-color: white;"
+        (keyup.enter)="send()" [(ngModel)]="message" maxlength="100">
+    <div class="input-group-addon" style="padding: 0;">
+        <button class="btn btn-info" style="height: 38px;border-radius: 0;" (click)="send()" [disabled]="!message">Отправить</button>
+    </div>
+</div>
+
+<div [ngStyle]="{'background-image': 'url(' + activedialog.dialog.background_image + ')'}"
+    style="
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        background-size: cover;
+        background-repeat: no-repeat;
+        opacity: 0.2;
+        left: 0;
+        top: 20px;
+        right: 0;">
+</div>

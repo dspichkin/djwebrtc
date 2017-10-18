@@ -20,6 +20,7 @@ import { AppSettings } from '../../app.settings';
 export class ProfileViewComponent implements OnInit {
     private user;
     private first_name;
+    private first_name_error;
     private selectedLevel;
     private skypeid;
     private password;
@@ -93,7 +94,7 @@ export class ProfileViewComponent implements OnInit {
     }
 
     submit() {
-
+        this.first_name_error = "";
         if (this.first_name && this.selectedLevel) {
             if (this.password && (this.password != this.password1)) {
                 return;
@@ -109,7 +110,16 @@ export class ProfileViewComponent implements OnInit {
             let self = this;
             this.statusService.saveUser(params).subscribe((data)=>{
                 self.loading = false;
-                self.notificationService.add(new Notification('Сообщение', 'alert-success', 'Настройки сохранены'));
+                if (data.status) {
+                    self.notificationService.add(new Notification('Сообщение', 'alert-success', 'Настройки сохранены'));
+                } else {
+                    if (data.first_name_error) {
+                        self.first_name_error = data.first_name_error;
+                    }
+                }
+            }, function(error) {
+                console.log('error', error)
+                self.notificationService.add(new Notification('Ошибка', 'alert-danger', error.statusText));
             })
         }
     }

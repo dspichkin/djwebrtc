@@ -21,6 +21,7 @@ declare const navigator;
 
 export class PlayerDialogPupilComponent implements OnInit, OnDestroy {
     @Input() public activedialog;
+    @Input() public user;
     @Output() public stopdialog = new EventEmitter();
     @Output() public changeactivedialog = new EventEmitter();
 
@@ -50,9 +51,7 @@ export class PlayerDialogPupilComponent implements OnInit, OnDestroy {
 
             if (message.command == "CHANGE_DIALOG") {
                 self.loading = true;
-                console.log("!!!!!!")
                 self.dialogsService.getActiveDialog(message.activedialodid).subscribe((activedialog)=> {
-                    console.log('pupil activedialog', activedialog)
                     self.loading = false;
                     self.changeactivedialog.emit(activedialog);
                     self.activedialog = activedialog;
@@ -61,9 +60,6 @@ export class PlayerDialogPupilComponent implements OnInit, OnDestroy {
                     self._setStartStepPersonage(self.current_step_id);
                     self.current_step = self.activedialog.dialog.scenario.steps[0][self.currentPersonage];
                     self._detectChanges();
-
-
-
                 })
                 self._detectChanges();
             }

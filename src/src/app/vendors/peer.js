@@ -1548,7 +1548,9 @@
 
         Socket.prototype.close = function() {
             if (!this.disconnected && this._wsOpen()) {
-                this._socket.close();
+                if (this._socket && this._socket.close) {
+                    this._socket.close();
+                }
                 this.disconnected = true;
             }
         };

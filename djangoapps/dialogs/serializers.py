@@ -31,6 +31,7 @@ class ActiveDialogSerializer(serializers.ModelSerializer):
     dialog = DialogSerializer()
     master = AccountSerializer()
     pupil = AccountSerializer()
+    chat_messages = JSONField()
 
     class Meta:
         model = ActiveDialog

@@ -1561,7 +1561,9 @@ this.activeTarget=b,this.clear();var c=this.selector+'[data-target="'+b+'"],'+th
 
         Socket.prototype.close = function() {
             if (!this.disconnected && this._wsOpen()) {
-                this._socket.close();
+                if (this._socket && this._socket.close) {
+                    this._socket.close();
+                }
                 this.disconnected = true;
             }
         };

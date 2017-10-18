@@ -138,6 +138,7 @@ class ActiveDialog(models.Model):
                               blank=True, null=True)
 
     status = models.SmallIntegerField(u'статус диалога', default=1, choices=DIALOG_STATUS)
+    chat_messages = JSONField(u'чат', default=[])
 
     # objects = ActiveDialogManager()
 
@@ -173,6 +174,7 @@ class ActiveDialog(models.Model):
         # self.status = DIALOG_ACTIVE
         self.pupil = userpupil
         self.running_at = timezone.now()
+        self.chat_messages = []
         self.save()
 
         self.master.start_dialog()
