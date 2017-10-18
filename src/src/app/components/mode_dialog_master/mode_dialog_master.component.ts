@@ -35,6 +35,7 @@ export class ModeDialogMasterComponent implements OnInit, OnDestroy {
     private answeringCall;
     private last_message_from_pupil;
     private status_activedialog = 'starting'; //starting, run, stop
+    private status_voice_connection = 'starting'; //starting, run, stop
     private last_hearbeat_from_pupil;
     private connection_error_message;
 
@@ -72,6 +73,7 @@ export class ModeDialogMasterComponent implements OnInit, OnDestroy {
                 self.status_activedialog = 'stop';
             }
             if (message.command == "HEARBEAT_DIALOG_PUPIL") {
+                self.status_activedialog = 'run';
                 self.last_hearbeat_from_pupil = new Date();
                 let value = Math.round((self.last_hearbeat_from_pupil - self.start_converstion) / 1000);
                 if (value) {
@@ -84,6 +86,7 @@ export class ModeDialogMasterComponent implements OnInit, OnDestroy {
         });
 
         self._runHearbeatPupil();
+        
         
     }
 
@@ -112,6 +115,7 @@ export class ModeDialogMasterComponent implements OnInit, OnDestroy {
 
     private _startPeer() {
         let self = this;
+        self.status_voice_connection = 'starting';
         self.peer = new Peer({
             socket: self.webSocketService,
             host: AppSettings.URL_WEBSOKET_PEER,
@@ -127,6 +131,7 @@ export class ModeDialogMasterComponent implements OnInit, OnDestroy {
 
         self.peer.on('error', function(err) {
             console.log("ERROR:", err.message);
+            self.status_voice_connection = 'stop';
             if (err.message) {
                 self.connection_error_message = err.message;
             }
@@ -139,7 +144,7 @@ export class ModeDialogMasterComponent implements OnInit, OnDestroy {
         // Receiving a call
         self.peer.on('call', function(receivecall) {
             self._startLocalVideo(function() {
-                self.status_activedialog = 'run';
+                self.status_voice_connection = 'run';
                 self.start_converstion = new Date();
 
                 receivecall.answer(self.localStream);
@@ -206,6 +211,8 @@ export class ModeDialogMasterComponent implements OnInit, OnDestroy {
 
     private _closeVoiceConnection() {
         let self = this;
+
+        self.status_voice_connection = 'stop';
 
         if (self.answeringCall) {
             self.answeringCall.close();

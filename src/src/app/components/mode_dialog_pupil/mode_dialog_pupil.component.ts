@@ -31,15 +31,16 @@ export class ModeDialogPupilComponent implements OnInit, OnDestroy {
     peer;
     peerid;
     user;
-    loading: boolean = false;
-    localStream;
-    callingCall;
-    status_activedialog = 'starting';
-    last_hearbeat_from_master;
+    private loading: boolean = false;
+    private localStream;
+    private callingCall;
+    private status_activedialog = 'starting';
+    private status_voice_connection = 'starting'; //starting, run, stop
+    private last_hearbeat_from_master;
     // продолжительность диалога
-    during_conversation;
-    start_converstion;
-    connection_error_message = "";
+    private during_conversation;
+    private start_converstion;
+    private connection_error_message = "";
 
     private personageName;
 
@@ -70,6 +71,7 @@ export class ModeDialogPupilComponent implements OnInit, OnDestroy {
                 self.status_activedialog = 'stop';
             }
             if (message.command == "HEARBEAT_DIALOG_MASTER") {
+                self.status_activedialog = 'run';
                 self.last_hearbeat_from_master = new Date();
                 let value = Math.round((self.last_hearbeat_from_master - self.start_converstion) / 1000);
                 if (value) {
@@ -128,7 +130,6 @@ export class ModeDialogPupilComponent implements OnInit, OnDestroy {
         self.peer.on('open', function(id) {
             //console.log('Peer: My peer ID is: ' + id);
             self.peerid = id;
-
             self._startLocalVideo(function() {
                 let call = self.peer.call(self.activedialog.master.key_id, self.localStream);
                 self._prepareCall(call);
@@ -137,6 +138,7 @@ export class ModeDialogPupilComponent implements OnInit, OnDestroy {
         });
 
         self.peer.on('error', function(err) {
+            self.status_voice_connection = 'stop';
             console.log("ERROR:", err.message);
             if (err.message) {
                 self.connection_error_message = err.message;
@@ -203,7 +205,7 @@ export class ModeDialogPupilComponent implements OnInit, OnDestroy {
             //console.log('got stream')
             // get call stream from remote host
             self.remoteVideo.nativeElement.src = URL.createObjectURL(stream); 
-            self.status_activedialog = 'run';
+            self.status_voice_connection = 'run';
             self.start_converstion = new Date();
         });
         
