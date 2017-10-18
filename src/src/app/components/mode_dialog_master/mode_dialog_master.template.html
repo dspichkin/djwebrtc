@@ -25,7 +25,7 @@
                 <button  *ngIf="status_activedialog=='run'" class="btn btn-warning" (click)="hangPhone()" style="margin-right: 25px;margin-top: 10px;">
                     <i class="fa fa-microphone-slash" aria-hidden="true" style="margin-right: 10px;"></i><span>Сбросить голосовую связь</span>
                 </button>
-                <button  *ngIf="status_activedialog!='run' && && status_activedialog!='starting'" class="btn btn-info" (click)="callPhone()" style="margin-right: 25px;margin-top: 10px;">
+                <button  *ngIf="status_activedialog != 'run' && status_activedialog != 'starting'" class="btn btn-info" (click)="callPhone()" style="margin-right: 25px;margin-top: 10px;">
                     <i class="fa fa-microphone" aria-hidden="true" style="margin-right: 10px;"></i><span>Попытаться установить голосовую связь</span>
                 </button>
             </div>
