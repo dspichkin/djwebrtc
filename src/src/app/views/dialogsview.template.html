@@ -54,7 +54,7 @@
                                         Запустить диалог и ждать собеседника
                                     </button> 
                                 -->
-                                    <button class="btn btn-success btn-xs" [routerLink]="['/dialog', item.id]">
+                                    <button class="btn btn-success btn-xs" [routerLink]="['/dialogue', item.id]">
                                         Просмотреть
                                     </button> 
                                 </p> 
@@ -65,26 +65,6 @@
 
             </div>
         </div>
-        <!--
-        <div *ngIf="mode == 'mode_wait_pupil'">
-            <modewaitpupil [user]="user" [activedialog]="activedialog" (stopwaitingdialog)="handelerStopWaitDialog($event)" (acceptcall)="handlerAcceptCall($event)"></modewaitpupil>
-        </div>
-        
-
-
-        <div *ngIf="mode == 'mode_calling'">
-            <modecalling [callingdialog]="callingdialog" (stopcalling)="handlerStopCalling($event)"></modecalling>
-        </div>
-        
-        
-        <div *ngIf="mode == 'mode_dialog_master'">
-            <modedialogmaster [activedialogid]="activedialog_id" (stopdialog)="handelerStopDialog($event)"></modedialogmaster>
-        </div>
-
-        <div *ngIf="mode == 'mode_dialog_pupil'">
-            <modedialogpupil [activedialogid]="activedialog_id" (stopdialog)="handelerStopDialog($event)"></modedialogpupil>
-        </div>
-        -->
     </div>
 </div>
 

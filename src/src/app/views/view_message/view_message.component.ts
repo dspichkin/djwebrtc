@@ -70,7 +70,7 @@ export class MessageViewComponent implements OnInit, OnDestroy {
 
         this.statusService.sendMessage(data).subscribe((data) => {
             this.loading = false;
-            this.router.navigate(['activedialogs']);
+            this.router.navigate(['activedialogues']);
         })
         
     }

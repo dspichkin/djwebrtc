@@ -5,15 +5,17 @@ from django.conf.urls import url
 from dialogs.views import (
     get_dialog, get_dialogs, get_activedialogs, get_activedialog,
     run_dialog, stop_dialog, user_status, stop_activedialog,
-    get_myactivedialogs)
+    get_myactivedialogs, get_mydialogs, get_mydialog)
 
 
 urlpatterns = [
-    url(r'^api/dialogs/?$', get_dialogs, name="get_dialogs"),
-    url(r'^api/dialogs/(?P<dialog_pk>\d+)/?$', get_dialog, name="get_dialog"),
-    url(r'^api/activedialogs/?$', get_activedialogs, name="get_activedialogs"),
-    url(r'^api/myactivedialogs/?$', get_myactivedialogs, name="get_myactivedialogs"),
-    url(r'^api/activedialogs/(?P<activedialog_pk>\d+)/?$', get_activedialog, name="get_activedialog"),
+    url(r'^api/dialogues/?$', get_dialogs, name="get_dialogs"),
+    url(r'^api/dialogues/(?P<dialog_pk>\d+)/?$', get_dialog, name="get_dialog"),
+    url(r'^api/mydialogues/?$', get_mydialogs, name="get_dialogs"),
+    url(r'^api/mydialogues/(?P<dialog_pk>\d+)/?$', get_mydialog, name="get_dialog"),
+    url(r'^api/activedialogues/?$', get_activedialogs, name="get_activedialogs"),
+    url(r'^api/myactivedialogues/?$', get_myactivedialogs, name="get_myactivedialogs"),
+    url(r'^api/activedialogues/(?P<activedialog_pk>\d+)/?$', get_activedialog, name="get_activedialog"),
     url(r'^api/run/(?P<dialog_pk>\d+)/?$', run_dialog, name="run_dialog"),
     # url(r'^api/runinto/(?P<activedialog_pk>\d+)/?$', runinto_dialog, name="runinto_dialog"),
     url(r'^api/stop/?$', stop_dialog, name="stop_dialog"),

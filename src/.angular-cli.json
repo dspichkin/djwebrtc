@@ -26,6 +26,9 @@
       "scripts": [
         "../node_modules/jquery/dist/jquery.min.js",
         "../node_modules/bootstrap/dist/js/bootstrap.min.js",
+        "../node_modules/cytoscape/dist/cytoscape.min.js",
+        "./app/vendors/dagre.min.js",
+        "./app/vendors/cytoscape-dagre.js",
         "./app/vendors/peer.js"
       ],
       "environmentSource": "environments/environment.ts",

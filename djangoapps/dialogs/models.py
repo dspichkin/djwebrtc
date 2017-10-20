@@ -79,10 +79,12 @@ class Dialog(models.Model):
 
     scenario = JSONField(u'сценарий диалога', null=True, blank=True)
 
-    level = models.SmallIntegerField(u' требуемый уровень знания', choices=ENGLISH_LEVELS, null=True, blank=True)
+    level = models.SmallIntegerField(u'требуемый уровень знания', choices=ENGLISH_LEVELS, null=True, blank=True)
     tags = models.ManyToManyField(Tag, verbose_name=u'метки', blank=True)
 
     background_image = models.ImageField(upload_to=path_and_rename_bg_images, blank=True, null=True)
+
+    is_published = models.BooleanField(u'диалог опубликован', default=False)
 
     def __str__(self):
         return self.name

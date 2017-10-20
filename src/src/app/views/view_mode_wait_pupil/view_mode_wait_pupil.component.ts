@@ -80,11 +80,11 @@ export class ModeWaitPupilViewComponent implements OnInit, OnDestroy {
             }
 
             if (message.command == "CALLING_REJECT") {
-                self.router.navigate(['/activedialogs/']);
+                self.router.navigate(['/activedialogues/']);
             }
 
             if (message.command == "EXIT_FROM_ACTIVE_DIALOG_BY_MASTER") {
-                self.router.navigate(['/activedialogs/']);
+                self.router.navigate(['/activedialogues/']);
             }
         })
 
@@ -104,7 +104,7 @@ export class ModeWaitPupilViewComponent implements OnInit, OnDestroy {
         
         setTimeout(function() {
             if (!this.activedialog) {
-                this.router.navigate(['/dialogs/']);
+                this.router.navigate(['/dialogues/']);
             }
         }.bind(this), 10000)
         

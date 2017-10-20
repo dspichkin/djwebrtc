@@ -7,7 +7,7 @@ from dialogs.models import (Dialog, ActiveDialog, Tag)
 
 class DialogAdmin(admin.ModelAdmin):
     list_display = (
-        'name', 'level', )
+        'owner', 'name', 'level', 'is_published', )
 
     filter_horizontal = ('tags', )
 

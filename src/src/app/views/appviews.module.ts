@@ -2,7 +2,8 @@ import { NgModule } from "@angular/core";
 import { BrowserModule } from "@angular/platform-browser";
 import { RouterModule } from "@angular/router";
 import { FormsModule } from '@angular/forms';
-
+// import { NgCytoscapeModule } from "ng2-cytoscape";
+import { NgCytoscapeModule } from "../vendors/ng2-cytoscape";
 
 import { DialogsViewComponent} from './dialogsview.component';
 import { ActiveDialogsViewComponent} from './activedialogsview.component';
@@ -19,6 +20,9 @@ import { MessageViewComponent } from "./view_message/view_message.component";
 import { ProfileViewComponent } from "./view_profile/view_profile.component";
 import { NotificationComponent } from "../components/common/notification/notification.component";
 import { ChatComponent } from "../components/chat/chat.component";
+import { MyDialoguesViewComponent } from "./mydialogues/mydialogues.component";
+import { MyDialogueEditViewComponent } from "./mydialogues/mydialogue.edit.component";
+import { ScenarioComponent } from '../components/scenario/scenario.component';
 
 import { EqualValidator } from './view_profile/equal_validator.directive';
 
@@ -40,11 +44,15 @@ import { EqualValidator } from './view_profile/equal_validator.directive';
     EqualValidator,
     NotificationComponent,
     ChatComponent,
+    MyDialoguesViewComponent,
+    MyDialogueEditViewComponent,
+    ScenarioComponent,
   ],
   imports: [
     BrowserModule,
     RouterModule,
     FormsModule,
+    NgCytoscapeModule,
   ],
   exports: [
     DialogsViewComponent,
@@ -63,6 +71,9 @@ import { EqualValidator } from './view_profile/equal_validator.directive';
     EqualValidator,
     NotificationComponent,
     ChatComponent,
+    MyDialoguesViewComponent,
+    MyDialogueEditViewComponent,
+    ScenarioComponent,
   ],
 })
 

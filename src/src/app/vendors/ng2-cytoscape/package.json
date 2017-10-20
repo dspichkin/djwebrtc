@@ -1,0 +1,95 @@
+{
+  "_args": [
+    [
+      {
+        "raw": "ng2-cytoscape",
+        "scope": null,
+        "escapedName": "ng2-cytoscape",
+        "name": "ng2-cytoscape",
+        "rawSpec": "",
+        "spec": "latest",
+        "type": "tag"
+      },
+      "/Users/denis/Documents/Work/MyProg/djwebrtc/src"
+    ]
+  ],
+  "_from": "ng2-cytoscape@latest",
+  "_id": "ng2-cytoscape@0.4.0",
+  "_inCache": true,
+  "_location": "/ng2-cytoscape",
+  "_nodeVersion": "8.1.2",
+  "_npmOperationalInternal": {
+    "host": "s3://npm-registry-packages",
+    "tmp": "tmp/ng2-cytoscape-0.4.0.tgz_1504302187568_0.35979742906056345"
+  },
+  "_npmUser": {
+    "name": "michaelknoch",
+    "email": "info@michaelknoch.de"
+  },
+  "_npmVersion": "4.2.0",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "ng2-cytoscape",
+    "scope": null,
+    "escapedName": "ng2-cytoscape",
+    "name": "ng2-cytoscape",
+    "rawSpec": "",
+    "spec": "latest",
+    "type": "tag"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/ng2-cytoscape/-/ng2-cytoscape-0.4.0.tgz",
+  "_shasum": "620fb74dfa5efb071c9566970b229feb31efac91",
+  "_shrinkwrap": null,
+  "_spec": "ng2-cytoscape",
+  "_where": "/Users/denis/Documents/Work/MyProg/djwebrtc/src",
+  "author": {
+    "name": "Michael Knoch"
+  },
+  "bugs": {
+    "url": "https://github.com/michaelknoch/ng2-cytoscape/issues"
+  },
+  "dependencies": {
+    "@angular/common": "^4.3.5",
+    "@angular/core": "^4.3.5",
+    "@types/jquery": "^3.2.12",
+    "cytoscape": "^2.7.24",
+    "jquery": "^3.2.1",
+    "rxjs": "^5.4.3",
+    "zone.js": "^0.8.17"
+  },
+  "description": "## Example Usage",
+  "devDependencies": {
+    "typescript": "^2.2.1",
+    "typings": "^1.5.0"
+  },
+  "directories": {},
+  "dist": {
+    "shasum": "620fb74dfa5efb071c9566970b229feb31efac91",
+    "tarball": "https://registry.npmjs.org/ng2-cytoscape/-/ng2-cytoscape-0.4.0.tgz"
+  },
+  "gitHead": "98388ce46e3423cfe0b996691359c3313fe82f51",
+  "homepage": "https://github.com/michaelknoch/ng2-cytoscape#readme",
+  "license": "ISC",
+  "main": "index.js",
+  "maintainers": [
+    {
+      "name": "michaelknoch",
+      "email": "info@michaelknoch.de"
+    }
+  ],
+  "name": "ng2-cytoscape",
+  "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/michaelknoch/ng2-cytoscape.git"
+  },
+  "scripts": {
+    "tsc": "tsc"
+  },
+  "version": "0.4.0"
+}

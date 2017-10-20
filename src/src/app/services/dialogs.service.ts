@@ -20,8 +20,8 @@ export class DialogsService {
         private router: Router) {}
 
     
-    getDialog(dialog_id): Observable<Dialog[]> {
-        return this._http.get(AppSettings.URL_DIALOGS + dialog_id + '/')
+    getDialog(dialogue_id): Observable<Dialog[]> {
+        return this._http.get(AppSettings.URL_DIALOGS + dialogue_id + '/')
             .map((response: Response) => {
                 return response.json();
             })
@@ -36,8 +36,8 @@ export class DialogsService {
             .catch(this.handleError.bind(this));
     }
 
-    getActiveDialog(activedialog_id): Observable<Dialog[]> {
-        return this._http.get(AppSettings.URL_ACTIVEDIALOGS + activedialog_id + '/')
+    getActiveDialog(activedialogue_id): Observable<Dialog[]> {
+        return this._http.get(AppSettings.URL_ACTIVEDIALOGS + activedialogue_id + '/')
             .map((response: Response) => {
                 return response.json();
             })
@@ -60,8 +60,8 @@ export class DialogsService {
             .catch(this.handleError.bind(this));
     }
 
-    runDialog(dialog_id):any {
-        return this._http.post(AppSettings.URL_DIALOG_RUN + dialog_id + "/", {})
+    runDialog(dialogue_id):any {
+        return this._http.post(AppSettings.URL_DIALOG_RUN + dialogue_id + "/", {})
             .map((response: Response) => {
                 return response.json();
             })
@@ -76,22 +76,37 @@ export class DialogsService {
             .catch(this.handleError.bind(this));
     }
 
-    runIntoDialog(dialog_id):any {
-        return this._http.post(AppSettings.URL_DIALOG_RUNINTO + dialog_id + "/", {})
+    runIntoDialog(dialogue_id):any {
+        return this._http.post(AppSettings.URL_DIALOG_RUNINTO + dialogue_id + "/", {})
             .map((response: Response) => {
                 return response.json();
             })
             .catch(this.handleError.bind(this));
     }
 
-    stopActiveDialog(dialog_id):any {
-        return this._http.post(AppSettings.URL_DIALOG_ACTIVESTOP + dialog_id + "/", {})
+    stopActiveDialog(dialogue_id):any {
+        return this._http.post(AppSettings.URL_DIALOG_ACTIVESTOP + dialogue_id + "/", {})
             .map((response: Response) => {
                 return response.json();
             })
             .catch(this.handleError.bind(this));
     }
 
+    getMyDialogs(): any {
+        return this._http.get(AppSettings.URL_MYDIALOGS)
+            .map((response: Response) => {
+                return response.json();
+            })
+            .catch(this.handleError.bind(this));
+    }
+
+    saveMyDialogs(dialogue_id, params): any {
+        return this._http.post(AppSettings.URL_MYDIALOGS + dialogue_id + "/", params)
+            .map((response: Response) => {
+                return response.json();
+            })
+            .catch(this.handleError.bind(this));
+    }
 
     private handleError(error: Response) {
         console.error(error);
@@ -100,7 +115,7 @@ export class DialogsService {
             this.router.navigate(['/accounts/login/']);
         }
         if (error.status == 404) {
-            this.router.navigate(['/dialogs/']);
+            this.router.navigate(['/dialogues/']);
         }
         //error.json().error || 
         return Observable.throw('Server error');

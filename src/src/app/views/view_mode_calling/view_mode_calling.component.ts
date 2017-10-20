@@ -68,10 +68,10 @@ export class ModeCallingViewComponent implements OnInit, OnDestroy {
             if (message.command == "STOP_CALLING") {
                 this.running_call = false;
                 if (message.reason == "DIALOG_STOP") {
-                    this.router.navigate(['/activedialogs']);
+                    this.router.navigate(['/activedialogues']);
                 }
                 if (message.reason == "NOT FOUND") {
-                    this.router.navigate(['/activedialogs']);
+                    this.router.navigate(['/activedialogsue']);
                 }
             }
 
@@ -133,7 +133,7 @@ export class ModeCallingViewComponent implements OnInit, OnDestroy {
 
     public stopCallingDialog() {
         this.running_call = false;
-        this.router.navigate(['/activedialogs']);
+        this.router.navigate(['/activedialogues']);
     }
 
      /*

@@ -6,6 +6,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from "@angular/router";
 import { JWBootstrapSwitchModule } from '../../node_modules/jw-bootstrap-switch-ng2';
 
+
 import { WebSocketService } from "./services/websocket.service";
 
 import { ROUTES } from "./app.routes";

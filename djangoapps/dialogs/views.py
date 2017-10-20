@@ -21,7 +21,7 @@ from dialogs.utils import IsConfirmAndIsAuthenticated
 @api_view(['GET'])
 @permission_classes((IsConfirmAndIsAuthenticated,))
 def get_dialog(request, dialog_pk):
-    queryset = get_object_or_404(Dialog, pk=dialog_pk)
+    queryset = get_object_or_404(Dialog, pk=dialog_pk, is_published=True)
     serializer = DialogSerializer(queryset)
 
     return Response(serializer.data, status.HTTP_200_OK)
@@ -32,7 +32,7 @@ def get_dialog(request, dialog_pk):
 def get_dialogs(request):
     request.user.check_activity()
 
-    queryset = Dialog.objects.all()
+    queryset = Dialog.objects.filter(is_published=True)
     dialogs = []
     for dialog in queryset:
         data = DialogSerializer(dialog).data
@@ -163,5 +163,40 @@ def user_status(request):
     }, status.HTTP_200_OK)
 
 
+@api_view(['GET', 'POST'])
+@permission_classes((IsConfirmAndIsAuthenticated,))
+def get_mydialog(request, dialog_pk):
 
+    mydialog = get_object_or_404(Dialog, pk=dialog_pk, owner=request.user)
+    if request.method == 'POST':
+        data = request.data
+        is_published = data.get('is_published')
+
+        is_dirty = False
+        if is_published is not None:
+            if mydialog.is_published != is_published:
+                mydialog.is_published = is_published
+                is_dirty = True
+
+        if is_dirty:
+            mydialog.save()
+
+    serializer = DialogSerializer(mydialog)
+    return Response(serializer.data, status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+@permission_classes((IsConfirmAndIsAuthenticated,))
+def get_mydialogs(request):
+    request.user.check_activity()
+
+    queryset = Dialog.objects.filter(owner=request.user)
+    dialogs = []
+    for dialog in queryset:
+        data = DialogSerializer(dialog).data
+        activedialog = ActiveDialog.objects.filter(master=request.user, dialog=dialog, status=DIALOG_WAIT)
+        if activedialog:
+            data["checked"] = True
+        dialogs.append(data)
+    return Response(dialogs, status.HTTP_200_OK)
 

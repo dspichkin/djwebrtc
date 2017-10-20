@@ -86,7 +86,7 @@ export class ModeDialogPupilComponent implements OnInit, OnDestroy {
             }
         });
 
-
+        self.status_activedialog = 'run';
         self._runHearbeatPupil();
 
 

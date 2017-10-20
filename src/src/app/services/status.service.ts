@@ -130,7 +130,7 @@ export class StatusService {
             this.router.navigate(['/accounts/login/']);
         }
         if (error.status == 404) {
-            this.router.navigate(['/dialogs/']);
+            this.router.navigate(['/dialogues']);
         }
         return Observable.throw('Server error');
     }

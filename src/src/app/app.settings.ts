@@ -7,6 +7,7 @@ export class AppSettings {
     public static URL_STATUS;
     public static URL_DIALOGS;
     public static URL_ACTIVEDIALOGS;
+    public static URL_MYDIALOGS;
     public static URL_MYACTIVEDIALOGS;
     public static URL_DIALOG_RUN;
     public static URL_DIALOG_RUNINTO;
@@ -44,9 +45,10 @@ export class AppSettings {
 
 
         AppSettings.URL_STATUS = AppSettings.base_url + "/dialogs/api/status/";
-        AppSettings.URL_DIALOGS = AppSettings.base_url + "/dialogs/api/dialogs/";
-        AppSettings.URL_ACTIVEDIALOGS = AppSettings.base_url + "/dialogs/api/activedialogs/";
-        AppSettings.URL_MYACTIVEDIALOGS = AppSettings.base_url + "/dialogs/api/myactivedialogs/";
+        AppSettings.URL_DIALOGS = AppSettings.base_url + "/dialogs/api/dialogues/";
+        AppSettings.URL_ACTIVEDIALOGS = AppSettings.base_url + "/dialogs/api/activedialogues/";
+        AppSettings.URL_MYDIALOGS = AppSettings.base_url + "/dialogs/api/mydialogues/";
+        AppSettings.URL_MYACTIVEDIALOGS = AppSettings.base_url + "/dialogs/api/myactivedialogues/";
         AppSettings.URL_DIALOG_RUN = AppSettings.base_url + "/dialogs/api/run/";
         AppSettings.URL_DIALOG_RUNINTO = AppSettings.base_url + "/dialogs/api/runinto/";
         AppSettings.URL_DIALOG_ACTIVESTOP = AppSettings.base_url + "/dialogs/api/stop/";

@@ -202,7 +202,9 @@ AppModule = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__views_view_mode_calling_view_mode_calling_component__ = __webpack_require__("../../../../../src/app/views/view_mode_calling/view_mode_calling.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__views_view_message_view_message_component__ = __webpack_require__("../../../../../src/app/views/view_message/view_message.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__views_view_profile_view_profile_component__ = __webpack_require__("../../../../../src/app/views/view_profile/view_profile.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__services_guards_service__ = __webpack_require__("../../../../../src/app/services/guards.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__views_mydialogues_mydialogues_component__ = __webpack_require__("../../../../../src/app/views/mydialogues/mydialogues.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__views_mydialogues_mydialogue_edit_component__ = __webpack_require__("../../../../../src/app/views/mydialogues/mydialogue.edit.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__services_guards_service__ = __webpack_require__("../../../../../src/app/services/guards.service.ts");
 
 
 
@@ -213,17 +215,19 @@ AppModule = __decorate([
 
 
 
+
+
 var ROUTES = [
     // Main redirect
-    { path: '', redirectTo: 'dialogs', pathMatch: 'full' },
+    { path: '', redirectTo: 'dialogues', pathMatch: 'full' },
     // App views
     {
         path: '', component: __WEBPACK_IMPORTED_MODULE_3__components_common_layouts_basicLayout_component__["a" /* BasicLayoutComponent */],
         children: [
             {
-                path: 'dialogs',
+                path: 'dialogues',
                 component: __WEBPACK_IMPORTED_MODULE_0__views_dialogsview_component__["a" /* DialogsViewComponent */],
-                canActivate: [__WEBPACK_IMPORTED_MODULE_8__services_guards_service__["a" /* AuthGuard */]]
+                canActivate: [__WEBPACK_IMPORTED_MODULE_10__services_guards_service__["a" /* AuthGuard */]]
             }
         ]
     },
@@ -231,9 +235,9 @@ var ROUTES = [
         path: '', component: __WEBPACK_IMPORTED_MODULE_3__components_common_layouts_basicLayout_component__["a" /* BasicLayoutComponent */],
         children: [
             {
-                path: 'activedialogs',
+                path: 'activedialogues',
                 component: __WEBPACK_IMPORTED_MODULE_1__views_activedialogsview_component__["a" /* ActiveDialogsViewComponent */],
-                canActivate: [__WEBPACK_IMPORTED_MODULE_8__services_guards_service__["a" /* AuthGuard */]]
+                canActivate: [__WEBPACK_IMPORTED_MODULE_10__services_guards_service__["a" /* AuthGuard */]]
             }
         ]
     },
@@ -241,9 +245,9 @@ var ROUTES = [
         path: '', component: __WEBPACK_IMPORTED_MODULE_3__components_common_layouts_basicLayout_component__["a" /* BasicLayoutComponent */],
         children: [
             {
-                path: 'dialog/:dialog_id',
+                path: 'dialogue/:dialog_id',
                 component: __WEBPACK_IMPORTED_MODULE_2__views_dialogview_component__["a" /* DialogViewComponent */],
-                canActivate: [__WEBPACK_IMPORTED_MODULE_8__services_guards_service__["a" /* AuthGuard */]]
+                canActivate: [__WEBPACK_IMPORTED_MODULE_10__services_guards_service__["a" /* AuthGuard */]]
             }
         ]
     },
@@ -253,7 +257,7 @@ var ROUTES = [
             {
                 path: 'message',
                 component: __WEBPACK_IMPORTED_MODULE_6__views_view_message_view_message_component__["a" /* MessageViewComponent */],
-                canActivate: [__WEBPACK_IMPORTED_MODULE_8__services_guards_service__["a" /* AuthGuard */]]
+                canActivate: [__WEBPACK_IMPORTED_MODULE_10__services_guards_service__["a" /* AuthGuard */]]
             }
         ]
     },
@@ -263,34 +267,42 @@ var ROUTES = [
             {
                 path: 'profile',
                 component: __WEBPACK_IMPORTED_MODULE_7__views_view_profile_view_profile_component__["a" /* ProfileViewComponent */],
-                canActivate: [__WEBPACK_IMPORTED_MODULE_8__services_guards_service__["a" /* AuthGuard */]]
+                canActivate: [__WEBPACK_IMPORTED_MODULE_10__services_guards_service__["a" /* AuthGuard */]]
             }
         ]
     },
     {
         path: 'wait',
         component: __WEBPACK_IMPORTED_MODULE_4__views_view_mode_wait_pupil_view_mode_wait_pupil_component__["a" /* ModeWaitPupilViewComponent */],
-        canActivate: [__WEBPACK_IMPORTED_MODULE_8__services_guards_service__["a" /* AuthGuard */]]
+        canActivate: [__WEBPACK_IMPORTED_MODULE_10__services_guards_service__["a" /* AuthGuard */]]
     },
     {
         path: 'calling/:id',
         component: __WEBPACK_IMPORTED_MODULE_5__views_view_mode_calling_view_mode_calling_component__["a" /* ModeCallingViewComponent */],
-        canActivate: [__WEBPACK_IMPORTED_MODULE_8__services_guards_service__["a" /* AuthGuard */]]
+        canActivate: [__WEBPACK_IMPORTED_MODULE_10__services_guards_service__["a" /* AuthGuard */]]
     },
-    /*
     {
-      path: '', component: BasicLayoutComponent,
-      children: [
-          {
-              path: 'mon',
-              component: MonitoringComponent,
-              //canActivate: [AuthGuard]
-          }
-      ]
+        path: '', component: __WEBPACK_IMPORTED_MODULE_3__components_common_layouts_basicLayout_component__["a" /* BasicLayoutComponent */],
+        children: [
+            {
+                path: 'mydialogues',
+                component: __WEBPACK_IMPORTED_MODULE_8__views_mydialogues_mydialogues_component__["a" /* MyDialoguesViewComponent */],
+                canActivate: [__WEBPACK_IMPORTED_MODULE_10__services_guards_service__["a" /* AuthGuard */]]
+            }
+        ]
     },
-    */
+    {
+        path: '', component: __WEBPACK_IMPORTED_MODULE_3__components_common_layouts_basicLayout_component__["a" /* BasicLayoutComponent */],
+        children: [
+            {
+                path: 'mydialogues/:dialogue_id',
+                component: __WEBPACK_IMPORTED_MODULE_9__views_mydialogues_mydialogue_edit_component__["a" /* MyDialogueEditViewComponent */],
+                canActivate: [__WEBPACK_IMPORTED_MODULE_10__services_guards_service__["a" /* AuthGuard */]]
+            }
+        ]
+    },
     // Handle all other routes
-    { path: '**', redirectTo: 'dialogs' }
+    { path: '**', redirectTo: 'dialogues' }
 ];
 //# sourceMappingURL=app.routes.js.map
 
@@ -314,9 +326,10 @@ var AppSettings = (function () {
             AppSettings.URL_WEBSOKET = "wss://" + document.location.hostname + ':8000/peerjs';
         }
         AppSettings.URL_STATUS = AppSettings.base_url + "/dialogs/api/status/";
-        AppSettings.URL_DIALOGS = AppSettings.base_url + "/dialogs/api/dialogs/";
-        AppSettings.URL_ACTIVEDIALOGS = AppSettings.base_url + "/dialogs/api/activedialogs/";
-        AppSettings.URL_MYACTIVEDIALOGS = AppSettings.base_url + "/dialogs/api/myactivedialogs/";
+        AppSettings.URL_DIALOGS = AppSettings.base_url + "/dialogs/api/dialogues/";
+        AppSettings.URL_ACTIVEDIALOGS = AppSettings.base_url + "/dialogs/api/activedialogues/";
+        AppSettings.URL_MYDIALOGS = AppSettings.base_url + "/dialogs/api/mydialogues/";
+        AppSettings.URL_MYACTIVEDIALOGS = AppSettings.base_url + "/dialogs/api/myactivedialogues/";
         AppSettings.URL_DIALOG_RUN = AppSettings.base_url + "/dialogs/api/run/";
         AppSettings.URL_DIALOG_RUNINTO = AppSettings.base_url + "/dialogs/api/runinto/";
         AppSettings.URL_DIALOG_ACTIVESTOP = AppSettings.base_url + "/dialogs/api/stop/";
@@ -954,7 +967,7 @@ var _a, _b, _c, _d;
 /***/ "../../../../../src/app/components/common/topnavbar/topnavbar.template.html":
 /***/ (function(module, exports) {
 
-module.exports = "<nav class=\"navbar navbar-default top-nav-collapse\" style=\"border-radius: 0px;\">\n  <div class=\"container\">\n    <div class=\"navbar-header\">\n        <button type=\"button\" class=\"navbar-toggle\" data-toggle=\"collapse\" data-target=\"#myNavbar\">\n            <span class=\"icon-bar\"></span>\n            <span class=\"icon-bar\"></span>\n            <span class=\"icon-bar\"></span>\n        </button>\n        <a class=\"navbar-brand\" href=\"#\" style=\"margin-left: 0;\">Ди<span class=\"logo-dec\">алоги</span></a>\n    </div>\n    <div class=\"collapse navbar-collapse\" id=\"myNavbar\">\n      <ul class=\"nav navbar-nav navbar-right\">\n        <li [ngClass]=\"{'active': activeRoute('/dialogs')}\">\n            <a [routerLink]=\"['/dialogs']\">Все диалоги</a>\n        </li>\n        <li [ngClass]=\"{'active': activeRoute('/activedialogs')}\">\n            <a [routerLink]=\"['/activedialogs']\">Диалоги в ожидание ученика</a>\n        </li>\n        <li class=\"dropdown\">\n            <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\" role=\"button\" aria-haspopup=\"true\" aria-expanded=\"false\">Настройки<span class=\"caret\"></span></a>\n              <ul class=\"dropdown-menu\">\n                <li><a [routerLink]=\"['/profile']\" >Профиль</a></li>\n                <li role=\"separator\" class=\"divider\"></li>\n                <li><a href=\"/accounts/logout/?next=/\" target=\"_self\">Выход</a></li>\n              </ul>\n        </li>\n      </ul>\n    </div>\n    <div class=\"col-md-12\">\n        <div class=\"col-md-10\" style=\"margin: 0 0 10px 0;\">\n            <bSwitch [switch-size]=\"'small'\" [switch-animate]=\"true\" [(ngModel)]=\"state_input_call\" (onChangeState)=\"onChangeInputCall($event)\" [switch-off-text]=\"'Выкл'\"\n              [switch-on-text]=\"'Вкл'\"></bSwitch>\n            <span style=\"color:beige;margin-left: 18px;\">Принимать входящие звонки</span>\n        </div>\n        <div class=\"col-md-2\" style=\"text-align: right;color:white;\">{{user?.fio}}</div>\n    </div>\n  </div>\n</nav>\n\n<div *ngIf=\"server_error\" style=\"position: absolute;top:0;left:0;height: 100%;width: 100%;z-index: 100;\">\n    <div style=\"position: fixed;opacity: 0.7;width:100%;height:200%;background-color: white;\"></div>\n    <div style=\"position: relative;margin: auto;margin-top: 160px;text-align: center;color: darkred;\">\n        <h1>Опс... не могу получить доступ к серверу</h1>\n        <h4>Работа сайта возобновится после восстановления доступа к серверу</h4>\n    </div>\n</div>\n\n<div *ngIf=\"errors.length > 0\" style=\"position:absolute;width:100%;top:0;right:0;z-index:1000;\">\n    <div *ngFor=\"let error of errors;let i=index\" class=\"alert alert-danger\" style=\"margin: 0 0 5px 0;max-height: 300px;overflow-y: auto;\">\n        <button aria-hidden=\"true\" data-dismiss=\"alert\" class=\"close\" type=\"button\" (click)=\"removeError(i)\" style=\"margin-top:-10px;margin-right: -10px;\">×</button>\n        <span *ngIf=\"error?.host\" style=\"font-weight: 800;\">Host: {{error?.host}}</span> \n        <span  *ngIf=\"error?.message\"><pre>Описание: {{error?.message}} </pre></span>\n        <span  *ngIf=\"error?.rc\">Код rc: {{error?.rc}}</span>\n    </div>\n</div>\n\n<div *ngIf=\"messages.length > 0\" style=\"position:absolute;width:100%;top:0;right:0;z-index:1000;\">\n    <div *ngFor=\"let message of messages;let i=index\" class=\"alert alert-success\" style=\"margin: 0 0 5px 0;max-height: 300px;overflow-y: auto;\">\n        <button aria-hidden=\"true\" data-dismiss=\"alert\" class=\"close\" type=\"button\" (click)=\"removeMessage(i)\" style=\"margin-top:-10px;margin-right: -10px;\">×</button>\n        <span *ngIf=\"message?.host\" style=\"font-weight: 800;\">Host: {{message?.host}}</span> \n        <span  *ngIf=\"message?.message\"><pre>Описание: {{message?.message}} </pre></span>\n        <span  *ngIf=\"message?.rc\">Код rc: {{message?.rc}}</span>\n    </div>\n</div>"
+module.exports = "<nav class=\"navbar navbar-default top-nav-collapse\" style=\"border-radius: 0px;\">\n  <div class=\"container\">\n    <div class=\"navbar-header\">\n        <button type=\"button\" class=\"navbar-toggle\" data-toggle=\"collapse\" data-target=\"#myNavbar\">\n            <span class=\"icon-bar\"></span>\n            <span class=\"icon-bar\"></span>\n            <span class=\"icon-bar\"></span>\n        </button>\n        <a class=\"navbar-brand\" href=\"#\" style=\"margin-left: 0;\">Ди<span class=\"logo-dec\">алоги</span></a>\n    </div>\n    <div class=\"collapse navbar-collapse\" id=\"myNavbar\">\n      <ul class=\"nav navbar-nav navbar-right\">\n        <li [ngClass]=\"{'active': activeRoute('/mydialogues')}\">\n            <a [routerLink]=\"['/mydialogues']\">Редактор диалогов</a>\n        </li>\n        <li [ngClass]=\"{'active': activeRoute('/dialogues')}\">\n            <a [routerLink]=\"['/dialogues']\">Все диалоги</a>\n        </li>\n        <li [ngClass]=\"{'active': activeRoute('/activedialogues')}\">\n            <a [routerLink]=\"['/activedialogues']\">Диалоги в ожидание ученика</a>\n        </li>\n        <li class=\"dropdown\">\n            <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\" role=\"button\" aria-haspopup=\"true\" aria-expanded=\"false\">Настройки<span class=\"caret\"></span></a>\n              <ul class=\"dropdown-menu\">\n                <li><a [routerLink]=\"['/profile']\" >Профиль</a></li>\n                <li role=\"separator\" class=\"divider\"></li>\n                <li><a href=\"/accounts/logout/?next=/\" target=\"_self\">Выход</a></li>\n              </ul>\n        </li>\n      </ul>\n    </div>\n    <div class=\"col-md-12\">\n        <div class=\"col-md-10\" style=\"margin: 0 0 10px 0;\">\n            <bSwitch [switch-size]=\"'small'\" [switch-animate]=\"true\" [(ngModel)]=\"state_input_call\" (onChangeState)=\"onChangeInputCall($event)\" [switch-off-text]=\"'Выкл'\"\n              [switch-on-text]=\"'Вкл'\"></bSwitch>\n            <span style=\"color:beige;margin-left: 18px;\">Принимать входящие звонки</span>\n        </div>\n        <div class=\"col-md-2\" style=\"text-align: right;color:white;\">{{user?.fio}}</div>\n    </div>\n  </div>\n</nav>\n\n<div *ngIf=\"server_error\" style=\"position: absolute;top:0;left:0;height: 100%;width: 100%;z-index: 100;\">\n    <div style=\"position: fixed;opacity: 0.7;width:100%;height:200%;background-color: white;\"></div>\n    <div style=\"position: relative;margin: auto;margin-top: 160px;text-align: center;color: darkred;\">\n        <h1>Опс... не могу получить доступ к серверу</h1>\n        <h4>Работа сайта возобновится после восстановления доступа к серверу</h4>\n    </div>\n</div>\n\n<div *ngIf=\"errors.length > 0\" style=\"position:absolute;width:100%;top:0;right:0;z-index:1000;\">\n    <div *ngFor=\"let error of errors;let i=index\" class=\"alert alert-danger\" style=\"margin: 0 0 5px 0;max-height: 300px;overflow-y: auto;\">\n        <button aria-hidden=\"true\" data-dismiss=\"alert\" class=\"close\" type=\"button\" (click)=\"removeError(i)\" style=\"margin-top:-10px;margin-right: -10px;\">×</button>\n        <span *ngIf=\"error?.host\" style=\"font-weight: 800;\">Host: {{error?.host}}</span> \n        <span  *ngIf=\"error?.message\"><pre>Описание: {{error?.message}} </pre></span>\n        <span  *ngIf=\"error?.rc\">Код rc: {{error?.rc}}</span>\n    </div>\n</div>\n\n<div *ngIf=\"messages.length > 0\" style=\"position:absolute;width:100%;top:0;right:0;z-index:1000;\">\n    <div *ngFor=\"let message of messages;let i=index\" class=\"alert alert-success\" style=\"margin: 0 0 5px 0;max-height: 300px;overflow-y: auto;\">\n        <button aria-hidden=\"true\" data-dismiss=\"alert\" class=\"close\" type=\"button\" (click)=\"removeMessage(i)\" style=\"margin-top:-10px;margin-right: -10px;\">×</button>\n        <span *ngIf=\"message?.host\" style=\"font-weight: 800;\">Host: {{message?.host}}</span> \n        <span  *ngIf=\"message?.message\"><pre>Описание: {{message?.message}} </pre></span>\n        <span  *ngIf=\"message?.rc\">Код rc: {{message?.rc}}</span>\n    </div>\n</div>"
 
 /***/ }),
 
@@ -1117,6 +1130,7 @@ var ModeDialogMasterComponent = (function () {
                 self.status_activedialog = 'error_connection';
             }
         });
+        self.status_activedialog = 'run';
         self._runHearbeatPupil();
     };
     ModeDialogMasterComponent.prototype.ngAfterViewInit = function () {
@@ -1413,6 +1427,7 @@ var ModeDialogPupilComponent = (function () {
                 self.status_activedialog = 'error_connection';
             }
         });
+        self.status_activedialog = 'run';
         self._runHearbeatPupil();
     };
     ModeDialogPupilComponent.prototype.ngAfterViewInit = function () {
@@ -2100,6 +2115,206 @@ module.exports = "<div class=\"row\">\n    <div class=\"container\">\n        <d
 
 /***/ }),
 
+/***/ "../../../../../src/app/components/scenario/scenario.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ScenarioComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+var ScenarioComponent = (function () {
+    function ScenarioComponent() {
+        this.loading = false;
+        this.graphData = {
+            nodes: [
+                { data: { id: 'j', name: 'Jerry', weight: 165, faveColor: '#6FB1FC', faveShape: 'triangle' } },
+                { data: { id: 'e', name: 'Elaine', weight: 145, faveColor: '#EDA1ED', faveShape: 'ellipse' } },
+                { data: { id: 'k', name: 'Kramer', weight: 175, faveColor: '#86B342', faveShape: 'octagon' } },
+                { data: { id: 'g', name: 'George', weight: 170, faveColor: '#F5A45D', faveShape: 'rectangle' } }
+            ],
+            edges: [
+                { data: { source: 'j', target: 'e', faveColor: '#6FB1FC', strength: 90 } },
+                { data: { source: 'j', target: 'k', faveColor: '#6FB1FC', strength: 90 } },
+                { data: { source: 'j', target: 'g', faveColor: '#6FB1FC', strength: 90 } },
+                { data: { source: 'e', target: 'j', faveColor: '#EDA1ED', strength: 90 } },
+                { data: { source: 'e', target: 'k', faveColor: '#EDA1ED', strength: 90 } },
+                { data: { source: 'k', target: 'j', faveColor: '#86B342', strength: 90 } },
+                { data: { source: 'k', target: 'e', faveColor: '#86B342', strength: 90 } },
+                { data: { source: 'k', target: 'g', faveColor: '#86B342', strength: 90 } },
+                { data: { source: 'g', target: 'j', faveColor: '#F5A45D', strength: 90 } }
+            ]
+        };
+        this.tapNodeFn = this.tapNode.bind(this);
+        this.tapBgFn = this.tapBg.bind(this);
+        this.self = this;
+    }
+    ScenarioComponent.prototype.ngOnInit = function () {
+        this._makeData();
+    };
+    ScenarioComponent.prototype.ngAfterViewInit = function () {
+    };
+    ScenarioComponent.prototype._makeData = function () {
+        if (!this.dialogue) {
+            return;
+        }
+        console.log('this.dialogue.scenario', this.dialogue.scenario);
+        var nodes = [];
+        var edges = [];
+        for (var i = 0; i < this.dialogue.scenario.steps.length; i++) {
+            var step = this.dialogue.scenario.steps[i];
+            // шаг
+            var data = {
+                data: {
+                    id: step.id,
+                    name: 'Шаг ' + step.id + ' ',
+                    weight: 165,
+                    faveColor: '#6FB1FC',
+                    faveShape: 'rectangle'
+                }
+            };
+            if (step.start_personage == 'master') {
+                data.data.faveColor = '#6FB1FC';
+            }
+            else {
+                data.data.faveColor = '#F5A45D';
+            }
+            nodes.push(data);
+            // вырианты
+            for (var j = 0; j < step.master.variants.length; j++) {
+                var variant = step.master.variants[j];
+                var data_1 = {
+                    data: {
+                        id: variant.id,
+                        name: 'Вариант ведущего ' + step.id,
+                        weight: 165,
+                        faveColor: '#6FB1FC',
+                        faveShape: 'rectangle',
+                        strength: 90
+                    }
+                };
+                nodes.push(data_1);
+            }
+            for (var j = 0; j < step.pupil.variants.length; j++) {
+                var variant = step.pupil.variants[j];
+                var data_2 = {
+                    data: {
+                        id: variant.id,
+                        name: 'Вариант игрока ' + step.id,
+                        weight: 165,
+                        faveColor: '#F5A45D',
+                        faveShape: 'rectangle',
+                        strength: 90
+                    }
+                };
+                nodes.push(data_2);
+            }
+        }
+        nodes.push({
+            data: {
+                id: -1,
+                name: 'Конец',
+                weight: 165,
+                faveColor: '#F5A45D',
+                faveShape: 'ellipse'
+            }
+        });
+        for (var i = 0; i < this.dialogue.scenario.steps.length; i++) {
+            var step = this.dialogue.scenario.steps[i];
+            for (var j = 0; j < step.master.variants.length; j++) {
+                var sdata = {
+                    data: {
+                        source: step.id,
+                        target: step.master.variants[j].id,
+                        faveColor: '#6FB1FC',
+                        strength: 90
+                    }
+                };
+                edges.push(sdata);
+                var tdata = {
+                    data: {
+                        source: step.master.variants[j].id,
+                        target: step.master.variants[j].next_step,
+                        faveColor: '#6FB1FC',
+                        strength: 90
+                    }
+                };
+                edges.push(tdata);
+            }
+            for (var j = 0; j < step.pupil.variants.length; j++) {
+                var sdata = {
+                    data: {
+                        source: step.id,
+                        target: step.pupil.variants[j].id,
+                        faveColor: '#F5A45D',
+                        strength: 90
+                    }
+                };
+                edges.push(sdata);
+                var tdata = {
+                    data: {
+                        source: step.pupil.variants[j].id,
+                        target: step.pupil.variants[j].next_step,
+                        faveColor: '#F5A45D',
+                        strength: 90
+                    }
+                };
+                edges.push(tdata);
+            }
+        }
+        this.graphData = {
+            nodes: nodes,
+            edges: edges
+        };
+    };
+    ScenarioComponent.prototype.ngOnDestroy = function () {
+    };
+    ScenarioComponent.prototype.tapNode = function (node) {
+        this.selected_node = null;
+        for (var i = 0; i < this.dialogue.scenario.steps.length; i++) {
+            if (this.dialogue.scenario.steps[i].id == node.id()) {
+                this.selected_node = this.dialogue.scenario.steps[i];
+                break;
+            }
+        }
+    };
+    ScenarioComponent.prototype.tapBg = function () {
+        this.selected_node = null;
+    };
+    return ScenarioComponent;
+}());
+__decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
+    __metadata("design:type", Object)
+], ScenarioComponent.prototype, "dialogue", void 0);
+ScenarioComponent = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+        selector: 'scenario',
+        template: __webpack_require__("../../../../../src/app/components/scenario/scenatio.template.html"),
+        styles: ["\n      ng2-cytoscape {\n        width: 100%;\n        height: 500px;\n        border:1px solid #ddd;\n        display: inline-block;\n    }"],
+    }),
+    __metadata("design:paramtypes", [])
+], ScenarioComponent);
+
+//# sourceMappingURL=scenario.component.js.map
+
+/***/ }),
+
+/***/ "../../../../../src/app/components/scenario/scenatio.template.html":
+/***/ (function(module, exports) {
+
+module.exports = "<h4>Редактор шагов</h4>\n<div class=\"col-md-6\">\n    <div>\n        <button type=\"\"></button>\n        <button type=\"\"></button>\n    </div>\n    <ng2-cytoscape [elements]=\"graphData\" [tapNode]=\"tapNodeFn\" [tapBg]=\"tapBgFn\"></ng2-cytoscape>\n</div>\n<div class=\"col-md-6\">\n    {{selected_node}}\n</div>"
+
+/***/ }),
+
 /***/ "../../../../../src/app/components/view_block_calling/callingfroms.component.ts":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -2258,8 +2473,8 @@ var DialogsService = (function () {
         this._http = _http;
         this.router = router;
     }
-    DialogsService.prototype.getDialog = function (dialog_id) {
-        return this._http.get(__WEBPACK_IMPORTED_MODULE_5__app_settings__["a" /* AppSettings */].URL_DIALOGS + dialog_id + '/')
+    DialogsService.prototype.getDialog = function (dialogue_id) {
+        return this._http.get(__WEBPACK_IMPORTED_MODULE_5__app_settings__["a" /* AppSettings */].URL_DIALOGS + dialogue_id + '/')
             .map(function (response) {
             return response.json();
         })
@@ -2272,8 +2487,8 @@ var DialogsService = (function () {
         })
             .catch(this.handleError.bind(this));
     };
-    DialogsService.prototype.getActiveDialog = function (activedialog_id) {
-        return this._http.get(__WEBPACK_IMPORTED_MODULE_5__app_settings__["a" /* AppSettings */].URL_ACTIVEDIALOGS + activedialog_id + '/')
+    DialogsService.prototype.getActiveDialog = function (activedialogue_id) {
+        return this._http.get(__WEBPACK_IMPORTED_MODULE_5__app_settings__["a" /* AppSettings */].URL_ACTIVEDIALOGS + activedialogue_id + '/')
             .map(function (response) {
             return response.json();
         })
@@ -2293,8 +2508,8 @@ var DialogsService = (function () {
         })
             .catch(this.handleError.bind(this));
     };
-    DialogsService.prototype.runDialog = function (dialog_id) {
-        return this._http.post(__WEBPACK_IMPORTED_MODULE_5__app_settings__["a" /* AppSettings */].URL_DIALOG_RUN + dialog_id + "/", {})
+    DialogsService.prototype.runDialog = function (dialogue_id) {
+        return this._http.post(__WEBPACK_IMPORTED_MODULE_5__app_settings__["a" /* AppSettings */].URL_DIALOG_RUN + dialogue_id + "/", {})
             .map(function (response) {
             return response.json();
         })
@@ -2307,15 +2522,29 @@ var DialogsService = (function () {
         })
             .catch(this.handleError.bind(this));
     };
-    DialogsService.prototype.runIntoDialog = function (dialog_id) {
-        return this._http.post(__WEBPACK_IMPORTED_MODULE_5__app_settings__["a" /* AppSettings */].URL_DIALOG_RUNINTO + dialog_id + "/", {})
+    DialogsService.prototype.runIntoDialog = function (dialogue_id) {
+        return this._http.post(__WEBPACK_IMPORTED_MODULE_5__app_settings__["a" /* AppSettings */].URL_DIALOG_RUNINTO + dialogue_id + "/", {})
             .map(function (response) {
             return response.json();
         })
             .catch(this.handleError.bind(this));
     };
-    DialogsService.prototype.stopActiveDialog = function (dialog_id) {
-        return this._http.post(__WEBPACK_IMPORTED_MODULE_5__app_settings__["a" /* AppSettings */].URL_DIALOG_ACTIVESTOP + dialog_id + "/", {})
+    DialogsService.prototype.stopActiveDialog = function (dialogue_id) {
+        return this._http.post(__WEBPACK_IMPORTED_MODULE_5__app_settings__["a" /* AppSettings */].URL_DIALOG_ACTIVESTOP + dialogue_id + "/", {})
+            .map(function (response) {
+            return response.json();
+        })
+            .catch(this.handleError.bind(this));
+    };
+    DialogsService.prototype.getMyDialogs = function () {
+        return this._http.get(__WEBPACK_IMPORTED_MODULE_5__app_settings__["a" /* AppSettings */].URL_MYDIALOGS)
+            .map(function (response) {
+            return response.json();
+        })
+            .catch(this.handleError.bind(this));
+    };
+    DialogsService.prototype.saveMyDialogs = function (dialogue_id, params) {
+        return this._http.post(__WEBPACK_IMPORTED_MODULE_5__app_settings__["a" /* AppSettings */].URL_MYDIALOGS + dialogue_id + "/", params)
             .map(function (response) {
             return response.json();
         })
@@ -2328,7 +2557,7 @@ var DialogsService = (function () {
             this.router.navigate(['/accounts/login/']);
         }
         if (error.status == 404) {
-            this.router.navigate(['/dialogs/']);
+            this.router.navigate(['/dialogues/']);
         }
         //error.json().error || 
         return __WEBPACK_IMPORTED_MODULE_1_rxjs__["Observable"].throw('Server error');
@@ -2594,7 +2823,7 @@ var StatusService = (function () {
             this.router.navigate(['/accounts/login/']);
         }
         if (error.status == 404) {
-            this.router.navigate(['/dialogs/']);
+            this.router.navigate(['/dialogues']);
         }
         return __WEBPACK_IMPORTED_MODULE_1_rxjs__["Observable"].throw('Server error');
     };
@@ -2689,6 +2918,202 @@ WebSocketService = __decorate([
 
 var _a;
 //# sourceMappingURL=websocket.service.js.map
+
+/***/ }),
+
+/***/ "../../../../../src/app/vendors/ng2-cytoscape/app.module.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return NgCytoscapeModule; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ng2_cytoscape__ = __webpack_require__("../../../../../src/app/vendors/ng2-cytoscape/ng2-cytoscape.ts");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+
+
+var NgCytoscapeModule = (function () {
+    function NgCytoscapeModule() {
+    }
+    return NgCytoscapeModule;
+}());
+NgCytoscapeModule = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["NgModule"])({
+        declarations: [
+            __WEBPACK_IMPORTED_MODULE_1__ng2_cytoscape__["a" /* NgCytoscapeComponent */],
+        ],
+        exports: [__WEBPACK_IMPORTED_MODULE_1__ng2_cytoscape__["a" /* NgCytoscapeComponent */]]
+    })
+], NgCytoscapeModule);
+
+//# sourceMappingURL=app.module.js.map
+
+/***/ }),
+
+/***/ "../../../../../src/app/vendors/ng2-cytoscape/index.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__app_module__ = __webpack_require__("../../../../../src/app/vendors/ng2-cytoscape/app.module.ts");
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_0__app_module__["a"]; });
+
+//# sourceMappingURL=index.js.map
+
+/***/ }),
+
+/***/ "../../../../../src/app/vendors/ng2-cytoscape/ng2-cytoscape.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return NgCytoscapeComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+var NgCytoscapeComponent = (function () {
+    function NgCytoscapeComponent(el) {
+        this.el = el;
+        this.layout = this.layout || {
+            /*
+            fit: true,
+            avoidOverlap: true,
+            padding: 30,
+            avoidOverlapPadding: 10,
+            nodeDimensionsIncludeLabels: false,
+            */
+            name: 'dagre',
+        };
+        this.zoom = this.zoom || {
+            min: 0.1,
+            max: 1.5
+        };
+        this.style = this.style || cytoscape.stylesheet()
+            .selector('node')
+            .css({
+            'content': 'data(name)',
+            'shape': 'data(faveShape)',
+            'text-valign': 'center',
+            'text-outline-width': 4,
+            'text-outline-color': 'data(faveColor)',
+            'background-color': 'data(faveColor)',
+            'width': '150px',
+            'height': '100px',
+            'color': '#fff'
+        })
+            .selector(':selected')
+            .css({
+            'border-width': 3,
+            'border-color': '#333'
+        })
+            .selector('edge')
+            .css({
+            'label': 'data(label)',
+            'color': 'black',
+            'curve-style': 'bezier',
+            'opacity': 0.666,
+            'width': 'mapData(strength, 70, 100, 2, 6)',
+            'target-arrow-shape': 'triangle',
+            'source-arrow-shape': 'circle',
+            'line-color': 'data(faveColor)',
+            'source-arrow-color': 'data(faveColor)',
+            'target-arrow-color': 'data(faveColor)'
+        })
+            .selector('edge.questionable')
+            .css({
+            'line-style': 'dotted',
+            'target-arrow-shape': 'diamond'
+        })
+            .selector('.faded')
+            .css({
+            'opacity': 0.25,
+            'text-opacity': 0
+        });
+    }
+    NgCytoscapeComponent.prototype.ngOnChanges = function () {
+        this.render();
+    };
+    NgCytoscapeComponent.prototype.render = function () {
+        this.cy = cytoscape({
+            container: jQuery(this.el.nativeElement),
+            layout: this.layout,
+            minZoom: this.zoom.min,
+            maxZoom: this.zoom.max,
+            style: this.style,
+            elements: this.elements,
+            zoomingEnabled: false,
+            zoom: 0.5,
+            selectionType: 'single',
+            userPanningEnabled: true,
+            panningEnabled: true,
+        });
+        var self = this;
+        this.cy.on('tap', function (evt) {
+            var evtTarget = evt.target;
+            console.log('evtTarget', evtTarget);
+            console.log('this.cy', self.cy);
+            if (evtTarget === self.cy) {
+                self.tapBg();
+                console.log('tap on background');
+            }
+            else {
+                self.tapNode(evtTarget);
+                console.log('tap on some element');
+            }
+            //let node = evt.target;
+            // console.log( 'tapped ' + node.id() );
+        });
+        console.log('this.elements ', this.elements);
+        this.cy.fit();
+        //this.cy.elements().kruskal();
+    };
+    return NgCytoscapeComponent;
+}());
+__decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
+    __metadata("design:type", Object)
+], NgCytoscapeComponent.prototype, "elements", void 0);
+__decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
+    __metadata("design:type", Object)
+], NgCytoscapeComponent.prototype, "style", void 0);
+__decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
+    __metadata("design:type", Object)
+], NgCytoscapeComponent.prototype, "layout", void 0);
+__decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
+    __metadata("design:type", Object)
+], NgCytoscapeComponent.prototype, "zoom", void 0);
+__decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
+    __metadata("design:type", Object)
+], NgCytoscapeComponent.prototype, "tapNode", void 0);
+__decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
+    __metadata("design:type", Object)
+], NgCytoscapeComponent.prototype, "tapBg", void 0);
+NgCytoscapeComponent = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+        selector: 'ng2-cytoscape',
+        template: '<div id="cy"></div>',
+        styles: ["#cy {\n        height: 100%;\n        width: 100%;\n        position: absolute;\n        left: 0;\n        top: 0;\n    }"]
+    }),
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["ElementRef"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_core__["ElementRef"]) === "function" && _a || Object])
+], NgCytoscapeComponent);
+
+var _a;
+//# sourceMappingURL=ng2-cytoscape.js.map
 
 /***/ }),
 
@@ -2804,28 +3229,37 @@ module.exports = "<div class=\"row\">\n    <div class=\"container\">\n        <d
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser__ = __webpack_require__("../../../platform-browser/@angular/platform-browser.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_router__ = __webpack_require__("../../../router/@angular/router.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_forms__ = __webpack_require__("../../../forms/@angular/forms.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__dialogsview_component__ = __webpack_require__("../../../../../src/app/views/dialogsview.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__activedialogsview_component__ = __webpack_require__("../../../../../src/app/views/activedialogsview.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_view_block_calling_callingfroms_component__ = __webpack_require__("../../../../../src/app/components/view_block_calling/callingfroms.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__components_mode_dialog_pupil_mode_dialog_pupil_component__ = __webpack_require__("../../../../../src/app/components/mode_dialog_pupil/mode_dialog_pupil.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__components_mode_dialog_master_mode_dialog_master_component__ = __webpack_require__("../../../../../src/app/components/mode_dialog_master/mode_dialog_master.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__dialogview_component__ = __webpack_require__("../../../../../src/app/views/dialogview.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__components_player_dialog_master_player_dialog_master_component__ = __webpack_require__("../../../../../src/app/components/player_dialog_master/player_dialog_master.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__components_player_dialog_pupil_player_dialog_pupil_component__ = __webpack_require__("../../../../../src/app/components/player_dialog_pupil/player_dialog_pupil.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__view_mode_wait_pupil_view_mode_wait_pupil_component__ = __webpack_require__("../../../../../src/app/views/view_mode_wait_pupil/view_mode_wait_pupil.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__view_mode_calling_view_mode_calling_component__ = __webpack_require__("../../../../../src/app/views/view_mode_calling/view_mode_calling.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__components_change_current_dialog_change_current_dialog_component__ = __webpack_require__("../../../../../src/app/components/change_current_dialog/change_current_dialog.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__view_message_view_message_component__ = __webpack_require__("../../../../../src/app/views/view_message/view_message.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__view_profile_view_profile_component__ = __webpack_require__("../../../../../src/app/views/view_profile/view_profile.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__components_common_notification_notification_component__ = __webpack_require__("../../../../../src/app/components/common/notification/notification.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__components_chat_chat_component__ = __webpack_require__("../../../../../src/app/components/chat/chat.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__view_profile_equal_validator_directive__ = __webpack_require__("../../../../../src/app/views/view_profile/equal_validator.directive.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__vendors_ng2_cytoscape__ = __webpack_require__("../../../../../src/app/vendors/ng2-cytoscape/index.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__dialogsview_component__ = __webpack_require__("../../../../../src/app/views/dialogsview.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__activedialogsview_component__ = __webpack_require__("../../../../../src/app/views/activedialogsview.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__components_view_block_calling_callingfroms_component__ = __webpack_require__("../../../../../src/app/components/view_block_calling/callingfroms.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__components_mode_dialog_pupil_mode_dialog_pupil_component__ = __webpack_require__("../../../../../src/app/components/mode_dialog_pupil/mode_dialog_pupil.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__components_mode_dialog_master_mode_dialog_master_component__ = __webpack_require__("../../../../../src/app/components/mode_dialog_master/mode_dialog_master.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__dialogview_component__ = __webpack_require__("../../../../../src/app/views/dialogview.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__components_player_dialog_master_player_dialog_master_component__ = __webpack_require__("../../../../../src/app/components/player_dialog_master/player_dialog_master.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__components_player_dialog_pupil_player_dialog_pupil_component__ = __webpack_require__("../../../../../src/app/components/player_dialog_pupil/player_dialog_pupil.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__view_mode_wait_pupil_view_mode_wait_pupil_component__ = __webpack_require__("../../../../../src/app/views/view_mode_wait_pupil/view_mode_wait_pupil.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__view_mode_calling_view_mode_calling_component__ = __webpack_require__("../../../../../src/app/views/view_mode_calling/view_mode_calling.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__components_change_current_dialog_change_current_dialog_component__ = __webpack_require__("../../../../../src/app/components/change_current_dialog/change_current_dialog.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__view_message_view_message_component__ = __webpack_require__("../../../../../src/app/views/view_message/view_message.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__view_profile_view_profile_component__ = __webpack_require__("../../../../../src/app/views/view_profile/view_profile.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__components_common_notification_notification_component__ = __webpack_require__("../../../../../src/app/components/common/notification/notification.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__components_chat_chat_component__ = __webpack_require__("../../../../../src/app/components/chat/chat.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__mydialogues_mydialogues_component__ = __webpack_require__("../../../../../src/app/views/mydialogues/mydialogues.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__mydialogues_mydialogue_edit_component__ = __webpack_require__("../../../../../src/app/views/mydialogues/mydialogue.edit.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__components_scenario_scenario_component__ = __webpack_require__("../../../../../src/app/components/scenario/scenario.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__view_profile_equal_validator_directive__ = __webpack_require__("../../../../../src/app/views/view_profile/equal_validator.directive.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
+
+
+
+// import { NgCytoscapeModule } from "ng2-cytoscape";
 
 
 
@@ -2854,45 +3288,52 @@ var AppviewsModule = (function () {
 AppviewsModule = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["NgModule"])({
         declarations: [
-            __WEBPACK_IMPORTED_MODULE_4__dialogsview_component__["a" /* DialogsViewComponent */],
-            __WEBPACK_IMPORTED_MODULE_5__activedialogsview_component__["a" /* ActiveDialogsViewComponent */],
-            __WEBPACK_IMPORTED_MODULE_6__components_view_block_calling_callingfroms_component__["a" /* CallingFromsComponent */],
-            __WEBPACK_IMPORTED_MODULE_7__components_mode_dialog_pupil_mode_dialog_pupil_component__["a" /* ModeDialogPupilComponent */],
-            __WEBPACK_IMPORTED_MODULE_8__components_mode_dialog_master_mode_dialog_master_component__["a" /* ModeDialogMasterComponent */],
-            __WEBPACK_IMPORTED_MODULE_9__dialogview_component__["a" /* DialogViewComponent */],
-            __WEBPACK_IMPORTED_MODULE_10__components_player_dialog_master_player_dialog_master_component__["a" /* PlayerDialogMasterComponent */],
-            __WEBPACK_IMPORTED_MODULE_11__components_player_dialog_pupil_player_dialog_pupil_component__["a" /* PlayerDialogPupilComponent */],
-            __WEBPACK_IMPORTED_MODULE_12__view_mode_wait_pupil_view_mode_wait_pupil_component__["a" /* ModeWaitPupilViewComponent */],
-            __WEBPACK_IMPORTED_MODULE_13__view_mode_calling_view_mode_calling_component__["a" /* ModeCallingViewComponent */],
-            __WEBPACK_IMPORTED_MODULE_14__components_change_current_dialog_change_current_dialog_component__["a" /* ChangeCurrentDialogComponent */],
-            __WEBPACK_IMPORTED_MODULE_15__view_message_view_message_component__["a" /* MessageViewComponent */],
-            __WEBPACK_IMPORTED_MODULE_16__view_profile_view_profile_component__["a" /* ProfileViewComponent */],
-            __WEBPACK_IMPORTED_MODULE_19__view_profile_equal_validator_directive__["a" /* EqualValidator */],
-            __WEBPACK_IMPORTED_MODULE_17__components_common_notification_notification_component__["a" /* NotificationComponent */],
-            __WEBPACK_IMPORTED_MODULE_18__components_chat_chat_component__["a" /* ChatComponent */],
+            __WEBPACK_IMPORTED_MODULE_5__dialogsview_component__["a" /* DialogsViewComponent */],
+            __WEBPACK_IMPORTED_MODULE_6__activedialogsview_component__["a" /* ActiveDialogsViewComponent */],
+            __WEBPACK_IMPORTED_MODULE_7__components_view_block_calling_callingfroms_component__["a" /* CallingFromsComponent */],
+            __WEBPACK_IMPORTED_MODULE_8__components_mode_dialog_pupil_mode_dialog_pupil_component__["a" /* ModeDialogPupilComponent */],
+            __WEBPACK_IMPORTED_MODULE_9__components_mode_dialog_master_mode_dialog_master_component__["a" /* ModeDialogMasterComponent */],
+            __WEBPACK_IMPORTED_MODULE_10__dialogview_component__["a" /* DialogViewComponent */],
+            __WEBPACK_IMPORTED_MODULE_11__components_player_dialog_master_player_dialog_master_component__["a" /* PlayerDialogMasterComponent */],
+            __WEBPACK_IMPORTED_MODULE_12__components_player_dialog_pupil_player_dialog_pupil_component__["a" /* PlayerDialogPupilComponent */],
+            __WEBPACK_IMPORTED_MODULE_13__view_mode_wait_pupil_view_mode_wait_pupil_component__["a" /* ModeWaitPupilViewComponent */],
+            __WEBPACK_IMPORTED_MODULE_14__view_mode_calling_view_mode_calling_component__["a" /* ModeCallingViewComponent */],
+            __WEBPACK_IMPORTED_MODULE_15__components_change_current_dialog_change_current_dialog_component__["a" /* ChangeCurrentDialogComponent */],
+            __WEBPACK_IMPORTED_MODULE_16__view_message_view_message_component__["a" /* MessageViewComponent */],
+            __WEBPACK_IMPORTED_MODULE_17__view_profile_view_profile_component__["a" /* ProfileViewComponent */],
+            __WEBPACK_IMPORTED_MODULE_23__view_profile_equal_validator_directive__["a" /* EqualValidator */],
+            __WEBPACK_IMPORTED_MODULE_18__components_common_notification_notification_component__["a" /* NotificationComponent */],
+            __WEBPACK_IMPORTED_MODULE_19__components_chat_chat_component__["a" /* ChatComponent */],
+            __WEBPACK_IMPORTED_MODULE_20__mydialogues_mydialogues_component__["a" /* MyDialoguesViewComponent */],
+            __WEBPACK_IMPORTED_MODULE_21__mydialogues_mydialogue_edit_component__["a" /* MyDialogueEditViewComponent */],
+            __WEBPACK_IMPORTED_MODULE_22__components_scenario_scenario_component__["a" /* ScenarioComponent */],
         ],
         imports: [
             __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser__["a" /* BrowserModule */],
             __WEBPACK_IMPORTED_MODULE_2__angular_router__["c" /* RouterModule */],
             __WEBPACK_IMPORTED_MODULE_3__angular_forms__["FormsModule"],
+            __WEBPACK_IMPORTED_MODULE_4__vendors_ng2_cytoscape__["a" /* NgCytoscapeModule */],
         ],
         exports: [
-            __WEBPACK_IMPORTED_MODULE_4__dialogsview_component__["a" /* DialogsViewComponent */],
-            __WEBPACK_IMPORTED_MODULE_5__activedialogsview_component__["a" /* ActiveDialogsViewComponent */],
-            __WEBPACK_IMPORTED_MODULE_6__components_view_block_calling_callingfroms_component__["a" /* CallingFromsComponent */],
-            __WEBPACK_IMPORTED_MODULE_7__components_mode_dialog_pupil_mode_dialog_pupil_component__["a" /* ModeDialogPupilComponent */],
-            __WEBPACK_IMPORTED_MODULE_8__components_mode_dialog_master_mode_dialog_master_component__["a" /* ModeDialogMasterComponent */],
-            __WEBPACK_IMPORTED_MODULE_9__dialogview_component__["a" /* DialogViewComponent */],
-            __WEBPACK_IMPORTED_MODULE_10__components_player_dialog_master_player_dialog_master_component__["a" /* PlayerDialogMasterComponent */],
-            __WEBPACK_IMPORTED_MODULE_11__components_player_dialog_pupil_player_dialog_pupil_component__["a" /* PlayerDialogPupilComponent */],
-            __WEBPACK_IMPORTED_MODULE_12__view_mode_wait_pupil_view_mode_wait_pupil_component__["a" /* ModeWaitPupilViewComponent */],
-            __WEBPACK_IMPORTED_MODULE_13__view_mode_calling_view_mode_calling_component__["a" /* ModeCallingViewComponent */],
-            __WEBPACK_IMPORTED_MODULE_14__components_change_current_dialog_change_current_dialog_component__["a" /* ChangeCurrentDialogComponent */],
-            __WEBPACK_IMPORTED_MODULE_15__view_message_view_message_component__["a" /* MessageViewComponent */],
-            __WEBPACK_IMPORTED_MODULE_16__view_profile_view_profile_component__["a" /* ProfileViewComponent */],
-            __WEBPACK_IMPORTED_MODULE_19__view_profile_equal_validator_directive__["a" /* EqualValidator */],
-            __WEBPACK_IMPORTED_MODULE_17__components_common_notification_notification_component__["a" /* NotificationComponent */],
-            __WEBPACK_IMPORTED_MODULE_18__components_chat_chat_component__["a" /* ChatComponent */],
+            __WEBPACK_IMPORTED_MODULE_5__dialogsview_component__["a" /* DialogsViewComponent */],
+            __WEBPACK_IMPORTED_MODULE_6__activedialogsview_component__["a" /* ActiveDialogsViewComponent */],
+            __WEBPACK_IMPORTED_MODULE_7__components_view_block_calling_callingfroms_component__["a" /* CallingFromsComponent */],
+            __WEBPACK_IMPORTED_MODULE_8__components_mode_dialog_pupil_mode_dialog_pupil_component__["a" /* ModeDialogPupilComponent */],
+            __WEBPACK_IMPORTED_MODULE_9__components_mode_dialog_master_mode_dialog_master_component__["a" /* ModeDialogMasterComponent */],
+            __WEBPACK_IMPORTED_MODULE_10__dialogview_component__["a" /* DialogViewComponent */],
+            __WEBPACK_IMPORTED_MODULE_11__components_player_dialog_master_player_dialog_master_component__["a" /* PlayerDialogMasterComponent */],
+            __WEBPACK_IMPORTED_MODULE_12__components_player_dialog_pupil_player_dialog_pupil_component__["a" /* PlayerDialogPupilComponent */],
+            __WEBPACK_IMPORTED_MODULE_13__view_mode_wait_pupil_view_mode_wait_pupil_component__["a" /* ModeWaitPupilViewComponent */],
+            __WEBPACK_IMPORTED_MODULE_14__view_mode_calling_view_mode_calling_component__["a" /* ModeCallingViewComponent */],
+            __WEBPACK_IMPORTED_MODULE_15__components_change_current_dialog_change_current_dialog_component__["a" /* ChangeCurrentDialogComponent */],
+            __WEBPACK_IMPORTED_MODULE_16__view_message_view_message_component__["a" /* MessageViewComponent */],
+            __WEBPACK_IMPORTED_MODULE_17__view_profile_view_profile_component__["a" /* ProfileViewComponent */],
+            __WEBPACK_IMPORTED_MODULE_23__view_profile_equal_validator_directive__["a" /* EqualValidator */],
+            __WEBPACK_IMPORTED_MODULE_18__components_common_notification_notification_component__["a" /* NotificationComponent */],
+            __WEBPACK_IMPORTED_MODULE_19__components_chat_chat_component__["a" /* ChatComponent */],
+            __WEBPACK_IMPORTED_MODULE_20__mydialogues_mydialogues_component__["a" /* MyDialoguesViewComponent */],
+            __WEBPACK_IMPORTED_MODULE_21__mydialogues_mydialogue_edit_component__["a" /* MyDialogueEditViewComponent */],
+            __WEBPACK_IMPORTED_MODULE_22__components_scenario_scenario_component__["a" /* ScenarioComponent */],
         ],
     })
 ], AppviewsModule);
@@ -3098,7 +3539,7 @@ var _a, _b, _c, _d, _e;
 /***/ "../../../../../src/app/views/dialogsview.template.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"row\">\n    <div class=\"container\">\n        <div class=\"panel panel-default\">\n            <div class=\"panel-heading\">\n                <h4>Выберите диалог</h4>\n            </div>\n            <div class=\"panel-body\" style=\"position: relative;\">\n                <!-- Loading -->\n                <div *ngIf=\"loading\" style=\"position: absolute;top:0;left:0;width:100%;height:100%;z-index: 100;\">\n                    <div style=\"position: absolute;opacity: 0.5;width:100%;height:100%;background-color: white;\">\n                    </div>\n                    <div style=\"width: 50px;margin: auto;margin-top: 160px;\">\n                        <i class=\"fa fa-spin fa-gear\" style=\"font-size: 50px;\"></i>\n                    </div>\n                </div>\n                <!-- END Loading -->\n\n                <div class=\"row\" style=\"margin: 20px 0;\"> \n                    <div class=\"col-sm-6 col-md-4\" *ngFor=\"let item of dialogs\"> \n                        <div class=\"thumbnail\"> \n                            <div class=\"\" style=\"width: 100%;position: relative;\">\n                                <img *ngIf=\"!item.background_image\" alt=\"100%x200\" data-src=\"holder.js/100%x200\" src=\"data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/PjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iMjQyIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDI0MiAyMDAiIHByZXNlcnZlQXNwZWN0UmF0aW89Im5vbmUiPjwhLS0KU291cmNlIFVSTDogaG9sZGVyLmpzLzEwMCV4MjAwCkNyZWF0ZWQgd2l0aCBIb2xkZXIuanMgMi42LjAuCkxlYXJuIG1vcmUgYXQgaHR0cDovL2hvbGRlcmpzLmNvbQooYykgMjAxMi0yMDE1IEl2YW4gTWFsb3BpbnNreSAtIGh0dHA6Ly9pbXNreS5jbwotLT48ZGVmcz48c3R5bGUgdHlwZT0idGV4dC9jc3MiPjwhW0NEQVRBWyNob2xkZXJfMTVlOTZiYzA5NjUgdGV4dCB7IGZpbGw6I0FBQUFBQTtmb250LXdlaWdodDpib2xkO2ZvbnQtZmFtaWx5OkFyaWFsLCBIZWx2ZXRpY2EsIE9wZW4gU2Fucywgc2Fucy1zZXJpZiwgbW9ub3NwYWNlO2ZvbnQtc2l6ZToxMnB0IH0gXV0+PC9zdHlsZT48L2RlZnM+PGcgaWQ9ImhvbGRlcl8xNWU5NmJjMDk2NSI+PHJlY3Qgd2lkdGg9IjI0MiIgaGVpZ2h0PSIyMDAiIGZpbGw9IiNFRUVFRUUiLz48Zz48dGV4dCB4PSI4OS44NTkzNzUiIHk9IjEwNS40Ij4yNDJ4MjAwPC90ZXh0PjwvZz48L2c+PC9zdmc+\" data-holder-rendered=\"true\" style=\"height: 50px; width: 50px; display: block;float: left;\"> \n                                <div *ngIf=\"item.background_image\" \n                                    [ngStyle]=\"{'background-image': 'url(' + item.background_image + ')'}\"\n                                    style=\"\n                                        height: 60px; \n                                        width: 90px; \n                                        background-size: cover;\n                                        display: block;\n                                        float: left;\"></div>\n\n                                <div style=\"position: absolute; right: 0;top:0;display: flex;align-items: center;\">\n                                    \n                                    <p  class=\"badge\" [ngClass]=\"{\n                                        'bg-color-begin': item.level == 10,\n                                        'bg-color-preintermediate': item.level == 20,\n                                        'bg-color-intermediate': item.level == 30\n                                    }\" style=\"margin: 5px;\">{{item.level_display}}</p>\n\n\n                                    <div style=\"width: 40px;height: 40px;border: 2px solid darkcyan;border-radius: 4px;cursor: pointer;\" (click)=\"turnActiveDialog(item)\">\n                                        <div *ngIf=\"item.checked\" style=\"width: 28px;height: 28px;background-color: darkcyan;border-radius: 4px;margin:4px;\"></div>\n                                    </div>\n                                </div>\n                                <div style=\"text-align: right;padding-top: 40px;\">\n                                    <p class=\"badge badge-info\" style=\"margin:5px;background-color: darkcyan;\" *ngFor=\"let item of item.tags\">{{item.name}}</p>\n                                </div>\n                            </div>\n                            <div class=\"caption\" style=\"clear:both;\"> \n                                <h3>{{item.name}}</h3> \n                                <p>{{item.description}}</p> \n                                <p><!--\n                                    <button class=\"btn btn-primary\" (click)=\"runDialog(item)\">\n                                        Запустить диалог и ждать собеседника\n                                    </button> \n                                -->\n                                    <button class=\"btn btn-success btn-xs\" [routerLink]=\"['/dialog', item.id]\">\n                                        Просмотреть\n                                    </button> \n                                </p> \n                            </div> \n                        </div> \n                    </div> \n                </div>\n\n            </div>\n        </div>\n        <!--\n        <div *ngIf=\"mode == 'mode_wait_pupil'\">\n            <modewaitpupil [user]=\"user\" [activedialog]=\"activedialog\" (stopwaitingdialog)=\"handelerStopWaitDialog($event)\" (acceptcall)=\"handlerAcceptCall($event)\"></modewaitpupil>\n        </div>\n        \n\n\n        <div *ngIf=\"mode == 'mode_calling'\">\n            <modecalling [callingdialog]=\"callingdialog\" (stopcalling)=\"handlerStopCalling($event)\"></modecalling>\n        </div>\n        \n        \n        <div *ngIf=\"mode == 'mode_dialog_master'\">\n            <modedialogmaster [activedialogid]=\"activedialog_id\" (stopdialog)=\"handelerStopDialog($event)\"></modedialogmaster>\n        </div>\n\n        <div *ngIf=\"mode == 'mode_dialog_pupil'\">\n            <modedialogpupil [activedialogid]=\"activedialog_id\" (stopdialog)=\"handelerStopDialog($event)\"></modedialogpupil>\n        </div>\n        -->\n    </div>\n</div>\n\n"
+module.exports = "<div class=\"row\">\n    <div class=\"container\">\n        <div class=\"panel panel-default\">\n            <div class=\"panel-heading\">\n                <h4>Выберите диалог</h4>\n            </div>\n            <div class=\"panel-body\" style=\"position: relative;\">\n                <!-- Loading -->\n                <div *ngIf=\"loading\" style=\"position: absolute;top:0;left:0;width:100%;height:100%;z-index: 100;\">\n                    <div style=\"position: absolute;opacity: 0.5;width:100%;height:100%;background-color: white;\">\n                    </div>\n                    <div style=\"width: 50px;margin: auto;margin-top: 160px;\">\n                        <i class=\"fa fa-spin fa-gear\" style=\"font-size: 50px;\"></i>\n                    </div>\n                </div>\n                <!-- END Loading -->\n\n                <div class=\"row\" style=\"margin: 20px 0;\"> \n                    <div class=\"col-sm-6 col-md-4\" *ngFor=\"let item of dialogs\"> \n                        <div class=\"thumbnail\"> \n                            <div class=\"\" style=\"width: 100%;position: relative;\">\n                                <img *ngIf=\"!item.background_image\" alt=\"100%x200\" data-src=\"holder.js/100%x200\" src=\"data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/PjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iMjQyIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDI0MiAyMDAiIHByZXNlcnZlQXNwZWN0UmF0aW89Im5vbmUiPjwhLS0KU291cmNlIFVSTDogaG9sZGVyLmpzLzEwMCV4MjAwCkNyZWF0ZWQgd2l0aCBIb2xkZXIuanMgMi42LjAuCkxlYXJuIG1vcmUgYXQgaHR0cDovL2hvbGRlcmpzLmNvbQooYykgMjAxMi0yMDE1IEl2YW4gTWFsb3BpbnNreSAtIGh0dHA6Ly9pbXNreS5jbwotLT48ZGVmcz48c3R5bGUgdHlwZT0idGV4dC9jc3MiPjwhW0NEQVRBWyNob2xkZXJfMTVlOTZiYzA5NjUgdGV4dCB7IGZpbGw6I0FBQUFBQTtmb250LXdlaWdodDpib2xkO2ZvbnQtZmFtaWx5OkFyaWFsLCBIZWx2ZXRpY2EsIE9wZW4gU2Fucywgc2Fucy1zZXJpZiwgbW9ub3NwYWNlO2ZvbnQtc2l6ZToxMnB0IH0gXV0+PC9zdHlsZT48L2RlZnM+PGcgaWQ9ImhvbGRlcl8xNWU5NmJjMDk2NSI+PHJlY3Qgd2lkdGg9IjI0MiIgaGVpZ2h0PSIyMDAiIGZpbGw9IiNFRUVFRUUiLz48Zz48dGV4dCB4PSI4OS44NTkzNzUiIHk9IjEwNS40Ij4yNDJ4MjAwPC90ZXh0PjwvZz48L2c+PC9zdmc+\" data-holder-rendered=\"true\" style=\"height: 50px; width: 50px; display: block;float: left;\"> \n                                <div *ngIf=\"item.background_image\" \n                                    [ngStyle]=\"{'background-image': 'url(' + item.background_image + ')'}\"\n                                    style=\"\n                                        height: 60px; \n                                        width: 90px; \n                                        background-size: cover;\n                                        display: block;\n                                        float: left;\"></div>\n\n                                <div style=\"position: absolute; right: 0;top:0;display: flex;align-items: center;\">\n                                    \n                                    <p  class=\"badge\" [ngClass]=\"{\n                                        'bg-color-begin': item.level == 10,\n                                        'bg-color-preintermediate': item.level == 20,\n                                        'bg-color-intermediate': item.level == 30\n                                    }\" style=\"margin: 5px;\">{{item.level_display}}</p>\n\n\n                                    <div style=\"width: 40px;height: 40px;border: 2px solid darkcyan;border-radius: 4px;cursor: pointer;\" (click)=\"turnActiveDialog(item)\">\n                                        <div *ngIf=\"item.checked\" style=\"width: 28px;height: 28px;background-color: darkcyan;border-radius: 4px;margin:4px;\"></div>\n                                    </div>\n                                </div>\n                                <div style=\"text-align: right;padding-top: 40px;\">\n                                    <p class=\"badge badge-info\" style=\"margin:5px;background-color: darkcyan;\" *ngFor=\"let item of item.tags\">{{item.name}}</p>\n                                </div>\n                            </div>\n                            <div class=\"caption\" style=\"clear:both;\"> \n                                <h3>{{item.name}}</h3> \n                                <p>{{item.description}}</p> \n                                <p><!--\n                                    <button class=\"btn btn-primary\" (click)=\"runDialog(item)\">\n                                        Запустить диалог и ждать собеседника\n                                    </button> \n                                -->\n                                    <button class=\"btn btn-success btn-xs\" [routerLink]=\"['/dialogue', item.id]\">\n                                        Просмотреть\n                                    </button> \n                                </p> \n                            </div> \n                        </div> \n                    </div> \n                </div>\n\n            </div>\n        </div>\n    </div>\n</div>\n\n"
 
 /***/ }),
 
@@ -3225,6 +3666,276 @@ module.exports = "<div class=\"row\">\n    <div class=\"container\">\n        <d
 
 /***/ }),
 
+/***/ "../../../../../src/app/views/mydialogues/mydialogue.edit.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return MyDialogueEditViewComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_router__ = __webpack_require__("../../../router/@angular/router.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_dialogs_service__ = __webpack_require__("../../../../../src/app/services/dialogs.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__services_status_service__ = __webpack_require__("../../../../../src/app/services/status.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__services_notification_service__ = __webpack_require__("../../../../../src/app/services/notification.service.ts");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+
+var MyDialogueEditViewComponent = (function () {
+    function MyDialogueEditViewComponent(dialogsService, statusService, router, activatedRoute, notificationService, ref) {
+        this.dialogsService = dialogsService;
+        this.statusService = statusService;
+        this.router = router;
+        this.activatedRoute = activatedRoute;
+        this.notificationService = notificationService;
+        this.ref = ref;
+        this.mode = 'base'; //base, scenario
+        this.dialogue = {
+            name: ""
+        };
+        this.loading = false;
+        this.levels = [
+            {
+                id: 10,
+                title: "Beginner, Elementary"
+            }, {
+                id: 20,
+                title: "Pre-Intermediate"
+            }, {
+                id: 30,
+                title: "Intermediate"
+            }, {
+                id: 40,
+                title: "Upper-Intermediate"
+            }, {
+                id: 50,
+                title: "Advanced"
+            }, {
+                id: 60,
+                title: "Proficiency"
+            },
+        ];
+    }
+    MyDialogueEditViewComponent.prototype.ngOnInit = function () {
+        var self = this;
+        self.statusService.ready.subscribe(function (date) {
+            self.user = self.statusService.user;
+            if (!self.user) {
+                return;
+            }
+        });
+        if (self.statusService.user) {
+            self.user = self.statusService.user;
+        }
+        else {
+            self.statusService.getStatus();
+        }
+        this._getDialog();
+    };
+    MyDialogueEditViewComponent.prototype.ngAfterViewInit = function () {
+    };
+    MyDialogueEditViewComponent.prototype._getDialog = function () {
+        var _this = this;
+        var self = this;
+        this.activatedRoute.params
+            .pluck('dialogue_id')
+            .switchMap(function (dialogue_id) { return _this.dialogsService.getDialog(dialogue_id); })
+            .subscribe(function (dialogue) {
+            self.dialogue = dialogue;
+            self._initVars();
+            console.log('self.dialogue ', self.dialogue);
+            if (_this.dialogue.scenario && _this.dialogue.scenario.personages) {
+                self.personages = _this.dialogue.scenario.personages;
+                self.selectedPersonage = self.dialogue.scenario.steps[0].start_personage;
+            }
+        });
+    };
+    MyDialogueEditViewComponent.prototype._initVars = function () {
+        if (this.dialogue) {
+            for (var i = 0; i < this.levels.length; i++) {
+                if (this.levels[i].id == this.dialogue.level) {
+                    this.selectedDialogLevel = this.levels[i].id;
+                }
+            }
+        }
+        else {
+            this.selectedDialogLevel = this.levels[0].id;
+        }
+    };
+    MyDialogueEditViewComponent.prototype._detectChanges = function () {
+        var _this = this;
+        // Programmatically run change detection to fix issue in Safari
+        setTimeout(function () {
+            if (_this.ref !== null &&
+                _this.ref !== undefined &&
+                !_this.ref.destroyed) {
+                _this.ref.detectChanges();
+            }
+        }, 250);
+    };
+    MyDialogueEditViewComponent.prototype.saveDialog = function (item) {
+        var _this = this;
+        item.is_published = !item.is_published;
+        console.log('item', item);
+        this.loading = true;
+        var params = {
+            is_published: item.is_published
+        };
+        this.dialogsService.saveMyDialogs(item.id, params).subscribe(function (data) {
+            _this.loading = false;
+        });
+    };
+    return MyDialogueEditViewComponent;
+}());
+MyDialogueEditViewComponent = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+        selector: 'mydialogueedit',
+        template: __webpack_require__("../../../../../src/app/views/mydialogues/mydialogue.edit.template.html")
+    }),
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__services_dialogs_service__["a" /* DialogsService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__services_dialogs_service__["a" /* DialogsService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_3__services_status_service__["a" /* StatusService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__services_status_service__["a" /* StatusService */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_1__angular_router__["b" /* Router */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_router__["b" /* Router */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_1__angular_router__["a" /* ActivatedRoute */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_router__["a" /* ActivatedRoute */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_4__services_notification_service__["a" /* NotificationService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__services_notification_service__["a" /* NotificationService */]) === "function" && _e || Object, typeof (_f = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["ChangeDetectorRef"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_core__["ChangeDetectorRef"]) === "function" && _f || Object])
+], MyDialogueEditViewComponent);
+
+var _a, _b, _c, _d, _e, _f;
+//# sourceMappingURL=mydialogue.edit.component.js.map
+
+/***/ }),
+
+/***/ "../../../../../src/app/views/mydialogues/mydialogue.edit.template.html":
+/***/ (function(module, exports) {
+
+module.exports = "<div style=\"padding: 20px\">\n    <div class=\"panel panel-primary\">\n        <div class=\"panel-heading\">\n            Редактируем диалог <strong>{{dialogue?.name}}</strong>\n        </div>\n        <div class=\"panel-body\" style=\"padding: 20px;\">\n            <ul class=\"nav nav-tabs\" role=\"tablist\">\n                <li (click)=\"mode='base'\" class=\"active\"><a href=\"#home\" aria-controls=\"home\" role=\"tab\" data-toggle=\"tab\">Описание диалога</a></li>\n                <li (click)=\"mode='scenario'\"><a href=\"#profile\" aria-controls=\"profile\" role=\"tab\" data-toggle=\"tab\">Сценарий диалога</a></li>\n            </ul>\n\n             <!-- Tab panes -->\n            <div *ngIf=\"mode=='base'\" class=\"tab-content\" style=\"padding: 20px;\">\n                <form #frm=\"ngForm\" (ngSubmit)=\"submit()\">\n                    <div class=\"form-group\">\n                        <label for=\"name\">Название диалога</label>\n                        <input name=\"frm_name\" type=\"email\" class=\"form-control\" id=\"name\" [(ngModel)]=\"dialogue.name\" required=\"required\">\n                    </div>\n                    <div class=\"form-group\">\n                        <label for=\"description\">Описание диалога</label>\n                        <textarea name=\"frm_descriptioon\" class=\"form-control\" id=\"description\"  [ngModel]=\"dialogue?.description\" required=\"required\"></textarea>\n                    </div>\n                    <div class=\"form-group\">\n                        <label for=\"level\">Требуемый уровень английсокого</label>\n                        <select name=\"frm_level\" id=\"level\" class=\"form-control\" [(ngModel)]=\"selectedDialogLevel\" required=\"required\">\n                             <option *ngFor=\"let level of levels\" [value]=\"level.id\">{{level.title}}</option>\n                         </select>\n                    </div>\n\n                    <div class=\"form-group\">\n                        <label for=\"background_image\">Картинка диалога</label>\n                        <div>\n                            <div class=\"col-md-6\">\n                                <input type=\"file\" class=\"btn btn-default\" id=\"background_image\" value=\"\">\n                            </div>\n                            <div class=\"col-md-6\">\n                                <img *ngIf=\"!dialogue.background_image\" alt=\"100%x200\" data-src=\"holder.js/100%x200\" src=\"data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/PjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iMjQyIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDI0MiAyMDAiIHByZXNlcnZlQXNwZWN0UmF0aW89Im5vbmUiPjwhLS0KU291cmNlIFVSTDogaG9sZGVyLmpzLzEwMCV4MjAwCkNyZWF0ZWQgd2l0aCBIb2xkZXIuanMgMi42LjAuCkxlYXJuIG1vcmUgYXQgaHR0cDovL2hvbGRlcmpzLmNvbQooYykgMjAxMi0yMDE1IEl2YW4gTWFsb3BpbnNreSAtIGh0dHA6Ly9pbXNreS5jbwotLT48ZGVmcz48c3R5bGUgdHlwZT0idGV4dC9jc3MiPjwhW0NEQVRBWyNob2xkZXJfMTVlOTZiYzA5NjUgdGV4dCB7IGZpbGw6I0FBQUFBQTtmb250LXdlaWdodDpib2xkO2ZvbnQtZmFtaWx5OkFyaWFsLCBIZWx2ZXRpY2EsIE9wZW4gU2Fucywgc2Fucy1zZXJpZiwgbW9ub3NwYWNlO2ZvbnQtc2l6ZToxMnB0IH0gXV0+PC9zdHlsZT48L2RlZnM+PGcgaWQ9ImhvbGRlcl8xNWU5NmJjMDk2NSI+PHJlY3Qgd2lkdGg9IjI0MiIgaGVpZ2h0PSIyMDAiIGZpbGw9IiNFRUVFRUUiLz48Zz48dGV4dCB4PSI4OS44NTkzNzUiIHk9IjEwNS40Ij4yNDJ4MjAwPC90ZXh0PjwvZz48L2c+PC9zdmc+\" data-holder-rendered=\"true\" style=\"height: 50px; width: 50px; display: block;margin: 0 10px;\"> \n                                    <div *ngIf=\"dialogue && dialogue.background_image\" \n                                        [ngStyle]=\"{'background-image': 'url(' + dialogue.background_image + ')'}\"\n                                        style=\"\n                                            height: 160px; \n                                            width: 190px; \n                                            background-size: cover;\n                                            display: block;\n                                            margin: 0 10px;\">\n                                    </div>\n                            </div>\n                        </div>\n                    </div>\n                 \n                    <button type=\"submit\" class=\"btn btn-primary btn-lg\" [disabled]=\"!frm.valid\">Сохранить</button>\n                </form>\n            </div>\n\n            <div *ngIf=\"mode=='scenario'\" class=\"tab-content\" style=\"padding: 20px;\">\n                <scenario [dialogue]=\"dialogue\"></scenario>\n            </div>\n        </div>\n    </div>\n    </div>"
+
+/***/ }),
+
+/***/ "../../../../../src/app/views/mydialogues/mydialogues.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return MyDialoguesViewComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_router__ = __webpack_require__("../../../router/@angular/router.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_dialogs_service__ = __webpack_require__("../../../../../src/app/services/dialogs.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__services_status_service__ = __webpack_require__("../../../../../src/app/services/status.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__services_notification_service__ = __webpack_require__("../../../../../src/app/services/notification.service.ts");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+
+var MyDialoguesViewComponent = (function () {
+    function MyDialoguesViewComponent(dialogsService, statusService, router, notificationService, ref) {
+        this.dialogsService = dialogsService;
+        this.statusService = statusService;
+        this.router = router;
+        this.notificationService = notificationService;
+        this.ref = ref;
+        this.dialogs = [];
+        this.loading = false;
+    }
+    MyDialoguesViewComponent.prototype.ngOnInit = function () {
+        var self = this;
+        self.statusService.ready.subscribe(function (date) {
+            self.user = self.statusService.user;
+            if (!self.user) {
+                return;
+            }
+        });
+        if (self.statusService.user) {
+            self.user = self.statusService.user;
+        }
+        else {
+            self.statusService.getStatus();
+        }
+        this._updateActiveDialogs();
+    };
+    MyDialoguesViewComponent.prototype.ngAfterViewInit = function () {
+    };
+    MyDialoguesViewComponent.prototype._updateActiveDialogs = function () {
+        var _this = this;
+        this.loading = true;
+        this.dialogsService.getMyDialogs().subscribe(function (data) {
+            _this.dialogs = data;
+            _this.loading = false;
+        });
+    };
+    MyDialoguesViewComponent.prototype.turnActiveDialog = function (dialog) {
+        var self = this;
+        self.loading = true;
+        self.dialogsService.runDialog(dialog.id).subscribe(function (data) {
+            self.loading = false;
+            if (data.status) {
+                for (var i = 0; i < self.dialogs.length; i++) {
+                    if (self.dialogs[i].id == dialog.id) {
+                        self.dialogs[i] = data.dialog;
+                    }
+                }
+                self._detectChanges();
+            }
+        });
+    };
+    MyDialoguesViewComponent.prototype._detectChanges = function () {
+        var _this = this;
+        // Programmatically run change detection to fix issue in Safari
+        setTimeout(function () {
+            if (_this.ref !== null &&
+                _this.ref !== undefined &&
+                !_this.ref.destroyed) {
+                _this.ref.detectChanges();
+            }
+        }, 250);
+    };
+    MyDialoguesViewComponent.prototype.publishDialog = function (item) {
+        var _this = this;
+        item.is_published = !item.is_published;
+        console.log('item', item);
+        this.loading = true;
+        var params = {
+            is_published: item.is_published
+        };
+        this.dialogsService.saveMyDialogs(item.id, params).subscribe(function (data) {
+            _this.loading = false;
+        });
+    };
+    return MyDialoguesViewComponent;
+}());
+MyDialoguesViewComponent = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+        selector: 'mydialogues',
+        template: __webpack_require__("../../../../../src/app/views/mydialogues/mydialogues.template.html")
+    }),
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__services_dialogs_service__["a" /* DialogsService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__services_dialogs_service__["a" /* DialogsService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_3__services_status_service__["a" /* StatusService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__services_status_service__["a" /* StatusService */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_1__angular_router__["b" /* Router */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_router__["b" /* Router */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_4__services_notification_service__["a" /* NotificationService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__services_notification_service__["a" /* NotificationService */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["ChangeDetectorRef"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_core__["ChangeDetectorRef"]) === "function" && _e || Object])
+], MyDialoguesViewComponent);
+
+var _a, _b, _c, _d, _e;
+//# sourceMappingURL=mydialogues.component.js.map
+
+/***/ }),
+
+/***/ "../../../../../src/app/views/mydialogues/mydialogues.template.html":
+/***/ (function(module, exports) {
+
+module.exports = "<div class=\"row\">\n    <div class=\"container\">\n        <div class=\"panel panel-default\">\n            <div class=\"panel-heading\">\n                <h4>Выберите диалог для редактирования</h4>\n            </div>\n            <div class=\"panel-body\" style=\"position: relative;\">\n                <!-- Loading -->\n                <div *ngIf=\"loading\" style=\"position: absolute;top:0;left:0;width:100%;height:100%;z-index: 100;\">\n                    <div style=\"position: absolute;opacity: 0.5;width:100%;height:100%;background-color: white;\">\n                    </div>\n                    <div style=\"width: 50px;margin: auto;margin-top: 160px;\">\n                        <i class=\"fa fa-spin fa-gear\" style=\"font-size: 50px;\"></i>\n                    </div>\n                </div>\n                <!-- END Loading -->\n\n                <div class=\"row\" style=\"margin: 20px 0;\"> \n                    <div class=\"col-sm-6 col-md-4\" *ngFor=\"let item of dialogs\"> \n                        <div class=\"thumbnail\"> \n                            <div class=\"\" style=\"width: 100%;position: relative;\">\n                                <div>\n                                    <img *ngIf=\"!item.background_image\" alt=\"100%x200\" data-src=\"holder.js/100%x200\" src=\"data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/PjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iMjQyIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDI0MiAyMDAiIHByZXNlcnZlQXNwZWN0UmF0aW89Im5vbmUiPjwhLS0KU291cmNlIFVSTDogaG9sZGVyLmpzLzEwMCV4MjAwCkNyZWF0ZWQgd2l0aCBIb2xkZXIuanMgMi42LjAuCkxlYXJuIG1vcmUgYXQgaHR0cDovL2hvbGRlcmpzLmNvbQooYykgMjAxMi0yMDE1IEl2YW4gTWFsb3BpbnNreSAtIGh0dHA6Ly9pbXNreS5jbwotLT48ZGVmcz48c3R5bGUgdHlwZT0idGV4dC9jc3MiPjwhW0NEQVRBWyNob2xkZXJfMTVlOTZiYzA5NjUgdGV4dCB7IGZpbGw6I0FBQUFBQTtmb250LXdlaWdodDpib2xkO2ZvbnQtZmFtaWx5OkFyaWFsLCBIZWx2ZXRpY2EsIE9wZW4gU2Fucywgc2Fucy1zZXJpZiwgbW9ub3NwYWNlO2ZvbnQtc2l6ZToxMnB0IH0gXV0+PC9zdHlsZT48L2RlZnM+PGcgaWQ9ImhvbGRlcl8xNWU5NmJjMDk2NSI+PHJlY3Qgd2lkdGg9IjI0MiIgaGVpZ2h0PSIyMDAiIGZpbGw9IiNFRUVFRUUiLz48Zz48dGV4dCB4PSI4OS44NTkzNzUiIHk9IjEwNS40Ij4yNDJ4MjAwPC90ZXh0PjwvZz48L2c+PC9zdmc+\" data-holder-rendered=\"true\" style=\"height: 50px; width: 50px; display: block;margin: 0 10px;\"> \n                                    <div *ngIf=\"item.background_image\" \n                                        [ngStyle]=\"{'background-image': 'url(' + item.background_image + ')'}\"\n                                        style=\"\n                                            height: 60px; \n                                            width: 90px; \n                                            background-size: cover;\n                                            display: block;\n                                            margin: 0 10px;\">\n                                    </div>\n                                    <p  class=\"badge\" [ngClass]=\"{\n                                            'bg-color-begin': item.level == 10,\n                                            'bg-color-preintermediate': item.level == 20,\n                                            'bg-color-intermediate': item.level == 30\n                                        }\" style=\"margin: 5px;\">{{item.level_display}}</p>\n\n                                    <div style=\"text-align: left;\">\n                                    <p class=\"badge badge-info\" style=\"margin:5px;background-color: darkcyan;\" *ngFor=\"let item of item.tags\">{{item.name}}</p>\n                                </div>\n                                </div>\n\n                                <div style=\"position: absolute; right: 0;top:0;display: flex;align-items: center;    flex-wrap: wrap;justify-content: flex-end;\">\n                                    <div>\n                                        <p style=\"font-size: 10px;width: 100%;text-align: right;margin: 0;\">Доступно для всех?</p>\n                                        <div style=\"width: 40px;height: 40px;border: 2px solid darkslateblue;border-radius: 4px;cursor: pointer;margin: auto;\" (click)=\"publishDialog(item)\">\n                                            <div *ngIf=\"item.is_published\" style=\"width: 28px;height: 28px;background-color: darkslateblue;border-radius: 4px;margin:4px;\"></div>\n                                        </div>\n                                    </div>\n                                    <div style=\"margin-left: 5px;\">\n                                        <p style=\"font-size: 10px;width: 100%;text-align: right;margin: 0;\">Принимать звонки?</p>\n                                        <div style=\"width: 40px;height: 40px;border: 2px solid darkcyan;border-radius: 4px;cursor: pointer;margin: auto;\" (click)=\"turnActiveDialog(item)\">\n                                            <div *ngIf=\"item.checked\" style=\"width: 28px;height: 28px;background-color: darkcyan;border-radius: 4px;margin:4px;\"></div>\n                                        </div>\n                                    </div>\n                                </div>\n                                \n                            </div>\n                            <div class=\"caption\" style=\"clear:both;\"> \n                                <h4>{{item.name}}</h4> \n                                <p style=\"font-size: 12px;\">{{item.description}}</p> \n                                <div style=\"text-align: right\">\n                                    <button class=\"btn btn-success\" [routerLink]=\"['/mydialogues', item.id]\">\n                                        Редактировать\n                                    </button> \n                                </div> \n                            </div> \n                        </div> \n                    </div> \n                </div>\n\n            </div>\n        </div>\n        \n    </div>\n</div>\n\n"
+
+/***/ }),
+
 /***/ "../../../../../src/app/views/view_message/view_message.component.ts":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -3287,7 +3998,7 @@ var MessageViewComponent = (function () {
         }
         this.statusService.sendMessage(data).subscribe(function (data) {
             _this.loading = false;
-            _this.router.navigate(['activedialogs']);
+            _this.router.navigate(['activedialogues']);
         });
     };
     return MessageViewComponent;
@@ -3373,10 +4084,10 @@ var ModeCallingViewComponent = (function () {
             if (message.command == "STOP_CALLING") {
                 _this.running_call = false;
                 if (message.reason == "DIALOG_STOP") {
-                    _this.router.navigate(['/activedialogs']);
+                    _this.router.navigate(['/activedialogues']);
                 }
                 if (message.reason == "NOT FOUND") {
-                    _this.router.navigate(['/activedialogs']);
+                    _this.router.navigate(['/activedialogsue']);
                 }
             }
         });
@@ -3423,7 +4134,7 @@ var ModeCallingViewComponent = (function () {
     };
     ModeCallingViewComponent.prototype.stopCallingDialog = function () {
         this.running_call = false;
-        this.router.navigate(['/activedialogs']);
+        this.router.navigate(['/activedialogues']);
     };
     /*
    private _startCalling() {
@@ -3576,10 +4287,10 @@ var ModeWaitPupilViewComponent = (function () {
                 self.mode = 'mode_dialog_master';
             }
             if (message.command == "CALLING_REJECT") {
-                self.router.navigate(['/activedialogs/']);
+                self.router.navigate(['/activedialogues/']);
             }
             if (message.command == "EXIT_FROM_ACTIVE_DIALOG_BY_MASTER") {
-                self.router.navigate(['/activedialogs/']);
+                self.router.navigate(['/activedialogues/']);
             }
         });
         self.statusService.ready.subscribe(function (date) {
@@ -3596,7 +4307,7 @@ var ModeWaitPupilViewComponent = (function () {
         }
         setTimeout(function () {
             if (!this.activedialog) {
-                this.router.navigate(['/dialogs/']);
+                this.router.navigate(['/dialogues/']);
             }
         }.bind(this), 10000);
     };
