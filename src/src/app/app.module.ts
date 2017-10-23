@@ -5,7 +5,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { RouterModule } from "@angular/router";
 import { JWBootstrapSwitchModule } from '../../node_modules/jw-bootstrap-switch-ng2';
-
+import { ModalModule } from 'ngx-bootstrap';
 
 import { WebSocketService } from "./services/websocket.service";
 
@@ -43,6 +43,7 @@ export const AppCSRF = {
         BrowserAnimationsModule,
         RouterModule.forRoot(ROUTES, { useHash: true }),
         JWBootstrapSwitchModule,
+        ModalModule.forRoot(),
     ],
     providers: [
         WebSocketService,

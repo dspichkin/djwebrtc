@@ -1,12 +1,14 @@
 import { Component, OnInit, OnDestroy, Input, Output, OnChanges, EventEmitter, ChangeDetectorRef,
-    ViewRef } from '@angular/core';
+    ViewRef, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+
+import { BsModalService } from 'ngx-bootstrap/modal';
+import { BsModalRef } from 'ngx-bootstrap/modal/modal-options.class';
 
 import { WebSocketService } from '../../services/websocket.service';
 import { DialogsService } from '../../services/dialogs.service';
 import { StatusService } from '../../services/status.service';
-
 
 import { Notification } from '../../models/notification.model';
 import { NotificationService } from '../../services/notification.service';
@@ -24,12 +26,20 @@ export class MyDialoguesViewComponent implements OnInit {
     private dialogs = [];
     private loading: boolean = false;
 
+    private new_dialog_name = "";
+    private show_create_dialog: boolean = false;
+
+
+    public modalRef: BsModalRef;
+    @ViewChild('template') template;
+
     constructor(
         private dialogsService: DialogsService,
         private statusService: StatusService,
         private router: Router,
         private notificationService: NotificationService,
         private ref: ChangeDetectorRef,
+        private modalService: BsModalService,
         ) {
     }
 
@@ -104,6 +114,44 @@ export class MyDialoguesViewComponent implements OnInit {
         });
     }
     
+    private showCreateDialog() {
+        if (!this.show_create_dialog) {
+            this.show_create_dialog = true;
+            this.new_dialog_name = "";
+            this.modalRef = this.modalService.show(this.template, {
+                class: 'modal-sm',
+                animated: true,
+                keyboard: true,
+                backdrop: true,
+                ignoreBackdropClick: true
+            });
+        } else {
+            this.closeCreateDialog();
+        }
+    }
     
-    
+
+    private closeCreateDialog() {
+        this.show_create_dialog = false;
+        this.modalRef.hide();
+        this.modalRef = null;
+    }
+
+    private createDialog() {
+        let params = {
+            dialog_name: this.new_dialog_name
+        }
+        if (this.new_dialog_name) {
+            this.loading = true;
+            this.dialogsService.createDialog(params).subscribe((data) => {
+                this.loading = false;
+                this.closeCreateDialog();
+                this._updateActiveDialogs();
+            });
+        }
+        
+    }
+
+
+
 }

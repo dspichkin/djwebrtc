@@ -1,11 +1,85 @@
 <h4>Редактор шагов</h4>
+<p>Всего шагов: {{ dialogue.scenario.steps.length }}</p>
 <div class="col-md-6">
-    <div>
-        <button type=""></button>
-        <button type=""></button>
+    <div style="margin: 20px 0px;">
+        <button *ngIf="selected_step_type == 'master' || selected_step_type == 'pupil'" class="btn btn-info" type="button" (click)="addStep()">Добавить следующий шаг</button>
+        <button *ngIf="selected_step_type == 'step'" class="btn btn-danger" type="button" (click)="deleteStep()">Удалить выбранный шаг</button>
     </div>
-    <ng2-cytoscape [elements]="graphData" [tapNode]="tapNodeFn" [tapBg]="tapBgFn"></ng2-cytoscape>
+    <div class="pull-right" style="margin-bottom: 5px;">
+        <button class="btn btn-info btn-xs" type="button" (click)="centerChange($event)" style="">
+            <span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
+        </button>
+        <button class="btn btn-info btn-xs" type="button" (click)="zoomInChange()" style1="position:absolute;top:0px;left:30px;z-index:100;">
+            <span class="glyphicon glyphicon-resize-full" aria-hidden="true"></span>
+        </button>
+        <button class="btn btn-info btn-xs" type="button" (click)="zoomOutChange()" style1="position:absolute;top:0px;left:60px;z-index:100;">
+            <span class="glyphicon glyphicon-resize-small" aria-hidden="true"></span>
+        </button>
+    </div>
+    <ng2-cytoscape [elements]="graphData" [tapNode]="tapNodeFn" [tapBg]="tapBgFn" [clickCenter]="onCenterChange" [clickZoomIn]="onZoomInChange" [clickZoomOut]="onZoomOutChange"></ng2-cytoscape>
 </div>
 <div class="col-md-6">
-    {{selected_node}}
+    <div *ngIf="selected_step_type">
+        <form #frm="ngForm" (ngSubmit)="submit()" style="max-width: 400px;margin: auto;">
+            <div *ngIf="selected_step && selected_step_type == 'step'" class="well">
+                <div class="form-group">
+                    <label>Первый персонаж в выбранном шаге</label>
+
+                    <select class="form-control" name="start_personage" (change)="changePersonage()" [(ngModel)]="selected_step.start_personage" style="background-color: white;">
+                        <option *ngFor="let personage of dialogue.scenario.personages" [value]="personage.role">{{personage.role}}</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <button type="button" class="btn btn-primary" (click)="saveSteps()">Сохранить изменить</button>
+                </div>
+            </div>
+            <div *ngIf="selected_step && selected_step_type == 'master'" class="well">
+                <h3 *ngIf="selected_step">Выбранный шаг: {{selected_step.id}}</h3>
+                <div *ngFor="let variant of selected_step.master.variants">
+                    <div class="form-group">
+                        <label>Задание для фразы персонажа А</label>
+                        <textarea class="form-control" name="master_task" [ngModel]="variant.task" style="background-color: white;"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Правильная фраза персонажа А</label>
+                        <textarea class="form-control" name="master_phrase" [ngModel]="variant.phrase" style="background-color: white;"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <button type="button" class="btn btn-primary" (click)="saveSteps()">Сохранить изменить</button>
+                    </div>
+                </div>
+            </div>
+
+            <div *ngIf="selected_step && selected_step_type == 'pupil'" class="well">
+                <h3 *ngIf="selected_step">Выбранный шаг: {{selected_step.id}}</h3>
+                <div *ngFor="let variant of selected_step.pupil.variants">
+                    <div class="form-group">
+                        <label>Задание для фразы персонажа B </label>
+                        <textarea class="form-control" name="pupil_task" [ngModel]="variant.task" style="background-color: white;"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Правильная фраза персонажа B </label>
+                        <textarea class="form-control" name="pupil_phrase" [ngModel]="variant.phrase" style="background-color: white;"></textarea>
+                    </div>
+                    <div class="form-group">
+                       <button type="button" class="btn btn-primary" (click)="saveSteps()">Сохранить изменить</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div *ngIf="!selected_step_type">
+        <p style="text-align: center;">Выберите шаг для редактирования</p>
+    </div>
 </div>
+
+<!-- Loading -->
+<div *ngIf="loading" style="position: absolute;top:0;left:0;width:100%;height:100%;z-index: 100;">
+    <div style="position: absolute;opacity: 0.5;width:100%;height:100%;background-color: white;">
+    </div>
+    <div style="width: 50px;margin: auto;margin-top: 60px;">
+        <i class="fa fa-spin fa-gear" style="font-size: 50px;"></i>
+    </div>
+</div>
+<!-- END Loading -->

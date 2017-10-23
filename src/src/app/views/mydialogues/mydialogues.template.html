@@ -2,7 +2,8 @@
     <div class="container">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h4>Выберите диалог для редактирования</h4>
+                <h4 style="display: inline-block;">Выберите диалог для редактирования</h4>
+                <button type="button" class="btn btn-info pull-right" (click)="showCreateDialog()">Создать диалог</button>
             </div>
             <div class="panel-body" style="position: relative;">
                 <!-- Loading -->
@@ -75,4 +76,26 @@
         
     </div>
 </div>
+
+
+<ng-template #template>
+    <form #frm="ngForm" (ngSubmit)="createDialog()">
+        <div class="modal-header">
+            <h4 class="modal-title pull-left">Создание нового диалога</h4>
+            <button type="button" class="close pull-right" aria-label="Close" (click)="closeCreateDialog()">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body" style="text-align: center;">
+            <div class="form-group">
+                <label for="name">Введите название диалога</label>
+                <input name="frm_name" type="text" class="form-control" id="name" [(ngModel)]="new_dialog_name" required="required" maxlength="25" [autofocus]="true">
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-primary" [disabled]="!frm.valid || loading">Создать</button>
+            <button type="button" class="btn btn-default pull-right" (click)="closeCreateDialog()">Отмена</button>
+        </div>
+    </form>
+</ng-template>
 

@@ -1,4 +1,6 @@
 import { Component, OnChanges, ElementRef, Input } from '@angular/core';
+import { Subject }    from 'rxjs/Subject';
+
 declare var jQuery: any;
 declare var cytoscape: any;
 
@@ -11,6 +13,7 @@ declare var cytoscape: any;
         position: absolute;
         left: 0;
         top: 0;
+        cursor:pointer;
     }`]
 })
 export class NgCytoscapeComponent implements OnChanges {
@@ -22,11 +25,16 @@ export class NgCytoscapeComponent implements OnChanges {
 
     @Input() public tapNode: Function;
     @Input() public tapBg: Function;
-    
+    @Input() clickCenter: Subject<any>;
+    @Input() clickZoomIn: Subject<any>;
+    @Input() clickZoomOut: Subject<any>;
 
     cy;
 
     public constructor(private el: ElementRef) {
+
+
+        
 
         this.layout = this.layout || {
             /*
@@ -42,7 +50,7 @@ export class NgCytoscapeComponent implements OnChanges {
 
         this.zoom = this.zoom || {
             min: 0.1,
-            max: 1.5
+            max: 1
         };
 
         this.style = this.style || cytoscape.stylesheet()
@@ -56,7 +64,9 @@ export class NgCytoscapeComponent implements OnChanges {
                 'background-color': 'data(faveColor)',
                 'width': '150px',
                 'height': '100px',
-                'color': '#fff'
+                'color': '#fff',
+                'text-wrap': 'wrap',
+                'text-max-width': '150px'
             })
             .selector(':selected')
             .css({
@@ -88,6 +98,18 @@ export class NgCytoscapeComponent implements OnChanges {
             });
     }
 
+    ngOnInit() {
+        this.clickCenter.subscribe(()=> {
+            this.center();
+        })
+        this.clickZoomIn.subscribe(()=> {
+            this.zoomin()
+        })
+        this.clickZoomOut.subscribe(()=> {
+            this.zoomout() 
+        })
+    }
+
     public ngOnChanges(): any {
         this.render();
     }
@@ -101,7 +123,7 @@ export class NgCytoscapeComponent implements OnChanges {
             style: this.style,
             elements: this.elements,
             zoomingEnabled: false,
-            zoom: 0.5,
+            zoom: 0.4,
             selectionType: 'single',
             userPanningEnabled: true,
             panningEnabled: true,
@@ -109,24 +131,43 @@ export class NgCytoscapeComponent implements OnChanges {
         let self = this;
         this.cy.on('tap', function(evt){
             let evtTarget = evt.target;
-            console.log('evtTarget', evtTarget);
-            console.log('this.cy', self.cy);
             if( evtTarget === self.cy ){
                 self.tapBg();
-                  console.log('tap on background');
             } else {
                 self.tapNode(evtTarget);
-                console.log('tap on some element');
             }
-            //let node = evt.target;
+            setTimeout(function() {
+                self.cy.resize(); 
+            }, 500);
             
-            // console.log( 'tapped ' + node.id() );
         });
-        console.log( 'this.elements ', this.elements );
 
-        this.cy.fit();
-        //this.cy.elements().kruskal();
-                
+
+        this.cy.center();
     }
+
+    public center() {
+        console.log('CENTER')
+        this.cy.center();
+        this.cy.resize(); 
+    }
+
+
+    public zoomin() {
+        let zoom = this.cy.zoom();
+        this.cy.zoomingEnabled( true );
+        this.cy.zoom(zoom + 0.2);
+        this.cy.zoomingEnabled( false );
+        this.cy.resize(); 
+    }
+    public zoomout() {
+        let zoom = this.cy.zoom();
+        this.cy.zoomingEnabled(true);
+        this.cy.zoom(zoom - 0.2);
+        this.cy.zoomingEnabled(false);
+        this.cy.resize(); 
+    }
+
+
 
 }

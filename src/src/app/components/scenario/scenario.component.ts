@@ -1,12 +1,10 @@
 import { Component, OnInit, OnDestroy, Input, Output, OnChanges, EventEmitter } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-// import 'jquery-slimscroll';
 import { FormsModule } from '@angular/forms';
 
-// import { AuthenticationService } from '../../../services/authentication.service';
+import { Subject }    from 'rxjs/Subject';
 
-//declare var jQuery:any;
-
+import { DialogsService } from '../../services/dialogs.service';
 import { AppSettings } from '../../app.settings';
 
 @Component({
@@ -23,42 +21,24 @@ import { AppSettings } from '../../app.settings';
 
 export class ScenarioComponent implements OnInit, OnDestroy {
     @Input() public dialogue;
-    
+
+    onCenterChange: Subject<any> = new Subject();
+    onZoomInChange: Subject<any> = new Subject();
+    onZoomOutChange: Subject<any> = new Subject();
 
     loading: boolean = false;
-    selected_node;
-    self;
+    selected_step: any;
+    selected_step_type;
 
-    graphData = {
-        nodes: [
-            {data: {id: 'j', name: 'Jerry', weight: 165, faveColor: '#6FB1FC', faveShape: 'triangle'}},
-            {data: {id: 'e', name: 'Elaine', weight: 145, faveColor: '#EDA1ED', faveShape: 'ellipse'}},
-            {data: {id: 'k', name: 'Kramer', weight: 175, faveColor: '#86B342', faveShape: 'octagon'}},
-            {data: {id: 'g', name: 'George', weight: 170, faveColor: '#F5A45D', faveShape: 'rectangle'}}
-        ],
-        edges: [
-            {data: {source: 'j', target: 'e', faveColor: '#6FB1FC', strength: 90 }},
-            {data: {source: 'j', target: 'k', faveColor: '#6FB1FC', strength: 90}},
-            {data: {source: 'j', target: 'g', faveColor: '#6FB1FC', strength: 90}},
-
-            {data: {source: 'e', target: 'j', faveColor: '#EDA1ED', strength: 90}},
-            {data: {source: 'e', target: 'k', faveColor: '#EDA1ED', strength: 90}},
-
-            {data: {source: 'k', target: 'j', faveColor: '#86B342', strength: 90}},
-            {data: {source: 'k', target: 'e', faveColor: '#86B342', strength: 90}},
-            {data: {source: 'k', target: 'g', faveColor: '#86B342', strength: 90}},
-
-            {data: {source: 'g', target: 'j', faveColor: '#F5A45D', strength: 90}}
-        ]
-    };
+    graphData = {};
 
     tapNodeFn = this.tapNode.bind(this);
     tapBgFn = this.tapBg.bind(this);
 
 
     constructor(
+        private dialogsService: DialogsService
         ) {
-        this.self = this;
     }
 
     ngOnInit() {
@@ -73,7 +53,6 @@ export class ScenarioComponent implements OnInit, OnDestroy {
         if (!this.dialogue) {
             return;
         }
-        console.log('this.dialogue.scenario', this.dialogue.scenario)
         let nodes = [];
         let edges = [];
 
@@ -102,13 +81,17 @@ export class ScenarioComponent implements OnInit, OnDestroy {
                 let data = {
                     data: {
                         id: variant.id,
-                        name: 'Вариант ведущего ' + step.id,
                         weight: 165, 
                         faveColor: '#6FB1FC', 
                         faveShape: 'rectangle',
                         strength: 90 
                     }
                 };
+                if (step.master.variants[j].phrase) {
+                    data["data"]["name"] = 'Ведущий: \n' + step.master.variants[j].phrase;
+                } else {
+                    data["data"]["name"] = 'Ведущий';
+                }
                 nodes.push(data);
             }
 
@@ -117,12 +100,16 @@ export class ScenarioComponent implements OnInit, OnDestroy {
                 let data = {
                     data: {
                         id: variant.id,
-                        name: 'Вариант игрока ' + step.id,
                         weight: 165,
                         faveColor: '#F5A45D', 
                         faveShape: 'rectangle',
                         strength: 90 
                     }
+                }
+                if (step.master.variants[j].phrase) {
+                    data["data"]["name"] = 'Игрок: \n' + step.pupil.variants[j].phrase;
+                } else {
+                    data["data"]["name"] = 'Игрок';
                 }
                 nodes.push(data);
             }
@@ -136,8 +123,6 @@ export class ScenarioComponent implements OnInit, OnDestroy {
                 faveShape: 'ellipse'
             }
         })
-
-
 
 
         for(let i = 0; i < this.dialogue.scenario.steps.length; i++) {
@@ -197,18 +182,239 @@ export class ScenarioComponent implements OnInit, OnDestroy {
 
 
     public tapNode(node) {
-        this.selected_node = null;
-        for (let i = 0; i < this.dialogue.scenario.steps.length; i++) {
-            if (this.dialogue.scenario.steps[i].id == node.id()) {
-                this.selected_node = this.dialogue.scenario.steps[i];
-                break;
+        // console.log('tapNode', node.id())
+        this.selected_step = null;
+        let id = node.id();
+
+        if (id.startsWith('m')) {
+            for (let i = 0; i < this.dialogue.scenario.steps.length; i++) {
+                for (let j = 0; j < this.dialogue.scenario.steps[i].master.variants.length; j++) {
+                    if (this.dialogue.scenario.steps[i].master.variants[j].id == node.id()) {
+                        this.selected_step = this.dialogue.scenario.steps[i];
+                        this.selected_step_type = 'master';
+                        break;
+                    }
+                }
+            }
+        } else if (id.startsWith('p')) {
+            for (let i = 0; i < this.dialogue.scenario.steps.length; i++) {
+                for (let j = 0; j < this.dialogue.scenario.steps[i].pupil.variants.length; j++) {
+                    if (this.dialogue.scenario.steps[i].pupil.variants[j].id == node.id()) {
+                        this.selected_step = this.dialogue.scenario.steps[i];
+                        this.selected_step_type = 'pupil';
+                        break;
+                    }
+                }
+            }
+        } else {
+            for (let i = 0; i < this.dialogue.scenario.steps.length; i++) {
+                if (this.dialogue.scenario.steps[i].id == node.id()) {
+                    this.selected_step = this.dialogue.scenario.steps[i];
+                    this.selected_step_type = 'step';
+                    break;
+                }
+            }
+        }
+        
+    }
+
+    public tapBg() {
+        this.selected_step = null;
+    }
+
+    private changePersonage() {
+        this._makeData();
+    }
+
+    public centerChange() {
+        this.onCenterChange.next();
+    }
+    public zoomInChange() {
+        this.onZoomInChange.next();
+    }
+    public zoomOutChange() {
+        this.onZoomOutChange.next();
+    }
+
+    private _recalculateSteps() {
+        let steps = this.dialogue.scenario.steps;
+        for (let i = 0; i < steps.length; i++) {
+            let new_id = i + 1;
+            steps[i].id = new_id
+            steps[i].number = new_id;
+            steps[i].master.number = new_id;
+            steps[i].pupil.number = new_id;
+            for (let j = 0; j < steps[i].master.variants.length; j++) {
+                steps[i].master.variants[j].id = 'm' + new_id + '.' + (j + 1);
+                if (i > 0) {
+                    steps[i].master.variants[j].prev_step = steps[i - 1].id;   
+                } else {
+                    steps[i].master.variants[j].prev_step = -1;
+                }
+                if (i < steps.length - 1) {
+                    steps[i].master.variants[j].next_step = new_id + 1;
+                }
+                if (i == steps.length - 1){
+                    steps[i].master.variants[j].next_step = -1;
+                }
+            }
+            for (let j = 0; j < steps[i].pupil.variants.length; j++) {
+                steps[i].pupil.variants[j].id = 'p' + new_id + '.' + (j + 1);
+                if (i > 0) {
+                    steps[i].pupil.variants[j].prev_step = steps[i - 1].id;
+                } else {
+                    steps[i].pupil.variants[j].prev_step = -1;
+                }
+                if (i < steps.length - 1) {
+                    steps[i].pupil.variants[j].next_step = new_id + 1;
+                }
+                if (i == steps.length - 1){
+                    steps[i].pupil.variants[j].next_step = -1;
+                }
             }
         }
     }
 
-    public tapBg() {
-        this.selected_node = null;
+    private addStep() {
+        if (this.selected_step) {
+            let steps = this.dialogue.scenario.steps;
+
+            let current_step_id = this.selected_step.id;
+            let current_step_index = -1;
+            let next_step;
+            let founded = false;
+            /*
+            for (let i = 0; i < steps.length; i++) {
+                if (founded) {
+                    if (!next_step) {
+                        next_step = steps[i];
+                    }
+                    let new_id = steps[i].id + 1;
+                    steps[i].id = new_id
+                    steps[i].number = new_id;
+                    steps[i].master.number = new_id;
+                    steps[i].pupil.number = new_id;
+                    for (let j = 0; j < steps[i].master.variants.length; j++) {
+                        steps[i].master.variants[j].id = 'm' + new_id + '.' + (j + 1);
+                        steps[i].master.variants[j].prev_step = steps[i - 1].id;
+                        if (i < steps.length - 1) {
+                            steps[i].master.variants[j].next_step = new_id + 1;
+                        }
+                        if (i == steps.length - 1){
+                            steps[i].master.variants[j].next_step = -1;
+                        }
+                    }
+                    for (let j = 0; j < steps[i].pupil.variants.length; j++) {
+                        steps[i].pupil.variants[j].id = 'p' + new_id + '.' + (j + 1);
+                        steps[i].pupil.variants[j].prev_step = steps[i - 1].id;
+                        if (i < steps.length - 1) {
+                            steps[i].pupil.variants[j].next_step = new_id + 1;
+                        }
+                        if (i == steps.length - 1){
+                            steps[i].pupil.variants[j].next_step = -1;
+                        }
+                    }
+                }
+
+                if (steps[i].id == current_step_id) {
+                    current_step_index = i;
+                    founded = true;
+                }
+            }
+            */
+            
+            for (let i = 0; i < steps.length; i++) {
+                if (founded) {
+                    if (!next_step) {
+                        next_step = steps[i];
+                    }
+                }
+                if (steps[i].id == current_step_id) {
+                    current_step_index = i;
+                    founded = true;
+                }
+            }
+
+
+            if (current_step_index > -1) {
+                let new_step_id = this.selected_step.id + 1;
+                let new_step = {
+                    "id": new_step_id,
+                    "number": new_step_id,
+                    "start_personage": this.selected_step.start_personage,
+                    "master": {
+                        "number": new_step_id,
+                        "variants":[{
+                            "id": 'm' + new_step_id + '.' + 1,
+                            //"next_step": next_step.id,
+                            //"prev_step": this.selected_step.id
+                        }]
+                    },
+                    "pupil": {
+                        "number": new_step_id,
+                        "variants":[{
+                            "id": 'p' + new_step_id + '.' + 1,
+                            //"next_step": next_step.id,
+                            //"prev_step": this.selected_step.id
+                        }]
+                    }
+                } 
+
+                steps.splice(current_step_index + 1, 0, new_step);
+                this._recalculateSteps();
+                this.selected_step = this.getStepById(new_step_id);
+
+                this.dialogue.scenario.steps = steps;
+                this._makeData();
+
+                this._save();
+            }
+            console.log('steps', steps);
+        }
     }
 
+    getStepById(step_id) {
+        let steps = this.dialogue.scenario.steps;
+        for (let i = 0; i < steps.length; i++) {
+            if (steps[i].id == step_id) {
+                return steps[i];
+            }
+        }
+    }
+
+    private deleteStep() {
+        let steps = this.dialogue.scenario.steps;
+        let step_index = -1;
+        for (let i = 0; i < steps.length; i++) {
+            if (steps[i].id == this.selected_step.id) {
+                step_index = i;
+                break;
+            }
+        }
+        if (step_index > 0) {
+            steps.splice(step_index, 1);
+            this._recalculateSteps();
+            this.selected_step = null;
+            this.selected_step_type = null;
+            this.dialogue.scenario.steps = steps;
+            this._makeData();
+
+            this._save();
+        }
+    }
+
+    private _save() {
+        let params = {
+            steps: this.dialogue.scenario.steps
+        }
+        this.loading = true;
+        this.dialogsService.saveMyDialogs(this.dialogue.id, params).subscribe((data) => {
+            this.loading = false;
+        });
+    }
+
+    private saveSteps() {
+        this._save();
+    }
     
 }

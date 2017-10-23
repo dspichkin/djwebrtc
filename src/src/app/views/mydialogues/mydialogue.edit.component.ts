@@ -1,7 +1,11 @@
 import { Component, OnInit, OnDestroy, Input, Output, OnChanges, EventEmitter, ChangeDetectorRef,
-    ViewRef } from '@angular/core';
+    ViewRef, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+
+import { BsModalService } from 'ngx-bootstrap/modal';
+import { BsModalRef } from 'ngx-bootstrap/modal/modal-options.class';
+
 
 import { WebSocketService } from '../../services/websocket.service';
 import { DialogsService } from '../../services/dialogs.service';
@@ -50,6 +54,11 @@ export class MyDialogueEditViewComponent implements OnInit {
         },
     ]
     private selectedDialogLevel;
+    private personage_a;
+    private personage_b;
+
+    public modalRef: BsModalRef;
+    @ViewChild('template') template;
 
 
     constructor(
@@ -59,6 +68,7 @@ export class MyDialogueEditViewComponent implements OnInit {
         private activatedRoute: ActivatedRoute,
         private notificationService: NotificationService,
         private ref: ChangeDetectorRef,
+        private modalService: BsModalService,
         ) {
     }
 
@@ -84,11 +94,33 @@ export class MyDialogueEditViewComponent implements OnInit {
         
     }
 
+    private initPersonages() {
+        for (let i = 0; i < this.dialogue.scenario.personages.length; i++) {
+            if (this.dialogue.scenario.personages[i].role == "master") {
+                this.personage_a = this.dialogue.scenario.personages[i].name;
+            }
+            if (this.dialogue.scenario.personages[i].role == "pupil") {
+                this.personage_b = this.dialogue.scenario.personages[i].name;
+            }
+        }
+    }
+
+    private updatePersonages() {
+        for (let i = 0; i < this.dialogue.scenario.personages.length; i++) {
+            if (this.dialogue.scenario.personages[i].role == "master") {
+                this.dialogue.scenario.personages[i].name = this.personage_a;
+            }
+            if (this.dialogue.scenario.personages[i].role == "pupil") {
+                 this.dialogue.scenario.personages[i].name = this.personage_b;
+            }
+        }
+    }
+
     private _getDialog() {
         let self = this;
         this.activatedRoute.params
             .pluck('dialogue_id')
-            .switchMap(dialogue_id => this.dialogsService.getDialog(dialogue_id))
+            .switchMap(dialogue_id => this.dialogsService.getMyDialog(dialogue_id))
             .subscribe((dialogue) => {
                 self.dialogue = dialogue;
                 self._initVars();
@@ -108,6 +140,7 @@ export class MyDialogueEditViewComponent implements OnInit {
                     this.selectedDialogLevel = this.levels[i].id;
                 }
             }
+            this.initPersonages();
         } else {
             this.selectedDialogLevel = this.levels[0].id;
         }
@@ -127,7 +160,6 @@ export class MyDialogueEditViewComponent implements OnInit {
     
     private saveDialog(item) {
         item.is_published = !item.is_published;
-        console.log('item', item)
         this.loading = true;
         let params = {
             is_published: item.is_published
@@ -136,7 +168,42 @@ export class MyDialogueEditViewComponent implements OnInit {
             this.loading = false;
         });
     }
+
+    private savePersonages(item) {
+        this.loading = true;
+        let params = {
+            personages: this.dialogue.scenario.personages
+        }
+        this.dialogsService.saveMyDialogs(item.id, params).subscribe((data) => {
+            this.loading = false;
+        });
+    }
     
+    private showConfirmDeleteDialog() {
+        this.modalRef = this.modalService.show(this.template, {
+            class: 'modal-sm',
+            animated: true,
+            keyboard: true,
+            backdrop: true,
+            ignoreBackdropClick: true
+        });
+    }
+
+
+    private closeDeleteDialog() {
+        this.modalRef.hide();
+        this.modalRef = null;
+    }
+
+    private deleteDialog() {
+        this.modalRef.hide();
+        this.modalRef = null;
+        this.loading = true;
+        this.dialogsService.deleteMyDialogs(this.dialogue.id).subscribe((data) => {
+            this.loading = false;
+            this.router.navigate(['/mydialogues']);
+        });
+    }
     
     
 }

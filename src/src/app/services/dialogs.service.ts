@@ -100,8 +100,32 @@ export class DialogsService {
             .catch(this.handleError.bind(this));
     }
 
+    getMyDialog(dialogue_id): Observable<Dialog[]> {
+        return this._http.get(AppSettings.URL_MYDIALOGS + dialogue_id + '/')
+            .map((response: Response) => {
+                return response.json();
+            })
+            .catch(this.handleError.bind(this));
+    }
+
     saveMyDialogs(dialogue_id, params): any {
         return this._http.post(AppSettings.URL_MYDIALOGS + dialogue_id + "/", params)
+            .map((response: Response) => {
+                return response.json();
+            })
+            .catch(this.handleError.bind(this));
+    }
+
+    createDialog(params):any {
+        return this._http.post(AppSettings.URL_MYDIALOGS, params)
+            .map((response: Response) => {
+                return response.json();
+            })
+            .catch(this.handleError.bind(this));
+    }
+
+    deleteMyDialogs(dialogue_id): any {
+        return this._http.delete(AppSettings.URL_MYDIALOGS + dialogue_id + "/")
             .map((response: Response) => {
                 return response.json();
             })

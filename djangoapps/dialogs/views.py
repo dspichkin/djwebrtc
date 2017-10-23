@@ -163,40 +163,102 @@ def user_status(request):
     }, status.HTTP_200_OK)
 
 
-@api_view(['GET', 'POST'])
+@api_view(['GET', 'POST', 'DELETE'])
 @permission_classes((IsConfirmAndIsAuthenticated,))
-def get_mydialog(request, dialog_pk):
+def mydialog(request, dialog_pk):
 
     mydialog = get_object_or_404(Dialog, pk=dialog_pk, owner=request.user)
+
+    if request.method == 'GET':
+        serializer = DialogSerializer(mydialog)
+        return Response(serializer.data, status.HTTP_200_OK)
+
     if request.method == 'POST':
         data = request.data
         is_published = data.get('is_published')
+        steps = data.get('steps')
+        personages = data.get('personages')
 
         is_dirty = False
         if is_published is not None:
             if mydialog.is_published != is_published:
                 mydialog.is_published = is_published
                 is_dirty = True
-
+        if steps is not None:
+            if mydialog.scenario.steps != steps:
+                mydialog.scenario.steps = steps
+                is_dirty = True
+        if personages is not None:
+            if mydialog.scenario.personages != personages:
+                mydialog.scenario.personages = personages
+                is_dirty = True
         if is_dirty:
             mydialog.save()
 
-    serializer = DialogSerializer(mydialog)
-    return Response(serializer.data, status.HTTP_200_OK)
+        serializer = DialogSerializer(mydialog)
+        return Response(serializer.data, status.HTTP_200_OK)
+
+    if request.method == 'DELETE':
+        mydialog.delete()
+
+    return Response(status.HTTP_200_OK)
 
 
-@api_view(['GET'])
+@api_view(['GET', 'POST'])
 @permission_classes((IsConfirmAndIsAuthenticated,))
-def get_mydialogs(request):
+def mydialogs(request):
     request.user.check_activity()
 
-    queryset = Dialog.objects.filter(owner=request.user)
-    dialogs = []
-    for dialog in queryset:
-        data = DialogSerializer(dialog).data
-        activedialog = ActiveDialog.objects.filter(master=request.user, dialog=dialog, status=DIALOG_WAIT)
-        if activedialog:
-            data["checked"] = True
-        dialogs.append(data)
-    return Response(dialogs, status.HTTP_200_OK)
+    if request.method == 'GET':
+        queryset = Dialog.objects.filter(owner=request.user)
+        dialogs = []
+        for dialog in queryset:
+            data = DialogSerializer(dialog).data
+            activedialog = ActiveDialog.objects.filter(master=request.user, dialog=dialog, status=DIALOG_WAIT)
+            if activedialog:
+                data["checked"] = True
+            dialogs.append(data)
+        return Response(dialogs, status.HTTP_200_OK)
+
+    if request.method == 'POST':
+        data = request.data
+        dialog_name = data.get('dialog_name')
+        if dialog_name:
+            dialog = Dialog.objects.create(owner=request.user, name=dialog_name, scenario={
+                "personages": [{
+                    "role": "master",
+                    "name": "Person A"
+                }, {
+                    "role": "pupil",
+                    "name": "Person B"
+                }],
+                "steps": [{
+                    "id": 1,
+                    "start_personage": "master",
+                    "master": {
+                        "variants": [{
+                            "id": "m1.1",
+                            "phrase": "",
+                            "task": "",
+                            "prev_step": -1,
+                            "next_step": -1
+                        }],
+                        "number": 1
+                    },
+                    "pupil": {
+                        "variants": [{
+                            "id": "p1.1",
+                            "phrase": "",
+                            "task": "",
+                            "prev_step": -1,
+                            "next_step": -1
+                        }],
+                        "number": 1
+                    }
+                }]
+            }, level=10)
+            data = DialogSerializer(dialog).data
+            data["checked"] = False
+        return Response(data, status.HTTP_200_OK)
+
 

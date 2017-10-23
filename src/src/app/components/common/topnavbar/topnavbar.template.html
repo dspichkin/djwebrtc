@@ -11,7 +11,7 @@
     <div class="collapse navbar-collapse" id="myNavbar">
       <ul class="nav navbar-nav navbar-right">
         <li [ngClass]="{'active': activeRoute('/mydialogues')}">
-            <a [routerLink]="['/mydialogues']">Редактор диалогов</a>
+            <a [routerLink]="['/mydialogues']">Мои диалоги</a>
         </li>
         <li [ngClass]="{'active': activeRoute('/dialogues')}">
             <a [routerLink]="['/dialogues']">Все диалоги</a>
@@ -65,3 +65,4 @@
         <span  *ngIf="message?.rc">Код rc: {{message?.rc}}</span>
     </div>
 </div>
+
