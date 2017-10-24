@@ -6,7 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal/modal-options.class';
 
-
+import { FileUploader } from 'ng2-file-upload';
 import { WebSocketService } from '../../services/websocket.service';
 import { DialogsService } from '../../services/dialogs.service';
 import { StatusService } from '../../services/status.service';
@@ -59,6 +59,8 @@ export class MyDialogueEditViewComponent implements OnInit {
 
     public modalRef: BsModalRef;
     @ViewChild('template') template;
+
+    public uploader:FileUploader;// = new FileUploader({ url: AppSettings.URL_MYDIALOGS });
 
 
     constructor(
@@ -145,7 +147,24 @@ export class MyDialogueEditViewComponent implements OnInit {
             this.selectedDialogLevel = this.levels[0].id;
         }
         
+        this.uploader = new FileUploader({ 
+            url: AppSettings.URL_MYDIALOGS + this.dialogue.id + '/bg/',
+            headers: [{
+                name: 'X-CSRFToken',
+                value: this.getCookie("csrftoken")
+            }]
+        });
+        this.uploader.onCompleteItem = (item:any, response:any, status:any, headers:any) => {
+            this.notificationService.add(new Notification('Сообщение', 'alert-success', 'Настройки сохранены'));
+            this._getDialog();
+        };
     }    
+
+    private getCookie(name: string): string {
+        var value = "; " + document.cookie;
+        var parts = value.split("; " + name + "=");
+        if (parts.length == 2) return decodeURIComponent(parts.pop().split(";").shift());
+    }
 
     private _detectChanges() {
         // Programmatically run change detection to fix issue in Safari
@@ -166,16 +185,31 @@ export class MyDialogueEditViewComponent implements OnInit {
         }
         this.dialogsService.saveMyDialogs(item.id, params).subscribe((data) => {
             this.loading = false;
+            this.notificationService.add(new Notification('Сообщение', 'alert-success', 'Настройки сохранены'));
+        });
+    }
+    private saveDescription() {
+        this.loading = true;
+        let params = {
+            dialog_name: this.dialogue.name,
+            description: this.dialogue.description,
+            level: this.selectedDialogLevel
+        }
+        this.dialogsService.saveMyDialogs(this.dialogue.id, params).subscribe((data) => {
+            this.loading = false;
+            this.notificationService.add(new Notification('Сообщение', 'alert-success', 'Настройки сохранены'));
         });
     }
 
-    private savePersonages(item) {
+
+    private savePersonages() {
         this.loading = true;
         let params = {
             personages: this.dialogue.scenario.personages
         }
-        this.dialogsService.saveMyDialogs(item.id, params).subscribe((data) => {
+        this.dialogsService.saveMyDialogs(this.dialogue.id, params).subscribe((data) => {
             this.loading = false;
+            this.notificationService.add(new Notification('Сообщение', 'alert-success', 'Настройки сохранены'));
         });
     }
     
@@ -203,6 +237,10 @@ export class MyDialogueEditViewComponent implements OnInit {
             this.loading = false;
             this.router.navigate(['/mydialogues']);
         });
+    }
+
+    private onFileSelected () {
+      this.uploader.uploadAll();
     }
     
     

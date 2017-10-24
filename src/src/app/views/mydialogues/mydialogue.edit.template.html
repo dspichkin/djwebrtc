@@ -19,7 +19,7 @@
                     </div>
                     <div class="form-group">
                         <label for="description">Описание диалога</label>
-                        <textarea name="frm_descriptioon" class="form-control" id="description"  [ngModel]="dialogue?.description" required="required"></textarea>
+                        <textarea name="frm_descriptioon" class="form-control" id="description"  [(ngModel)]="dialogue.description"></textarea>
                     </div>
                     <div class="form-group">
                         <label for="level">Требуемый уровень английского</label>
@@ -31,10 +31,21 @@
                     <div class="form-group">
                         <label for="background_image">Картинка диалога</label>
                         <div>
-                            <div class="col-md-6">
-                                <input type="file" class="btn btn-default" id="background_image" value="">
+                            <div class="col-md-3" style="padding: 0">
+                                <!-- <input type="file" class="btn btn-default" id="background_image" value=""> -->
+                                <input #fileInput type="file" ng2FileSelect [uploader]="uploader" accept="image/png, image/jpg, image/jpeg" style="display:none;" (change)="onFileSelected()"/>
+                                <button type="button" class="btn btn-default" (click)="fileInput.click()" [disabled]="loading">Загрузить картинку диалога</button>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-9">
+                                <section id="uploadQueue" *ngIf="uploader?.queue?.length > 0">
+                                    <div ngFor="let item of uploader.queue">
+                                        {{ item?.file?.name }}
+                                        <div *ngIf="uploader.isHTML5" class="progress" style="margin-bottom: 0;">
+                                            <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': item.progress + '%' }"></div>
+                                         </div>
+                                    </div>
+                                </section>
+
                                 <img *ngIf="!dialogue.background_image" alt="100%x200" data-src="holder.js/100%x200" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/PjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iMjQyIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDI0MiAyMDAiIHByZXNlcnZlQXNwZWN0UmF0aW89Im5vbmUiPjwhLS0KU291cmNlIFVSTDogaG9sZGVyLmpzLzEwMCV4MjAwCkNyZWF0ZWQgd2l0aCBIb2xkZXIuanMgMi42LjAuCkxlYXJuIG1vcmUgYXQgaHR0cDovL2hvbGRlcmpzLmNvbQooYykgMjAxMi0yMDE1IEl2YW4gTWFsb3BpbnNreSAtIGh0dHA6Ly9pbXNreS5jbwotLT48ZGVmcz48c3R5bGUgdHlwZT0idGV4dC9jc3MiPjwhW0NEQVRBWyNob2xkZXJfMTVlOTZiYzA5NjUgdGV4dCB7IGZpbGw6I0FBQUFBQTtmb250LXdlaWdodDpib2xkO2ZvbnQtZmFtaWx5OkFyaWFsLCBIZWx2ZXRpY2EsIE9wZW4gU2Fucywgc2Fucy1zZXJpZiwgbW9ub3NwYWNlO2ZvbnQtc2l6ZToxMnB0IH0gXV0+PC9zdHlsZT48L2RlZnM+PGcgaWQ9ImhvbGRlcl8xNWU5NmJjMDk2NSI+PHJlY3Qgd2lkdGg9IjI0MiIgaGVpZ2h0PSIyMDAiIGZpbGw9IiNFRUVFRUUiLz48Zz48dGV4dCB4PSI4OS44NTkzNzUiIHk9IjEwNS40Ij4yNDJ4MjAwPC90ZXh0PjwvZz48L2c+PC9zdmc+" data-holder-rendered="true" style="height: 200px; width: 200px; display: block;margin: 0 10px;"> 
                                     <div *ngIf="dialogue && dialogue.background_image" 
                                         [ngStyle]="{'background-image': 'url(' + dialogue.background_image + ')'}"
@@ -49,13 +60,13 @@
                         </div>
                     </div>
                  
-                    <button type="submit" class="btn btn-primary" [disabled]="!frm.valid">Сохранить</button>
+                    <button type="submit" class="btn btn-primary" [disabled]="!frm.valid || loading" (click)="saveDescription()">Сохранить</button>
                     <button type="button" class="btn btn-danger pull-right" (click)="showConfirmDeleteDialog()">Удалить диалог</button>
                 </form>
             </div>
 
             <div *ngIf="mode=='personages'" class="tab-content" style="padding: 20px;">
-                <form #frm="ngForm" (ngSubmit)="submit()">
+                <form #frm2="ngForm" (ngSubmit)="savePersonages()">
                     <div class="form-group">
                         <label for="personage_a">Персонаж 1</label>
                         <input name="frm_name_a" type="text" class="form-control" id="personage_a" (ngModelChange)="updatePersonages($event)" [(ngModel)]="personage_a" required="required">
@@ -66,7 +77,7 @@
                         <input name="frm_name_b" type="text" class="form-control" id="personage_b" (ngModelChange)="updatePersonages($event)"  [(ngModel)]="personage_b" required="required">
                     </div>
                     
-                    <button type="submit" class="btn btn-primary" [disabled]="!frm.valid" (click)="savePersonages()">Сохранить изменения</button>
+                    <button type="submit" class="btn btn-primary" [disabled]="!frm2.valid">Сохранить изменения</button>
                 </form>
             </div>
 
@@ -92,3 +103,6 @@
         <button type="button" class="btn btn-default pull-right" (click)="closeDeleteDialog()">Отмена</button>
     </div>
 </ng-template>
+
+
+<notifications></notifications>

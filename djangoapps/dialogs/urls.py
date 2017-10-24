@@ -5,13 +5,14 @@ from django.conf.urls import url
 from dialogs.views import (
     get_dialog, get_dialogs, get_activedialogs, get_activedialog,
     run_dialog, stop_dialog, user_status, stop_activedialog,
-    get_myactivedialogs, mydialogs, mydialog)
+    get_myactivedialogs, mydialogs, mydialog, mydialog_bg_image)
 
 
 urlpatterns = [
     url(r'^api/dialogues/?$', get_dialogs, name="get_dialogs"),
     url(r'^api/dialogues/(?P<dialog_pk>\d+)/?$', get_dialog, name="get_dialog"),
     url(r'^api/mydialogues/?$', mydialogs, name="mydialogs"),
+    url(r'^api/mydialogues/(?P<dialog_pk>\d+)/bg/?$', mydialog_bg_image, name="mydialog_bg_image"),
     url(r'^api/mydialogues/(?P<dialog_pk>\d+)/?$', mydialog, name="mydialog"),
     url(r'^api/activedialogues/?$', get_activedialogs, name="get_activedialogs"),
     url(r'^api/myactivedialogues/?$', get_myactivedialogs, name="get_myactivedialogs"),

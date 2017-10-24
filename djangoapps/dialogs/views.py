@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import os
 
 from django.conf import settings
 from django.shortcuts import get_object_or_404
@@ -178,8 +179,24 @@ def mydialog(request, dialog_pk):
         is_published = data.get('is_published')
         steps = data.get('steps')
         personages = data.get('personages')
+        dialog_name = data.get('dialog_name')
+        description = data.get('description')
+        level = data.get('level')
 
         is_dirty = False
+
+        if dialog_name is not None:
+            if mydialog.name != dialog_name:
+                mydialog.name = dialog_name
+                is_dirty = True
+        if description is not None:
+            if mydialog.description != description:
+                mydialog.description = description
+                is_dirty = True
+        if level is not None:
+            if mydialog.level != level:
+                mydialog.level = level
+                is_dirty = True
         if is_published is not None:
             if mydialog.is_published != is_published:
                 mydialog.is_published = is_published
@@ -189,9 +206,8 @@ def mydialog(request, dialog_pk):
                 mydialog.scenario.steps = steps
                 is_dirty = True
         if personages is not None:
-            if mydialog.scenario.personages != personages:
-                mydialog.scenario.personages = personages
-                is_dirty = True
+            mydialog.scenario['personages'] = personages
+            is_dirty = True
         if is_dirty:
             mydialog.save()
 
@@ -262,3 +278,26 @@ def mydialogs(request):
         return Response(data, status.HTTP_200_OK)
 
 
+@api_view(['POST'])
+@permission_classes((IsConfirmAndIsAuthenticated,))
+def mydialog_bg_image(request, dialog_pk):
+
+    mydialog = get_object_or_404(Dialog, pk=dialog_pk, owner=request.user)
+
+    if request.method == 'POST':
+        file_upload = request.FILES.get('file')
+
+        if file_upload and file_upload._size > 30 * 1024 * 1024:
+            return Response({"error": "Загружаемый файл не может быть более 30М."}, status=status.HTTP_400_BAD_REQUEST)
+
+        if mydialog.background_image:
+            os.remove(mydialog.background_image.path)
+
+        if file_upload:
+            mydialog.background_image = file_upload
+
+        mydialog.save()
+
+        return Response(DialogSerializer(mydialog).data, status.HTTP_200_OK)
+
+    return Response(status.HTTP_200_OK)
