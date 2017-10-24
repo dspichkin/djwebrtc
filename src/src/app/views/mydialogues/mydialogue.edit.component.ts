@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy, Input, Output, OnChanges, EventEmitter, C
     ViewRef, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { Subject }    from 'rxjs/Subject';
 
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal/modal-options.class';
@@ -61,7 +62,10 @@ export class MyDialogueEditViewComponent implements OnInit {
     @ViewChild('template') template;
 
     public uploader:FileUploader;// = new FileUploader({ url: AppSettings.URL_MYDIALOGS });
-
+    private description_is_changed: boolean = false;
+    
+    descriptionChanged: Subject<string> = new Subject<string>();
+    personageChanged: Subject<string> = new Subject<string>();
 
     constructor(
         private dialogsService: DialogsService,
@@ -89,6 +93,21 @@ export class MyDialogueEditViewComponent implements OnInit {
         } else {
             self.statusService.getStatus();
         }
+        this.descriptionChanged
+            .debounceTime(2000) // wait 1 sec after the last event before emitting last event
+            .distinctUntilChanged() // only emit if value is different from previous value
+            .subscribe(model => {
+                this.saveDescription();
+                this.description_is_changed = false;
+            });
+        this.personageChanged
+            .debounceTime(2000) // wait 1 sec after the last event before emitting last event
+            .distinctUntilChanged()
+            .subscribe(model => {
+                this.savePersonages();
+                this.description_is_changed = false;
+            });
+
         this._getDialog();
     }
 
@@ -126,7 +145,6 @@ export class MyDialogueEditViewComponent implements OnInit {
             .subscribe((dialogue) => {
                 self.dialogue = dialogue;
                 self._initVars();
-                //console.log('self.dialogue ', self.dialogue )
                 if (this.dialogue.scenario && this.dialogue.scenario.personages) {
                     self.personages = this.dialogue.scenario.personages;
                     self.selectedPersonage = self.dialogue.scenario.steps[0].start_personage;
@@ -155,7 +173,7 @@ export class MyDialogueEditViewComponent implements OnInit {
             }]
         });
         this.uploader.onCompleteItem = (item:any, response:any, status:any, headers:any) => {
-            this.notificationService.add(new Notification('Сообщение', 'alert-success', 'Настройки сохранены'));
+            this.notificationService.add(new Notification('Сообщение', 'alert-success', 'Картинка загружена'));
             this._getDialog();
         };
     }    
@@ -176,7 +194,7 @@ export class MyDialogueEditViewComponent implements OnInit {
             }
         }, 250);
     }
-    
+    /*
     private saveDialog(item) {
         item.is_published = !item.is_published;
         this.loading = true;
@@ -188,28 +206,35 @@ export class MyDialogueEditViewComponent implements OnInit {
             this.notificationService.add(new Notification('Сообщение', 'alert-success', 'Настройки сохранены'));
         });
     }
+    */
     private saveDescription() {
         this.loading = true;
         let params = {
             dialog_name: this.dialogue.name,
             description: this.dialogue.description,
-            level: this.selectedDialogLevel
+            level: this.selectedDialogLevel,
+            is_published: this.dialogue.is_published
         }
         this.dialogsService.saveMyDialogs(this.dialogue.id, params).subscribe((data) => {
             this.loading = false;
-            this.notificationService.add(new Notification('Сообщение', 'alert-success', 'Настройки сохранены'));
         });
     }
 
 
     private savePersonages() {
         this.loading = true;
+        this.dialogue.scenario.personages = [{
+            role: "master", 
+            name: this.personage_a
+        }, {
+            role: "pupil",
+            name: this.personage_b 
+        }];
         let params = {
             personages: this.dialogue.scenario.personages
         }
         this.dialogsService.saveMyDialogs(this.dialogue.id, params).subscribe((data) => {
             this.loading = false;
-            this.notificationService.add(new Notification('Сообщение', 'alert-success', 'Настройки сохранены'));
         });
     }
     
@@ -240,8 +265,31 @@ export class MyDialogueEditViewComponent implements OnInit {
     }
 
     private onFileSelected () {
-      this.uploader.uploadAll();
+        this.uploader.uploadAll();
     }
     
+    private publishDialog() {
+        this.dialogue.is_published = !this.dialogue.is_published;
+        this.saveDescription();
+    }
+
+    private changedDescriptionData($event, type_text) {
+        if (type_text == 'name' && !$event) {
+            return;
+        }
+        this.description_is_changed = true;
+        this.dialogue[type_text] = $event;
+        this.descriptionChanged.next($event);
+    }
+
+    private changedPersonageData($event, type_text) {
+        if (!$event) {
+            return;
+        }
+        this.description_is_changed = true;
+        this[type_text] = $event;
+        console.log('this[type_text]', this[type_text])
+        this.personageChanged.next($event);
+    }
     
 }

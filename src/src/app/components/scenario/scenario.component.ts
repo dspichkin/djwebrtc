@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, Input, Output, OnChanges, EventEmitter } 
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 
-import { Observable } from 'rxjs/Observable';
+//import { Observable } from 'rxjs/Observable';
 import { Subject }    from 'rxjs/Subject';
 
 import { DialogsService } from '../../services/dialogs.service';
