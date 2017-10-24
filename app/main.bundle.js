@@ -2221,7 +2221,7 @@ var ScenarioComponent = (function () {
                         strength: 90
                     }
                 };
-                if (step.master.variants[j].phrase) {
+                if (step.pupil.variants[j].phrase) {
                     data_2["data"]["name"] = 'Игрок: \n' + step.pupil.variants[j].phrase;
                 }
                 else {
