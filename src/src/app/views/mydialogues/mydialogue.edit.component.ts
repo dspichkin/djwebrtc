@@ -126,7 +126,7 @@ export class MyDialogueEditViewComponent implements OnInit {
             .subscribe((dialogue) => {
                 self.dialogue = dialogue;
                 self._initVars();
-                console.log('self.dialogue ', self.dialogue )
+                //console.log('self.dialogue ', self.dialogue )
                 if (this.dialogue.scenario && this.dialogue.scenario.personages) {
                     self.personages = this.dialogue.scenario.personages;
                     self.selectedPersonage = self.dialogue.scenario.steps[0].start_personage;

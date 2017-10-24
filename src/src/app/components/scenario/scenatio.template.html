@@ -2,7 +2,7 @@
 <p>Всего шагов: {{ dialogue.scenario.steps.length }}</p>
 <div class="col-md-6">
     <div style="margin: 20px 0px;">
-        <button *ngIf="selected_step_type == 'master' || selected_step_type == 'pupil'" class="btn btn-info" type="button" (click)="addStep()">Добавить следующий шаг</button>
+       
         <button *ngIf="selected_step_type == 'step'" class="btn btn-danger" type="button" (click)="deleteStep()">Удалить выбранный шаг</button>
     </div>
     <div class="pull-right" style="margin-bottom: 5px;">
@@ -34,39 +34,49 @@
                     <button type="button" class="btn btn-primary" (click)="saveSteps()">Сохранить изменить</button>
                 </div>
             </div>
-            <div *ngIf="selected_step && selected_step_type == 'master'" class="well">
-                <h3 *ngIf="selected_step">Выбранный шаг: {{selected_step.id}}</h3>
+            <div *ngIf="selected_step && selected_step_type == 'master'" class="well" style="background-color: aliceblue;">
+                <h3 *ngIf="selected_step" style="text-align: center;">
+                    Выбранный шаг: {{selected_step.id}}
+                    Персонаж A
+                </h3>
                 <div *ngFor="let variant of selected_step.master.variants">
                     <div class="form-group">
-                        <label>Задание для фразы персонажа А</label>
-                        <textarea class="form-control" name="master_task" [ngModel]="variant.task" style="background-color: white;"></textarea>
+                        <label>Задание</label>
+                        <textarea class="form-control" name="master_task" [ngModel]="variant.task" style="background-color: white;" (ngModelChange)="changedData($event, variant, 'task')"></textarea>
                     </div>
                     <div class="form-group">
-                        <label>Правильная фраза персонажа А</label>
-                        <textarea class="form-control" name="master_phrase" [ngModel]="variant.phrase" style="background-color: white;"></textarea>
+                        <label>Правильная фраза</label>
+                        <textarea class="form-control" name="master_phrase" [ngModel]="variant.phrase" style="background-color: white;" (ngModelChange)="changedData($event, variant, 'phrase')"></textarea>
                     </div>
                     <div class="form-group">
-                        <button type="button" class="btn btn-primary" (click)="saveSteps()">Сохранить изменить</button>
+                        <p *ngIf="phrase_is_changed" style="margin: 0;font-size: 10px;">Изменения пока еще не сохранены</p>
+                        <button class="btn btn-info" type="button" (click)="addStep()">Добавить следующий шаг</button>
+                    </div>
+                </div>
+
+            </div>
+
+            <div *ngIf="selected_step && selected_step_type == 'pupil'" class="well" style="background-color: #fcf8e3;">
+                <h3 *ngIf="selected_step" style="text-align: center;">
+                        Выбранный шаг: {{selected_step.id}}
+                        Персонаж B
+                </h3>
+                <div *ngFor="let variant of selected_step.pupil.variants">
+                    <div class="form-group">
+                        <label>Задание</label>
+                        <textarea class="form-control" name="pupil_task" [ngModel]="variant.task" style="background-color: white;" (ngModelChange)="changedData($event, variant, 'task')"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Правильная фраза</label>
+                        <textarea class="form-control" name="pupil_phrase" [ngModel]="variant.phrase" style="background-color: white;" (ngModelChange)="changedData($event, variant, 'phrase')"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <p *ngIf="phrase_is_changed" style="margin: 0;font-size: 10px;">Изменения пока еще не сохранены</p>
+                        <button class="btn btn-info" type="button" (click)="addStep()">Добавить следующий шаг</button>
                     </div>
                 </div>
             </div>
 
-            <div *ngIf="selected_step && selected_step_type == 'pupil'" class="well">
-                <h3 *ngIf="selected_step">Выбранный шаг: {{selected_step.id}}</h3>
-                <div *ngFor="let variant of selected_step.pupil.variants">
-                    <div class="form-group">
-                        <label>Задание для фразы персонажа B </label>
-                        <textarea class="form-control" name="pupil_task" [ngModel]="variant.task" style="background-color: white;"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label>Правильная фраза персонажа B </label>
-                        <textarea class="form-control" name="pupil_phrase" [ngModel]="variant.phrase" style="background-color: white;"></textarea>
-                    </div>
-                    <div class="form-group">
-                       <button type="button" class="btn btn-primary" (click)="saveSteps()">Сохранить изменить</button>
-                    </div>
-                </div>
-            </div>
         </form>
     </div>
     <div *ngIf="!selected_step_type">

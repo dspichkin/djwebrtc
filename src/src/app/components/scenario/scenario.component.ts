@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy, Input, Output, OnChanges, EventEmitter } 
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 
+import { Observable } from 'rxjs/Observable';
 import { Subject }    from 'rxjs/Subject';
 
 import { DialogsService } from '../../services/dialogs.service';
@@ -34,11 +35,21 @@ export class ScenarioComponent implements OnInit, OnDestroy {
 
     tapNodeFn = this.tapNode.bind(this);
     tapBgFn = this.tapBg.bind(this);
-
+    
+    phraseChanged: Subject<string> = new Subject<string>();
+    phrase_is_changed: boolean = false;
 
     constructor(
         private dialogsService: DialogsService
         ) {
+
+        this.phraseChanged
+            .debounceTime(2000) // wait 1 sec after the last event before emitting last event
+            .distinctUntilChanged() // only emit if value is different from previous value
+            .subscribe(model => {
+                this._save();
+                this.phrase_is_changed = false;
+            });
     }
 
     ngOnInit() {
@@ -415,6 +426,12 @@ export class ScenarioComponent implements OnInit, OnDestroy {
 
     private saveSteps() {
         this._save();
+    }
+
+    private changedData($event, item, type_text) {
+        this.phrase_is_changed = true;
+        item[type_text] = $event;
+        this.phraseChanged.next($event);
     }
     
 }
