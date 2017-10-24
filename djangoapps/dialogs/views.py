@@ -202,9 +202,8 @@ def mydialog(request, dialog_pk):
                 mydialog.is_published = is_published
                 is_dirty = True
         if steps is not None:
-            if mydialog.scenario.steps != steps:
-                mydialog.scenario.steps = steps
-                is_dirty = True
+            mydialog.scenario['steps'] = steps
+            is_dirty = True
         if personages is not None:
             mydialog.scenario['personages'] = personages
             is_dirty = True
