@@ -418,10 +418,9 @@ export class ScenarioComponent implements OnInit, OnDestroy {
         let params = {
             steps: this.dialogue.scenario.steps
         }
-        this.loading = true;
+        //this.loading = true;
         this.dialogsService.saveMyDialogs(this.dialogue.id, params).subscribe((data) => {
-            this._makeData();
-            this.loading = false;
+            //this.loading = false;
         });
     }
 
@@ -433,6 +432,10 @@ export class ScenarioComponent implements OnInit, OnDestroy {
         this.phrase_is_changed = true;
         item[type_text] = $event;
         this.phraseChanged.next($event);
+    }
+
+    private refreshMap() {
+        this._makeData();
     }
     
 }

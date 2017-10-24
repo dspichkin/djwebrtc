@@ -6,6 +6,9 @@
         <button *ngIf="selected_step_type == 'step'" class="btn btn-danger" type="button" (click)="deleteStep()">Удалить выбранный шаг</button>
     </div>
     <div class="pull-right" style="margin-bottom: 5px;">
+         <button class="btn btn-info btn-xs" type="button" (click)="refreshMap()" style="">
+            <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
+        </button>
         <button class="btn btn-info btn-xs" type="button" (click)="centerChange($event)" style="">
             <span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
         </button>
