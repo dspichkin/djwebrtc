@@ -2500,6 +2500,7 @@ var ScenarioComponent = (function () {
         };
         this.loading = true;
         this.dialogsService.saveMyDialogs(this.dialogue.id, params).subscribe(function (data) {
+            _this._makeData();
             _this.loading = false;
         });
     };

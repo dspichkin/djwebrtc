@@ -420,6 +420,7 @@ export class ScenarioComponent implements OnInit, OnDestroy {
         }
         this.loading = true;
         this.dialogsService.saveMyDialogs(this.dialogue.id, params).subscribe((data) => {
+            this._makeData();
             this.loading = false;
         });
     }
