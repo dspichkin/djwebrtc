@@ -59,10 +59,19 @@ export class DialogViewComponent implements OnInit  {
                 self.dialog = dialog
                 if (this.dialog.scenario && this.dialog.scenario.personages) {
                     self.personages = this.dialog.scenario.personages;
-                    self.selectedPersonage = self.dialog.scenario.steps[0].start_personage;
+                    self._selectPersonage(self.dialog.scenario.steps[0].start_personage);
                     self.nextStep();
                 }
             });
+    }
+
+    private _selectPersonage(personage) {
+        for (let i = 0; i < this.dialog.scenario.personages.length; i++) {
+            if (this.dialog.scenario.personages[i].role == personage) {
+                this.selectedPersonage = this.dialog.scenario.personages[i];
+                break
+            }
+        }
     }
 
     private _shuffle(a) {
@@ -100,17 +109,20 @@ export class DialogViewComponent implements OnInit  {
         item.hints = null;
     }
 
-    public nextStep(next_step_id?) {
+    public nextStep(next_step_id?, reset_presonage?) {
         if (next_step_id) {
             for (var i = 0; i < this.dialog.scenario.steps.length; i++) {
                 if (this.dialog.scenario.steps[i].id == next_step_id) {
-                    this.current_step = this.dialog.scenario.steps[i][this.selectedPersonage];
+                    if (reset_presonage) {
+                        this._selectPersonage(this.dialog.scenario.steps[i].start_personage);
+                    }
+                    this.current_step = this.dialog.scenario.steps[i][this.selectedPersonage.role];
                     this.current_step_id = this.dialog.scenario.steps[i].id;
                     return;
                 } 
             }
         }
-        this.current_step = this.dialog.scenario.steps[0][this.selectedPersonage];
+        this.current_step = this.dialog.scenario.steps[0][this.selectedPersonage.role];
         this.current_step_id = this.dialog.scenario.steps[0].id;
     }
 

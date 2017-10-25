@@ -55,24 +55,11 @@ export class DialogsViewComponent implements OnInit  {
 
             self.mode = this.statusService.mode;
             self.activedialog = self.statusService.activedialog;
-            if (!this.activedialog) {
-                this._updateDialogs();
-            }
+            
         });
 
         self.webSocketService.message.subscribe((data) => {
             let message = JSON.parse(data);
-            //console.log("1!!!!message", message)
-            //if (message.command == "UPDATE") {
-            //    if (message.target == "activedialogs") {
-            //        self._updateActiveDialogs();
-            //    }
-            //}
-
-            //if (message.command == "START_DIALOG_MASTER") {
-            //    self.activedialog_id = message.dialog;
-            //    self.mode = AppSettings.MODE_DIALOG_MASTER
-            //}
             
             if (message.command == "EXIT_FROM_ACTIVE_DIALOG_BY_PUPIL") {
                 console.log("EXIT_FROM_ACTIVE_DIALOG_BY_PUPIL")
@@ -95,10 +82,6 @@ export class DialogsViewComponent implements OnInit  {
             this.dialogs = data;
             this.loading = false;
         });
-
-        //if (self.loading) {
-        //    self._updateDialogs();
-        //}
     }
 
     
@@ -107,10 +90,6 @@ export class DialogsViewComponent implements OnInit  {
     }
     
 
-    private _updateDialogs() {
-        //this.loading = true;
-        
-    }
 
 
     private turnActiveDialog(dialog) {
@@ -125,71 +104,19 @@ export class DialogsViewComponent implements OnInit  {
                     }
                 }
                 self.ref.detectChanges();
-            //    self.router.navigate(['/wait']);
-            //    self.mode = AppSettings.MODE_WAIT_PUPIL;
-            //    self.activedialog = data.activedialog;
             }
         });
     }
     
 
-    /*
-
-    public runDialog(dialog) {
-        let self = this;
-        self.loading = true;
-        self.dialogsService.runDialog(dialog.id).subscribe((data) => {
-            //console.log(data)
-            self.loading = false;
-            if (data.status) {
-                self.router.navigate(['/wait']);
-            //    self.mode = AppSettings.MODE_WAIT_PUPIL;
-            //    self.activedialog = data.activedialog;
-            }
-        });
-    }
-
-    
-    
-    public callDialog(dialog) {
-        let self = this;
-        self.callingdialog = dialog;
-        self.mode = AppSettings.MODE_CALLING;
-        self._callingDialog(dialog.id);
-    }
-
-    
-
-    private _callingDialog(activedialog_id) {
-        let self = this;
-        if (self.mode == AppSettings.MODE_CALLING) {
-            self.calling_time = new Date();
-
-            self.webSocketService.sendCommand({
-                command: 'CALLING',
-                target: activedialog_id,
-                source: self.user.key_id
-            })
-
-            setTimeout(function() {
-                self._callingDialog(activedialog_id);
-            }, AppSettings.CALLING_TIME_INTERVAL);
-        }
-        
-    }
-    */
+   
     public handlerStopCalling($event) {
         this.callingdialog = null;
         this.mode = AppSettings.MODE_LIST;
         //this._updateActiveDialogs();
     }
 
-    //public handelerStopWaitDialog(data) {
-    //    if (data.status) {
-    //        this.mode = AppSettings.MODE_LIST;
-            //this.showDialogs();
-    //    }
-    //}
+    
 
     public handlerAcceptCall(user_key_id) {
         let self = this;
@@ -200,28 +127,7 @@ export class DialogsViewComponent implements OnInit  {
             pupil: user_key_id
         })
     }
-    /*
-    public handelerStopDialog(data) {
-        let self = this;
-        self.loading = true;
-        let command;
-        if (data.type == 'pupil') {
-            command = {
-                command: 'EXIT_FROM_ACTIVE_DIALOG_BY_PUPIL',
-                target: data.activedialogid,
-            }
-        }
-        if (data.type == 'master') {
-            command = {
-                command: 'EXIT_FROM_ACTIVE_DIALOG_BY_MASTER',
-                target: data.activedialogid
-            }
-        }
-        self.webSocketService.sendCommand(command)
-       // this._updateActiveDialogs();
-    }
-
-    */
+    
 
 
 }
