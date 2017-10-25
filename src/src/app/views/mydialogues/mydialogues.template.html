@@ -62,7 +62,10 @@
                                 <p style="font-size: 8px;margin:0;">Кол-во шагов: {{item.scenario.steps.length || 0}}</p> 
                                 <h4>{{item.name}}</h4> 
                                 <p style="font-size: 12px;">{{item.description}}</p> 
-                                <div style="text-align: right">
+                                <div style="display: flex;justify-content: space-between;align-items: baseline;">
+                                    <button class="btn btn-info btn-xs" [routerLink]="['/dialogue', item.id]">
+                                        Просмотреть
+                                    </button> 
                                     <button class="btn btn-success" [routerLink]="['/mydialogues', item.id]">
                                         Редактировать
                                     </button> 
