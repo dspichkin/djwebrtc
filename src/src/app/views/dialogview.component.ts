@@ -49,6 +49,15 @@ export class DialogViewComponent implements OnInit  {
         this.nextStep(this.current_step_id);
     }
     
+    private changePersonage() {
+        for (let i = 0; i < this.dialog.scenario.personages.length; i++) {
+            if (this.dialog.scenario.personages[i].role != this.selectedPersonage.role) {
+                this.selectedPersonage = this.dialog.scenario.personages[i];
+                break;
+            }
+        }
+        this.nextStep(this.current_step_id);
+    }
     
     private _getDialog() {
         let self = this;

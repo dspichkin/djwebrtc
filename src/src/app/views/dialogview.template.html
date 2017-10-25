@@ -26,6 +26,7 @@
                                 <h4 class="text-success">{{item.task}}</h4>
 
                                 <button *ngIf="item.prev_step > 0" class="btn btn-info" type="button" (click)="nextStep(item.prev_step, true)">Назад</button>
+                                <button class="btn btn-warning" type="button" (click)="changePersonage()">Переключить собеседника</button>
                                 <button *ngIf="item.next_step > 0" class="btn btn-success" type="button" (click)="nextStep(item.next_step, true)">Следуюйщий шаг</button>
                             
                                 <div style="margin-top:40px">
