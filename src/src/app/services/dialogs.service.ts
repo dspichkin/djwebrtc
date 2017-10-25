@@ -132,10 +132,17 @@ export class DialogsService {
             .catch(this.handleError.bind(this));
     }
 
+    getTags(type): any {
+        return this._http.get(AppSettings.URL_TAGS + "?tags=" + type)
+            .map((response: Response) => {
+                return response.json();
+            })
+            .catch(this.handleError.bind(this));
+    }
+
     private handleError(error: Response) {
         console.error(error);
         if (error.status == 403) {
-            console.log("XXXX")
             this.router.navigate(['/accounts/login/']);
         }
         if (error.status == 404) {

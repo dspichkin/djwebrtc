@@ -16,3 +16,12 @@ class AccountSerializer(serializers.ModelSerializer):
 
     def get_level_display(self, obj):
         return obj.get_level_display()
+
+
+class AccountFIOSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Account
+        fields = ('fio', )
+
+

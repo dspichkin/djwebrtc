@@ -19,6 +19,7 @@ export class AppSettings {
     public static URL_USER_SETTING;
     public static URL_WEBSOKET;
     public static URL_WEBSOKET_PEER;
+    public static URL_TAGS;
 
 
     public static CALLING_TIME_INTERVAL = 5000;
@@ -57,6 +58,7 @@ export class AppSettings {
         AppSettings.URL_MESSAGE = AppSettings.base_url + "/accounts/message/";
         AppSettings.URL_CHECK_USER  = AppSettings.base_url + "/accounts/check_user/";
         AppSettings.URL_USER_SETTING = AppSettings.base_url + "/accounts/user/";
+        AppSettings.URL_TAGS =  AppSettings.base_url + "/dialogs/tags/";
         
         AppSettings.URL_WEBSOKET_PEER = document.location.hostname;
 

@@ -6,6 +6,7 @@ import { Subject }    from 'rxjs/Subject';
 
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal/modal-options.class';
+import { SelectComponent } from 'ng2-select';
 
 import { FileUploader } from 'ng2-file-upload';
 import { WebSocketService } from '../../services/websocket.service';
@@ -24,6 +25,7 @@ import { AppSettings } from '../../app.settings';
 })
 
 export class MyDialogueEditViewComponent implements OnInit {
+    @ViewChild('tagsInput') recipientsInput: SelectComponent;
 
     user;
     private mode:string = 'base'; //base, scenario
@@ -66,6 +68,15 @@ export class MyDialogueEditViewComponent implements OnInit {
     
     descriptionChanged: Subject<string> = new Subject<string>();
     personageChanged: Subject<string> = new Subject<string>();
+
+
+    public tags:Array<string> = [];
+    private activetags = [];
+    private value:any = [];
+
+    
+    
+
 
     constructor(
         private dialogsService: DialogsService,
@@ -176,6 +187,13 @@ export class MyDialogueEditViewComponent implements OnInit {
             this.notificationService.add(new Notification('Сообщение', 'alert-success', 'Картинка загружена'));
             this._getDialog();
         };
+
+        this.activetags = [];
+        if (this.dialogue.tags && this.dialogue.tags.length > 0) {
+            for (let i = 0; i < this.dialogue.tags.length; i++) {
+                this.activetags.push(this.dialogue.tags[i].name);
+            }
+        }
     }    
 
     private getCookie(name: string): string {
@@ -194,19 +212,7 @@ export class MyDialogueEditViewComponent implements OnInit {
             }
         }, 250);
     }
-    /*
-    private saveDialog(item) {
-        item.is_published = !item.is_published;
-        this.loading = true;
-        let params = {
-            is_published: item.is_published
-        }
-        this.dialogsService.saveMyDialogs(item.id, params).subscribe((data) => {
-            this.loading = false;
-            this.notificationService.add(new Notification('Сообщение', 'alert-success', 'Настройки сохранены'));
-        });
-    }
-    */
+    
     private saveDescription() {
         this.loading = true;
         let params = {
@@ -288,8 +294,35 @@ export class MyDialogueEditViewComponent implements OnInit {
         }
         this.description_is_changed = true;
         this[type_text] = $event;
-        console.log('this[type_text]', this[type_text])
         this.personageChanged.next($event);
     }
-    
+
+
+    public selectedTag(value:any):void {
+        let params = {
+            tags:  this.tags
+        }
+        this.dialogsService.saveMyDialogs(this.dialogue.id, params).subscribe((data) => {
+            this.loading = false;
+        });
+    }
+ 
+    public removedTag(value:any):void {
+        let params = {
+            tags:  this.tags
+        }
+        this.dialogsService.saveMyDialogs(this.dialogue.id, params).subscribe((data) => {
+            this.loading = false;
+        });
+    }
+
+    public searchTags(value:any) {
+        this.dialogsService.getTags(value).subscribe((res)=>{
+            this.tags = res;
+        })
+    }
+
+    public refreshValue(value:any):void {
+        this.value = value;
+    }
 }

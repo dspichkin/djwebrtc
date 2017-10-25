@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 // import { NgCytoscapeModule } from "ng2-cytoscape";
 import { NgCytoscapeModule } from "../vendors/ng2-cytoscape";
 import { FileSelectDirective } from 'ng2-file-upload';
+import { SelectModule } from 'ng2-select';
 
 import { DialogsViewComponent} from './dialogsview.component';
 import { ActiveDialogsViewComponent} from './activedialogsview.component';
@@ -55,6 +56,7 @@ import { EqualValidator } from './view_profile/equal_validator.directive';
     RouterModule,
     FormsModule,
     NgCytoscapeModule,
+    SelectModule,
   ],
   exports: [
     DialogsViewComponent,

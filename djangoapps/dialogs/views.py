@@ -14,8 +14,10 @@ from channels_presence.models import Presence
 from accounts.serializers import AccountSerializer
 # from dialogs.signals import activedialog_changed
 from dialogs.models import (
-    Dialog, ActiveDialog, DIALOG_STOP, DIALOG_WAIT)
-from dialogs.serializers import (DialogSerializer, ActiveDialogSerializer)
+    Dialog, ActiveDialog, DIALOG_STOP, DIALOG_WAIT, Tag)
+from dialogs.serializers import (
+    DialogSerializer, ActiveDialogSerializer,
+    TagSerializer)
 from dialogs.utils import IsConfirmAndIsAuthenticated
 
 
@@ -182,6 +184,7 @@ def mydialog(request, dialog_pk):
         dialog_name = data.get('dialog_name')
         description = data.get('description')
         level = data.get('level')
+        tags = data.get('tags')
 
         is_dirty = False
 
@@ -207,6 +210,14 @@ def mydialog(request, dialog_pk):
         if personages is not None:
             mydialog.scenario['personages'] = personages
             is_dirty = True
+        if tags is not None:
+            mydialog.tags.all().delete()
+            for tag in tags:
+                t = Tag.objects.filter(name=tag).first()
+                if t:
+                    mydialog.tags.add(t)
+            is_dirty = True
+
         if is_dirty:
             mydialog.save()
 
@@ -300,3 +311,20 @@ def mydialog_bg_image(request, dialog_pk):
         return Response(DialogSerializer(mydialog).data, status.HTTP_200_OK)
 
     return Response(status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+@permission_classes((IsConfirmAndIsAuthenticated,))
+def tags(request):
+    types = request.GET.get('tags')
+    tags = []
+    if types:
+        tags = Tag.objects.filter(name__icontains=types.lower())
+    else:
+        tags = Tag.objects.all()[:10]
+
+    return Response([tag.name for tag in tags], status.HTTP_200_OK)
+
+
+
+

@@ -4,7 +4,7 @@ from rest_framework import serializers
 
 from dialogs.utils import JSONField
 from dialogs.models import (Tag, Dialog, ActiveDialog)
-from accounts.serializers import (AccountSerializer)
+from accounts.serializers import (AccountSerializer, AccountFIOSerializer)
 
 
 class TagSerializer(serializers.ModelSerializer):
@@ -17,6 +17,7 @@ class DialogSerializer(serializers.ModelSerializer):
     scenario = JSONField()
     level_display = serializers.SerializerMethodField()
     tags = TagSerializer(many=True)
+    owner = AccountFIOSerializer()
 
     class Meta:
         model = Dialog
