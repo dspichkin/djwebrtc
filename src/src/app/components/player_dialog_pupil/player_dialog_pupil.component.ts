@@ -33,6 +33,7 @@ export class PlayerDialogPupilComponent implements OnInit, OnDestroy {
 
     private loading = false;
     
+    private message_change_turn_to_master = false;
 
     constructor(
         private statusService: StatusService,
@@ -175,6 +176,13 @@ export class PlayerDialogPupilComponent implements OnInit, OnDestroy {
     }
 
     
-
+    private triggerTurn() {
+        let command = {
+            command: 'MESSAGE_CHANGE_TURN_TO_MASTER',
+            activedialogid: this.activedialog.id,
+        }
+        this.message_change_turn_to_master = true;
+        this.webSocketService.sendCommand(command)
+    }
 
 }

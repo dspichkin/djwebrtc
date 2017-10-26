@@ -45,6 +45,16 @@ def ws_message(message):
     command = data.get("command")
     if command:
 
+        if command == 'MESSAGE_CHANGE_TURN_TO_MASTER':
+            activedialogid = data.get("activedialogid")
+            activedialog = ActiveDialog.objects.filter(pk=activedialogid).first()
+            if activedialog:
+                Group("call-client-%s" % activedialog.master.key_id).send({
+                    'text': json.dumps({
+                        'command': "MESSAGE_CHANGE_TURN_TO_MASTER",
+                    })
+                })
+
         if command == 'CHAT_SEND_MESSAGE':
             activedialogid = data.get("activedialogid")
             chat_message = data.get("message")

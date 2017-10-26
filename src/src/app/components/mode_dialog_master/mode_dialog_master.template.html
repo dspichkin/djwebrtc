@@ -38,8 +38,7 @@
             </div>
         </div>
     </div>
-    <div class="panel-body">
-
+    <div class="panel-body" style="min-height: 500px;">
         <div [hidden]="status_activedialog != 'run'" class="row">
             <div style="display: flex;justify-content: flex-start;">
                 <div style="display: flex;opacity: 0;height: 0;">
@@ -59,8 +58,9 @@
             <playerdialogmaster [user]="user" [activedialog]="activedialog" (changeactivedialog)="handlerChangeActiveDialog($event)"></playerdialogmaster>
         </div>
         
-        <div style="margin-top: 30px">
-            
+    </div>
+    <div class="panel-footer">
+        <div>
             <button class="btn btn-warning" (click)="exitDialog()"><span>Выход из режима диалога</span></button>
         </div>
     </div>

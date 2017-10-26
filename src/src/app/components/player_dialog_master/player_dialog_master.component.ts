@@ -30,6 +30,7 @@ export class PlayerDialogMasterComponent implements OnInit, OnDestroy {
     private current_mode = 1; // 1 - ожидание хода 2 - мой ход
     private currentPersonage;
     private open_change_dialog:boolean = false;
+    private message_change_turn_to_master = false;
 
     private passed_turns = {
         master: false,
@@ -54,6 +55,10 @@ export class PlayerDialogMasterComponent implements OnInit, OnDestroy {
 
         self.webSocketService.message.subscribe((data) => {
             let message = JSON.parse(data);
+            if (message.command == "MESSAGE_CHANGE_TURN_TO_MASTER") {
+                this.message_change_turn_to_master = true;
+            }
+
 
             if (message.command == "CHANGE_DIALOG") {
                 self.loading = true;
@@ -146,6 +151,7 @@ export class PlayerDialogMasterComponent implements OnInit, OnDestroy {
     }
     
     private _getNextStep(next_step_id) {
+        this.message_change_turn_to_master = false;
         if (next_step_id) {
             let step  = this._getStep(next_step_id);
             if (step) {

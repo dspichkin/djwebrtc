@@ -16,13 +16,13 @@
                                 <h4 class="text-success">{{item.task}}</h4>
                             </div>
                             <div>
-                                <h4 *ngIf="!passed_turns.pupil" class="text-warning" style="text-align: center;">Ход игрока еще не был сделан</h4>
+                                <h4 *ngIf="!passed_turns.pupil" class="text-warning" style="text-align: center;">Партнер еще не делал свой ход</h4>
                                
                                 <button *ngIf="item.prev_step > 0" class="btn btn-info" type="button" (click)="nextStep(item.prev_step)">Назад</button>
                                 
-                                <button class="btn btn-warning" type="button" (click)="pupilTurn()">Ход игрока</button>
+                                <button class="btn btn-warning" type="button" (click)="pupilTurn()">Передать ход партнеру</button>
 
-                                <button *ngIf="hasNextTurn(item)" class="btn btn-success pull-right" type="button" (click)="nextStep(item.next_step)">Следуюйщий шаг</button>
+                                <button *ngIf="hasNextTurn(item) && passed_turns.pupil" class="btn btn-success pull-right" type="button" (click)="nextStep(item.next_step)">Следуюйщий шаг</button>
                             </div>
 
                             <h2 *ngIf="!hasNextTurn(item)" class="text-warning" style="text-align: center;">Это последний шаг диалога</h2>
@@ -48,7 +48,8 @@
                     </div>
                     <div *ngIf="current_mode == 1" class="panel-body" style="min-height: 200px;">
                         <h3 style="text-align: center;">Ожидаем ход игрока</h3>
-                        <span *ngIf="current_step.variants && current_step.variants.length > 0">Ему нужно сказать:</span> 
+                        <p *ngIf="message_change_turn_to_master" style="text-align: center;color: brown;">Партнер готов передать ход</p>
+                        <p *ngIf="current_step.variants && current_step.variants.length > 0">Ему нужно сказать:</p> 
                         <div *ngFor="let item of current_step.variants">
                             <div class="well">
                                 <p class="text-success">{{item.task}}</p>
