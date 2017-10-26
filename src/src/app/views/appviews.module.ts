@@ -2,9 +2,11 @@ import { NgModule } from "@angular/core";
 import { BrowserModule } from "@angular/platform-browser";
 import { RouterModule } from "@angular/router";
 import { FormsModule } from '@angular/forms';
-// import { NgCytoscapeModule } from "ng2-cytoscape";
 import { NgCytoscapeModule } from "../vendors/ng2-cytoscape";
-import { FileSelectDirective } from 'ng2-file-upload';
+//import { FileSelectDirective } from 'ng2-file-upload';
+//import { FileSelectDirective } from '../../../node_modules/ng2-file-upload';
+import { FileUploadModule } from "ng2-file-upload";
+
 import { SelectModule } from 'ng2-select';
 
 import { DialogsViewComponent} from './dialogsview.component';
@@ -49,7 +51,7 @@ import { EqualValidator } from './view_profile/equal_validator.directive';
     MyDialoguesViewComponent,
     MyDialogueEditViewComponent,
     ScenarioComponent,
-    FileSelectDirective,
+    //FileSelectDirective,
   ],
   imports: [
     BrowserModule,
@@ -57,6 +59,7 @@ import { EqualValidator } from './view_profile/equal_validator.directive';
     FormsModule,
     NgCytoscapeModule,
     SelectModule,
+    FileUploadModule
   ],
   exports: [
     DialogsViewComponent,
@@ -78,7 +81,7 @@ import { EqualValidator } from './view_profile/equal_validator.directive';
     MyDialoguesViewComponent,
     MyDialogueEditViewComponent,
     ScenarioComponent,
-    FileSelectDirective,
+    //FileSelectDirective,
   ],
 })
 

@@ -18,15 +18,15 @@ import { AppSettings } from '../../app.settings';
 })
 
 export class ProfileViewComponent implements OnInit {
-    private user;
-    private first_name;
-    private first_name_error;
-    private selectedLevel;
-    private skypeid;
-    private password;
-    private password1;
+    public user;
+    public first_name;
+    public first_name_error;
+    public selectedLevel;
+    public skypeid;
+    public password;
+    public password1;
 
-    private levels = [
+    public levels = [
         {
             id: 10,
             title: "Beginner, Elementary"
@@ -48,7 +48,7 @@ export class ProfileViewComponent implements OnInit {
         },
     ]
 
-    private loading: boolean = false;
+    public loading: boolean = false;
 
     constructor(
         private statusService: StatusService,

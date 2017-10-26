@@ -13,6 +13,7 @@ import { WebSocketService } from '../../../services/websocket.service';
 })
 export class FooterComponent implements OnInit {
 
+    public show_error_dialog: boolean = false;
 
     public constructor(
         ) {

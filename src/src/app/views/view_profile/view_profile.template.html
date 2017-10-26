@@ -20,7 +20,7 @@
                     </div>
                     <div class="form-group">
                         <label for="exampleInputLevel">Ваш уровень английского *</label>
-                        <select name="frm_level" class="form-control" [(ngModel)]="selectedLevel" style="" (ngModelChange)="onChangePersonage()" required="required">
+                        <select name="frm_level" class="form-control" [(ngModel)]="selectedLevel" style="" required="required">
                              <option *ngFor="let pesonage of levels" [value]="pesonage.id">{{pesonage.title}}</option>
                          </select>
                     </div>

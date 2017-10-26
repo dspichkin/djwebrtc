@@ -6,7 +6,8 @@ import { FormControl, FormsModule } from '@angular/forms';
 //import {BsDropdownModule} from 'ngx-bootstrap';
 
 import { JWBootstrapSwitchModule } from 'jw-bootstrap-switch-ng2';
-import { BasicLayoutComponent} from "./basicLayout.component";
+import { BasicLayoutComponent } from "./basicLayout.component";
+import { BlankLayoutComponent } from "./blankLayout.component";
 
 import { NavigationComponent} from "../navigation/navigation.component";
 import { FooterComponent} from "../footer/footer.component";
@@ -17,6 +18,7 @@ import { MessageErrorsComponent } from "../../../components/message_errors/messa
   declarations: [
     FooterComponent,
     BasicLayoutComponent,
+    BlankLayoutComponent,
     NavigationComponent,
     TopNavbarComponent,
     MessageErrorsComponent,
@@ -30,6 +32,7 @@ import { MessageErrorsComponent } from "../../../components/message_errors/messa
   exports: [
     FooterComponent,
     BasicLayoutComponent,
+    BlankLayoutComponent,
     NavigationComponent,
     TopNavbarComponent,
     MessageErrorsComponent,

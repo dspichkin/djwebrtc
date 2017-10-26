@@ -41,14 +41,14 @@ export class ChangeCurrentDialogComponent implements OnInit, OnDestroy {
 
     }
 
-    private changeSelectedDialog(item) {
+    public changeSelectedDialog(item) {
         for (let i = 0; i < this.mydialogs.length; i++) {
             this.mydialogs[i].select = false;
         }
         item.select = true;
     }
 
-    private selectDialog() {
+    public selectDialog() {
         let selected_dialog;
         for (let i = 0; i < this.mydialogs.length; i++) {
             if (this.mydialogs[i].select == true) {

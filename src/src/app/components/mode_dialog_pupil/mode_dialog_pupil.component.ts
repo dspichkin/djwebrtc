@@ -31,18 +31,18 @@ export class ModeDialogPupilComponent implements OnInit, OnDestroy {
     peer;
     peerid;
     user;
-    private loading: boolean = false;
+    public loading: boolean = false;
     private localStream;
     private callingCall;
-    private status_activedialog = 'starting';
-    private status_voice_connection = 'starting'; //starting, run, stop, error_connection
-    private last_hearbeat_from_master;
+    public status_activedialog = 'starting';
+    public status_voice_connection = 'starting'; //starting, run, stop, error_connection
+    public last_hearbeat_from_master;
     // продолжительность диалога
-    private during_conversation;
+    public during_conversation;
     private start_converstion;
-    private connection_error_message = "";
+    public connection_error_message = "";
 
-    private personageName;
+    public personageName;
 
 
     private _timeout;

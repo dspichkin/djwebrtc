@@ -28,8 +28,8 @@ export class MyDialogueEditViewComponent implements OnInit {
     @ViewChild('tagsInput') recipientsInput: SelectComponent;
 
     user;
-    private mode:string = 'base'; //base, scenario
-    private dialogue: any = {
+    public mode:string = 'base'; //base, scenario
+    public dialogue: any = {
         name: ""
     };
     private loading: boolean = false;

@@ -49,7 +49,7 @@ export class ChatComponent implements OnInit, OnDestroy {
 
 
 
-    private send() {
+    public send() {
         if (!this.message) {
             return;
         }

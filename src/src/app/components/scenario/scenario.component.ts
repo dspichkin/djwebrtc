@@ -434,7 +434,7 @@ export class ScenarioComponent implements OnInit, OnDestroy {
         this.phraseChanged.next($event);
     }
 
-    private refreshMap() {
+    public refreshMap() {
         this._makeData();
     }
     

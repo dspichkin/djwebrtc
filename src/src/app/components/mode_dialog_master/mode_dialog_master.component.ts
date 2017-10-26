@@ -26,7 +26,7 @@ export class ModeDialogMasterComponent implements OnInit, OnDestroy {
     @ViewChild('localVideo') private localVideo: ElementRef;
 
     private userMedia = <any>navigator;
-    private activedialog;
+    public activedialog;
     private peer;
     private peerid;
     private user;
@@ -34,16 +34,16 @@ export class ModeDialogMasterComponent implements OnInit, OnDestroy {
     private localStream;
     private answeringCall;
     private last_message_from_pupil;
-    private status_activedialog = 'starting'; //starting, run, stop
-    private status_voice_connection = 'starting'; //starting, run, stop, error_connection
+    public status_activedialog = 'starting'; //starting, run, stop
+    public status_voice_connection = 'starting'; //starting, run, stop, error_connection
     private last_hearbeat_from_pupil;
-    private connection_error_message;
+    public connection_error_message;
 
     // продолжительность диалога
-    private during_conversation;
+    public during_conversation;
     private start_converstion;
 
-    private personageName;
+    public personageName;
     private _timeout;
 
     constructor(

@@ -29,7 +29,7 @@ export class PlayerDialogMasterComponent implements OnInit, OnDestroy {
     private current_step_id;
     private current_mode = 1; // 1 - ожидание хода 2 - мой ход
     private currentPersonage;
-    private open_change_dialog:boolean = false;
+    public open_change_dialog:boolean = false;
     private message_change_turn_to_master = false;
 
     private passed_turns = {

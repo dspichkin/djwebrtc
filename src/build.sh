@@ -1,3 +1,3 @@
 #!/bin/bash
 
-ng build -d /static/
+ng build --prod -d /static/

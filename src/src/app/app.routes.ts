@@ -4,7 +4,7 @@ import { DialogsViewComponent } from "./views/dialogsview.component";
 import { ActiveDialogsViewComponent } from "./views/activedialogsview.component";
 import { DialogViewComponent } from "./views/dialogview.component";
 
-//import {BlankLayoutComponent} from "./components/common/layouts/blankLayout.component";
+import {BlankLayoutComponent} from "./components/common/layouts/blankLayout.component";
 import { BasicLayoutComponent } from "./components/common/layouts/basicLayout.component";
 import { ModeWaitPupilViewComponent } from "./views/view_mode_wait_pupil/view_mode_wait_pupil.component";
 import { ModeCallingViewComponent } from "./views/view_mode_calling/view_mode_calling.component";

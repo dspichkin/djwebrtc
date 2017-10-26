@@ -23,8 +23,8 @@ import { AppSettings } from '../../app.settings';
 export class MyDialoguesViewComponent implements OnInit {
 
     user;
-    private dialogs = [];
-    private loading: boolean = false;
+    public dialogs = [];
+    public loading: boolean = false;
 
     private new_dialog_name = "";
     private show_create_dialog: boolean = false;
@@ -114,7 +114,7 @@ export class MyDialoguesViewComponent implements OnInit {
         });
     }
     
-    private showCreateDialog() {
+    public showCreateDialog() {
         if (!this.show_create_dialog) {
             this.show_create_dialog = true;
             this.new_dialog_name = "";
