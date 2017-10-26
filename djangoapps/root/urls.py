@@ -41,6 +41,7 @@ urlpatterns += [
     # JS-приложение
     url(r'^$', app, name='app'),
     url(r'^idia/?', TemplateView.as_view(template_name="idia.html"), name="idia"),
+    url(r'^interface/?', TemplateView.as_view(template_name="interface.html"), name="interface"),
     url(r'^close/', closepopup, name="login_popup_close"),
     # url(r'^(?P<url>.*)$', sredirect),
 ]

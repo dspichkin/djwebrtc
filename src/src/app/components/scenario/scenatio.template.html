@@ -29,7 +29,7 @@
                     <label>Первый персонаж в выбранном шаге</label>
 
                     <select class="form-control" name="start_personage" (change)="changePersonage()" [(ngModel)]="selected_step.start_personage" style="background-color: white;">
-                        <option *ngFor="let personage of dialogue.scenario.personages" [value]="personage.role">{{personage.role}}</option>
+                        <option *ngFor="let personage of dialogue.scenario.personages" [value]="personage.role">{{personage.name}}</option>
                     </select>
                 </div>
 

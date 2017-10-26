@@ -146,7 +146,7 @@ export class MyDialoguesViewComponent implements OnInit {
             this.dialogsService.createDialog(params).subscribe((data) => {
                 this.loading = false;
                 this.closeCreateDialog();
-                this._updateActiveDialogs();
+                this.router.navigate(['/mydialogues', data.id]);
             });
         }
         
