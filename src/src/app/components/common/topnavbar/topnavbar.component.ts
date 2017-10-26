@@ -102,7 +102,7 @@ export class TopNavbarComponent implements OnInit {
     }
 
     activeRoute(routename: string): boolean{
-        return this.router.url == routename;
+        return this.router.url.startsWith(routename);
     }
 
     onChangeInputCall() {

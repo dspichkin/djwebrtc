@@ -13,7 +13,7 @@
         <li [ngClass]="{'active': activeRoute('/mydialogues')}">
             <a [routerLink]="['/mydialogues']">Мои диалоги</a>
         </li>
-        <li [ngClass]="{'active': activeRoute('/dialogues')}">
+        <li [ngClass]="{'active': activeRoute('/dialogues') ||  activeRoute('/dialogue')}">
             <a [routerLink]="['/dialogues']">Все диалоги</a>
         </li>
         <li [ngClass]="{'active': activeRoute('/activedialogues')}">
