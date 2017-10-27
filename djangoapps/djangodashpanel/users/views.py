@@ -45,9 +45,5 @@ def get_current_user_data(request):
             if len(settings.DJANGODASHPANEL_NGINX_LOGS) > 0:
                 data["apps"]["nginx"] = True
 
-        if hasattr(settings, 'DJANGODASHPANEL_NGINX_NAXSI'):
-            if os.path.exists(settings.DJANGODASHPANEL_NGINX_NAXSI):
-                data["apps"]["naxsi"] = True
-
     return Response(data, status=status.HTTP_200_OK)
 

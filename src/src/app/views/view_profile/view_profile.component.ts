@@ -28,6 +28,7 @@ export class ProfileViewComponent implements OnInit {
     public avatar;
     public password;
     public password1;
+    public change_password: boolean = false;
 
     public levels = [
         {
@@ -158,6 +159,14 @@ export class ProfileViewComponent implements OnInit {
         this.uploader.uploadAll();
     }
     
+
+    public showChangePassword() {
+        this.change_password = !this.change_password;
+        if (!this.change_password) {
+            this.password = null;
+            this.password1 = null;
+        }
+    }
 
     
     

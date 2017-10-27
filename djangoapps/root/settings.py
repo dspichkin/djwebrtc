@@ -329,15 +329,18 @@ DJANGODASHPANEL_URLSTAT_EXCLUDES = [
     "/dash/.*",
     "/static/.*",
     "/media/.*",
+    "/pj/.*",
 ]
 
 DJANGODASHPANEL_NGINX_ACCESS_EXCLUDES = [
     "/api/dash/.*",
     "/dash/.*",
     "/media/.*",
-    "/static/.*"
+    "/static/.*",
+    "/pj/.*",
 ]
 
+DJANGODASHPANEL_NGINX_LOGS = '/var/log/nginx/access.log'
 
 TEMP_DIR = os.path.join(BASE_DIR, '..', 'temp')
 if not os.path.exists(TEMP_DIR):

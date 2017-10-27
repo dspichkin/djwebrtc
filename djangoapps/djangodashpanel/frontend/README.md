@@ -30,6 +30,7 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 ## Run frontend watcher
 
 ```
-ng build -w -d /static/
+ng build --prod -d /static/dash/
+ng build -w -d /static/dash/
 ```
 
