@@ -340,7 +340,12 @@ DJANGODASHPANEL_NGINX_ACCESS_EXCLUDES = [
     "/pj/.*",
 ]
 
-DJANGODASHPANEL_NGINX_LOGS = '/var/log/nginx/access.log'
+DJANGODASHPANEL_NGINX_LOGS = [{
+    'name': 'mydialogs.ru',
+    'slug': 'mydialogs',
+    'access':  '/var/log/nginx/access.log',
+    'error': '/var/log/nginx.error.log',
+}]
 
 TEMP_DIR = os.path.join(BASE_DIR, '..', 'temp')
 if not os.path.exists(TEMP_DIR):
