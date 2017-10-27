@@ -325,20 +325,13 @@ LOGGING = {
 DJANGODASHPANEL_BACKUP_DIR = os.path.join(BASE_DIR, '..', 'backups')
 DJANGODASHPANEL_URLSTAT = True
 DJANGODASHPANEL_URLSTAT_EXCLUDES = [
-    "/api/user/new_count_messages/",
-    "/api/news/is_has_new/",
-    "/api/user/location/",
-    "/config/.*",
+    "/admin/.*",
     "/dash/.*",
     "/static/.*",
     "/media/.*",
 ]
 
 DJANGODASHPANEL_NGINX_ACCESS_EXCLUDES = [
-    "/api/user/new_count_messages/",
-    "/api/user/location/",
-    "/api/news/is_has_new/",
-    "/config/.*",
     "/api/dash/.*",
     "/dash/.*",
     "/media/.*",
