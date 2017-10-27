@@ -1,8 +1,6 @@
 import time
 import json
 import pytz
-import os
-import re
 from pprint import pprint
 
 from datetime import datetime, timedelta
@@ -16,8 +14,6 @@ from rest_framework.permissions import IsAdminUser
 
 from djangodashpanel.models.nginx import (
     NginxAccess, NginxError)
-
-from djangodashpanel.nginx.naxsi import read_naxsi_error
 
 
 @api_view(['GET'])
