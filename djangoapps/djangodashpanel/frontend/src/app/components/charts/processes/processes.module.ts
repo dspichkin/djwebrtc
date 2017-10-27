@@ -1,3 +1,4 @@
+/*
 import { NgModule } from "@angular/core";
 import { BrowserModule } from "@angular/platform-browser";
 import { ProcessesComponent } from "./processes.component";
@@ -13,3 +14,4 @@ import { ProcessesComponent } from "./processes.component";
 })
 
 export class ProcessesModule {}
+*/

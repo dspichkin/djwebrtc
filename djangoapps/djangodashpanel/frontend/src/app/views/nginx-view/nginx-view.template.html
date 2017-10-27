@@ -21,9 +21,6 @@
                             <li [ngClass]="{active: current_log == 'error'}">
                                 <a (click)="current_log='error'">Error Log</a>
                             </li>
-                            <li *ngIf="has_naxsi" [ngClass]="{active: current_log == 'naxsi'}">
-                                <a (click)="current_log='naxsi'">NAXSI</a>
-                            </li>
                         </ul>
                         <div class="tab-content">
                             <div *ngIf="current_log == 'access'" class="tab-pane active" style="padding: 10px;">

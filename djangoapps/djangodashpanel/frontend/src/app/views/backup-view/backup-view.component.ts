@@ -34,7 +34,7 @@ export class backupViewComponent implements OnInit{
     backuptime_is_dirty = false;
     backuptime_loaded;
 
-	constructor (private dataService: DataService, private router: Router) {
+	constructor (private dataService: DataService, public router: Router) {
     }
 
     ngOnInit() { 

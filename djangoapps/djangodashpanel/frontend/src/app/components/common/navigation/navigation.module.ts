@@ -1,3 +1,4 @@
+/*
 import {NgModule} from "@angular/core";
 import {BrowserModule} from "@angular/platform-browser";
 import {RouterModule} from "@angular/router";
@@ -10,3 +11,4 @@ import {NavigationComponent} from "./navigation.component";
 })
 
 export class NavigationModule {}
+*/

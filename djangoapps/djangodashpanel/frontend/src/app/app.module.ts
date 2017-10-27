@@ -26,6 +26,8 @@ import { BackupViewModule } from "./views/backup-view/backup-view.module";
 import { UrlStatViewModule } from "./views/urlstat-view/urlstat-view.module";
 import { NginxViewModule } from "./views/nginx-view/nginx-view.module";
 
+import { NotificationComponent } from "./components/common/notification/notification.component";
+
 
 // App services
 //import { ChartsService } from "./services/charts.services";
@@ -33,6 +35,7 @@ import { DataService } from './services/data.service';
 import { UserService } from './services/user.service';
 import { WindowRef } from './services/window.service';
 import { NotificationService } from './services/notification.service';
+import { ValuesPipe } from './services/iterobj.pipe';
 
 
 //import { SelectComponent } from "ng2-select/ng2-select";
@@ -50,6 +53,8 @@ export const AppCSRF = {
 @NgModule({
   declarations: [
     AppComponent,
+    NotificationComponent,
+    ValuesPipe
     //SelectComponent
   ],
   imports: [
@@ -82,7 +87,8 @@ export const AppCSRF = {
     DataService,
     UserService,
     WindowRef,
-    NotificationService
+    NotificationService,
+
   ],
   bootstrap: [AppComponent]
 })

@@ -45,12 +45,9 @@ export class nginxViewComponent implements OnInit {
 
     onInitTime = false;
 
-    //has_naxsi: boolean = false;
     showIPAddr: boolean = false;
     showRef: boolean = false;
     showAgents: boolean = false;
-    //showNaxsiWhitelist: boolean = false;
-    //showNaxsiRule: boolean = false;
 
     //selectedRule;
 
@@ -199,11 +196,6 @@ export class nginxViewComponent implements OnInit {
 
                     self.listErrorPids = data.errors;
 
-                    // naxis
-                    //self.has_naxsi = data.has_naxsi;
-                    //self.lineChartNumberNaxisErrorsData = data.numbers_naxsi_errors;
-                    //self.lineChartNaxisErrorsLabels = data.naxsi_errors_dates;
-                    //self.listNaxisPids = data.list_naxsi_errors;
 
 	                self.chart.ngOnChanges({});
 
@@ -280,13 +272,6 @@ export class nginxViewComponent implements OnInit {
                 self.lineChartErrorsLabels = data.errors_dates;
 
                 self.listErrorPids = data.errors;
-
-                // Naxis
-                //self.has_naxsi = data.has_naxsi;
-                //self.lineChartNumberNaxisErrorsData = data.numbers_naxsi_errors;
-                //self.lineChartNaxisErrorsLabels = data.naxsi_errors_dates;
-                //self.listNaxisPids = data.list_naxsi_errors;
-
 
                 self.chart.ngOnChanges({});
 

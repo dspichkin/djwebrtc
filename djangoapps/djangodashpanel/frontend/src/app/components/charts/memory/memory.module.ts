@@ -1,3 +1,4 @@
+/*
 import { NgModule } from "@angular/core";
 import { BrowserModule } from "@angular/platform-browser";
 import { MemoryComponent } from "./memory.component";
@@ -13,3 +14,4 @@ import { MemoryComponent } from "./memory.component";
 })
 
 export class MemoryModule {}
+*/

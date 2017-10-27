@@ -16,7 +16,9 @@ export class NavigationComponent {
 		username: ""
 	};
     apps = {
-        backup: false
+        urlstat: false,
+        backup: false,
+        nginx: false
     };
 
     constructor(private router: Router, private userService: UserService) {}

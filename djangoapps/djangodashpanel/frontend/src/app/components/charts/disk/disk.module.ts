@@ -1,3 +1,4 @@
+/*
 import { NgModule } from "@angular/core";
 import { BrowserModule } from "@angular/platform-browser";
 import { DiskComponent } from "./disk.component";
@@ -13,3 +14,4 @@ import { DiskComponent } from "./disk.component";
 })
 
 export class DiskModule {}
+*/

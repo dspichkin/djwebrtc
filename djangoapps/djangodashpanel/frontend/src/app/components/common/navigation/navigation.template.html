@@ -17,28 +17,6 @@
             <li [ngClass]="{active: activeRoute('processes')}">
                 <a [routerLink]="['/processes']"><i class="fa fa-tasks"></i> <span class="nav-label">Processes</span> </a>
             </li>
-            <li [ngClass]="{active: activeRoute('correctlogin') || activeRoute('incorrectlogin')}">
-                <a href="" class="auto">      
-                  <span class="pull-right text-muted">
-                    <i class="fa fa-fw fa-angle-right text"></i>
-                    <i class="fa fa-fw fa-angle-down text-active"></i>
-                  </span>
-                  <i class="fa fa-shield"></i>
-                  <span>Security</span>
-                </a>
-                <ul class="nav nav-sub dk">
-                  <li [ngClass]="{active: activeRoute('correctlogin')}">
-                    <a [routerLink]="['/correctlogin']" style="font-size: 11px;">
-                      <i class="fa fa-square-o"></i><span>Number of login </span>
-                    </a>
-                  </li>
-                  <li [ngClass]="{active: activeRoute('incorrectlogin')}">
-                    <a [routerLink]="['/incorrectlogin']" style="font-size: 11px;">
-                      <i class="fa  fa-exclamation"></i><span>Incorrect attempt login</span>
-                    </a>
-                  </li>
-                </ul>
-            </li>
             <li *ngIf="apps.urlstat" [ngClass]="{active: activeRoute('urlstat')}">
                 <a [routerLink]="['/urlstat']"><i class="fa fa-sitemap"></i> <span class="nav-label">Url statistics</span> </a>
             </li>
@@ -48,9 +26,7 @@
             <li *ngIf="apps.nginx" [ngClass]="{active: activeRoute('nginx')}">
                 <a [routerLink]="['/nginx']"><i class="fa fa-filter"></i> <span class="nav-label">Nginx</span> </a>
             </li>
-            <li *ngIf="apps.naxsi" [ngClass]="{active: activeRoute('naxsi')}">
-                <a [routerLink]="['/naxsi/configs']"><i class="fa fa-bug"></i> <span class="nav-label">Naxsi</span> </a>
-            </li>
+            
         </ul>
 
     </div>

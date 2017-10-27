@@ -27,9 +27,14 @@ host    all             all             ::1/128                 trust
 
 # Настройки крона
 
-sudo vim /etc/cron.d/discounter
+sudo vim /etc/cron.d/webrtc
 
 ```
-*/5 * * * * /home/ubuntu/discounter/djangoapps/run_cron.sh
+*/5 * * * * /home/ubuntu/webrtc/djangoapps/run_cron.sh
 ```
 
+# Сборка dash
+
+```
+ng build --prod -d /static/dash/
+```

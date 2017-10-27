@@ -39,7 +39,7 @@ class Command(BaseCommand):
             self.get_memory()
             self.get_nginx()
 
-        if not nginx.run_last_time or perf.run_last_time + timedelta(minutes=10) < now:
+        if not nginx.run_last_time or perf.run_last_time_5m + timedelta(minutes=10) < now:
             nginx.run_last_time = timezone.now()
             nginx.save()
             self.get_nginx()

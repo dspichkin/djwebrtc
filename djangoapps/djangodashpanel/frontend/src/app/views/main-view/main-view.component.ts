@@ -16,6 +16,10 @@ export class mainViewComponent implements OnInit{
 	boottime:string = "";
 	users;
     avarage = {
+        avarage_cpu: 0,
+        hours: 0,
+        avarage_memory: 0,
+        avarage_disk: 0
     };
 
 	constructor (private dashboardService: DataService) {
