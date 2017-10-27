@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import re
 import json
+import os
 
 from rest_framework.response import Response
 from rest_framework import status
@@ -357,5 +358,25 @@ def user(request):
         }, status.HTTP_200_OK)
 
 
+@api_view(['POST'])
+@permission_classes((IsConfirmAndIsAuthenticated,))
+def user_avatar(request):
+
+    if request.method == 'POST':
+        file_upload = request.FILES.get('file')
+
+        if file_upload and file_upload._size > 30 * 1024 * 1024:
+            return Response({"error": "Загружаемый файл не может быть более 30М."}, status=status.HTTP_400_BAD_REQUEST)
+
+        if request.user.avatar:
+            os.remove(request.user.avatar.path)
+
+        if file_upload:
+            request.user.avatar = file_upload
+            request.user.save()
+
+        return Response({"status": True}, status.HTTP_200_OK)
+
+    return Response(status.HTTP_200_OK)
 
 

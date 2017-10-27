@@ -32,7 +32,6 @@
                         <label for="background_image">Картинка диалога</label>
                         <div>
                             <div class="col-md-6" style="padding: 0">
-                                <!-- <input type="file" class="btn btn-default" id="background_image" value=""> -->
                                 <input #fileInput type="file" ng2FileSelect [uploader]="uploader" accept="image/png, image/jpg, image/jpeg" style="display:none;" (change)="onFileSelected()"/>
                                 <button type="button" class="btn btn-default" (click)="fileInput.click()" [disabled]="loading">Загрузить картинку диалога</button>
                             </div>

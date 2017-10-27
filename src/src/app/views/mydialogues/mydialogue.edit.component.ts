@@ -184,7 +184,6 @@ export class MyDialogueEditViewComponent implements OnInit {
             }]
         });
         this.uploader.onCompleteItem = (item:any, response:any, status:any, headers:any) => {
-            this.notificationService.add(new Notification('Сообщение', 'alert-success', 'Картинка загружена'));
             this._getDialog();
         };
 

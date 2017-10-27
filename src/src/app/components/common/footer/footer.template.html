@@ -1,5 +1,5 @@
 <div class="" style="width:100%;background: rgba(64,75,97, 0.9);display: flex;justify-content: space-between;">
-    <div style="height: 80px;color: white;margin-top:20px;font-size: 14px;">
+    <div style="height: 80px;color: white;margin:20px;font-size: 14px;">
         <ol>
             <li>
                 <a [routerLink]="['/message']" style="color:white;">Обратная связь</a>
@@ -10,7 +10,25 @@
         </ol>
     </div>
 
-    <div style="height: 80px;color: white;margin-top:20px;font-size: 14px;margin-right: 40px;">
+    <div style="height: 80px;color: white;margin:20px;font-size: 14px;">
+        <ol>
+            <li>
+                <a [routerLink]="['/mydialogues']" style="color:white;">Мои диалоги</a>
+            </li>
+            <li>
+                <a [routerLink]="['/dialogues']" style="color:white;">Все диалоги</a>
+            </li>
+            <li>
+                <a [routerLink]="['/activedialogues']" style="color:white;">Диалоги в ожидание диалоги</a>
+            </li>
+            <li>
+                <a [routerLink]="['/profile']" style="color:white;">Настройки профиля</a>
+            </li>
+        </ol>
+    </div>
+
+
+    <div style="height: 80px;color: white;margin:20px 40px;font-size: 14px;">
         <ol>
             <li>
                 <a [routerLink]="['/help']" style="color:white;">Помощь с интерфейсом</a>

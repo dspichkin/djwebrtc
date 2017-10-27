@@ -2,6 +2,8 @@ import { Component, OnInit, OnDestroy, Input, Output, OnChanges, EventEmitter } 
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 
+import { FileUploader } from 'ng2-file-upload';
+
 import { WebSocketService } from '../../services/websocket.service';
 import { DialogsService } from '../../services/dialogs.service';
 import { StatusService } from '../../services/status.service';
@@ -23,6 +25,7 @@ export class ProfileViewComponent implements OnInit {
     public first_name_error;
     public selectedLevel;
     public skypeid;
+    public avatar;
     public password;
     public password1;
 
@@ -49,6 +52,7 @@ export class ProfileViewComponent implements OnInit {
     ]
 
     public loading: boolean = false;
+    public uploader:FileUploader;
 
     constructor(
         private statusService: StatusService,
@@ -66,15 +70,17 @@ export class ProfileViewComponent implements OnInit {
             if (!self.user) {
                 return;
             }
+            console.log( self.user)
             self.setVars();
         });
         if (self.statusService.user) {
             self.user = self.statusService.user;
+
             self.setVars();
         } else {
             self.statusService.getStatus();
         }
-
+        
     }
 
     ngAfterViewInit() {
@@ -85,7 +91,30 @@ export class ProfileViewComponent implements OnInit {
         this.first_name = this.user.first_name;
         this.selectedLevel = this.user.level;
         this.skypeid = this.user.skypeid;
+
+        this.uploader = new FileUploader({ 
+            url: AppSettings.URL_USER_SETTING + 'avatar/',
+            headers: [{
+                name: 'X-CSRFToken',
+                value: this.getCookie("csrftoken")
+            }]
+        });
+        
+        let self = this;
+
+        this.uploader.onCompleteItem = (item:any, response:any, status:any, headers:any) => {
+            this.statusService.getStatus().subscribe((data) => {
+                self.user = data.user;
+            })
+        };
     }
+
+    private getCookie(name: string): string {
+        var value = "; " + document.cookie;
+        var parts = value.split("; " + name + "=");
+        if (parts.length == 2) return decodeURIComponent(parts.pop().split(";").shift());
+    }
+
     
     changePassword($event) {
         if (this.password1) {
@@ -124,6 +153,10 @@ export class ProfileViewComponent implements OnInit {
         }
     }
    
+
+    private onFileSelected () {
+        this.uploader.uploadAll();
+    }
     
 
     

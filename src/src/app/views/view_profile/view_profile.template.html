@@ -31,6 +31,47 @@
                     </div>
 
                     <div class="form-group">
+                        <label for="skypeid">Аватарка</label>
+                        <div>
+                            <div class="col-md-6" style="padding: 0">
+                                <input #fileInput type="file" ng2FileSelect [uploader]="uploader" accept="image/png, image/jpg, image/jpeg" style="display:none;" (change)="onFileSelected()"/>
+                                <button type="button" class="btn btn-default" (click)="fileInput.click()" [disabled]="loading">Загрузить аватарку</button>
+                            </div>
+                            <div class="col-md-6">
+                                <section id="uploadQueue" *ngIf="uploader?.queue?.length > 0">
+                                    <div ngFor="let item of uploader.queue">
+                                        {{ item?.file?.name }}
+                                        <div *ngIf="uploader.isHTML5" class="progress" style="margin-bottom: 0;">
+                                            <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': item.progress + '%' }"></div>
+                                         </div>
+                                    </div>
+                                </section>
+
+                                <div *ngIf="!user || !user.avatar" 
+                                    style="
+                                        height: 160px; 
+                                        width: 160px; 
+                                        border: 1px solid #ccc;
+                                        border-radius: 50%;
+                                        background-color: #ddd;
+                                        ">
+                                </div>
+                                <div *ngIf="user && user.avatar" 
+                                    [ngStyle]="{'background-image': 'url(' + user.avatar + ')'}"
+                                    style="
+                                        height: 160px; 
+                                        width: 160px; 
+                                        background-size: cover;
+                                        background-repeat: no-repeat;
+                                        border-radius: 50%;
+                                        display: block;
+                                        margin: 0 10px;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
                         <label for="exampleInputPassword1">Новый пароль</label>
                         <input type="password" name="frm_password" class="form-control" id="exampleInputPassword1" [(ngModel)]="password" #frm_password="ngModel" reverse="false" (ngModelChange)="changePassword($event)" maxlength="25">
                         <small *ngIf="frm_password.errors && frm_password.errors.required && !frm_password.pristine" class="text-danger pull-right">

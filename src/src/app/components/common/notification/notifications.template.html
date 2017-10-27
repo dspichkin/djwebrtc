@@ -1,5 +1,5 @@
 <div *ngIf="visible" class="notification" style="">
-    <div style="position: fixed;width: 100%;height: 100%;opacity: 0.5;top:0;left:0;background-color: black;"></div>
+    <div style="position: fixed;width: 100%;height: 100%;opacity: 0.5;top:0;left:0;background-color: black;z-index:100;"></div>
     <!-- <button (click)="close()" aria-label="Close" class="btn btn-primary pull-right">X</button> -->
     <p *ngIf="loading">Loading ...</p>
     <div *ngIf="!loading" style="position: absolute;
@@ -10,7 +10,8 @@
     margin: 200px auto;
     border: 1px solid #ddd;
     border-radius: 6px;
-    box-shadow: 0px 0px 14px 0px;">
+    box-shadow: 0px 0px 14px 0px;
+    z-index: 1000;">
             <div class="panel" style="margin: 0;">
                 <div class="panel-heading panel-info">
                      <h4>{{note.title}}</h4>
