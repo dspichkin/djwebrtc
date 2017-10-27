@@ -1,4 +1,4 @@
-<div class="row" style="background: rgba(64,75,97, 0.9);">
+<div class="" style="width:100%;background: rgba(64,75,97, 0.9);display: flex;justify-content: space-between;">
     <div style="height: 80px;color: white;margin-top:20px;font-size: 14px;">
         <ol>
             <li>
@@ -7,6 +7,15 @@
             <li>
                 <a style="color:white;cursor: pointer;" (click)="show_error_dialog=true">Сообщить об ошибке</a>
             </li>
+        </ol>
+    </div>
+
+    <div style="height: 80px;color: white;margin-top:20px;font-size: 14px;margin-right: 40px;">
+        <ol>
+            <li>
+                <a [routerLink]="['/message']" style="color:white;">Помощь с интерфейсом</a>
+            </li>
+           
         </ol>
     </div>
 </div>

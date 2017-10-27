@@ -3,7 +3,7 @@
 <div class="col-md-6">
     <div style="margin: 20px 0px;">
        
-        <button *ngIf="selected_step_type == 'step'" class="btn btn-danger" type="button" (click)="deleteStep()">Удалить выбранный шаг</button>
+        <button *ngIf="selected_step_type == 'step' && selected_step.id > 1" class="btn btn-danger" type="button" (click)="deleteStep()">Удалить выбранный шаг</button>
     </div>
     <div class="pull-right" style="margin-bottom: 5px;">
          <button class="btn btn-info btn-xs" type="button" (click)="refreshMap()" style="">

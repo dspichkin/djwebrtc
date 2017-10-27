@@ -294,45 +294,6 @@ export class ScenarioComponent implements OnInit, OnDestroy {
             let current_step_index = -1;
             let next_step;
             let founded = false;
-            /*
-            for (let i = 0; i < steps.length; i++) {
-                if (founded) {
-                    if (!next_step) {
-                        next_step = steps[i];
-                    }
-                    let new_id = steps[i].id + 1;
-                    steps[i].id = new_id
-                    steps[i].number = new_id;
-                    steps[i].master.number = new_id;
-                    steps[i].pupil.number = new_id;
-                    for (let j = 0; j < steps[i].master.variants.length; j++) {
-                        steps[i].master.variants[j].id = 'm' + new_id + '.' + (j + 1);
-                        steps[i].master.variants[j].prev_step = steps[i - 1].id;
-                        if (i < steps.length - 1) {
-                            steps[i].master.variants[j].next_step = new_id + 1;
-                        }
-                        if (i == steps.length - 1){
-                            steps[i].master.variants[j].next_step = -1;
-                        }
-                    }
-                    for (let j = 0; j < steps[i].pupil.variants.length; j++) {
-                        steps[i].pupil.variants[j].id = 'p' + new_id + '.' + (j + 1);
-                        steps[i].pupil.variants[j].prev_step = steps[i - 1].id;
-                        if (i < steps.length - 1) {
-                            steps[i].pupil.variants[j].next_step = new_id + 1;
-                        }
-                        if (i == steps.length - 1){
-                            steps[i].pupil.variants[j].next_step = -1;
-                        }
-                    }
-                }
-
-                if (steps[i].id == current_step_id) {
-                    current_step_index = i;
-                    founded = true;
-                }
-            }
-            */
             
             for (let i = 0; i < steps.length; i++) {
                 if (founded) {
@@ -357,16 +318,12 @@ export class ScenarioComponent implements OnInit, OnDestroy {
                         "number": new_step_id,
                         "variants":[{
                             "id": 'm' + new_step_id + '.' + 1,
-                            //"next_step": next_step.id,
-                            //"prev_step": this.selected_step.id
                         }]
                     },
                     "pupil": {
                         "number": new_step_id,
                         "variants":[{
                             "id": 'p' + new_step_id + '.' + 1,
-                            //"next_step": next_step.id,
-                            //"prev_step": this.selected_step.id
                         }]
                     }
                 } 
@@ -394,6 +351,11 @@ export class ScenarioComponent implements OnInit, OnDestroy {
     }
 
     private deleteStep() {
+        if (this.selected_step.id == 1) {
+            return;
+        }
+
+        
         let steps = this.dialogue.scenario.steps;
         let step_index = -1;
         for (let i = 0; i < steps.length; i++) {
