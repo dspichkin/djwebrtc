@@ -13,9 +13,6 @@ from django.utils.timezone import get_fixed_timezone
 from djangodashpanel.models.nginx import (
     NginxData, NginxAccess, NginxError)
 
-from djangodashpanel.models.naxsi import (
-    NaxsiData, NaxsiMessage)
-
 
 def parse_datetime(raw_date):
     # 18/Feb/2016:04:03:12 -0500
@@ -116,11 +113,6 @@ def nginx_error(index, name, filename):
     if last_record_error and last_record_error.list_time_error_record:
         last_record_error_tz = timezone.localtime(last_record_error.list_time_error_record)
 
-    last_record_naxsi = NaxsiData.get_solo()
-    last_record_naxsi_tz = None
-    if has_naxsi and last_record_naxsi and last_record_naxsi.list_time_record:
-        last_record_naxsi_tz = timezone.localtime(last_record_naxsi.list_time_record)
-
     with open(filename, 'r') as infile:
         data = infile.readlines()
         data.reverse()
@@ -160,15 +152,6 @@ def nginx_error(index, name, filename):
                 dt_last_tz = value['time']
 
                 error_desc = value.get('error_desc')
-
-                # Naxsi record
-                if has_naxsi and error_desc and 'NAXSI_FMT' in error_desc:
-                    if last_record_naxsi_tz and last_record_naxsi_tz >= dt_last_tz:
-                        continue
-
-                    last_record_naxsi.list_time_record = dt_last_tz
-                    last_record_naxsi.save()
-                    NaxsiMessage.objects.put(index, name, value)
 
                 # Nginx error
                 if not has_naxsi or not error_desc or 'NAXSI_FMT' not in error_desc:
