@@ -166,7 +166,6 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
     os.path.join(BASE_DIR, '..', 'app'),
-    os.path.join(BASE_DIR, 'djangodashpanel', 'dashstatic')
 )
 STATIC_ROOT = os.path.join(BASE_DIR, '..', 'www', 'assets')
 
