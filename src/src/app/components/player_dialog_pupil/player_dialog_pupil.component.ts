@@ -67,6 +67,7 @@ export class PlayerDialogPupilComponent implements OnInit, OnDestroy {
 
             if (message.command == "SET_STEP") {
                 if (message.STEP_ID > 0) {
+                    self.message_change_turn_to_master = false;
                     self.current_step_id = message.STEP_ID;
                     self._setStartStepPersonage(self.current_step_id)
                     self.current_step = self._getNextStep(message.STEP_ID);
@@ -75,6 +76,7 @@ export class PlayerDialogPupilComponent implements OnInit, OnDestroy {
             }
 
             if (message.command == "CHANGE_PERSONAGE") {
+                self.message_change_turn_to_master = false;
                 if (self.currentPersonage == 'pupil') {
                     self.currentPersonage = 'master';
                 } else {
