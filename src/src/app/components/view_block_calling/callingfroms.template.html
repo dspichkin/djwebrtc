@@ -1,7 +1,35 @@
 <div class="" *ngFor="let item of listin">
     <div style="border: 1px solid;padding: 30px;margin:10px;">
-        <p>Звонок от {{item.fio}}</p>
-        <p>{{item.lasttime | date:"hh:mm dd-mm-yyyy"}}</p>
+        <div class="well" style="padding: 0;">
+            <div class="media">
+                <div class="media-left">
+                    <div *ngIf="item.avatar" 
+                        [ngStyle]="{'background-image': 'url(' + item.avatar + ')'}"
+                        class="media-object" style="
+                            height: 50px; 
+                            width: 50px; 
+                            background-size: contain;
+                            border-radius: 50%;
+                            margin: 10px;">
+                    </div>
+                    <div *ngIf="!item.avatar" 
+                        class="media-object" style="
+                            height: 50px; 
+                            width: 50px; 
+                            margin: 10px;">
+                            <i class="fa fa-user-circle-o" aria-hidden="true" style="font-size: 50px;"></i>
+                    </div>
+                </div>
+                <div class="media-body">
+                    <div>
+                        <p>Звонок от {{item.fio}}</p>
+                    </div>
+                    <div class="badge" style="background-color: indianred;">
+                        {{item.level_display}}
+                    </div>
+                </div>
+            </div>
+        </div>
         <button class="btn btn-success" (click)="takeCall(item)" [disabled]="loading"><span>Принять звонок</span></button>
         <button class="btn btn-default" (click)="rejectCall(item)" [disabled]="loading"><span>Сбросить</span></button>
     </div>

@@ -45,8 +45,9 @@
                                 </div>
                             </div>
                             <div class="caption"> 
+
                                 <p *ngIf="item.dialog" style="font-size: 8px;margin:0;">Кол-во шагов: {{item.dialog.scenario.steps.length || 0}}</p> 
-                                <p *ngIf="item && item.owner" style="font-size: 8px;margin:0;">Создано: {{item.owner?.fio}}</p> 
+                                <p *ngIf="item.dialog && item.dialog.owner" style="font-size: 8px;margin:0;">Создано: {{item.dialog.owner?.fio}}</p> 
 
                                 <h3>{{item.dialog?.name}}</h3> 
                                 <div>

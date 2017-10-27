@@ -11,8 +11,9 @@
                         
                         <span>Вам нужно сказать:</span> 
                         <div *ngFor="let item of current_step.variants">
-                            <h4 class="text-success">{{item.task}}</h4>
-
+                            <div class="well">
+                                <h4 class="text-success">{{item.task}}</h4>
+                            </div>
                             <div style="margin-top:20px">
                                 <button class="btn btn-warning" type="button" (click)="triggerTurn()" [disabled]="message_change_turn_to_master">Ход завершен, готов передать</button>
                             </div>

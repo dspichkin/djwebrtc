@@ -157,7 +157,9 @@ def ws_message(message):
                                     'activedialogid': activedialog.id,
                                     'user': {
                                         'fio': source_user.fio(),
-                                        'key_id': source_user.key_id
+                                        'key_id': source_user.key_id,
+                                        'level_display': source_user.get_level_display(),
+                                        'avatar': source_user.avatar.url
                                     }
                                 })
                             })
@@ -269,6 +271,27 @@ def ws_message(message):
                         'dialog': target,
                     })
                 })
+        if command == 'DIALOG_VOICE_CONNECTION_ERROR':
+            target = data.get("target")
+            message = data.get("message")
+            ac = get_object_or_404(ActiveDialog, pk=target)
+            ac.master.stop_dialog()
+            ac.pupil.stop_dialog()
+            Group("call-client-%s" % ac.master.key_id).send({
+                'text': json.dumps({
+                    'command': "DIALOG_VOICE_CONNECTION_ERROR",
+                    'dialog': target,
+                    'message': message
+                })
+            })
+            Group("call-client-%s" % ac.pupil.key_id).send({
+                'text': json.dumps({
+                    'command': "DIALOG_VOICE_CONNECTION_ERROR",
+                    'dialog': target,
+                    'message': message
+                })
+            })
+
         if command == 'DIALOG_STOP_ERROR':
             target = data.get("target")
             ac = get_object_or_404(ActiveDialog, pk=target)

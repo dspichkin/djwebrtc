@@ -61,14 +61,14 @@ export class CallingFromsComponent implements OnInit, OnDestroy {
     }
 
     private _checkInterval() {
-        //console.log('_checkInterval')
+        
         var self = this;
         for (let i = 0; i < self.listin.length; i++) {
             if (new Date(self.listin[i].lasttime).getTime() + AppSettings.CALLING_TIME_INTERVAL < new Date().getTime()) {
                 self.listin.splice(i, 1);
             }
         }
-
+        //console.log('self.listin', self.listin)
         if (this.listin.length > 0) {
             setTimeout(function() {
                 self._checkInterval();

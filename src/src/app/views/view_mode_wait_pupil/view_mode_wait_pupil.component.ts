@@ -44,6 +44,7 @@ export class ModeWaitPupilViewComponent implements OnInit, OnDestroy {
         let self = this;
 
         self.createAudioIncoming();
+        self._playCallingAudo();
 
         self.webSocketService.message.subscribe((data) => {
             let message = JSON.parse(data);

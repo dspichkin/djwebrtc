@@ -22,7 +22,7 @@
                                 
                                 <button class="btn btn-warning" type="button" (click)="pupilTurn()">Передать ход партнеру</button>
 
-                                <button *ngIf="hasNextTurn(item) && !passed_turns.pupil" class="btn btn-success pull-right" type="button" (click)="nextStep(item.next_step)">Следуюйщий шаг</button>
+                                <button *ngIf="hasNextTurn(item) && passed_turns.pupil" class="btn btn-success pull-right" type="button" (click)="nextStep(item.next_step)">Следуюйщий шаг</button>
                             </div>
 
                             <h2 *ngIf="!hasNextTurn(item)" class="text-warning" style="text-align: center;">Это последний шаг диалога</h2>
