@@ -328,7 +328,8 @@ def check_user(request):
 @permission_classes((IsConfirmAndIsAuthenticated,))
 def user(request):
     if request.method == 'POST':
-        data = json.loads(request.body.decode("utf-8"))
+        # data = json.loads(request.body.decode("utf-8"))
+        data = request.data
         first_name = data.get("first_name")
         selectedLevel = data.get("selectedLevel")
         skypeid = data.get("skypeid")
