@@ -1,0 +1,65 @@
+<div class="wrapper wrapper-content">
+    <div class="text-muted font-thin pull-right" style="font-size: 12px;margin: 10px;">
+        Running time: {{ boottime || 0 }}
+    </div>
+    <div class="row">
+        <div class="col-lg-9">
+            <div class="wrapper-md">
+                <small>Last {{ avarage.hours || 0}} hours</small>
+                <div class="row row-sm">
+                    <div class="col-md-3">
+                        <div class="panel padder-v item text-center bg-primary" [ngClass]="{
+                            'bg-warning': avarage.avarage_cpu > 60 && avarage.avarage_cpu < 90,
+                            'bg-danger': avarage.avarage_cpu >= 90
+                        }" style="height: 90px;" >
+                            <div class="h1 text-white font-thin">{{ avarage.avarage_cpu || 0 }}%</div>
+                            <span class="text-white text-xs" translate>Avarage cpu used</span><br>
+
+                            <div class="top text-info text-right w-full">
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="panel padder-v item text-center bg-primary" [ngClass]="{
+                            'bg-warning': avarage.avarage_memory > 60 && avarage.avarage_memory < 90,
+                            'bg-danger': avarage.avarage_memory >= 90
+                        }" style="height: 90px;">
+                            <div class="h1 text-white font-thin">{{ avarage.avarage_memory || 0 }}%</div>
+                            <span class="text-white text-xs" translate>Avarage memory used</span><br>
+                            <div class="top text-right w-full">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="panel padder-v item text-center bg-primary" [ngClass]="{
+                            'bg-warning': avarage.avarage_disk > 60 && avarage.avarage_disk < 90,
+                            'bg-danger': avarage.avarage_disk >= 90
+                        }" style="height: 90px;">
+                            <div class="h1 text-white font-thin">{{ avarage.avarage_disk || 0 }}%</div>
+                            <span class="text-white text-xs" translate>Avarage disk space used</span>
+                            <div class="top text-right w-full">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="panel panel-default" style="padding-top: 20px;">
+                <div class="text-center wrapper m-b-sm">              
+                    <h4>Current users</h4>
+                    <ul class="list-group" stlye="text-align: left;">
+                        <li class="list-group-item" style="text-align: left;" *ngFor="let user of users; let i = index;">
+                            <p style="margin:0;font-size: 8px;text-align: right;">{{getDateFromTimestap(user[3])}}</p>
+                            <div>
+                                <span class="label bg-primary">{{i}}</span>
+                                <span>{{user[0]}} / {{user[1]}}</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,256 @@
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <!-- Loading -->
+            <div *ngIf="loading" style="position: absolute;top:0;left:0;width:100%;height:100%;z-index: 100;">
+                <div style="position: absolute;opacity: 0.5;width:100%;height:100%;background-color: white;">
+                </div>
+                <div style="width: 50px;margin: auto;margin-top: 60px;">
+                    <i class="fa fa-spin fa-gear" style="font-size: 50px;"></i>
+                </div>
+            </div>
+            <!-- END Loading -->
+
+            <div class="col-md-7">
+                <div class="panel panel-info">
+                    <div class="tab-container">
+                        <ul class="nav nav-tabs nav-stacked nav-justified">
+                            <li [ngClass]="{active: current_log == 'access'}">
+                                <a (click)="current_log='access'">Access Log</a>
+                            </li>
+                            <li [ngClass]="{active: current_log == 'error'}">
+                                <a (click)="current_log='error'">Error Log</a>
+                            </li>
+                            <li *ngIf="has_naxsi" [ngClass]="{active: current_log == 'naxsi'}">
+                                <a (click)="current_log='naxsi'">NAXSI</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div *ngIf="current_log == 'access'" class="tab-pane active" style="padding: 10px;">
+                                
+                                <button class="btn btn-success" (click)="showIPAddr=true">Show 100 IP address</button>
+                                <button class="btn btn-primary" (click)="showRef=true">Top 100 HTTP referrer</button>
+                                <button class="btn btn-info" (click)="showAgents=true">User agents</button>
+    
+
+                                <div class="panel panel-default" style="margin-top:20px;">
+                                    <div class="panel-heading ">
+                                        Top 100 Urls ({{listRequestUrls.length}})
+                                    </div>
+                                    <div class="panel-body">
+                                        <table class="table">
+                                            <tr *ngFor="let p of listRequestUrls">
+                                                <td style="word-break: break-word;">
+                                                    {{p.url}}
+                                                    <p style="font-size: 10px;">{{p.method}} {{p.status}}</p>
+                                                </td>
+                                                <td><b>{{p.count}}</b> </td>
+                                                <td>{{p.last_date}}</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div *ngIf="current_log == 'error'" class="tab-pane active" style="padding: 10px;">
+                                <div class="panel panel-default" style="margin-top:20px;">
+                                    <div class="panel-heading ">
+                                        Last 100 Errors ({{listErrorPids.length}})
+                                    </div>
+                                    <div class="panel-body">
+                                        <ul class="list-group">
+                                            <li class="list-group-item" *ngFor="let p of listErrorPids">
+                                                <div>   
+                                                    <p><b>{{p.pid}}</b> <small class="pull-right">{{p.error}}</small></p>
+                                                    <p *ngIf="p.last_request_url"><b>Last url:</b> {{p.last_request_method}} {{p.last_request_url}}</p>
+                                                </div>
+                                                <div>   
+                                                    <p style="word-break: break-word;"><b>Error description:</b> {{p.error_desc}}</p>
+                                                </div>
+                                                <div>
+                                                    <small style="margin: 0;">Last host: {{p.client}}
+                                                        <span *ngIf="p.location && (p.location.country_name || p.location.city)" style="font-size: 8px;word-break: break-word;margin:0;margin-top:5px;">
+                                                                <span *ngIf="p.location && p.location.country_name">{{p.location.country_name}}</span>
+                                                                <span *ngIf="p.location && p.location.country_name && p.location.city">/</span>
+                                                                <span *ngIf="p.location && p.location.city">{{p.location.city}}</span>
+                                                            </span>
+                                                    </small>
+                                                    <br>
+                                                    <small>Last date: {{p.date}}</small>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            
+                            <div *ngIf="current_log == 'naxsi'" class="tab-pane active" style="padding: 10px;">
+                                <div class="panel panel-default" style="margin-top:20px;">
+                                    <div class="panel-heading" style="height: 56px;">
+                                        <h4 style="display: inline-block;">Top 100 Naxis errors ({{listNaxisPids.length}})</h4>
+                                    </div>
+                                    <div class="panel-body">
+                                        <ul class="list-group">
+                                            <li class="list-group-item" *ngFor="let p of listNaxisPids">
+                                                <div>  
+                                                    <p>
+                                                        <b>Pid: {{p.pid}}</b> 
+                                                        <span class="pull-right">
+                                                            <button type="button" class="btn btn-success btn-xs" (click)="makeWhitelistRule(p)">Make whitelist rule</button>
+                                                        </span>
+                                                    </p>
+                                                    <p><b>Url:</b> {{p.request_method}} {{p.request_url}}</p>
+                                                    <p *ngIf="p.last_request_url"><b>Last url:</b> {{p.request_method}} {{p.request_url}}</p>
+                                                </div>
+                                                <div>   
+                                                    <p><b>Rules:</b></p>
+                                                    <p *ngFor="let item of p.ids" style="margin;0">
+                                                        {{item.id}}
+                                                        {{item.description}}
+                                                       
+                                                    </p>
+                                                    <p><b>Zones:</b></p>
+                                                    <p *ngFor="let item of p.zones" style="margin;0">{{item}}</p>
+                                                    <p><b>Variables:</b></p>
+                                                    <p *ngFor="let item of p.var_names" style="margin;0">{{item}}</p>
+                                                </div>
+                                                <div>   
+                                                    <p style="word-break: break-word;"><b>Error description:</b> {{p.error_desc}}</p>
+                                                </div>
+                                                <div>
+                                                    <small style="margin: 0;">Last host: {{p.client}}
+                                                        <span *ngIf="p.location && (p.location.country_name || p.location.city)" style="font-size: 8px;word-break: break-word;margin:0;margin-top:5px;">
+                                                                <span *ngIf="p.location && p.location.country_name">{{p.location.country_name}}</span>
+                                                                <span *ngIf="p.location && p.location.country_name && p.location.city">/</span>
+                                                                <span *ngIf="p.location && p.location.city">{{p.location.city}}</span>
+                                                            </span>
+                                                    </small>
+                                                    <br>
+                                                    <small>Last date: {{p.date}}</small>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div> 
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-5">
+                <div class="panel">
+                    <div class="panel-body">
+                        <div class="btn-group" style="text-align: center;margin: 10px 0;width: 100%;">
+                            <button type="button" class="btn btn-primary btn-lg dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" [disabled]="loading" style="width: 100%;">
+                                {{currentLogger.name}} <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li *ngFor="let item of loggers">
+                                    <a (click)="selectLogger(item)">{{item.name}}</a>
+                                </li>
+                            </ul>
+                        </div>
+
+
+                        <div style="text-align: center;">
+                            <button type="button" class="btn btn-default btn-xs pull-right" (click)="refreshAccessChart()">
+                                <i class="fa fa-refresh"></i>
+                            </button>
+                            <div *ngIf="current_log == 'access'">
+                                <div>
+                                    <canvas baseChart
+                                            [datasets]="lineChartReqData"
+                                            [labels]="lineChartLabels"
+                                            [options]="lineChartOptions"
+                                            [colors]="lineChartColors"
+                                            [chartType]="lineChartType"></canvas>
+                                </div>
+
+                                <div>
+                                    <canvas baseChart
+                                            [datasets]="lineChartIpAddrData"
+                                            [labels]="lineChartLabels"
+                                            [options]="lineChartOptions"
+                                            [colors]="lineChartIpAddrColors"
+                                            [chartType]="lineChartType"></canvas>
+                                </div>
+
+                                <div>
+                                    <canvas baseChart
+                                            [datasets]="lineChartBytesData"
+                                            [labels]="lineChartLabels"
+                                            [options]="lineChartBytesOptions"
+                                            [colors]="lineChartBytesColors"
+                                            [chartType]="lineChartType"></canvas>
+                                </div>
+                            </div>
+                            
+                            <div *ngIf="current_log == 'error'">
+                                <div>
+                                    <canvas baseChart
+                                            [datasets]="lineChartNumberErrorsData"
+                                            [labels]="lineChartErrorsLabels"
+                                            [options]="lineChartOptions"
+                                            [colors]="lineChartIpAddrColors"
+                                            [chartType]="lineChartType"></canvas>
+                                </div>
+                            </div>
+
+                            <div *ngIf="current_log == 'naxsi'">
+                                <div>
+                                    <canvas baseChart
+                                            [datasets]="lineChartNumberNaxisErrorsData"
+                                            [labels]="lineChartNaxisErrorsLabels"
+                                            [options]="lineChartOptions"
+                                            [colors]="lineChartIpAddrColors"
+                                            [chartType]="lineChartType"></canvas>
+                                </div>
+                            </div>
+
+                            <h3 style="color: #337ab7">{{ rangeStartDate }} - {{ rangeEndDate }}</h3>
+                            <nouislider [min]="dateRangeMin" [max]="dateRangeMax"  [connect]="true" [(ngModel)]="dateRange" (ngModelChange)="onChangeAccess($event)" [disabled]="loading" [format]="formatter" [tooltips]="false" [step]="1000"></nouislider>
+
+
+                            <div *ngIf="current_log == 'naxsi'">
+                                <button type="button" class="btn btn-info" (click)="showNaxsiWhitelist=true">Show whitelist rules</button>
+                            </div>
+
+
+                            <!-- Loading -->
+                            <div *ngIf="loading" style="position: absolute;top:0;left:0;width:100%;height:100%;z-index: 100;">
+                                <div style="position: absolute;opacity: 0.5;width:100%;height:100%;background-color: white;">
+                                </div>
+                                <div style="width: 50px;margin: auto;margin-top: 60px;">
+                                    <i class="fa fa-spin fa-gear" style="font-size: 50px;"></i>
+                                </div>
+                            </div>
+                            <!-- END Loading -->
+                        </div>
+
+
+                     </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+
+<!-- <notifications></notifications> -->
+<!--
+<naxsirule-dialog [(visible)]="showNaxsiRule" [closable]="true" [(rule)]="selectedRule"></naxsirule-dialog>
+-->
+<ip-dialog [(visible)]="showIPAddr" [closable]="true" [dateRange]="dateRange" [currentLogger]="currentLogger">
+</ip-dialog>
+<ref-dialog [(visible)]="showRef" [closable]="true" [dateRange]="dateRange" [currentLogger]="currentLogger">
+</ref-dialog>
+<agent-dialog [(visible)]="showAgents" [closable]="true" [dateRange]="dateRange" [currentLogger]="currentLogger">
+</agent-dialog>
+<!--
+<naxsiwhitelist-dialog [(visible)]="showNaxsiWhitelist" [closable]="true" [currentLogger]="currentLogger">
+</naxsiwhitelist-dialog>
+-->

@@ -1,0 +1,64 @@
+<div *ngIf="visible" class="dialog">
+    <button *ngIf="closable" (click)="close()" aria-label="Close" class="btn btn-primary pull-right">X</button>
+
+    <p *ngIf="loading">Loading ...</p>
+    <div *ngIf="!loading">
+	    <h4>Top 100 IP address</h4>
+	    
+	    <div class="panel">
+	    	<div class="panel-body" style="overflow-y: auto;max-height: 400px;">
+	    		<div class="col-md-12">
+                    <div *ngIf="doughnutCountryChartData.length > 0" class="col-md-6">
+                        <canvas baseChart
+                            [data]="doughnutCountryChartData"
+                            [labels]="doughnutCountryChartLabels"
+                            [chartType]="doughnutChartType"></canvas>
+                    </div>
+                    <div *ngIf="doughnutCitiesChartData.length > 0" class="col-md-6">
+                        <canvas baseChart
+                            [data]="doughnutCitiesChartData"
+                            [labels]="doughnutCitiesChartLabels"
+                            [chartType]="doughnutChartType"></canvas>
+                    </div>
+
+	    			<div class="panel panel-default">
+                        <div class="panel-body">
+                            <table *ngIf="listRemoteAddr.length > 0" class="table">
+                                <tr *ngFor="let p of listRemoteAddr">
+                                    <td>
+                                        {{p.ipaddr}}
+                                        <p style="font-size: 8px;word-break: break-word;margin:0;">{{p.last_url}}</p>
+                                        <p *ngIf="p.location && (p.location.country_name || p.location.city)" style="font-size: 8px;word-break: break-word;margin:0;margin-top:5px;">
+                                            <span *ngIf="p.location && p.location.country_name">{{p.location.country_name}}</span>
+                                            <span *ngIf="p.location && p.location.country_name && p.location.city">/</span>
+                                            <span *ngIf="p.location && p.location.city">{{p.location.city}}</span>
+                                        </p>
+                                    </td>
+                                    <td><b>{{p.count}}</b> </td>
+                                    <td>{{p.last_date}}</td>
+                                </tr>
+                            </table>
+                            <p *ngIf="listRemoteAddr.length == 0">No data available</p>
+                        </div>
+                    </div>
+
+                    <!-- Loading -->
+		            <div *ngIf="loading" style="position: absolute;top:0;left:0;width:100%;height:100%;z-index: 100;">
+		                <div style="position: absolute;opacity: 0.5;width:100%;height:100%;background-color: white;">
+		                </div>
+		                <div style="width: 50px;margin: auto;margin-top: 60px;">
+		                    <i class="fa fa-spin fa-gear" style="font-size: 50px;"></i>
+		                </div>
+		            </div>
+		            <!-- END Loading -->
+            
+		    	</div>
+	    	</div>
+	    </div>
+
+    </div>
+  
+
+  
+</div>
+<div *ngIf="visible" class="overlay"></div>

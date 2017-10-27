@@ -1,0 +1,38 @@
+<div *ngIf="visible" class="dialog">
+    <!-- <button *ngIf="closable" (click)="close()" aria-label="Close" class="btn btn-primary pull-right">X</button>
+	-->
+    <p *ngIf="loading">Loading ...</p>
+    <div *ngIf="!loading">
+		    <div class="panel" style="margin: 0;">
+		    	<div class="panel-heading panel-info">
+		    		 <h4>{{note.title}}</h4>
+		    	</div>
+		    	<div class="panel-body" style="overflow-y: auto;max-height: 400px;">
+		    		<div class="col-md-12">
+		    			<div class="panel">
+	                        <div class="panel-body" style="padding: 0;">
+	                            <div class="{{ note.classes }}" style="min-height: 50px;text-align: center;display: flex;justify-content: center;align-items: center;">
+						            <h3>{{ note.message }}</h3>
+						        </div>
+	                        </div>
+	                    </div>
+
+	                    <!-- Loading -->
+			            <div *ngIf="loading" style="position: absolute;top:0;left:0;width:100%;height:100%;z-index: 100;">
+			                <div style="position: absolute;opacity: 0.5;width:100%;height:100%;background-color: white;">
+			                </div>
+			                <div style="width: 50px;margin: auto;margin-top: 60px;">
+			                    <i class="fa fa-spin fa-gear" style="font-size: 50px;"></i>
+			                </div>
+			            </div>
+			            <!-- END Loading -->
+	            
+			    	</div>
+		    	</div>
+		    	<div class="panel-footer" style="text-align: right;">
+		    		<button type="button" class="btn btn-primary"  (click)="close()">OK</button>
+		    	</div>
+		    </div>
+    </div>
+</div>
+<div *ngIf="visible" class="overlay"></div>

@@ -25,3 +25,11 @@ host    all             all             ::1/128                 trust
 ```
 
 
+# Настройки крона
+
+sudo vim /etc/cron.d/discounter
+
+```
+*/5 * * * * /home/ubuntu/discounter/djangoapps/run_cron.sh
+```
+

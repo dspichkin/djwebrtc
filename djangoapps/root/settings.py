@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.facebook',
     'allauth.socialaccount.providers.vk',
 
+    'djangodashpanel',
     'accounts',
     'djwebrtc',
     'peerjs',
@@ -69,6 +70,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'djangodashpanel.middleware.urllogstat.URLLogStatMiddleware',
 ]
 
 ROOT_URLCONF = 'root.urls'
@@ -76,7 +78,8 @@ ROOT_URLCONF = 'root.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates'), os.path.join(BASE_DIR, '..', 'app')],
+        'DIRS': [os.path.join(BASE_DIR, 'templates'),
+                 os.path.join(BASE_DIR, '..', 'app')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -162,7 +165,8 @@ DEFAULT_FROM_EMAIL = 'noreply@mydialogs.ru'
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
-    os.path.join(BASE_DIR, '..', 'app')
+    os.path.join(BASE_DIR, '..', 'app'),
+    os.path.join(BASE_DIR, 'djangodashpanel', 'dashstatic')
 )
 STATIC_ROOT = os.path.join(BASE_DIR, '..', 'www', 'assets')
 
@@ -317,6 +321,30 @@ LOGGING = {
         },
     }
 }
+
+
+DJANGODASHPANEL_BACKUP_DIR = os.path.join(BASE_DIR, '..', 'backups')
+DJANGODASHPANEL_URLSTAT = True
+DJANGODASHPANEL_URLSTAT_EXCLUDES = [
+    "/api/user/new_count_messages/",
+    "/api/news/is_has_new/",
+    "/api/user/location/",
+    "/config/.*",
+    "/dash/.*",
+    "/static/.*",
+    "/media/.*",
+]
+
+DJANGODASHPANEL_NGINX_ACCESS_EXCLUDES = [
+    "/api/user/new_count_messages/",
+    "/api/user/location/",
+    "/api/news/is_has_new/",
+    "/config/.*",
+    "/api/dash/.*",
+    "/dash/.*",
+    "/media/.*",
+    "/static/.*"
+]
 
 
 TEMP_DIR = os.path.join(BASE_DIR, '..', 'temp')

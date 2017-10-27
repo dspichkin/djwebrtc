@@ -1,0 +1,44 @@
+<div *ngIf="visible" class="dialog">
+    <button *ngIf="closable" (click)="close()" aria-label="Close" class="btn btn-primary pull-right">X</button>
+
+    <p *ngIf="loading">Loading ...</p>
+    <div *ngIf="!loading">
+	    <h4>Top 100 user agents</h4>
+	    
+	    <div class="panel">
+	    	<div class="panel-body" style="overflow-y: auto;max-height: 400px;">
+	    		<div class="col-md-12">
+	    			<div class="panel panel-default">
+                        <div class="panel-body">
+                            <table *ngIf="listAgents.length > 0" class="table">
+                                <tr *ngFor="let p of listAgents">
+                                    <td style="word-break: break-word;">
+                                        {{p.agent}}
+                                    </td>
+                                    <td><b>{{p.count}}</b> </td>
+                                </tr>
+                            </table>
+                            <p *ngIf="listAgents.length == 0">No data available</p>
+                        </div>
+                    </div>
+
+                    <!-- Loading -->
+		            <div *ngIf="loading" style="position: absolute;top:0;left:0;width:100%;height:100%;z-index: 100;">
+		                <div style="position: absolute;opacity: 0.5;width:100%;height:100%;background-color: white;">
+		                </div>
+		                <div style="width: 50px;margin: auto;margin-top: 60px;">
+		                    <i class="fa fa-spin fa-gear" style="font-size: 50px;"></i>
+		                </div>
+		            </div>
+		            <!-- END Loading -->
+            
+		    	</div>
+	    	</div>
+	    </div>
+
+    </div>
+  
+
+  
+</div>
+<div *ngIf="visible" class="overlay"></div>

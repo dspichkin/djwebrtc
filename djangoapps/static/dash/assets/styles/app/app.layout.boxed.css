@@ -1,0 +1,82 @@
+/*
+
+*/
+html.bg {
+  background-attachment: fixed;
+  background-size: cover;
+}
+.app.container {
+  padding-left: 0;
+  padding-right: 0;
+}
+@media (min-width: 768px) {
+  .app.container {
+    width: 750px;
+    -webkit-box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+  }
+  .app.container .app-aside {
+    overflow-x: hidden;
+  }
+  .app.container.app-aside-folded .app-aside {
+    overflow-x: visible;
+  }
+  .app.container.app-aside-fixed .aside-wrap {
+    left: inherit;
+  }
+  .app.container.app-aside-fixed.app-aside-folded .app-aside > ul.nav {
+    position: absolute;
+  }
+  .app.container .app-header,
+  .app.container .app-aside {
+    max-width: 750px;
+  }
+  .app.container .app-footer-fixed {
+    left: auto;
+    right: auto;
+    width: 100%;
+    max-width: 550px;
+  }
+  .app.container.app-aside-folded .app-footer-fixed {
+    max-width: 690px;
+  }
+  .app.container.app-aside-dock .app-footer-fixed {
+    max-width: 750px;
+  }
+}
+@media (min-width: 992px) {
+  .app.container {
+    width: 970px;
+  }
+  .app.container .app-header,
+  .app.container .app-aside {
+    max-width: 970px;
+  }
+  .app.container .app-footer-fixed {
+    max-width: 770px;
+  }
+  .app.container.app-aside-folded .app-footer-fixed {
+    max-width: 910px;
+  }
+  .app.container.app-aside-dock .app-footer-fixed {
+    max-width: 970px;
+  }
+}
+@media (min-width: 1200px) {
+  .app.container {
+    width: 1170px;
+  }
+  .app.container .app-header,
+  .app.container .app-aside {
+    max-width: 1170px;
+  }
+  .app.container .app-footer-fixed {
+    max-width: 970px;
+  }
+  .app.container.app-aside-folded .app-footer-fixed {
+    max-width: 1110px;
+  }
+  .app.container.app-aside-dock .app-footer-fixed {
+    max-width: 1170px;
+  }
+}

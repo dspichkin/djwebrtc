@@ -34,6 +34,7 @@ if settings.DEBUG:
 
 urlpatterns += [
     url(r'^admin/', admin.site.urls),
+    url(r'^dash/', include('djangodashpanel.urls')),
 
     url(r'^accounts/', include('accounts.urls')),
     url(r'^pj/', include('peerjs.urls')),
