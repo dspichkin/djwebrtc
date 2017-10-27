@@ -12,6 +12,7 @@ import { MessageViewComponent } from "./views/view_message/view_message.componen
 import { ProfileViewComponent } from "./views/view_profile/view_profile.component";
 import { MyDialoguesViewComponent } from "./views/mydialogues/mydialogues.component";
 import { MyDialogueEditViewComponent } from "./views/mydialogues/mydialogue.edit.component";
+import { HelpViewComponent } from "./views/view_help/view_help.component";
 
 import { AuthGuard } from './services/guards.service';
 
@@ -96,6 +97,16 @@ export const ROUTES:Routes = [
         {
             path: 'mydialogues/:dialogue_id', 
             component: MyDialogueEditViewComponent,
+            canActivate: [AuthGuard]
+        }
+    ]
+  },
+  {
+    path: '', component: BasicLayoutComponent,
+    children: [
+        {
+            path: 'help', 
+            component: HelpViewComponent,
             canActivate: [AuthGuard]
         }
     ]

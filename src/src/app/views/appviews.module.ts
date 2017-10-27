@@ -22,6 +22,7 @@ import { ModeCallingViewComponent } from "./view_mode_calling/view_mode_calling.
 import { ChangeCurrentDialogComponent } from "../components/change_current_dialog/change_current_dialog.component";
 import { MessageViewComponent } from "./view_message/view_message.component";
 import { ProfileViewComponent } from "./view_profile/view_profile.component";
+import { HelpViewComponent } from "./view_help/view_help.component";
 import { NotificationComponent } from "../components/common/notification/notification.component";
 import { ChatComponent } from "../components/chat/chat.component";
 import { MyDialoguesViewComponent } from "./mydialogues/mydialogues.component";
@@ -45,6 +46,7 @@ import { EqualValidator } from './view_profile/equal_validator.directive';
     ChangeCurrentDialogComponent,
     MessageViewComponent,
     ProfileViewComponent,
+    HelpViewComponent,
     EqualValidator,
     NotificationComponent,
     ChatComponent,
@@ -75,6 +77,7 @@ import { EqualValidator } from './view_profile/equal_validator.directive';
     ChangeCurrentDialogComponent,
     MessageViewComponent,
     ProfileViewComponent,
+    HelpViewComponent,
     EqualValidator,
     NotificationComponent,
     ChatComponent,
