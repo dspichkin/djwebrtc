@@ -17,7 +17,7 @@
                                 <button class="btn btn-warning" type="button" (click)="triggerTurn()" [disabled]="message_change_turn_to_master">Ход завершен, готов передать</button>
                             </div>
                             <div style="margin-top:40px">
-                                <button ngIf="!item.words" class="btn btn-info btn-xs" type="button" (click)="getWords(item)">Посмотреть подсказку</button>
+                                <button *ngIf="!item.words || !item.words.length" class="btn btn-info btn-xs" type="button" (click)="getWords(item)">Посмотреть подсказку</button>
                                 <button *ngIf="item.words && item.words.length > 0" class="btn btn-info btn-xs" type="button" (click)="clearWords(item)">Скрыть подсказку</button>
                             </div>
 
