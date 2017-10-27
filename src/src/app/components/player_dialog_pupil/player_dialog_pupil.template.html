@@ -17,8 +17,11 @@
                                 <button class="btn btn-warning" type="button" (click)="triggerTurn()" [disabled]="message_change_turn_to_master">Ход завершен, готов передать</button>
                             </div>
                             <div style="margin-top:40px">
-                                <button *ngIf="!item.words || !item.words.length" class="btn btn-info btn-xs" type="button" (click)="getWords(item)">Посмотреть подсказку</button>
-                                <button *ngIf="item.words && item.words.length > 0" class="btn btn-info btn-xs" type="button" (click)="clearWords(item)">Скрыть подсказку</button>
+                                <button *ngIf="!item.words || !item.words.length" class="btn btn-info btn-xs" type="button" (click)="getWords(item)">Посмотреть слова</button>
+                                <button *ngIf="item.words && item.words.length > 0" class="btn btn-info btn-xs" type="button" (click)="clearWords(item)">Скрыть слова</button>
+                                <button *ngIf="!item.hints"  class="btn btn-default btn-xs" type="button" (click)="getHints(item)">Посмотреть подсказку</button>
+                                <button *ngIf="item.hints" class="btn btn-default btn-xs" type="button" (click)="clearHints(item)">Убрать подсказку</button>
+
                             </div>
 
                             <div *ngIf="item.words && item.words.length > 0" style="margin-top:20px;display: flex;justify-content: center;flex-wrap: wrap;">
