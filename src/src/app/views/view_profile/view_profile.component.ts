@@ -154,7 +154,7 @@ export class ProfileViewComponent implements OnInit {
     }
    
 
-    private onFileSelected () {
+    public onFileSelected () {
         this.uploader.uploadAll();
     }
     
