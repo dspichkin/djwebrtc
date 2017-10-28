@@ -4248,22 +4248,17 @@ var MyDialogueEditViewComponent = (function () {
         this.personageChanged.next($event);
     };
     MyDialogueEditViewComponent.prototype.selectedTag = function (value) {
-        var _this = this;
-        var params = {
-            tags: this.tags
-        };
-        this.dialogsService.saveMyDialogs(this.dialogue.id, params).subscribe(function (data) {
-            _this.loading = false;
-        });
+        //let params = {
+        //    tags:  this.tags
+        //}
     };
     MyDialogueEditViewComponent.prototype.removedTag = function (value) {
-        var _this = this;
-        var params = {
-            tags: this.tags
-        };
-        this.dialogsService.saveMyDialogs(this.dialogue.id, params).subscribe(function (data) {
-            _this.loading = false;
-        });
+        //let params = {
+        //    tags:  this.tags
+        //}
+        //this.dialogsService.saveMyDialogs(this.dialogue.id, params).subscribe((data) => {
+        //    this.loading = false;
+        //});
     };
     MyDialogueEditViewComponent.prototype.searchTags = function (value) {
         var _this = this;
@@ -4272,7 +4267,20 @@ var MyDialogueEditViewComponent = (function () {
         });
     };
     MyDialogueEditViewComponent.prototype.refreshValue = function (value) {
+        var _this = this;
         this.value = value;
+        var tags = [];
+        for (var i = 0; i < this.value.length; i++) {
+            tags.push(this.value[i].text);
+        }
+        if (tags.length > 0) {
+            var params = {
+                tags: tags
+            };
+            this.dialogsService.saveMyDialogs(this.dialogue.id, params).subscribe(function (data) {
+                _this.loading = false;
+            });
+        }
     };
     return MyDialogueEditViewComponent;
 }());

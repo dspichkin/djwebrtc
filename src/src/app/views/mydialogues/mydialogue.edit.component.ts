@@ -298,21 +298,19 @@ export class MyDialogueEditViewComponent implements OnInit {
 
 
     public selectedTag(value:any):void {
-        let params = {
-            tags:  this.tags
-        }
-        this.dialogsService.saveMyDialogs(this.dialogue.id, params).subscribe((data) => {
-            this.loading = false;
-        });
+        //let params = {
+        //    tags:  this.tags
+        //}
+        
     }
  
     public removedTag(value:any):void {
-        let params = {
-            tags:  this.tags
-        }
-        this.dialogsService.saveMyDialogs(this.dialogue.id, params).subscribe((data) => {
-            this.loading = false;
-        });
+        //let params = {
+        //    tags:  this.tags
+        //}
+        //this.dialogsService.saveMyDialogs(this.dialogue.id, params).subscribe((data) => {
+        //    this.loading = false;
+        //});
     }
 
     public searchTags(value:any) {
@@ -323,5 +321,18 @@ export class MyDialogueEditViewComponent implements OnInit {
 
     public refreshValue(value:any):void {
         this.value = value;
+        let tags = [];
+        for (let i = 0; i < this.value.length; i++) {
+            tags.push(this.value[i].text);
+        }
+        if (tags.length > 0) {
+            let params = {
+                tags:  tags
+            }
+            this.dialogsService.saveMyDialogs(this.dialogue.id, params).subscribe((data) => {
+                this.loading = false;
+            });
+        }
+        
     }
 }
