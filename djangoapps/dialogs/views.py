@@ -211,7 +211,7 @@ def mydialog(request, dialog_pk):
             mydialog.scenario['personages'] = personages
             is_dirty = True
         if tags is not None:
-            mydialog.tags.all().delete()
+            mydialog.tags.all().remove()
             for tag in tags:
                 t = Tag.objects.filter(name=tag).first()
                 if t:
