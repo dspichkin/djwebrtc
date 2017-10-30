@@ -25,7 +25,7 @@
                                 <button *ngIf="hasNextTurn(item) && passed_turns.pupil" class="btn btn-success pull-right" type="button" (click)="nextStep(item.next_step)">Следуюйщий шаг</button>
                             </div>
 
-                            <h2 *ngIf="!hasNextTurn(item)" class="text-warning" style="text-align: center;">Это последний шаг диалога</h2>
+                            <h2 *ngIf="!hasNextTurn(item) && passed_turns.pupil" class="text-warning" style="text-align: center;">Это последний шаг диалога</h2>
                             
 
                             <div style="margin-top:40px">
@@ -64,7 +64,7 @@
                             <button *ngIf="hasMyTurn()" class="btn btn-warning" type="button" (click)="myTurn()">Теперь мой ход</button>
                             <button *ngIf="hasNextTurn(item) || hasMyTurn(item)" class="btn btn-success pull-right" type="button" (click)="nextStep(item.next_step)">Следуюйщий шаг</button>
 
-                            <h2 *ngIf="!hasPlayerTurn(item) && !hasMyTurn(item)" class="text-warning" style="text-align: center;">Это последний шаг диалога</h2>
+                            <h2 *ngIf="!hasPlayerTurn(item) && passed_turns.master" class="text-warning" style="text-align: center;">Это последний шаг диалога</h2>
                             <button *ngIf="!hasPlayerTurn(item) && item.prev_step > 0" class="btn btn-info" type="button" (click)="nextStep(item.prev_step)">Назад</button>
                             
                         </div> 
