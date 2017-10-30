@@ -109,7 +109,12 @@ def make_backup(request):
     file_name = str(int(time.mktime(timezone.now().timetuple()))) + '.json'
     file_distination = os.path.join(TEMP_DIR, file_name)
     with open(file_distination, 'w') as f:
-        call_command('dumpdata', exclude=['contenttypes'], indent=4, use_natural_keys=True, stdout=f)
+        call_command('dumpdata', '--natural-primary',
+                     '--exclude=contenttypes',
+                     '--exclude=auth.Permission',
+                     '--exclude=admin.logentry',
+                     '--exclude=sessions.session',
+                     '--indent 4', stdout=f)
 
     response = HttpResponse(FileWrapper(file(file_distination, 'r')), content_type='application/json')
     response['Content-Disposition'] = 'attachment; filename=backup.json'

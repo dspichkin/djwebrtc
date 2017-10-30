@@ -334,6 +334,9 @@ DJANGODASHPANEL_URLSTAT_EXCLUDES = [
     "/static/.*",
     "/media/.*",
     "/pj/.*",
+    "/accounts/check_user/",
+    "/dialogs/api/.*",
+    "/dialogs/api/status/"
 ]
 
 DJANGODASHPANEL_NGINX_ACCESS_EXCLUDES = [
@@ -342,6 +345,9 @@ DJANGODASHPANEL_NGINX_ACCESS_EXCLUDES = [
     "/media/.*",
     "/static/.*",
     "/pj/.*",
+    "/accounts/check_user/",
+    "/dialogs/api/.*",
+    "/dialogs/api/status/"
 ]
 
 DJANGODASHPANEL_NGINX_LOGS = [{

@@ -3,6 +3,7 @@ import os
 
 from django.conf import settings
 from django.shortcuts import get_object_or_404
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from rest_framework.response import Response
 from rest_framework import status
@@ -35,15 +36,38 @@ def get_dialog(request, dialog_pk):
 def get_dialogs(request):
     request.user.check_activity()
 
+    paginate_by = 15
+    page = request.GET.get('page', 1)
+
     queryset = Dialog.objects.filter(is_published=True)
+
+    paginator = Paginator(queryset, paginate_by)
+    try:
+        rdata = paginator.page(page)
+    except PageNotAnInteger:
+        rdata = paginator.page(1)
+    except EmptyPage:
+        rdata = paginator.page(1)
+    count = paginator.count
+    previous = None if not rdata.has_previous() else rdata.previous_page_number()
+    nextpage = None if not rdata.has_next() else rdata.next_page_number()
+
     dialogs = []
-    for dialog in queryset:
+    for dialog in rdata:
         data = DialogSerializer(dialog).data
         activedialog = ActiveDialog.objects.filter(master=request.user, dialog=dialog, status=DIALOG_WAIT)
         if activedialog:
             data["checked"] = True
         dialogs.append(data)
-    return Response(dialogs, status.HTTP_200_OK)
+    print "dialog", dialogs[0]
+    result = {
+        'count': count,
+        'previous': previous,
+        'next': nextpage,
+        'dialogs': dialogs
+    }
+
+    return Response(result, status.HTTP_200_OK)
 
 
 @api_view(['GET'])
