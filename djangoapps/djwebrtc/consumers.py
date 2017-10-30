@@ -159,7 +159,7 @@ def ws_message(message):
                                         'fio': source_user.fio(),
                                         'key_id': source_user.key_id,
                                         'level_display': source_user.get_level_display(),
-                                        'avatar': source_user.avatar.url
+                                        'avatar': source_user.get_avatar_url()
                                     }
                                 })
                             })

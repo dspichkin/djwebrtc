@@ -92,6 +92,10 @@ class Account(AbstractUser):
         if self.last_dialog_active:
             self.stop_dialog()
 
+    def get_avatar_url(self):
+        if self.avatar and self.avatar.url:
+            return self.avatar.url
+
 
 @python_2_unicode_compatible
 class ConfirmationCode(models.Model):
