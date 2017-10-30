@@ -1,0 +1,45 @@
+<div class="ui-select-container dropdown open"
+    (keyup)="mainClick($event)"
+    (focus)="focusToInput('')"
+    [offClick]="clickedOutside">
+
+    <div>
+        <div *ngFor="let item of active" style="display: inline-block;margin: 0 5px;">
+            <span class="badge">{{ item.name }}</span>
+            <span style="font-size: 21px;
+                font-weight: 700;
+                line-height: 1;
+                color: #000;
+                text-shadow: 0 1px 0 #fff;
+                filter: alpha(opacity=20);
+                opacity: .2;
+                cursor: pointer;" (click)="deleteTags(item)">×</span>
+        </div>
+    </div>
+    <div class="input-group" style="margin-top: 10px;">
+        <input type="text" class="form-control ui-select-search" placeholder="новая метка" 
+            autocomplete="false" tabindex="-1" autocorrect="off" autocapitalize="off" spellcheck="false"
+            [(ngModel)]="inputedValue"
+            (ngModelChange)="change()"
+            (keyup)="inputEvent($event)"
+            (focus)="focusToInput('')"
+            (click)="matchClick($event)"
+            >
+        <span class="input-group-btn">
+            <button class="btn btn-info" type="button" (click)="add()">Добавить</button>
+        </span>
+    </div>
+    <!-- options template -->
+     <ul *ngIf="itemsOpened && items && items.length > 0" class="ui-select-choices dropdown-menu" role="menu">
+        <li *ngFor="let o of items" role="menuitem">
+            <div class="ui-select-choices-row"
+               [class.active]="isActive(o)"
+               (mouseenter)="selectActive(o)"
+               (click)="selectMatch(o, $event)">
+                <a href="javascript:void(0)" class="dropdown-item">
+                    <div> {{ o }}</div>
+                </a>
+            </div>
+        </li>
+    </ul>
+</div>

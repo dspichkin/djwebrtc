@@ -28,6 +28,7 @@ import { ChatComponent } from "../components/chat/chat.component";
 import { MyDialoguesViewComponent } from "./mydialogues/mydialogues.component";
 import { MyDialogueEditViewComponent } from "./mydialogues/mydialogue.edit.component";
 import { ScenarioComponent } from '../components/scenario/scenario.component';
+import { TagsComponent } from '../components/tags/tags.component';
 
 import { EqualValidator } from './view_profile/equal_validator.directive';
 
@@ -53,6 +54,7 @@ import { EqualValidator } from './view_profile/equal_validator.directive';
     MyDialoguesViewComponent,
     MyDialogueEditViewComponent,
     ScenarioComponent,
+    TagsComponent,
     //FileSelectDirective,
   ],
   imports: [
@@ -84,6 +86,7 @@ import { EqualValidator } from './view_profile/equal_validator.directive';
     MyDialoguesViewComponent,
     MyDialogueEditViewComponent,
     ScenarioComponent,
+    TagsComponent,
     //FileSelectDirective,
   ],
 })

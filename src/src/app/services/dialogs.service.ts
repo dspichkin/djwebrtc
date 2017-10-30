@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Subject, BehaviorSubject, Observable } from 'rxjs';
-import { Http, Response } from '@angular/http';
+import { Http, Response, RequestOptions } from '@angular/http';
 import { Router } from '@angular/router';
 import 'rxjs/add/operator/catch';
 
@@ -134,6 +134,22 @@ export class DialogsService {
 
     getTags(type): any {
         return this._http.get(AppSettings.URL_TAGS + "?tags=" + type)
+            .map((response: Response) => {
+                return response.json();
+            })
+            .catch(this.handleError.bind(this));
+    }
+
+    deleteTagFromDialogs(dialogue_id, tag_id) {
+        return this._http.delete(AppSettings.URL_TAGS + dialogue_id + '/' + tag_id)
+            .map((response: Response) => {
+                return response.json();
+            })
+            .catch(this.handleError.bind(this));
+    }
+
+    addTagToDialogs(dialogue_id, params) {
+        return this._http.post(AppSettings.URL_TAGS + dialogue_id, params)
             .map((response: Response) => {
                 return response.json();
             })

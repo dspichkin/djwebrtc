@@ -327,5 +327,32 @@ def tags(request):
     return Response([tag.name for tag in tags], status.HTTP_200_OK)
 
 
+@api_view(['DELETE'])
+@permission_classes((IsConfirmAndIsAuthenticated,))
+def delete_dialog_tag(request, dialog_pk, tag_pk):
+    if request.method == 'DELETE':
+        dialog = get_object_or_404(Dialog, pk=dialog_pk)
+        tag = get_object_or_404(Tag, pk=tag_pk)
+        dtag = dialog.tags.through.objects.filter(tag=tag).first()
+        if dtag:
+            dtag.delete()
+            count = Dialog.objects.filter(tags__name=tag.name).count()
+            if count == 0:
+                tag.delete()
+    return Response(status.HTTP_200_OK)
+
+
+@api_view(['POST'])
+@permission_classes((IsConfirmAndIsAuthenticated,))
+def dialog_tag(request, dialog_pk):
+    if request.method == 'POST':
+        data = request.data
+        tag_name = data.get('tag_name')
+        if tag_name:
+            dialog = get_object_or_404(Dialog, pk=dialog_pk)
+            if not dialog.tags.through.objects.filter(tag__name=tag_name.lower()).exists():
+                tag, create = Tag.objects.get_or_create(name=tag_name.lower())
+                dialog.tags.add(tag)
+    return Response(status.HTTP_200_OK)
 
 

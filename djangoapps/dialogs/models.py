@@ -93,7 +93,7 @@ class Dialog(models.Model):
         verbose_name = 'Диалог'
         verbose_name_plural = 'Диалоги'
 
-        ordering = ('-updated_at', 'name', )
+        ordering = ('-created_at', 'name', )
 
 
 """

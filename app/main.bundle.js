@@ -2596,6 +2596,337 @@ module.exports = "<h4>Редактор шагов</h4>\n<p>Всего шагов
 
 /***/ }),
 
+/***/ "../../../../../src/app/components/tags/tags.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return TagsComponent; });
+/* unused harmony export Behavior */
+/* unused harmony export GenericBehavior */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+var styles = "\n  .ui-select-toggle {\n    position: relative;\n  }\n  /* Fix caret going into new line in Firefox */\n  .ui-select-placeholder {\n    float: left;\n  }\n  \n  /* Fix Bootstrap dropdown position when inside a input-group */\n  .input-group > .dropdown {\n    /* Instead of relative */\n    position: static;\n  }\n  \n  .ui-select-match > .btn {\n    /* Instead of center because of .btn */\n    text-align: left !important;\n  }\n  \n  .ui-select-match > .caret {\n    position: absolute;\n    top: 45%;\n    right: 15px;\n  }\n  \n  .ui-disabled {\n    background-color: #eceeef;\n    border-radius: 4px;\n    position: absolute;\n    width: 100%;\n    height: 100%;\n    z-index: 5;\n    opacity: 0.6;\n    top: 0;\n    left: 0;\n    cursor: not-allowed;\n  }\n  \n  .ui-select-choices {\n    width: 100%;\n    height: auto;\n    max-height: 200px;\n    overflow-x: hidden;\n    margin-top: 0;\n  }\n  \n  .ui-select-multiple .ui-select-choices {\n    margin-top: 1px;\n  }\n  .ui-select-choices-row>a {\n      display: block;\n      padding: 3px 20px;\n      clear: both;\n      font-weight: 400;\n      line-height: 1.42857143;\n      color: #333;\n      white-space: nowrap;\n  }\n  .ui-select-choices-row.active>a {\n      color: #fff;\n      text-decoration: none;\n      outline: 0;\n      background-color: #428bca;\n  }\n  \n  .ui-select-multiple {\n    height: auto;\n    padding:3px 3px 0 3px;\n  }\n  \n  .ui-select-multiple input.ui-select-search {\n    background-color: transparent !important; /* To prevent double background when disabled */\n    border: none;\n    outline: none;\n    box-shadow: none;\n    height: 1.6666em;\n    padding: 0;\n    margin-bottom: 3px;\n    \n  }\n  .ui-select-match .close {\n      font-size: 1.6em;\n      line-height: 0.75;\n  }\n  \n  .ui-select-multiple .ui-select-match-item {\n    outline: 0;\n    margin: 0 3px 3px 0;\n  }\n  .ui-select-toggle > .caret {\n      position: absolute;\n      height: 10px;\n      top: 50%;\n      right: 10px;\n      margin-top: -2px;\n  }\n";
+var TagsComponent = (function () {
+    //protected onChange:any = Function.prototype;
+    function TagsComponent(element) {
+        this.itemsOpened = false;
+        this.inputMode = false;
+        this.selected = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]();
+        this.typed = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]();
+        this.opened = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]();
+        this.delete = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]();
+        this.items = [];
+        this.active = [];
+        this.element = element;
+        this.clickedOutside = this.clickedOutside.bind(this);
+    }
+    TagsComponent.prototype.ngOnInit = function () {
+        this.behavior = new GenericBehavior(this);
+    };
+    TagsComponent.prototype.deleteTags = function (item) {
+        this.delete.next(item);
+    };
+    TagsComponent.prototype.inputEvent = function (e) {
+        // esc
+        if (e.keyCode === 27) {
+            this.hideOptions();
+            this.element.nativeElement.children[0].focus();
+            e.preventDefault();
+            return;
+        }
+        // up
+        if (e.keyCode === 38) {
+            this.behavior.prev();
+            e.preventDefault();
+            return;
+        }
+        // down
+        if (e.keyCode === 40) {
+            this.behavior.next();
+            e.preventDefault();
+            return;
+        }
+        // enter
+        if (e.keyCode === 13) {
+            if (this.inputedValue) {
+                this.selectMatch(this.inputedValue);
+            }
+            e.preventDefault();
+            return;
+        }
+    };
+    TagsComponent.prototype.add = function () {
+        this.selectMatch(this.inputedValue);
+    };
+    TagsComponent.prototype.change = function () {
+        var value = this.inputedValue;
+        var cleanInputValue = this.removeSpecials(value);
+        if (cleanInputValue) {
+            this.doEvent('typed', cleanInputValue);
+        }
+        else {
+            this.hideOptions();
+        }
+    };
+    TagsComponent.prototype.isNumber = function (text) {
+        var reg = new RegExp('[0-9]+$');
+        if (text) {
+            return reg.test(text);
+        }
+        return false;
+    };
+    TagsComponent.prototype.removeSpecials = function (str) {
+        var lower = str.toLowerCase();
+        var upper = str.toUpperCase();
+        var res = "";
+        for (var i = 0; i < lower.length; ++i) {
+            if (this.isNumber(lower[i]) || lower[i] != upper[i] || lower[i].trim() === '') {
+                res += str[i];
+            }
+        }
+        return res;
+    };
+    TagsComponent.prototype.doEvent = function (type, value) {
+        if (this[type] && value) {
+            this[type].next(value);
+        }
+        //if (type === 'selected' || type === 'removed') {
+        //    this.onChange(this.active);
+        //}
+    };
+    TagsComponent.prototype.matchClick = function (e) {
+        this.inputMode = !this.inputMode;
+        if (this.inputMode === true) {
+            this.focusToInput();
+            this.open();
+        }
+    };
+    TagsComponent.prototype.open = function () {
+        if (this.items.length > 0) {
+            this.behavior.first();
+        }
+        //this.optionsOpened = true;
+        this.itemsOpened = true;
+    };
+    TagsComponent.prototype.clickedOutside = function () {
+        //this.optionsOpened = false;
+        this.itemsOpened = false;
+    };
+    TagsComponent.prototype.focusToInput = function (value) {
+        var _this = this;
+        if (value === void 0) { value = ''; }
+        setTimeout(function () {
+            var el = _this.element.nativeElement.querySelector('div.ui-select-container > input');
+            if (el) {
+                el.focus();
+                el.value = value;
+            }
+        }, 0);
+    };
+    TagsComponent.prototype.selectActive = function (value) {
+        this.activeOption = value;
+    };
+    TagsComponent.prototype.isActive = function (value) {
+        return this.activeOption === value;
+    };
+    TagsComponent.prototype.hideOptions = function () {
+        this.inputMode = false;
+        //this.optionsOpened = false;
+        this.itemsOpened = false;
+        this.inputedValue = "";
+        this.activeOption = "";
+        this.items = [];
+    };
+    TagsComponent.prototype.mainClick = function (event) {
+        if (this.inputMode === true) {
+            return;
+        }
+        this.inputMode = true;
+        var value = String
+            .fromCharCode(96 <= event.keyCode && event.keyCode <= 105 ? event.keyCode - 48 : event.keyCode)
+            .toLowerCase();
+        this.focusToInput(value);
+        this.open();
+        var target = event.target || event.srcElement;
+        target.value = value;
+        this.inputEvent(event);
+    };
+    TagsComponent.prototype.selectActiveMatch = function () {
+        this.selectMatch(this.activeOption);
+    };
+    TagsComponent.prototype.selectMatch = function (value, e) {
+        if (e === void 0) { e = void 0; }
+        if (e) {
+            e.stopPropagation();
+            e.preventDefault();
+        }
+        if (!value) {
+            return;
+        }
+        this.doEvent('selected', value);
+        this.hideOptions();
+        this.focusToInput('');
+    };
+    return TagsComponent;
+}());
+__decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Output"])(),
+    __metadata("design:type", typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]) === "function" && _a || Object)
+], TagsComponent.prototype, "selected", void 0);
+__decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Output"])(),
+    __metadata("design:type", typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]) === "function" && _b || Object)
+], TagsComponent.prototype, "typed", void 0);
+__decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Output"])(),
+    __metadata("design:type", typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]) === "function" && _c || Object)
+], TagsComponent.prototype, "opened", void 0);
+__decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Output"])(),
+    __metadata("design:type", typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]) === "function" && _d || Object)
+], TagsComponent.prototype, "delete", void 0);
+__decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
+    __metadata("design:type", Object)
+], TagsComponent.prototype, "items", void 0);
+__decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
+    __metadata("design:type", Object)
+], TagsComponent.prototype, "active", void 0);
+TagsComponent = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+        selector: 'tags',
+        styles: [styles],
+        template: __webpack_require__("../../../../../src/app/components/tags/tags.template.html")
+    }),
+    __metadata("design:paramtypes", [typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["ElementRef"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_core__["ElementRef"]) === "function" && _e || Object])
+], TagsComponent);
+
+var Behavior = (function () {
+    function Behavior(actor) {
+        this.actor = actor;
+    }
+    Behavior.prototype.ensureHighlightVisible = function (optionsMap) {
+        if (optionsMap === void 0) { optionsMap = void 0; }
+        var container = this.actor.element.nativeElement.querySelector('.ui-select-choices-content');
+        if (!container) {
+            return;
+        }
+        var choices = container.querySelectorAll('.ui-select-choices-row');
+        if (choices.length < 1) {
+            return;
+        }
+        var activeIndex = this.getActiveIndex(optionsMap);
+        if (activeIndex < 0) {
+            return;
+        }
+        var highlighted = choices[activeIndex];
+        if (!highlighted) {
+            return;
+        }
+        var posY = highlighted.offsetTop + highlighted.clientHeight - container.scrollTop;
+        var height = container.offsetHeight;
+        if (posY > height) {
+            container.scrollTop += posY - height;
+        }
+        else if (posY < highlighted.clientHeight) {
+            container.scrollTop -= highlighted.clientHeight - posY;
+        }
+    };
+    Behavior.prototype.getActiveIndex = function (optionsMap) {
+        if (optionsMap === void 0) { optionsMap = void 0; }
+        //let ai = this.actor.options.indexOf(this.actor.activeOption);
+        var ai = this.actor.items.indexOf(this.actor.activeOption);
+        if (ai < 0 && optionsMap !== void 0) {
+            ai = optionsMap.get(this.actor.activeOption.id);
+        }
+        return ai;
+    };
+    return Behavior;
+}());
+
+var GenericBehavior = (function (_super) {
+    __extends(GenericBehavior, _super);
+    function GenericBehavior(actor) {
+        return _super.call(this, actor) || this;
+    }
+    GenericBehavior.prototype.first = function () {
+        //this.actor.activeOption = this.actor.options[0];
+        this.actor.activeOption = this.actor.items[0];
+        _super.prototype.ensureHighlightVisible.call(this);
+    };
+    GenericBehavior.prototype.last = function () {
+        //this.actor.activeOption = this.actor.options[this.actor.options.length - 1];
+        this.actor.activeOption = this.actor.items[this.actor.items.length - 1];
+        _super.prototype.ensureHighlightVisible.call(this);
+    };
+    GenericBehavior.prototype.prev = function () {
+        //let index = this.actor.options.indexOf(this.actor.activeOption);
+        var index = this.actor.items.indexOf(this.actor.activeOption);
+        this.actor.activeOption = this.actor
+            .items[index - 1 < 0 ? this.actor.items.length - 1 : index - 1];
+        this.actor.inputedValue = this.actor.activeOption;
+        _super.prototype.ensureHighlightVisible.call(this);
+    };
+    GenericBehavior.prototype.next = function () {
+        //let index = this.actor.options.indexOf(this.actor.activeOption);
+        var index = this.actor.items.indexOf(this.actor.activeOption);
+        this.actor.activeOption = this.actor
+            .items[index + 1 > this.actor.items.length - 1 ? 0 : index + 1];
+        this.actor.inputedValue = this.actor.activeOption;
+        //console.log('this.actor.inputedValue', this.actor.inputedValue)
+        _super.prototype.ensureHighlightVisible.call(this);
+    };
+    GenericBehavior.prototype.filter = function (query) {
+        //let options = this.actor.itemObjects;
+        var options = this.actor.items;
+        //.filter((option:any) => {
+        //    return stripTags(option.text).match(query) &&
+        //        (this.actor.multiple === false ||
+        //        (this.actor.multiple === true && this.actor.active.map((item:SelectItem) => item.id).indexOf(option.id) < 0));
+        // });
+        //this.actor.options = options;
+        //if (this.actor.options.length > 0) {
+        if (this.actor.items.length > 0) {
+            //this.actor.activeOption = this.actor.options[0];
+            this.actor.activeOption = this.actor.items[0];
+            _super.prototype.ensureHighlightVisible.call(this);
+        }
+    };
+    return GenericBehavior;
+}(Behavior));
+
+var _a, _b, _c, _d, _e;
+//# sourceMappingURL=tags.component.js.map
+
+/***/ }),
+
+/***/ "../../../../../src/app/components/tags/tags.template.html":
+/***/ (function(module, exports) {
+
+module.exports = "<div class=\"ui-select-container dropdown open\"\n    (keyup)=\"mainClick($event)\"\n    (focus)=\"focusToInput('')\"\n    [offClick]=\"clickedOutside\">\n\n    <div>\n        <div *ngFor=\"let item of active\" style=\"display: inline-block;margin: 0 5px;\">\n            <span class=\"badge\">{{ item.name }}</span>\n            <span style=\"font-size: 21px;\n                font-weight: 700;\n                line-height: 1;\n                color: #000;\n                text-shadow: 0 1px 0 #fff;\n                filter: alpha(opacity=20);\n                opacity: .2;\n                cursor: pointer;\" (click)=\"deleteTags(item)\">×</span>\n        </div>\n    </div>\n    <div class=\"input-group\" style=\"margin-top: 10px;\">\n        <input type=\"text\" class=\"form-control ui-select-search\" placeholder=\"новая метка\" \n            autocomplete=\"false\" tabindex=\"-1\" autocorrect=\"off\" autocapitalize=\"off\" spellcheck=\"false\"\n            [(ngModel)]=\"inputedValue\"\n            (ngModelChange)=\"change()\"\n            (keyup)=\"inputEvent($event)\"\n            (focus)=\"focusToInput('')\"\n            (click)=\"matchClick($event)\"\n            >\n        <span class=\"input-group-btn\">\n            <button class=\"btn btn-info\" type=\"button\" (click)=\"add()\">Добавить</button>\n        </span>\n    </div>\n    <!-- options template -->\n     <ul *ngIf=\"itemsOpened && items && items.length > 0\" class=\"ui-select-choices dropdown-menu\" role=\"menu\">\n        <li *ngFor=\"let o of items\" role=\"menuitem\">\n            <div class=\"ui-select-choices-row\"\n               [class.active]=\"isActive(o)\"\n               (mouseenter)=\"selectActive(o)\"\n               (click)=\"selectMatch(o, $event)\">\n                <a href=\"javascript:void(0)\" class=\"dropdown-item\">\n                    <div> {{ o }}</div>\n                </a>\n            </div>\n        </li>\n    </ul>\n</div>"
+
+/***/ }),
+
 /***/ "../../../../../src/app/components/view_block_calling/callingfroms.component.ts":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -2854,6 +3185,20 @@ var DialogsService = (function () {
     };
     DialogsService.prototype.getTags = function (type) {
         return this._http.get(__WEBPACK_IMPORTED_MODULE_5__app_settings__["a" /* AppSettings */].URL_TAGS + "?tags=" + type)
+            .map(function (response) {
+            return response.json();
+        })
+            .catch(this.handleError.bind(this));
+    };
+    DialogsService.prototype.deleteTagFromDialogs = function (dialogue_id, tag_id) {
+        return this._http.delete(__WEBPACK_IMPORTED_MODULE_5__app_settings__["a" /* AppSettings */].URL_TAGS + dialogue_id + '/' + tag_id)
+            .map(function (response) {
+            return response.json();
+        })
+            .catch(this.handleError.bind(this));
+    };
+    DialogsService.prototype.addTagToDialogs = function (dialogue_id, params) {
+        return this._http.post(__WEBPACK_IMPORTED_MODULE_5__app_settings__["a" /* AppSettings */].URL_TAGS + dialogue_id, params)
             .map(function (response) {
             return response.json();
         })
@@ -3604,7 +3949,8 @@ module.exports = "<div class=\"row\">\n    <div class=\"container\">\n        <d
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__mydialogues_mydialogues_component__ = __webpack_require__("../../../../../src/app/views/mydialogues/mydialogues.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__mydialogues_mydialogue_edit_component__ = __webpack_require__("../../../../../src/app/views/mydialogues/mydialogue.edit.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_25__components_scenario_scenario_component__ = __webpack_require__("../../../../../src/app/components/scenario/scenario.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_26__view_profile_equal_validator_directive__ = __webpack_require__("../../../../../src/app/views/view_profile/equal_validator.directive.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_26__components_tags_tags_component__ = __webpack_require__("../../../../../src/app/components/tags/tags.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_27__view_profile_equal_validator_directive__ = __webpack_require__("../../../../../src/app/views/view_profile/equal_validator.directive.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -3618,6 +3964,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 //import { FileSelectDirective } from 'ng2-file-upload';
 //import { FileSelectDirective } from '../../../node_modules/ng2-file-upload';
+
 
 
 
@@ -3662,12 +4009,13 @@ AppviewsModule = __decorate([
             __WEBPACK_IMPORTED_MODULE_18__view_message_view_message_component__["a" /* MessageViewComponent */],
             __WEBPACK_IMPORTED_MODULE_19__view_profile_view_profile_component__["a" /* ProfileViewComponent */],
             __WEBPACK_IMPORTED_MODULE_20__view_help_view_help_component__["a" /* HelpViewComponent */],
-            __WEBPACK_IMPORTED_MODULE_26__view_profile_equal_validator_directive__["a" /* EqualValidator */],
+            __WEBPACK_IMPORTED_MODULE_27__view_profile_equal_validator_directive__["a" /* EqualValidator */],
             __WEBPACK_IMPORTED_MODULE_21__components_common_notification_notification_component__["a" /* NotificationComponent */],
             __WEBPACK_IMPORTED_MODULE_22__components_chat_chat_component__["a" /* ChatComponent */],
             __WEBPACK_IMPORTED_MODULE_23__mydialogues_mydialogues_component__["a" /* MyDialoguesViewComponent */],
             __WEBPACK_IMPORTED_MODULE_24__mydialogues_mydialogue_edit_component__["a" /* MyDialogueEditViewComponent */],
             __WEBPACK_IMPORTED_MODULE_25__components_scenario_scenario_component__["a" /* ScenarioComponent */],
+            __WEBPACK_IMPORTED_MODULE_26__components_tags_tags_component__["a" /* TagsComponent */],
         ],
         imports: [
             __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser__["BrowserModule"],
@@ -3692,12 +4040,13 @@ AppviewsModule = __decorate([
             __WEBPACK_IMPORTED_MODULE_18__view_message_view_message_component__["a" /* MessageViewComponent */],
             __WEBPACK_IMPORTED_MODULE_19__view_profile_view_profile_component__["a" /* ProfileViewComponent */],
             __WEBPACK_IMPORTED_MODULE_20__view_help_view_help_component__["a" /* HelpViewComponent */],
-            __WEBPACK_IMPORTED_MODULE_26__view_profile_equal_validator_directive__["a" /* EqualValidator */],
+            __WEBPACK_IMPORTED_MODULE_27__view_profile_equal_validator_directive__["a" /* EqualValidator */],
             __WEBPACK_IMPORTED_MODULE_21__components_common_notification_notification_component__["a" /* NotificationComponent */],
             __WEBPACK_IMPORTED_MODULE_22__components_chat_chat_component__["a" /* ChatComponent */],
             __WEBPACK_IMPORTED_MODULE_23__mydialogues_mydialogues_component__["a" /* MyDialoguesViewComponent */],
             __WEBPACK_IMPORTED_MODULE_24__mydialogues_mydialogue_edit_component__["a" /* MyDialogueEditViewComponent */],
             __WEBPACK_IMPORTED_MODULE_25__components_scenario_scenario_component__["a" /* ScenarioComponent */],
+            __WEBPACK_IMPORTED_MODULE_26__components_tags_tags_component__["a" /* TagsComponent */],
         ],
     })
 ], AppviewsModule);
@@ -3987,14 +4336,12 @@ module.exports = "<div class=\"row\">\n    <div class=\"container\">\n        <d
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_Subject__ = __webpack_require__("../../../../rxjs/Subject.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_Subject___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_rxjs_Subject__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_ngx_bootstrap_modal__ = __webpack_require__("../../../../ngx-bootstrap/modal/index.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_ng2_select__ = __webpack_require__("../../../../ng2-select/index.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_ng2_select___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_ng2_select__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_ng2_file_upload__ = __webpack_require__("../../../../ng2-file-upload/index.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_ng2_file_upload___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_ng2_file_upload__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__services_dialogs_service__ = __webpack_require__("../../../../../src/app/services/dialogs.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__services_status_service__ = __webpack_require__("../../../../../src/app/services/status.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__services_notification_service__ = __webpack_require__("../../../../../src/app/services/notification.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__app_settings__ = __webpack_require__("../../../../../src/app/app.settings.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_ng2_file_upload__ = __webpack_require__("../../../../ng2-file-upload/index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_ng2_file_upload___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_ng2_file_upload__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__services_dialogs_service__ = __webpack_require__("../../../../../src/app/services/dialogs.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__services_status_service__ = __webpack_require__("../../../../../src/app/services/status.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__services_notification_service__ = __webpack_require__("../../../../../src/app/services/notification.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__app_settings__ = __webpack_require__("../../../../../src/app/app.settings.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -4004,7 +4351,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-
 
 
 
@@ -4053,7 +4399,7 @@ var MyDialogueEditViewComponent = (function () {
         this.descriptionChanged = new __WEBPACK_IMPORTED_MODULE_2_rxjs_Subject__["Subject"]();
         this.personageChanged = new __WEBPACK_IMPORTED_MODULE_2_rxjs_Subject__["Subject"]();
         this.tags = [];
-        this.activetags = [];
+        //private activetags = [];
         this.value = [];
     }
     MyDialogueEditViewComponent.prototype.ngOnInit = function () {
@@ -4137,8 +4483,8 @@ var MyDialogueEditViewComponent = (function () {
         else {
             this.selectedDialogLevel = this.levels[0].id;
         }
-        this.uploader = new __WEBPACK_IMPORTED_MODULE_5_ng2_file_upload__["FileUploader"]({
-            url: __WEBPACK_IMPORTED_MODULE_9__app_settings__["a" /* AppSettings */].URL_MYDIALOGS + this.dialogue.id + '/bg/',
+        this.uploader = new __WEBPACK_IMPORTED_MODULE_4_ng2_file_upload__["FileUploader"]({
+            url: __WEBPACK_IMPORTED_MODULE_8__app_settings__["a" /* AppSettings */].URL_MYDIALOGS + this.dialogue.id + '/bg/',
             headers: [{
                     name: 'X-CSRFToken',
                     value: this.getCookie("csrftoken")
@@ -4147,12 +4493,12 @@ var MyDialogueEditViewComponent = (function () {
         this.uploader.onCompleteItem = function (item, response, status, headers) {
             _this._getDialog();
         };
-        this.activetags = [];
-        if (this.dialogue.tags && this.dialogue.tags.length > 0) {
-            for (var i = 0; i < this.dialogue.tags.length; i++) {
-                this.activetags.push(this.dialogue.tags[i].name);
-            }
-        }
+        //this.activetags = [];
+        //if (this.dialogue.tags && this.dialogue.tags.length > 0) {
+        //    for (let i = 0; i < this.dialogue.tags.length; i++) {
+        //        this.activetags.push(this.dialogue.tags[i].name);
+        //    }
+        //}
     };
     MyDialogueEditViewComponent.prototype.getCookie = function (name) {
         var value = "; " + document.cookie;
@@ -4248,20 +4594,25 @@ var MyDialogueEditViewComponent = (function () {
         this.personageChanged.next($event);
     };
     MyDialogueEditViewComponent.prototype.selectedTag = function (value) {
-        //let params = {
-        //    tags:  this.tags
-        //}
+        var _this = this;
+        var params = {
+            tag_name: value
+        };
+        this.dialogsService.addTagToDialogs(this.dialogue.id, params).subscribe(function (data) {
+            _this.loading = false;
+            _this._getDialog();
+        });
     };
-    MyDialogueEditViewComponent.prototype.removedTag = function (value) {
-        //let params = {
-        //    tags:  this.tags
-        //}
-        //this.dialogsService.saveMyDialogs(this.dialogue.id, params).subscribe((data) => {
-        //    this.loading = false;
-        //});
+    MyDialogueEditViewComponent.prototype.deleteTag = function (value) {
+        var _this = this;
+        this.dialogsService.deleteTagFromDialogs(this.dialogue.id, value.id).subscribe(function (data) {
+            _this.loading = false;
+            _this._getDialog();
+        });
     };
     MyDialogueEditViewComponent.prototype.searchTags = function (value) {
         var _this = this;
+        //console.log('value',value)
         this.dialogsService.getTags(value).subscribe(function (res) {
             _this.tags = res;
         });
@@ -4285,10 +4636,6 @@ var MyDialogueEditViewComponent = (function () {
     return MyDialogueEditViewComponent;
 }());
 __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewChild"])('tagsInput'),
-    __metadata("design:type", typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_4_ng2_select__["SelectComponent"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4_ng2_select__["SelectComponent"]) === "function" && _a || Object)
-], MyDialogueEditViewComponent.prototype, "recipientsInput", void 0);
-__decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewChild"])('template'),
     __metadata("design:type", Object)
 ], MyDialogueEditViewComponent.prototype, "template", void 0);
@@ -4297,10 +4644,10 @@ MyDialogueEditViewComponent = __decorate([
         selector: 'mydialogueedit',
         template: __webpack_require__("../../../../../src/app/views/mydialogues/mydialogue.edit.template.html")
     }),
-    __metadata("design:paramtypes", [typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_6__services_dialogs_service__["a" /* DialogsService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_6__services_dialogs_service__["a" /* DialogsService */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_7__services_status_service__["a" /* StatusService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_7__services_status_service__["a" /* StatusService */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_1__angular_router__["b" /* Router */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_router__["b" /* Router */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_1__angular_router__["a" /* ActivatedRoute */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_router__["a" /* ActivatedRoute */]) === "function" && _e || Object, typeof (_f = typeof __WEBPACK_IMPORTED_MODULE_8__services_notification_service__["a" /* NotificationService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_8__services_notification_service__["a" /* NotificationService */]) === "function" && _f || Object, typeof (_g = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["ChangeDetectorRef"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_core__["ChangeDetectorRef"]) === "function" && _g || Object, typeof (_h = typeof __WEBPACK_IMPORTED_MODULE_3_ngx_bootstrap_modal__["a" /* BsModalService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3_ngx_bootstrap_modal__["a" /* BsModalService */]) === "function" && _h || Object])
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_5__services_dialogs_service__["a" /* DialogsService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_5__services_dialogs_service__["a" /* DialogsService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_6__services_status_service__["a" /* StatusService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_6__services_status_service__["a" /* StatusService */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_1__angular_router__["b" /* Router */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_router__["b" /* Router */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_1__angular_router__["a" /* ActivatedRoute */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_router__["a" /* ActivatedRoute */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_7__services_notification_service__["a" /* NotificationService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_7__services_notification_service__["a" /* NotificationService */]) === "function" && _e || Object, typeof (_f = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["ChangeDetectorRef"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_core__["ChangeDetectorRef"]) === "function" && _f || Object, typeof (_g = typeof __WEBPACK_IMPORTED_MODULE_3_ngx_bootstrap_modal__["a" /* BsModalService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3_ngx_bootstrap_modal__["a" /* BsModalService */]) === "function" && _g || Object])
 ], MyDialogueEditViewComponent);
 
-var _a, _b, _c, _d, _e, _f, _g, _h;
+var _a, _b, _c, _d, _e, _f, _g;
 //# sourceMappingURL=mydialogue.edit.component.js.map
 
 /***/ }),
@@ -4308,7 +4655,7 @@ var _a, _b, _c, _d, _e, _f, _g, _h;
 /***/ "../../../../../src/app/views/mydialogues/mydialogue.edit.template.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div style=\"padding: 20px\">\n    <div class=\"panel panel-primary\">\n        <div class=\"panel-heading\">\n            Редактируем диалог <strong>{{dialogue?.name}}</strong>\n        </div>\n        <div class=\"panel-body\" style=\"padding: 20px;\">\n            <ul class=\"nav nav-tabs\" role=\"tablist\">\n                <li (click)=\"mode='base'\" class=\"active\"><a href=\"#home\" aria-controls=\"home\" role=\"tab\" data-toggle=\"tab\">Описание диалога</a></li>\n                <li (click)=\"mode='personages'\"><a href=\"#profile\" aria-controls=\"profile\" role=\"tab\" data-toggle=\"tab\">Имена персонажей</a></li>\n                <li (click)=\"mode='scenario'\"><a href=\"#profile\" aria-controls=\"profile\" role=\"tab\" data-toggle=\"tab\">Сценарий диалога</a></li>\n            </ul>\n\n             <!-- Tab panes -->\n            <div *ngIf=\"mode=='base'\" class=\"tab-content\" style=\"padding: 20px; max-width: 600px;\">\n                <form #frm=\"ngForm\" (ngSubmit)=\"submit()\">\n                    <div class=\"form-group\" [ngClass]=\"{'has-error': !dialogue.name}\">\n                        <label for=\"name\">Название диалога</label>\n                        <input name=\"frm_name\" type=\"email\" class=\"form-control \" id=\"name\" [(ngModel)]=\"dialogue.name\" required=\"required\" (ngModelChange)=\"changedDescriptionData($event, 'name')\">\n                    </div>\n                    <div class=\"form-group\">\n                        <label for=\"description\">Описание диалога</label>\n                        <textarea name=\"frm_descriptioon\" class=\"form-control\" id=\"description\"  [(ngModel)]=\"dialogue.description\" (ngModelChange)=\"changedDescriptionData($event, 'description')\"></textarea>\n                    </div>\n                    <div class=\"form-group\">\n                        <label for=\"level\">Требуемый уровень английского</label>\n                        <select name=\"frm_level\" id=\"level\" class=\"form-control\" [(ngModel)]=\"selectedDialogLevel\" required=\"required\" (change)=\"saveDescription()\">\n                             <option *ngFor=\"let level of levels\" [value]=\"level.id\">{{level.title}}</option>\n                         </select>\n                    </div>\n\n                    <div class=\"form-group\">\n                        <label for=\"background_image\">Картинка диалога</label>\n                        <div>\n                            <div class=\"col-md-6\" style=\"padding: 0\">\n                                <input #fileInput type=\"file\" ng2FileSelect [uploader]=\"uploader\" accept=\"image/png, image/jpg, image/jpeg\" style=\"display:none;\" (change)=\"onFileSelected()\"/>\n                                <button type=\"button\" class=\"btn btn-default\" (click)=\"fileInput.click()\" [disabled]=\"loading\">Загрузить картинку диалога</button>\n                            </div>\n                            <div class=\"col-md-6\">\n                                <section id=\"uploadQueue\" *ngIf=\"uploader?.queue?.length > 0\">\n                                    <div ngFor=\"let item of uploader.queue\">\n                                        {{ item?.file?.name }}\n                                        <div *ngIf=\"uploader.isHTML5\" class=\"progress\" style=\"margin-bottom: 0;\">\n                                            <div class=\"progress-bar\" role=\"progressbar\" [ngStyle]=\"{ 'width': item.progress + '%' }\"></div>\n                                         </div>\n                                    </div>\n                                </section>\n\n                                <img *ngIf=\"!dialogue.background_image\" alt=\"100%x200\" data-src=\"holder.js/100%x200\" src=\"data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/PjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iMjQyIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDI0MiAyMDAiIHByZXNlcnZlQXNwZWN0UmF0aW89Im5vbmUiPjwhLS0KU291cmNlIFVSTDogaG9sZGVyLmpzLzEwMCV4MjAwCkNyZWF0ZWQgd2l0aCBIb2xkZXIuanMgMi42LjAuCkxlYXJuIG1vcmUgYXQgaHR0cDovL2hvbGRlcmpzLmNvbQooYykgMjAxMi0yMDE1IEl2YW4gTWFsb3BpbnNreSAtIGh0dHA6Ly9pbXNreS5jbwotLT48ZGVmcz48c3R5bGUgdHlwZT0idGV4dC9jc3MiPjwhW0NEQVRBWyNob2xkZXJfMTVlOTZiYzA5NjUgdGV4dCB7IGZpbGw6I0FBQUFBQTtmb250LXdlaWdodDpib2xkO2ZvbnQtZmFtaWx5OkFyaWFsLCBIZWx2ZXRpY2EsIE9wZW4gU2Fucywgc2Fucy1zZXJpZiwgbW9ub3NwYWNlO2ZvbnQtc2l6ZToxMnB0IH0gXV0+PC9zdHlsZT48L2RlZnM+PGcgaWQ9ImhvbGRlcl8xNWU5NmJjMDk2NSI+PHJlY3Qgd2lkdGg9IjI0MiIgaGVpZ2h0PSIyMDAiIGZpbGw9IiNFRUVFRUUiLz48Zz48dGV4dCB4PSI4OS44NTkzNzUiIHk9IjEwNS40Ij4yNDJ4MjAwPC90ZXh0PjwvZz48L2c+PC9zdmc+\" data-holder-rendered=\"true\" style=\"height: 200px; width: 200px; display: block;margin: 0 10px;\"> \n                                    <div *ngIf=\"dialogue && dialogue.background_image\" \n                                        [ngStyle]=\"{'background-image': 'url(' + dialogue.background_image + ')'}\"\n                                        style=\"\n                                            height: 160px; \n                                            width: 190px; \n                                            background-size: cover;\n                                            display: block;\n                                            margin: 0 10px;\">\n                                    </div>\n                            </div>\n                        </div>\n                    </div>\n                    \n                    <div class=\"form-group\" [ngClass]=\"{'has-error': !dialogue.name}\">\n                        <label for=\"name\">Метка для быстрого поиска</label>\n                        <ng-select #tagsInput [multiple]=\"true\"\n                            [active]=\"activetags\"\n                          [items]=\"tags\"\n                          (data)=\"refreshValue($event)\"\n                          (selected)=\"selectedTag($event)\"\n                          (removed)=\"removedTag($event)\"\n                          (typed)=\"searchTags($event)\"\n                          placeholder=\"Поиск среди существующих меток\"></ng-select>\n\n                    </div>\n\n                    <div class=\"form-group\">\n                        <label>Доступно для всех?</label>\n                        <div style=\"width: 40px;height: 40px;border: 2px solid darkslateblue;border-radius: 4px;cursor: pointer;\" (click)=\"publishDialog(item)\">\n                            <div *ngIf=\"dialogue.is_published\" style=\"width: 28px;height: 28px;background-color: darkslateblue;border-radius: 4px;margin:4px;\"></div>\n                        </div>\n                    </div>\n                    \n                    <div class=\"form-group\">\n                        <p *ngIf=\"description_is_changed\" style=\"margin: 0;font-size: 10px;\">Изменения пока еще не сохранены</p>\n                        <!--\n                        <button type=\"submit\" class=\"btn btn-primary\" [disabled]=\"!frm.valid || loading\" (click)=\"saveDescription()\">Сохранить</button>-->\n\n                        <button type=\"button\" class=\"btn btn-danger pull-right\" (click)=\"showConfirmDeleteDialog()\">Удалить диалог</button>\n                    </div>\n\n                    <div class=\"form-group\">\n                        <button type=\"button\" class=\"btn btn-success\" [routerLink]=\"['/mydialogues']\">Перейти к моим диалогам</button>\n                    </div>\n\n                </form>\n            </div>\n\n            <div *ngIf=\"mode=='personages'\" class=\"tab-content\" style=\"padding: 20px;\">\n                <form #frm2=\"ngForm\">\n                    <div class=\"form-group\" [ngClass]=\"{'has-error': !personage_a}\">\n                        <label for=\"personage_a\">Персонаж 1</label>\n                        <input name=\"frm_name_a\" type=\"text\" class=\"form-control\" id=\"personage_a\" (ngModelChange)=\"updatePersonages($event)\" [(ngModel)]=\"personage_a\" required=\"required\" (ngModelChange)=\"changedPersonageData($event, 'personage_a')\">\n                    </div>\n                    \n                    <div class=\"form-group\" [ngClass]=\"{'has-error': !personage_b}\">\n                        <label for=\"personage_b\">Персонаж 2</label>\n                        <input name=\"frm_name_b\" type=\"text\" class=\"form-control\" id=\"personage_b\" (ngModelChange)=\"updatePersonages($event)\"  [(ngModel)]=\"personage_b\" required=\"required\" (ngModelChange)=\"changedPersonageData($event, 'personage_b')\">\n                    </div>\n                    <p *ngIf=\"description_is_changed\" style=\"margin: 0;font-size: 10px;\">Изменения пока еще не сохранены</p>\n                    <!-- <button type=\"submit\" class=\"btn btn-primary\" [disabled]=\"!frm2.valid\">Сохранить изменения</button> -->\n                </form>\n            </div>\n\n            <div *ngIf=\"mode=='scenario'\" class=\"tab-content\" style=\"padding: 20px;\">\n                <scenario [dialogue]=\"dialogue\"></scenario>\n            </div>\n        </div>\n    </div>\n</div>\n\n<ng-template #template>\n    <div class=\"modal-header\">\n        <h4 class=\"modal-title pull-left\">Подтверждение</h4>\n        <button type=\"button\" class=\"close pull-right\" aria-label=\"Close\" (click)=\"closeCreateDialog()\">\n            <span aria-hidden=\"true\">&times;</span>\n        </button>\n    </div>\n    <div class=\"modal-body\" style=\"text-align: center;\">\n        <h4>Вы уверено хотите удлать выбранный диалог?</h4>\n    </div>\n    <div class=\"modal-footer\">\n        <button type=\"button\" class=\"btn btn-primary\" (click)=\"deleteDialog()\" [disabled]=\"loading\">Да, хочу</button>\n        <button type=\"button\" class=\"btn btn-default pull-right\" (click)=\"closeDeleteDialog()\">Отмена</button>\n    </div>\n</ng-template>\n\n\n<notifications></notifications>"
+module.exports = "<div style=\"padding: 20px\">\n    <div class=\"panel panel-primary\">\n        <div class=\"panel-heading\">\n            Редактируем диалог <strong>{{dialogue?.name}}</strong>\n        </div>\n        <div class=\"panel-body\" style=\"padding: 20px;\">\n            <ul class=\"nav nav-tabs\" role=\"tablist\">\n                <li (click)=\"mode='base'\" class=\"active\"><a href=\"#home\" aria-controls=\"home\" role=\"tab\" data-toggle=\"tab\">Описание диалога</a></li>\n                <li (click)=\"mode='personages'\"><a href=\"#profile\" aria-controls=\"profile\" role=\"tab\" data-toggle=\"tab\">Имена персонажей</a></li>\n                <li (click)=\"mode='scenario'\"><a href=\"#profile\" aria-controls=\"profile\" role=\"tab\" data-toggle=\"tab\">Сценарий диалога</a></li>\n                <li (click)=\"mode='publish'\"><a href=\"#profile\" aria-controls=\"profile\" role=\"tab\" data-toggle=\"tab\">Сделать доступным для всех</a></li>\n            </ul>\n\n             <!-- Tab panes -->\n            <div *ngIf=\"mode=='base'\" class=\"tab-content\" style=\"padding: 20px; max-width: 600px;\">\n                <form #frm=\"ngForm\" (ngSubmit)=\"submit()\">\n                    <div class=\"form-group\" [ngClass]=\"{'has-error': !dialogue.name}\">\n                        <label for=\"name\">Название диалога</label>\n                        <input name=\"frm_name\" type=\"email\" class=\"form-control \" id=\"name\" [(ngModel)]=\"dialogue.name\" required=\"required\" (ngModelChange)=\"changedDescriptionData($event, 'name')\">\n                    </div>\n                    <div class=\"form-group\">\n                        <label for=\"description\">Описание диалога</label>\n                        <textarea name=\"frm_descriptioon\" class=\"form-control\" id=\"description\"  [(ngModel)]=\"dialogue.description\" (ngModelChange)=\"changedDescriptionData($event, 'description')\"></textarea>\n                    </div>\n                    <div class=\"form-group\">\n                        <label for=\"level\">Требуемый уровень английского</label>\n                        <select name=\"frm_level\" id=\"level\" class=\"form-control\" [(ngModel)]=\"selectedDialogLevel\" required=\"required\" (change)=\"saveDescription()\">\n                             <option *ngFor=\"let level of levels\" [value]=\"level.id\">{{level.title}}</option>\n                         </select>\n                    </div>\n\n                    <div class=\"form-group\">\n                        <label for=\"background_image\">Картинка диалога</label>\n                        <div>\n                            <div class=\"col-md-6\" style=\"padding: 0\">\n                                <input #fileInput type=\"file\" ng2FileSelect [uploader]=\"uploader\" accept=\"image/png, image/jpg, image/jpeg\" style=\"display:none;\" (change)=\"onFileSelected()\"/>\n                                <button type=\"button\" class=\"btn btn-default\" (click)=\"fileInput.click()\" [disabled]=\"loading\">Загрузить картинку диалога</button>\n                            </div>\n                            <div class=\"col-md-6\">\n                                <section id=\"uploadQueue\" *ngIf=\"uploader?.queue?.length > 0\">\n                                    <div ngFor=\"let item of uploader.queue\">\n                                        {{ item?.file?.name }}\n                                        <div *ngIf=\"uploader.isHTML5\" class=\"progress\" style=\"margin-bottom: 0;\">\n                                            <div class=\"progress-bar\" role=\"progressbar\" [ngStyle]=\"{ 'width': item.progress + '%' }\"></div>\n                                         </div>\n                                    </div>\n                                </section>\n\n                                <img *ngIf=\"!dialogue.background_image\" alt=\"100%x200\" data-src=\"holder.js/100%x200\" src=\"data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/PjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iMjQyIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDI0MiAyMDAiIHByZXNlcnZlQXNwZWN0UmF0aW89Im5vbmUiPjwhLS0KU291cmNlIFVSTDogaG9sZGVyLmpzLzEwMCV4MjAwCkNyZWF0ZWQgd2l0aCBIb2xkZXIuanMgMi42LjAuCkxlYXJuIG1vcmUgYXQgaHR0cDovL2hvbGRlcmpzLmNvbQooYykgMjAxMi0yMDE1IEl2YW4gTWFsb3BpbnNreSAtIGh0dHA6Ly9pbXNreS5jbwotLT48ZGVmcz48c3R5bGUgdHlwZT0idGV4dC9jc3MiPjwhW0NEQVRBWyNob2xkZXJfMTVlOTZiYzA5NjUgdGV4dCB7IGZpbGw6I0FBQUFBQTtmb250LXdlaWdodDpib2xkO2ZvbnQtZmFtaWx5OkFyaWFsLCBIZWx2ZXRpY2EsIE9wZW4gU2Fucywgc2Fucy1zZXJpZiwgbW9ub3NwYWNlO2ZvbnQtc2l6ZToxMnB0IH0gXV0+PC9zdHlsZT48L2RlZnM+PGcgaWQ9ImhvbGRlcl8xNWU5NmJjMDk2NSI+PHJlY3Qgd2lkdGg9IjI0MiIgaGVpZ2h0PSIyMDAiIGZpbGw9IiNFRUVFRUUiLz48Zz48dGV4dCB4PSI4OS44NTkzNzUiIHk9IjEwNS40Ij4yNDJ4MjAwPC90ZXh0PjwvZz48L2c+PC9zdmc+\" data-holder-rendered=\"true\" style=\"height: 200px; width: 200px; display: block;margin: 0 10px;\"> \n                                    <div *ngIf=\"dialogue && dialogue.background_image\" \n                                        [ngStyle]=\"{'background-image': 'url(' + dialogue.background_image + ')'}\"\n                                        style=\"\n                                            height: 160px; \n                                            width: 190px; \n                                            background-size: cover;\n                                            display: block;\n                                            margin: 0 10px;\">\n                                    </div>\n                            </div>\n                        </div>\n                    </div>\n                    \n                    <div class=\"form-group\" [ngClass]=\"{'has-error': !dialogue.name}\">\n                        <label for=\"name\">Метка для быстрого поиска диалога</label>\n                        <!--\n                        <ng-select #tagsInput [multiple]=\"true\"\n                            [active]=\"activetags\"\n                            [items]=\"tags\"\n                            (data)=\"refreshValue($event)\"\n                          (selected)=\"selectedTag($event)\"\n                          (removed)=\"removedTag($event)\"\n                          (typed)=\"searchTags($event)\"\n                          placeholder=\"Поиск среди существующих меток\"></ng-select>\n                        -->\n\n                        <tags [active]=\"dialogue.tags\" [items]=\"tags\" \n                            (typed)=\"searchTags($event)\" \n                            (selected)=\"selectedTag($event)\"\n                            (delete)=\"deleteTag($event)\"></tags>\n\n\n                    </div>\n\n                    <div class=\"form-group\" style=\"margin-top: 80px;\">\n                        <p *ngIf=\"description_is_changed\" style=\"margin: 0;font-size: 10px;\">Изменения пока еще не сохранены</p>\n                        <!--\n                        <button type=\"submit\" class=\"btn btn-primary\" [disabled]=\"!frm.valid || loading\" (click)=\"saveDescription()\">Сохранить</button>-->\n\n                        <button type=\"button\" class=\"btn btn-danger pull-right\" (click)=\"showConfirmDeleteDialog()\">Удалить диалог</button>\n                    </div>\n                </form>\n            </div>\n\n            <div *ngIf=\"mode=='personages'\" class=\"tab-content\" style=\"padding: 20px;\">\n                <form #frm2=\"ngForm\">\n                    <div class=\"form-group\" [ngClass]=\"{'has-error': !personage_a}\">\n                        <label for=\"personage_a\">Персонаж 1</label>\n                        <input name=\"frm_name_a\" type=\"text\" class=\"form-control\" id=\"personage_a\" (ngModelChange)=\"updatePersonages($event)\" [(ngModel)]=\"personage_a\" required=\"required\" (ngModelChange)=\"changedPersonageData($event, 'personage_a')\">\n                    </div>\n                    \n                    <div class=\"form-group\" [ngClass]=\"{'has-error': !personage_b}\">\n                        <label for=\"personage_b\">Персонаж 2</label>\n                        <input name=\"frm_name_b\" type=\"text\" class=\"form-control\" id=\"personage_b\" (ngModelChange)=\"updatePersonages($event)\"  [(ngModel)]=\"personage_b\" required=\"required\" (ngModelChange)=\"changedPersonageData($event, 'personage_b')\">\n                    </div>\n                    <p *ngIf=\"description_is_changed\" style=\"margin: 0;font-size: 10px;\">Изменения пока еще не сохранены</p>\n                    <!-- <button type=\"submit\" class=\"btn btn-primary\" [disabled]=\"!frm2.valid\">Сохранить изменения</button> -->\n                </form>\n            </div>\n\n            <div *ngIf=\"mode=='scenario'\" class=\"tab-content\" style=\"padding: 20px;\">\n                <scenario [dialogue]=\"dialogue\"></scenario>\n            </div>\n\n            <div *ngIf=\"mode=='publish'\" class=\"tab-content\" style=\"padding: 20px; max-width: 600px;\">\n                <form #frm=\"ngForm\" (ngSubmit)=\"submit()\">\n                    <div class=\"form-group\">\n                        <label>Доступно для всех?</label>\n                        <div style=\"width: 40px;height: 40px;border: 2px solid darkslateblue;border-radius: 4px;cursor: pointer;\" (click)=\"publishDialog(item)\">\n                            <div *ngIf=\"dialogue.is_published\" style=\"width: 28px;height: 28px;background-color: darkslateblue;border-radius: 4px;margin:4px;\"></div>\n                        </div>\n                    </div>\n                    \n                    <div class=\"form-group\">\n                        <p *ngIf=\"description_is_changed\" style=\"margin: 0;font-size: 10px;\">Изменения пока еще не сохранены</p>\n                    </div>\n\n                </form>\n            </div>\n        </div>\n        <div class=\"panel-footer\">\n            <div class=\"form-group\">\n                <button type=\"button\" class=\"btn btn-success\" [routerLink]=\"['/mydialogues']\">Перейти к моим диалогам</button>\n            </div>\n        </div>\n    </div>\n</div>\n\n<ng-template #template>\n    <div class=\"modal-header\">\n        <h4 class=\"modal-title pull-left\">Подтверждение</h4>\n        <button type=\"button\" class=\"close pull-right\" aria-label=\"Close\" (click)=\"closeCreateDialog()\">\n            <span aria-hidden=\"true\">&times;</span>\n        </button>\n    </div>\n    <div class=\"modal-body\" style=\"text-align: center;\">\n        <h4>Вы уверено хотите удлать выбранный диалог?</h4>\n    </div>\n    <div class=\"modal-footer\">\n        <button type=\"button\" class=\"btn btn-primary\" (click)=\"deleteDialog()\" [disabled]=\"loading\">Да, хочу</button>\n        <button type=\"button\" class=\"btn btn-default pull-right\" (click)=\"closeDeleteDialog()\">Отмена</button>\n    </div>\n</ng-template>\n\n\n<notifications></notifications>"
 
 /***/ }),
 

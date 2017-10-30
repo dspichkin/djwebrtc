@@ -8,6 +8,7 @@
                 <li (click)="mode='base'" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Описание диалога</a></li>
                 <li (click)="mode='personages'"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Имена персонажей</a></li>
                 <li (click)="mode='scenario'"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Сценарий диалога</a></li>
+                <li (click)="mode='publish'"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Сделать доступным для всех</a></li>
             </ul>
 
              <!-- Tab panes -->
@@ -60,37 +61,33 @@
                     </div>
                     
                     <div class="form-group" [ngClass]="{'has-error': !dialogue.name}">
-                        <label for="name">Метка для быстрого поиска</label>
+                        <label for="name">Метка для быстрого поиска диалога</label>
+                        <!--
                         <ng-select #tagsInput [multiple]="true"
                             [active]="activetags"
-                          [items]="tags"
-                          (data)="refreshValue($event)"
+                            [items]="tags"
+                            (data)="refreshValue($event)"
                           (selected)="selectedTag($event)"
                           (removed)="removedTag($event)"
                           (typed)="searchTags($event)"
                           placeholder="Поиск среди существующих меток"></ng-select>
+                        -->
+
+                        <tags [active]="dialogue.tags" [items]="tags" 
+                            (typed)="searchTags($event)" 
+                            (selected)="selectedTag($event)"
+                            (delete)="deleteTag($event)"></tags>
+
 
                     </div>
 
-                    <div class="form-group">
-                        <label>Доступно для всех?</label>
-                        <div style="width: 40px;height: 40px;border: 2px solid darkslateblue;border-radius: 4px;cursor: pointer;" (click)="publishDialog(item)">
-                            <div *ngIf="dialogue.is_published" style="width: 28px;height: 28px;background-color: darkslateblue;border-radius: 4px;margin:4px;"></div>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
+                    <div class="form-group" style="margin-top: 80px;">
                         <p *ngIf="description_is_changed" style="margin: 0;font-size: 10px;">Изменения пока еще не сохранены</p>
                         <!--
                         <button type="submit" class="btn btn-primary" [disabled]="!frm.valid || loading" (click)="saveDescription()">Сохранить</button>-->
 
                         <button type="button" class="btn btn-danger pull-right" (click)="showConfirmDeleteDialog()">Удалить диалог</button>
                     </div>
-
-                    <div class="form-group">
-                        <button type="button" class="btn btn-success" [routerLink]="['/mydialogues']">Перейти к моим диалогам</button>
-                    </div>
-
                 </form>
             </div>
 
@@ -112,6 +109,27 @@
 
             <div *ngIf="mode=='scenario'" class="tab-content" style="padding: 20px;">
                 <scenario [dialogue]="dialogue"></scenario>
+            </div>
+
+            <div *ngIf="mode=='publish'" class="tab-content" style="padding: 20px; max-width: 600px;">
+                <form #frm="ngForm" (ngSubmit)="submit()">
+                    <div class="form-group">
+                        <label>Доступно для всех?</label>
+                        <div style="width: 40px;height: 40px;border: 2px solid darkslateblue;border-radius: 4px;cursor: pointer;" (click)="publishDialog(item)">
+                            <div *ngIf="dialogue.is_published" style="width: 28px;height: 28px;background-color: darkslateblue;border-radius: 4px;margin:4px;"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <p *ngIf="description_is_changed" style="margin: 0;font-size: 10px;">Изменения пока еще не сохранены</p>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+        <div class="panel-footer">
+            <div class="form-group">
+                <button type="button" class="btn btn-success" [routerLink]="['/mydialogues']">Перейти к моим диалогам</button>
             </div>
         </div>
     </div>

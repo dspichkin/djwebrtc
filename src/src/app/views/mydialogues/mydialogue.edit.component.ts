@@ -25,7 +25,7 @@ import { AppSettings } from '../../app.settings';
 })
 
 export class MyDialogueEditViewComponent implements OnInit {
-    @ViewChild('tagsInput') recipientsInput: SelectComponent;
+    //@ViewChild('tagsInput') recipientsInput: SelectComponent;
 
     user;
     public mode:string = 'base'; //base, scenario
@@ -71,7 +71,7 @@ export class MyDialogueEditViewComponent implements OnInit {
 
 
     public tags:Array<string> = [];
-    private activetags = [];
+    //private activetags = [];
     private value:any = [];
 
     
@@ -187,12 +187,12 @@ export class MyDialogueEditViewComponent implements OnInit {
             this._getDialog();
         };
 
-        this.activetags = [];
-        if (this.dialogue.tags && this.dialogue.tags.length > 0) {
-            for (let i = 0; i < this.dialogue.tags.length; i++) {
-                this.activetags.push(this.dialogue.tags[i].name);
-            }
-        }
+        //this.activetags = [];
+        //if (this.dialogue.tags && this.dialogue.tags.length > 0) {
+        //    for (let i = 0; i < this.dialogue.tags.length; i++) {
+        //        this.activetags.push(this.dialogue.tags[i].name);
+        //    }
+        //}
     }    
 
     private getCookie(name: string): string {
@@ -298,22 +298,24 @@ export class MyDialogueEditViewComponent implements OnInit {
 
 
     public selectedTag(value:any):void {
-        //let params = {
-        //    tags:  this.tags
-        //}
-        
+        let params = {
+            tag_name:  value
+        }
+        this.dialogsService.addTagToDialogs(this.dialogue.id, params).subscribe((data) => {
+            this.loading = false;
+            this._getDialog();
+        });
     }
  
-    public removedTag(value:any):void {
-        //let params = {
-        //    tags:  this.tags
-        //}
-        //this.dialogsService.saveMyDialogs(this.dialogue.id, params).subscribe((data) => {
-        //    this.loading = false;
-        //});
+    public deleteTag(value:any):void {
+        this.dialogsService.deleteTagFromDialogs(this.dialogue.id, value.id).subscribe((data) => {
+            this.loading = false;
+            this._getDialog();
+        });
     }
 
     public searchTags(value:any) {
+        //console.log('value',value)
         this.dialogsService.getTags(value).subscribe((res)=>{
             this.tags = res;
         })
