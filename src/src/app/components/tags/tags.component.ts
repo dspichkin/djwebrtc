@@ -234,7 +234,7 @@ export class TagsComponent implements OnInit {
         //}
     }
 
-    protected matchClick(e:any):void {
+    public matchClick(e:any):void {
         this.inputMode = !this.inputMode;
         if (this.inputMode === true) {
           this.focusToInput();
@@ -258,7 +258,7 @@ export class TagsComponent implements OnInit {
         this.itemsOpened = false;
     }
 
-    private focusToInput(value:string = ''):void {
+    public focusToInput(value:string = ''):void {
         setTimeout(() => {
             let el = this.element.nativeElement.querySelector('div.ui-select-container > input');
             if (el) {
@@ -285,7 +285,7 @@ export class TagsComponent implements OnInit {
         this.items = [];
     }
 
-    protected  mainClick(event:any):void {
+    public  mainClick(event:any):void {
         if (this.inputMode === true) {
             return;
         }
