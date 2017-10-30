@@ -114,7 +114,7 @@ def make_backup(request):
                      '--exclude=auth.Permission',
                      '--exclude=admin.logentry',
                      '--exclude=sessions.session',
-                     '--indent 4', stdout=f)
+                     stdout=f)
 
     response = HttpResponse(FileWrapper(file(file_distination, 'r')), content_type='application/json')
     response['Content-Disposition'] = 'attachment; filename=backup.json'
