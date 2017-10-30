@@ -210,14 +210,14 @@ def mydialog(request, dialog_pk):
         if personages is not None:
             mydialog.scenario['personages'] = personages
             is_dirty = True
-        if tags is not None:
-            for t in mydialog.tags.through.objects.filter(dialog=mydialog):
-                t.delete()
-            for tag in tags:
-                t = Tag.objects.filter(name=tag).first()
-                if t:
-                    mydialog.tags.add(t)
-            is_dirty = True
+        #if tags is not None:
+        #    for t in mydialog.tags.through.objects.filter(dialog=mydialog):
+        #        t.delete()
+        #    for tag in tags:
+        #        t = Tag.objects.filter(name=tag).first()
+        #        if t:
+        #            mydialog.tags.add(t)
+        #    is_dirty = True
 
         if is_dirty:
             mydialog.save()
@@ -333,7 +333,7 @@ def delete_dialog_tag(request, dialog_pk, tag_pk):
     if request.method == 'DELETE':
         dialog = get_object_or_404(Dialog, pk=dialog_pk)
         tag = get_object_or_404(Tag, pk=tag_pk)
-        dtag = dialog.tags.through.objects.filter(tag=tag).first()
+        dtag = dialog.tags.through.objects.filter(dialog=dialog, tag=tag).first()
         if dtag:
             dtag.delete()
             count = Dialog.objects.filter(tags__name=tag.name).count()
@@ -351,7 +351,7 @@ def dialog_tag(request, dialog_pk):
         if tag_name:
             dialog = get_object_or_404(Dialog, pk=dialog_pk)
             print "dialog.tags.through.objects.filter(tag__name=tag_name.lower()).exists()", dialog.tags.through.objects.filter(tag__name=tag_name.lower()).exists()
-            if not dialog.tags.through.objects.filter(tag__name=tag_name.lower()).exists():
+            if not dialog.tags.through.objects.filter(dialog=mydialog, tag__name=tag_name.lower()).exists():
                 tag, create = Tag.objects.get_or_create(name=tag_name.lower())
                 dialog.tags.add(tag)
                 dialog.save()
