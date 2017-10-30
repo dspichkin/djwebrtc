@@ -1364,11 +1364,13 @@ var ModeDialogMasterComponent = (function () {
         var self = this;
         if (self._checkLastMessageFromPupil) {
             if (self.webSocketService.ws.socket.readyState == 1) {
+                if (self.activedialog && self.activedialog.id) {
+                    self.webSocketService.sendCommand({
+                        command: "HEARBEAT_DIALOG_MASTER",
+                        target: self.activedialog.id
+                    });
+                }
                 //if (self.answeringCall && self.answeringCall.open) {
-                self.webSocketService.sendCommand({
-                    command: "HEARBEAT_DIALOG_MASTER",
-                    target: self.activedialog.id
-                });
                 //}
             }
         }
@@ -1665,11 +1667,13 @@ var ModeDialogPupilComponent = (function () {
         var self = this;
         if (self._checkLastMessageFromPupil) {
             if (self.webSocketService.ws.socket.readyState == 1) {
+                if (self.activedialog && self.activedialog.id) {
+                    self.webSocketService.sendCommand({
+                        command: "HEARBEAT_DIALOG_PUPIL",
+                        target: self.activedialog.id
+                    });
+                }
                 //if (self.callingCall && self.callingCall.open) {
-                self.webSocketService.sendCommand({
-                    command: "HEARBEAT_DIALOG_PUPIL",
-                    target: self.activedialog.id
-                });
                 //}
             }
         }
