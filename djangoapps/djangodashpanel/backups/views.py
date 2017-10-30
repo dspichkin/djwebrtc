@@ -113,7 +113,7 @@ def make_backup(request):
                      '--natural-foreign',
                      '--natural-primary',
                      '--exclude=contenttypes',
-                     #'--exclude=auth.Permission',
+                     '--exclude=auth.Permission',
                      '--exclude=admin.logentry',
                      '--exclude=sessions.session',
                      stdout=f)
