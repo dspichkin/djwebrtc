@@ -109,9 +109,11 @@ def make_backup(request):
     file_name = str(int(time.mktime(timezone.now().timetuple()))) + '.json'
     file_distination = os.path.join(TEMP_DIR, file_name)
     with open(file_distination, 'w') as f:
-        call_command('dumpdata', '--natural-primary',
+        call_command('dumpdata',
+                     '--natural-foreign',
+                     '--natural-primary',
                      '--exclude=contenttypes',
-                     '--exclude=auth.Permission',
+                     #'--exclude=auth.Permission',
                      '--exclude=admin.logentry',
                      '--exclude=sessions.session',
                      stdout=f)
