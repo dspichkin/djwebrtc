@@ -207,6 +207,10 @@ CELERYBEAT_SCHEDULE = {
     'prune-rooms': {
         'task': 'channels_presence.tasks.prune_rooms',
         'schedule': timedelta(seconds=600)
+    },
+    'clean-old-session': {
+        'task': 'channels_presence.tasks.clean_old_session',
+        'schedule': timedelta(seconds=600)
     }
 }
 

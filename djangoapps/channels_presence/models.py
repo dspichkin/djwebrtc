@@ -20,17 +20,13 @@ class PresenceManager(models.Manager):
         presense = Presence.objects.filter(channel_name=channel_name)
         if presense:
             presense.update(last_seen=now())
-        print "touch user", user
-
-        # elif channel_name:
-        #    room = Room.objects.filter(channel_name='Clients').first()
-            #if room:
-            #    if user and user.is_authenticated():
-            #        print "!!!!2", user
-            #        presense = Presence.objects.create(room=room, channel_name=channel_name, user=user)
-            #        presense.last_seen = now()
-            #        presense.save()
-        # self.filter(channel_name=channel_name).update(last_seen=now())
+        elif channel_name:
+            room = Room.objects.filter(channel_name='Clients').first()
+            if room:
+                if user and user.is_authenticated():
+                    presense = Presence.objects.create(room=room, channel_name=channel_name, user=user)
+                    presense.last_seen = now()
+                    presense.save()
 
     def leave_all(self, channel_name):
         for presence in self.select_related('room').filter(channel_name=channel_name):
