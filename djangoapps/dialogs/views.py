@@ -353,6 +353,7 @@ def dialog_tag(request, dialog_pk):
             if not dialog.tags.through.objects.filter(tag__name=tag_name.lower()).exists():
                 tag, create = Tag.objects.get_or_create(name=tag_name.lower())
                 dialog.tags.add(tag)
+                dialog.save()
     return Response(status.HTTP_200_OK)
 
 
