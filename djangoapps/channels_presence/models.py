@@ -30,7 +30,6 @@ class PresenceManager(models.Manager):
                 else:
                     room = Room.objects.filter(channel_name='Clients').first()
                     if room:
-                        print "create new Presence"
                         presense = Presence.objects.create(
                             room=room,
                             channel_name=channel_name,
@@ -90,12 +89,27 @@ class Room(models.Model):
         return self.channel_name
 
     def add_presence(self, channel_name, user=None):
-        presence, created = Presence.objects.get_or_create(
+        presence = Presence.objects.filter(
             room=self,
             channel_name=channel_name,
             user=user if (user and user.is_authenticated()) else None
-        )
-        if created:
+        ).first()
+        if not presence:
+            if user and user.is_authenticated():
+                presence = Presence.objects.filter(
+                    room=self,
+                    user=user
+                ).first()
+                if presence:
+                    presence.channel_name = channel_name
+                    presence.last_seen = now()
+                    presence.save()
+
+        if not presence:
+            presence = Presence.objects.create(
+                room=self,
+                channel_name=channel_name
+            )
             Group(self.channel_name).add(channel_name)
             self.broadcast_changed(added=presence)
 
