@@ -350,7 +350,6 @@ def dialog_tag(request, dialog_pk):
         tag_name = data.get('tag_name')
         if tag_name:
             dialog = get_object_or_404(Dialog, pk=dialog_pk)
-            print "tag_name.lower()", tag_name.lower()
             print "dialog.tags.through.objects.filter(tag__name=tag_name.lower()).exists()", dialog.tags.through.objects.filter(tag__name=tag_name.lower()).exists()
             if not dialog.tags.through.objects.filter(tag__name=tag_name.lower()).exists():
                 tag, create = Tag.objects.get_or_create(name=tag_name.lower())
