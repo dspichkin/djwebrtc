@@ -6,7 +6,7 @@ import urlparse
 from pprint import pprint
 
 from channels import Group
-from channels.auth import channel_session_user_from_http
+from channels.auth import channel_session_user_from_http, channel_session_user
 # from channels.sessions import channel_session
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
@@ -32,7 +32,7 @@ def ws_connect(message):
     Group("call-client-%s" % client_id).add(message.reply_channel)
 
 
-@channel_session_user_from_http
+@channel_session_user
 def ws_message(message):
     print "message", dir(message)
     Presence.objects.touch(message.reply_channel.name, user=message.user)
@@ -410,7 +410,7 @@ def ws_message(message):
                     })
 
 
-@channel_session_user_from_http
+@channel_session_user
 def ws_disconnect(message):
     # print "XXXXX ws_disconnect"
     if 'client_id' in message.channel_session:
