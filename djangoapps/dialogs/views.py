@@ -4,6 +4,8 @@ import os
 from django.conf import settings
 from django.shortcuts import get_object_or_404
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.core.urlresolvers import reverse
+from django.db.models import Q
 
 from rest_framework.response import Response
 from rest_framework import status
@@ -38,8 +40,14 @@ def get_dialogs(request):
 
     paginate_by = 15
     page = request.GET.get('page', 1)
+    search = request.GET.get('search')
+    level = request.GET.get('level')
 
     queryset = Dialog.objects.filter(is_published=True)
+    if search:
+        queryset = queryset.filter(Q(tags__name__icontains=search) | Q(name=search))
+    if level:
+        queryset = queryset.filter(level=level)
 
     paginator = Paginator(queryset, paginate_by)
     try:
@@ -49,7 +57,7 @@ def get_dialogs(request):
     except EmptyPage:
         rdata = paginator.page(1)
     count = paginator.count
-    previous = None if not rdata.has_previous() else rdata.previous_page_number()
+    previouspage = None if not rdata.has_previous() else rdata.previous_page_number()
     nextpage = None if not rdata.has_next() else rdata.next_page_number()
 
     dialogs = []
@@ -59,13 +67,16 @@ def get_dialogs(request):
         if activedialog:
             data["checked"] = True
         dialogs.append(data)
-    print "dialog", dialogs[0]
     result = {
         'count': count,
-        'previous': previous,
-        'next': nextpage,
         'dialogs': dialogs
     }
+    if previouspage:
+        result['previous_url'] = reverse('get_dialogs') + '?page=%s' % previouspage
+        result['previous'] = previouspage
+    if nextpage:
+        result['next'] = nextpage
+        result['next_url'] = reverse('get_dialogs') + '?page=%s' % nextpage
 
     return Response(result, status.HTTP_200_OK)
 

@@ -1,6 +1,8 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { Http, HttpModule, XSRFStrategy, CookieXSRFStrategy } from '@angular/http';
+import { HttpClientModule, HttpClient } from '@angular/common/http';
+
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { RouterModule } from "@angular/router";
@@ -40,6 +42,7 @@ export const AppCSRF = {
         AppviewsModule,
         LayoutsModule,
         HttpModule,
+        HttpClientModule,
         BrowserAnimationsModule,
         RouterModule.forRoot(ROUTES, { useHash: true }),
         JWBootstrapSwitchModule,

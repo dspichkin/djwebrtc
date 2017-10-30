@@ -3,7 +3,37 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h4>Выберите диалог</h4>
-                
+                <div style="display: inline-block;">
+                    <div>
+                        <div class="col-md-4">
+                             <tags [items]="tags"
+                                (typed)="searchTags($event)" 
+                                (selected)="selectedTag($event)"
+                                [clearaftereintput]="false"
+                                [textbtn]="'Искать'"
+                                [placeholder]="''"
+                                [disabled]="show_inputed_dialogs"
+                                (onChangeSearchValue)="onChangeSearchValue($event)"
+                                ></tags>
+                        </div>
+                        <div class="col-md-4">
+                            <select name="frm_level" id="level" class="form-control" [(ngModel)]="selectedDialogLevel"(change)="changeLevel()" [disabled]="show_inputed_dialogs">
+                                <option *ngFor="let level of levels" [value]="level.id">{{level.title}}</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4" style="text-align: right;">
+                            <p>Всего найдено {{count}} диалогов</p>
+                        </div>
+                    </div>
+
+
+                    <div style="clear: both;display: flex;">
+                        <div style="width: 20px;height: 20px;border: 2px solid darkcyan;border-radius: 4px;cursor: pointer;margin: 10px;" (click)="showInputDialogs()">
+                            <div *ngIf="show_inputed_dialogs" style="width: 8px;height: 8px;background-color: darkcyan;border-radius: 4px;margin:4px;"></div>
+                        </div>
+                        <p style="margin: 10px 0 0 0;cursor: pointer;" (click)="showInputDialogs()">Показать только диалоги по которым я принимаю звонки</p>
+                    </div>
+                </div>
             </div>
             <div class="panel-body" style="position: relative;">
                 <!-- Loading -->
@@ -17,6 +47,7 @@
                 <!-- END Loading -->
 
                 <div class="row" style="margin: 20px 0;display: flex;flex-wrap: wrap;"> 
+                    <h4 *ngIf="dialogs.length == 0" style="text-align: center;width: 100%;">Диалоги не найдены</h4>
                     <div class="col-sm-6 col-md-4" *ngFor="let item of dialogs"> 
                         <div class="thumbnail"> 
                             <div class="" style="width: 100%;position: relative;">
@@ -75,6 +106,15 @@
                             </div> 
                         </div> 
                     </div> 
+                    <div style="width: 100%; text-align: center;">
+                        <nav>
+                            
+                            <ul class="pager">
+                                <li *ngIf="previous"><button type="button" class="btn btn-default" (click)="prevPage()">Предыдущие</button></li>
+                                <li *ngIf="next"><button type="button" class="btn btn-default" (click)="nextPage()">Следующие</button></li>
+                            </ul>
+                        </nav>
+                    </div>
                 </div>
 
             </div>

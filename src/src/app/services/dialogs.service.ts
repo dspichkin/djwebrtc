@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Subject, BehaviorSubject, Observable } from 'rxjs';
-import { Http, Response, RequestOptions } from '@angular/http';
+import { Http, Response, RequestOptions, Headers } from '@angular/http';
+import { HttpParams, HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import 'rxjs/add/operator/catch';
 
@@ -17,7 +18,8 @@ export class DialogsService {
 
     constructor(
         private _http: Http,
-        private router: Router) {}
+        private router: Router,
+        private httpClient: HttpClient) {}
 
     
     getDialog(dialogue_id): Observable<Dialog[]> {
@@ -28,11 +30,14 @@ export class DialogsService {
             .catch(this.handleError.bind(this));
     }
 
-    getDialogs(): Observable<Dialog[]> {
-        return this._http.get(AppSettings.URL_DIALOGS)
-            .map((response: Response) => {
-                return response.json();
-            })
+    getDialogs(_params): Observable<any> {
+        let url = AppSettings.URL_DIALOGS;
+        let data = _params || {};
+        let params: HttpParams = new HttpParams();
+        for (let key in data) {
+            params = params.set(key, data[key]);
+        }
+        return this.httpClient.get(url, {params})
             .catch(this.handleError.bind(this));
     }
 

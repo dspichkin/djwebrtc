@@ -95,6 +95,10 @@ class Dialog(models.Model):
 
         ordering = ('-created_at', 'name', )
 
+    def get_tags(self):
+        return ", ".join([x.name for x in self.tags.all()])
+
+    get_tags.short_description = u'Метки'
 
 """
 @receiver(post_save, sender=Dialog)

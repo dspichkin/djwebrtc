@@ -130,14 +130,19 @@ export class TagsComponent implements OnInit {
     @Output() public typed:EventEmitter<any> = new EventEmitter();
     @Output() public opened:EventEmitter<any> = new EventEmitter();
     @Output() public delete:EventEmitter<any> = new EventEmitter();
+    @Output() public onChangeSearchValue = new EventEmitter<any>();
 
     
     @Input() public items: Array<any> = [];
     @Input() public active: Array<any> = [];
+    @Input() public textbtn: string = "Добавить";
+    @Input() public placeholder: string = "Введите метку";
+    @Input() public clearaftereintput: boolean = true;
+    @Input() public disabled: boolean = false;
     
 
-    //protected onChange:any = Function.prototype;
 
+    
 
 
     constructor(element:ElementRef
@@ -156,7 +161,7 @@ export class TagsComponent implements OnInit {
     }
 
     public inputEvent(e:any):void {
-        
+        console.log(e)
         // esc
         if (e.keyCode === 27) {
             this.hideOptions();
@@ -184,6 +189,7 @@ export class TagsComponent implements OnInit {
             e.preventDefault();
             return;
         }
+
     }
 
 
@@ -194,12 +200,12 @@ export class TagsComponent implements OnInit {
     public change() {
         let value = this.inputedValue;
         let cleanInputValue = this.removeSpecials(value); 
-
         if (cleanInputValue) {
             this.doEvent('typed', cleanInputValue);
         } else {
             this.hideOptions();
         }
+        this.onChangeSearchValue.emit(cleanInputValue);
     }
 
     isNumber (text) {
@@ -237,24 +243,21 @@ export class TagsComponent implements OnInit {
     public matchClick(e:any):void {
         this.inputMode = !this.inputMode;
         if (this.inputMode === true) {
-          this.focusToInput();
-          this.open();
+            this.focusToInput();
+            this.open();
         }
     }
 
 
     private open():void {
-        
         if (this.items.length > 0) {
             this.behavior.first();
         }
-        //this.optionsOpened = true;
         this.itemsOpened = true;
     }
 
 
     public clickedOutside():void {
-        //this.optionsOpened = false;
         this.itemsOpened = false;
     }
 
@@ -277,15 +280,16 @@ export class TagsComponent implements OnInit {
     }
 
     private hideOptions():void {
-        this.inputMode = false;
-        //this.optionsOpened = false;
-        this.itemsOpened = false;
-        this.inputedValue = "";
-        this.activeOption = "";
         this.items = [];
+        if (this.clearaftereintput) {
+            this.itemsOpened = false;
+            this.inputMode = false;
+            this.inputedValue = "";
+            this.activeOption = "";
+        }
     }
 
-    public  mainClick(event:any):void {
+    public mainClick(event:any):void {
         if (this.inputMode === true) {
             return;
         }
@@ -301,6 +305,7 @@ export class TagsComponent implements OnInit {
     }
 
     private selectActiveMatch():void {
+
         this.selectMatch(this.activeOption);
     }
 
@@ -312,6 +317,8 @@ export class TagsComponent implements OnInit {
         if (!value) {
             return
         }
+        this.inputedValue = value;
+        this.onChangeSearchValue.emit(value);
         this.doEvent('selected', value);
         this.hideOptions();
         this.focusToInput('');
@@ -354,7 +361,6 @@ export class Behavior {
     }
 
     private getActiveIndex(optionsMap:Map<string, number> = void 0):number {
-        //let ai = this.actor.options.indexOf(this.actor.activeOption);
         let ai = this.actor.items.indexOf(this.actor.activeOption);
         if (ai < 0 && optionsMap !== void 0) {
             ai = optionsMap.get(this.actor.activeOption.id);
@@ -371,50 +377,34 @@ export class GenericBehavior extends Behavior implements OptionsBehavior {
     }
 
     public first():void {
-        //this.actor.activeOption = this.actor.options[0];
         this.actor.activeOption = this.actor.items[0];
         super.ensureHighlightVisible();
     }
     public last():void {
-        //this.actor.activeOption = this.actor.options[this.actor.options.length - 1];
         this.actor.activeOption = this.actor.items[this.actor.items.length - 1];
         super.ensureHighlightVisible();
     }
 
     public prev():void {
-        //let index = this.actor.options.indexOf(this.actor.activeOption);
         let index = this.actor.items.indexOf(this.actor.activeOption);
         this.actor.activeOption = this.actor
-        //    .options[index - 1 < 0 ? this.actor.options.length - 1 : index - 1];
               .items[index - 1 < 0 ? this.actor.items.length - 1 : index - 1];
         this.actor.inputedValue = this.actor.activeOption;
         super.ensureHighlightVisible();
     }
 
     public next():void {
-        //let index = this.actor.options.indexOf(this.actor.activeOption);
         let index = this.actor.items.indexOf(this.actor.activeOption);
 
         this.actor.activeOption = this.actor
-            //.options[index + 1 > this.actor.options.length - 1 ? 0 : index + 1];
             .items[index + 1 > this.actor.items.length - 1 ? 0 : index + 1];
         this.actor.inputedValue = this.actor.activeOption;
-         //console.log('this.actor.inputedValue', this.actor.inputedValue)
         super.ensureHighlightVisible();
     }
 
     public filter(query:RegExp):void {
-        //let options = this.actor.itemObjects;
         let options = this.actor.items;
-            //.filter((option:any) => {
-            //    return stripTags(option.text).match(query) &&
-            //        (this.actor.multiple === false ||
-            //        (this.actor.multiple === true && this.actor.active.map((item:SelectItem) => item.id).indexOf(option.id) < 0));
-            // });
-        //this.actor.options = options;
-        //if (this.actor.options.length > 0) {
         if (this.actor.items.length > 0) {
-            //this.actor.activeOption = this.actor.options[0];
             this.actor.activeOption = this.actor.items[0];
             super.ensureHighlightVisible();
         }
