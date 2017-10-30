@@ -111,7 +111,19 @@ export class NgCytoscapeComponent implements OnChanges {
     }
 
     public ngOnChanges(): any {
-        //this.render();
+        try {
+            this.render();
+        } catch(e) {
+            let self = this;
+            setTimeout(function() {
+                try {
+                    self.render();
+                } catch(e) {
+                
+                }
+            }, 1000);
+        }
+        
     }
 
     public render() {
