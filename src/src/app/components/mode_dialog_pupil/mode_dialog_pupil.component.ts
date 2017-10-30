@@ -294,12 +294,12 @@ export class ModeDialogPupilComponent implements OnInit, OnDestroy {
         let self = this;
         if (self._checkLastMessageFromPupil) {
             if (self.webSocketService.ws.socket.readyState == 1) {
-                if (self.callingCall && self.callingCall.open) {
+                //if (self.callingCall && self.callingCall.open) {
                     self.webSocketService.sendCommand({
                         command: "HEARBEAT_DIALOG_PUPIL",
                         target: self.activedialog.id
                     })
-                }
+                //}
             }
         }
         if (self._timeout) {
