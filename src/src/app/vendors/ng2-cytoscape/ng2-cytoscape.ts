@@ -33,9 +33,6 @@ export class NgCytoscapeComponent implements OnChanges {
 
     public constructor(private el: ElementRef) {
 
-
-        
-
         this.layout = this.layout || {
             /*
             fit: true,
@@ -111,23 +108,11 @@ export class NgCytoscapeComponent implements OnChanges {
     }
 
     public ngOnChanges(): any {
-        try {
-            this.render();
-        } catch(e) {
-            console.log(e);
-            let self = this;
-            setTimeout(function() {
-                try {
-                    self.render();
-                } catch(e) {
-                     console.log(e);
-                }
-            }, 1000);
-        }
-        
+        this.render();
     }
 
     public render() {
+
         this.cy = cytoscape({
             container: jQuery(this.el.nativeElement),
             layout: this.layout,
