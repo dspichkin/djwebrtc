@@ -88,7 +88,7 @@ class Room(models.Model):
 
     def __str__(self):
         return self.channel_name
-
+    """
     def add_presence(self, channel_name, user=None):
         presence, created = Presence.objects.get_or_create(
             room=self,
@@ -98,6 +98,31 @@ class Room(models.Model):
         if created:
             Group(self.channel_name).add(channel_name)
             self.broadcast_changed(added=presence)
+    """
+    def add_presence(self, channel_name, user=None):
+        presence = Presence.objects.filter(
+            room=self,
+            channel_name=channel_name,
+            user=user if (user and user.is_authenticated()) else None
+        ).first()
+        if not presence:
+            if user and user.is_authenticated():
+                presence = Presence.objects.filter(
+                    room=self,
+                    user=user
+                ).first()
+                if presence:
+                    presence.channel_name = channel_name
+                    presence.last_seen = now()
+                    presence.save()
+
+        if not presence:
+            presence = Presence.objects.create(
+                room=self,
+                channel_name=channel_name
+            )
+        Group(self.channel_name).add(channel_name)
+        self.broadcast_changed(added=presence)
 
     def remove_presence(self, channel_name=None, presence=None):
         if presence is None:
