@@ -148,7 +148,7 @@ class ActiveDialog(models.Model):
         verbose_name = 'Запущенный диалог'
         verbose_name_plural = 'Запущенные диалоги'
 
-        ordering = ('created_at', )
+        ordering = ('-dialog__created_at', )
 
     def __str__(self):
         return u"%s - %s" % (self.dialog, self.master)
