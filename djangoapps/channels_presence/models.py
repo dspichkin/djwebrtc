@@ -100,27 +100,29 @@ class Room(models.Model):
             self.broadcast_changed(added=presence)
     """
     def add_presence(self, channel_name, user=None):
+        if not user or not user.is_authenticated():
+            return
+
         presence = Presence.objects.filter(
             room=self,
             channel_name=channel_name,
-            user=user if (user and user.is_authenticated()) else None
+            user=user
         ).first()
         if not presence:
-            if user and user.is_authenticated():
-                presence = Presence.objects.filter(
-                    room=self,
-                    user=user
-                ).first()
-                if presence:
-                    presence.channel_name = channel_name
-                    presence.last_seen = now()
-                    presence.save()
-
-        if not presence:
-            presence = Presence.objects.create(
+            presence = Presence.objects.filter(
                 room=self,
-                channel_name=channel_name
-            )
+                user=user
+            ).first()
+            if presence:
+                presence.channel_name = channel_name
+                presence.last_seen = now()
+                presence.save()
+            else:
+                presence = Presence.objects.create(
+                    room=self,
+                    channel_name=channel_name,
+                    user=user
+                )
         Group(self.channel_name).add(channel_name)
         self.broadcast_changed(added=presence)
 
