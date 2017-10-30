@@ -26,7 +26,9 @@ class PresenceManager(models.Manager):
             if user and user.is_authenticated():
                 presense = Presence.objects.filter(user=user).first()
                 if presense:
-                    presense.update(last_seen=now(), channel_name=channel_name)
+                    presense.last_seen = now()
+                    presense.channel_name = channel_name
+                    presense.save()
                 else:
                     room = Room.objects.filter(channel_name='Clients').first()
                     if room:
