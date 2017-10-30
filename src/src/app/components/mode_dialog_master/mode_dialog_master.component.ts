@@ -25,8 +25,16 @@ export class ModeDialogMasterComponent implements OnInit, OnDestroy {
     @ViewChild('remoteVideo') private remoteVideo: ElementRef;
     @ViewChild('localVideo') private localVideo: ElementRef;
 
-    private userMedia = <any>navigator;
+    public personageName;
+    public status_activedialog = 'starting'; //starting, run, stop
+    public status_voice_connection = 'starting'; //starting, run, stop, error_connection
+    public connection_error_message;
+    // продолжительность диалога
+    public during_conversation;
     public activedialog;
+
+
+    private userMedia = <any>navigator;
     private peer;
     private peerid;
     private user;
@@ -34,16 +42,9 @@ export class ModeDialogMasterComponent implements OnInit, OnDestroy {
     private localStream;
     private answeringCall;
     private last_message_from_pupil;
-    public status_activedialog = 'starting'; //starting, run, stop
-    public status_voice_connection = 'starting'; //starting, run, stop, error_connection
+    private webSocketSubscription;
     private last_hearbeat_from_pupil;
-    public connection_error_message;
-
-    // продолжительность диалога
-    public during_conversation;
     private start_converstion;
-
-    public personageName;
     private _timeout;
 
     constructor(
@@ -66,7 +67,7 @@ export class ModeDialogMasterComponent implements OnInit, OnDestroy {
         })
 
         
-        self.webSocketService.message.subscribe((data) => {
+        self.webSocketSubscription = self.webSocketService.message.subscribe((data) => {
             let message = JSON.parse(data);
             if (message.command == "DIALOG_STOP") {
                 self._closeVoiceConnection();
@@ -76,7 +77,6 @@ export class ModeDialogMasterComponent implements OnInit, OnDestroy {
                 self._closeVoiceConnection();
             }
             if (message.command == "HEARBEAT_DIALOG_PUPIL") {
-                console.log('self.status_activedialog', self.status_activedialog)
                 self.status_activedialog = 'run';
                 self.last_hearbeat_from_pupil = new Date();
                 let value = Math.round((self.last_hearbeat_from_pupil - self.start_converstion) / 1000);
@@ -108,7 +108,7 @@ export class ModeDialogMasterComponent implements OnInit, OnDestroy {
 
 
     ngOnDestroy() {
-        this.webSocketService.message.unsubscribe();
+        this.webSocketSubscription.unsubscribe();
     }
 
     private callPhone() {

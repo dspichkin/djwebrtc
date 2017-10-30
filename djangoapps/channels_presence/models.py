@@ -32,7 +32,6 @@ class PresenceManager(models.Manager):
                 else:
                     room = Room.objects.filter(channel_name='Clients').first()
                     if room:
-                        print "create new Presence"
                         presense = Presence.objects.create(
                             room=room,
                             channel_name=channel_name,

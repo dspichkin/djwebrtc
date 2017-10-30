@@ -20,18 +20,18 @@ export class ActiveDialogsViewComponent implements OnInit  {
 
     public user;
     public activedialogs = [];
-
     public callingdialog;
-
     public activedialog = null;
     public activedialog_id = null;
     public loading = true;
     public calling_time;
-    
     public reject_call_from = null;
 
     private _CALLING_TIME_INTERVAL = 3000;
     private _intervalid;
+    private webSocketSubscription;
+    private webSocketSubscriptionError;
+    private statusSubscription
 
     public constructor(
         private statusService: StatusService,
@@ -43,15 +43,14 @@ export class ActiveDialogsViewComponent implements OnInit  {
 
     public ngOnInit():any {
         let self = this;
-        self.statusService.ready.subscribe((date)=> {
+        self.statusSubscription = self.statusService.ready.subscribe((date)=> {
             self.user = this.statusService.user;
-            //console.log('self.user', self.user)
             if (!self.user) {
                 return;
             }
         });
 
-        self.webSocketService.message.subscribe((data) => {
+        self.webSocketSubscription = self.webSocketService.message.subscribe((data) => {
             let message = JSON.parse(data);
             //console.log('message', message)
             if (message.command == "UPDATE") {
@@ -62,7 +61,7 @@ export class ActiveDialogsViewComponent implements OnInit  {
 
         })
 
-        self.webSocketService.error.subscribe((err) => {
+        self.webSocketSubscriptionError = self.webSocketService.error.subscribe((err) => {
             console.log("Error", err)
         })
 
@@ -75,6 +74,9 @@ export class ActiveDialogsViewComponent implements OnInit  {
     
 
     public ngOnDestroy():any {
+        this.webSocketSubscription.unsubscribe();
+        this.statusSubscription.unsubscribe();
+        this.webSocketSubscriptionError.unsubscribe();
     }
     
 

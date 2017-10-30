@@ -27,24 +27,23 @@ export class ModeDialogPupilComponent implements OnInit, OnDestroy {
     @ViewChild('localVideo') private localVideo: ElementRef;
 
     public userMedia = <any>navigator;
-    activedialog;
-    peer;
-    peerid;
-    user;
+    public activedialog;
+    public user;
     public loading: boolean = false;
-    private localStream;
-    private callingCall;
+    // продолжительность диалога
+    public during_conversation;
+    public connection_error_message = "";
+    public personageName;
     public status_activedialog = 'starting';
     public status_voice_connection = 'starting'; //starting, run, stop, error_connection
     public last_hearbeat_from_master;
-    // продолжительность диалога
-    public during_conversation;
+
+    private peer;
+    private peerid;
+    private localStream;
+    private callingCall;
     private start_converstion;
-    public connection_error_message = "";
-
-    public personageName;
-
-
+    private webSocketSubscription;
     private _timeout;
 
     constructor(
@@ -64,7 +63,7 @@ export class ModeDialogPupilComponent implements OnInit, OnDestroy {
             self._startPeer();
         })
 
-        self.webSocketService.message.subscribe((data) => {
+        self.webSocketSubscription = self.webSocketService.message.subscribe((data) => {
             let message = JSON.parse(data);
             if (message.command == "DIALOG_STOP") {
                 self._closeVoiceConnection();
@@ -108,7 +107,7 @@ export class ModeDialogPupilComponent implements OnInit, OnDestroy {
 
 
     ngOnDestroy() {
-        this.webSocketService.message.unsubscribe();
+        this.webSocketSubscription.unsubscribe();
     }
 
     private callPhone() {
