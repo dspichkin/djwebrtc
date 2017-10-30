@@ -34,7 +34,7 @@ def ws_connect(message):
 
 @channel_session_user_from_http
 def ws_message(message):
-
+    print "message", dir(message)
     Presence.objects.touch(message.reply_channel.name, user=message.user)
 
     data = message.content.get('text')
