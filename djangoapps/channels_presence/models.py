@@ -20,6 +20,8 @@ class PresenceManager(models.Manager):
         presense = Presence.objects.filter(channel_name=channel_name)
         if presense:
             presense.update(last_seen=now())
+        print "user", user
+        
         # elif channel_name:
         #    room = Room.objects.filter(channel_name='Clients').first()
             #if room:
