@@ -76,6 +76,7 @@ export class ModeDialogMasterComponent implements OnInit, OnDestroy {
                 self._closeVoiceConnection();
             }
             if (message.command == "HEARBEAT_DIALOG_PUPIL") {
+                console.log('self.status_activedialog', self.status_activedialog)
                 self.status_activedialog = 'run';
                 self.last_hearbeat_from_pupil = new Date();
                 let value = Math.round((self.last_hearbeat_from_pupil - self.start_converstion) / 1000);
@@ -308,7 +309,7 @@ export class ModeDialogMasterComponent implements OnInit, OnDestroy {
         }
         self._timeout = setTimeout(function() {
             self._runHearbeatPupil();
-        }, 4000);
+        }, 10000);
     }
 
     private _checkLastMessageFromPupil(): boolean {

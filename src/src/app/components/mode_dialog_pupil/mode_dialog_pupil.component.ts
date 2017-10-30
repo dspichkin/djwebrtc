@@ -310,7 +310,7 @@ export class ModeDialogPupilComponent implements OnInit, OnDestroy {
         }
         self._timeout = setTimeout(function() {
             self._runHearbeatPupil();
-        }, 4000);
+        }, 10000);
     }
 
     private _checkLastMessageFromPupil(): boolean {
