@@ -1207,6 +1207,7 @@ var ModeDialogMasterComponent = (function () {
     ModeDialogMasterComponent.prototype.ngOnChanges = function (changes) {
     };
     ModeDialogMasterComponent.prototype.ngOnDestroy = function () {
+        this.webSocketService.message.unsubscribe();
     };
     ModeDialogMasterComponent.prototype.callPhone = function () {
         this._startPeer();
@@ -1510,6 +1511,7 @@ var ModeDialogPupilComponent = (function () {
     ModeDialogPupilComponent.prototype.ngOnChanges = function (changes) {
     };
     ModeDialogPupilComponent.prototype.ngOnDestroy = function () {
+        this.webSocketService.message.unsubscribe();
     };
     ModeDialogPupilComponent.prototype.callPhone = function () {
         this._startPeer();

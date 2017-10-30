@@ -107,6 +107,7 @@ export class ModeDialogMasterComponent implements OnInit, OnDestroy {
 
 
     ngOnDestroy() {
+        this.webSocketService.message.unsubscribe();
     }
 
     private callPhone() {
