@@ -105,7 +105,6 @@ def get_activedialogs(request):
         status=DIALOG_WAIT,
         master__is_accept_call=True,
         master__last_dialog_active=False,
-        pupil__last_dialog_active=False,
             ).exclude(master=request.user):
         if Presence.objects.filter(user=activedialig.master).exists():
             activedialogs.append(ActiveDialogSerializer(activedialig).data)
