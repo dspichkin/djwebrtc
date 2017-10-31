@@ -330,8 +330,7 @@ def ws_message(message):
             target = data.get("target")
             if target:
                 ac = get_object_or_404(ActiveDialog, pk=target)
-                # ac.status = DIALOG_STOP
-                # ac.save()
+                ac.stop_dialog()
 
                 Group("call-client-%s" % ac.master.key_id).send({
                     'text': json.dumps({
@@ -349,8 +348,7 @@ def ws_message(message):
             target = data.get("target")
             if target:
                 ac = get_object_or_404(ActiveDialog, pk=target)
-                # ac.status = DIALOG_STOP
-                # ac.save()
+                ac.stop_dialog()
 
                 Group("call-client-%s" % ac.master.key_id).send({
                     'text': json.dumps({
