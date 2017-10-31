@@ -3452,17 +3452,15 @@ var StatusService = (function () {
     };
     StatusService.prototype.runHearbeat = function () {
         var self = this;
-        if (this.webSocketService.ws.socket.readyState == 1) {
-            self.webSocketService.sendCommand({
-                type: "HEARBEAT",
-            });
-            if (self.runhearbeatid) {
-                clearTimeout(self.runhearbeatid);
-            }
-            self.runhearbeatid = setTimeout(function () {
-                self.runHearbeat();
-            }, 20000);
+        self.webSocketService.sendCommand({
+            type: "HEARBEAT",
+        });
+        if (self.runhearbeatid) {
+            clearTimeout(self.runhearbeatid);
         }
+        self.runhearbeatid = setTimeout(function () {
+            self.runHearbeat();
+        }, 20000);
     };
     StatusService.prototype.runCheckLogin = function () {
         var self = this;
@@ -3589,13 +3587,15 @@ var WebSocketService = (function () {
     };
     WebSocketService.prototype.sendCommand = function (command) {
         console.log('command', command);
-        this.ws.send(command).subscribe(function (msg) {
-            //console.log("msg", msg);
-        }, function (error) {
-            //console.log("error", error);
-        }, function () {
-            //console.log("complete");
-        });
+        if (this.ws.socket.readyState == 1) {
+            this.ws.send(command).subscribe(function (msg) {
+                //console.log("msg", msg);
+            }, function (error) {
+                //console.log("error", error);
+            }, function () {
+                //console.log("complete");
+            });
+        }
     };
     return WebSocketService;
 }());
@@ -3900,7 +3900,6 @@ var ActiveDialogsViewComponent = (function () {
             var message = JSON.parse(data);
             //console.log('message', message)
             if (message.command == "UPDATE") {
-                console.log("UPDATE");
                 if (message.target == "activedialogs") {
                     self._updateActiveDialogs();
                 }
@@ -5321,6 +5320,7 @@ var ModeWaitPupilViewComponent = (function () {
             if (message.command == 'CALLING') {
                 if (message.target == 'TAKEPHONE') {
                     if (!self.activedialog) {
+                        console.log('_getActiveDialog', self.activedialog);
                         self._getActiveDialog(message.activedialogid, function () {
                             self._calling(message);
                         });

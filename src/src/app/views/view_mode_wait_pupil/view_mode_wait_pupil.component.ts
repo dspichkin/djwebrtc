@@ -50,6 +50,7 @@ export class ModeWaitPupilViewComponent implements OnInit, OnDestroy {
             if (message.command == 'CALLING') {
                 if (message.target == 'TAKEPHONE') {
                     if (!self.activedialog) {
+                        console.log('_getActiveDialog', self.activedialog)
                         self._getActiveDialog(message.activedialogid, function() {
                             self._calling(message);
                         })

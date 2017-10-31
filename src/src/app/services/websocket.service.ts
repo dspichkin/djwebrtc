@@ -54,17 +54,19 @@ export class WebSocketService {
 
     public sendCommand(command) {
         console.log('command', command)
-        this.ws.send(command).subscribe(
-            (msg)=> {
-                //console.log("msg", msg);
-            },
-            (error)=> {
-                //console.log("error", error);
-            },
-            ()=> {
-                //console.log("complete");
-            }
-        );
+        if (this.ws.socket.readyState == 1) {
+            this.ws.send(command).subscribe(
+                (msg)=> {
+                    //console.log("msg", msg);
+                },
+                (error)=> {
+                    //console.log("error", error);
+                },
+                ()=> {
+                    //console.log("complete");
+                }
+            );
+        }
     }
 
 

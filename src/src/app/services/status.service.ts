@@ -66,18 +66,17 @@ export class StatusService {
 
     runHearbeat(): void {
         let self = this;
-        if (this.webSocketService.ws.socket.readyState == 1) {
-            self.webSocketService.sendCommand({
-                type: "HEARBEAT",
-            })
-            if (self.runhearbeatid) {
-                clearTimeout(self.runhearbeatid);
-            }
-
-            self.runhearbeatid = setTimeout(function() {
-                self.runHearbeat();
-            }, 20000);
+        
+        self.webSocketService.sendCommand({
+            type: "HEARBEAT",
+        })
+        if (self.runhearbeatid) {
+            clearTimeout(self.runhearbeatid);
         }
+
+        self.runhearbeatid = setTimeout(function() {
+            self.runHearbeat();
+        }, 20000);
     }
 
     runCheckLogin(): void {
