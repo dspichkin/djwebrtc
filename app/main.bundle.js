@@ -1197,6 +1197,7 @@ var ModeDialogMasterComponent = (function () {
                 }
             }
             if (message.command == "DIALOG_STOP_ERROR") {
+                console.log('get DIALOG_STOP_ERROR');
                 self.status_activedialog = 'error_connection';
             }
             if (message.command == "DIALOG_VOICE_CONNECTION_ERROR") {
