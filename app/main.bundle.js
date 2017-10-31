@@ -1206,6 +1206,7 @@ var ModeDialogMasterComponent = (function () {
             }
         });
         self.status_activedialog = 'run';
+        self._run_hearbeat_pupil = true;
         self._runHearbeatPupil();
     };
     ModeDialogMasterComponent.prototype.ngAfterViewInit = function () {
@@ -1368,24 +1369,22 @@ var ModeDialogMasterComponent = (function () {
     };
     ModeDialogMasterComponent.prototype._runHearbeatPupil = function () {
         var self = this;
-        if (self._checkLastMessageFromPupil) {
-            if (self.webSocketService.ws.socket.readyState == 1) {
-                if (self.activedialog && self.activedialog.id) {
-                    self.webSocketService.sendCommand({
-                        command: "HEARBEAT_DIALOG_MASTER",
-                        target: self.activedialog.id
-                    });
-                }
-                //if (self.answeringCall && self.answeringCall.open) {
-                //}
+        if (self._checkLastMessageFromPupil && self._run_hearbeat_pupil) {
+            if (self.activedialog && self.activedialog.id) {
+                self.webSocketService.sendCommand({
+                    command: "HEARBEAT_DIALOG_MASTER",
+                    target: self.activedialog.id
+                });
             }
         }
         if (self._timeout) {
             clearTimeout(self._timeout);
         }
-        self._timeout = setTimeout(function () {
-            self._runHearbeatPupil();
-        }, 10000);
+        if (self._run_hearbeat_pupil) {
+            self._timeout = setTimeout(function () {
+                self._runHearbeatPupil();
+            }, 10000);
+        }
     };
     ModeDialogMasterComponent.prototype._checkLastMessageFromPupil = function () {
         var self = this;
@@ -1480,6 +1479,7 @@ var ModeDialogPupilComponent = (function () {
     }
     ModeDialogPupilComponent.prototype.ngOnInit = function () {
         var self = this;
+        self._run_hearbeat_pupil = true;
         self.user = self.statusService.user;
         self.dialogsService.getActiveDialog(self.activedialogid).subscribe(function (data) {
             self.activedialog = data;
@@ -1519,6 +1519,7 @@ var ModeDialogPupilComponent = (function () {
     ModeDialogPupilComponent.prototype.ngOnChanges = function (changes) {
     };
     ModeDialogPupilComponent.prototype.ngOnDestroy = function () {
+        this._run_hearbeat_pupil = false;
         this.webSocketSubscription.unsubscribe();
     };
     ModeDialogPupilComponent.prototype.callPhone = function () {
@@ -1671,24 +1672,22 @@ var ModeDialogPupilComponent = (function () {
     };
     ModeDialogPupilComponent.prototype._runHearbeatPupil = function () {
         var self = this;
-        if (self._checkLastMessageFromPupil) {
-            if (self.webSocketService.ws.socket.readyState == 1) {
-                if (self.activedialog && self.activedialog.id) {
-                    self.webSocketService.sendCommand({
-                        command: "HEARBEAT_DIALOG_PUPIL",
-                        target: self.activedialog.id
-                    });
-                }
-                //if (self.callingCall && self.callingCall.open) {
-                //}
+        if (self._checkLastMessageFromPupil && this._run_hearbeat_pupil) {
+            if (self.activedialog && self.activedialog.id) {
+                self.webSocketService.sendCommand({
+                    command: "HEARBEAT_DIALOG_PUPIL",
+                    target: self.activedialog.id
+                });
             }
         }
         if (self._timeout) {
             clearTimeout(self._timeout);
         }
-        self._timeout = setTimeout(function () {
-            self._runHearbeatPupil();
-        }, 10000);
+        if (this._run_hearbeat_pupil) {
+            self._timeout = setTimeout(function () {
+                self._runHearbeatPupil();
+            }, 10000);
+        }
     };
     ModeDialogPupilComponent.prototype._checkLastMessageFromPupil = function () {
         var self = this;
@@ -1705,7 +1704,6 @@ var ModeDialogPupilComponent = (function () {
     ModeDialogPupilComponent.prototype.handlerChangeActiveDialog = function (activedialog) {
         this.activedialog = activedialog;
         this.activedialogid = activedialog.id;
-        //console.log('this.activedialog ', this.activedialog )
     };
     return ModeDialogPupilComponent;
 }());

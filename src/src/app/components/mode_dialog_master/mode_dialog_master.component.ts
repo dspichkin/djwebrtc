@@ -46,6 +46,7 @@ export class ModeDialogMasterComponent implements OnInit, OnDestroy {
     private last_hearbeat_from_pupil;
     private start_converstion;
     private _timeout;
+    private _run_hearbeat_pupil: boolean;
 
     constructor(
         private statusService: StatusService,
@@ -58,6 +59,7 @@ export class ModeDialogMasterComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         let self = this;
+
         self.user = self.statusService.user;
         console.log('getActiveDialog')
         self.dialogsService.getActiveDialog(self.activedialogid).subscribe((data) => {
@@ -97,6 +99,7 @@ export class ModeDialogMasterComponent implements OnInit, OnDestroy {
         });
 
         self.status_activedialog = 'run';
+        self._run_hearbeat_pupil = true;
         self._runHearbeatPupil();
         
         
@@ -294,25 +297,22 @@ export class ModeDialogMasterComponent implements OnInit, OnDestroy {
 
     private _runHearbeatPupil(): void {
         let self = this;
-        if (self._checkLastMessageFromPupil) {
-            if (self.webSocketService.ws.socket.readyState == 1) {
-                if (self.activedialog && self.activedialog.id) {
-                    self.webSocketService.sendCommand({
-                        command: "HEARBEAT_DIALOG_MASTER",
-                        target: self.activedialog.id
-                    })
-                }
-                //if (self.answeringCall && self.answeringCall.open) {
-                    
-                //}
+        if (self._checkLastMessageFromPupil && self._run_hearbeat_pupil) {
+            if (self.activedialog && self.activedialog.id) {
+                self.webSocketService.sendCommand({
+                    command: "HEARBEAT_DIALOG_MASTER",
+                    target: self.activedialog.id
+                })
             }
         }
         if (self._timeout) {
             clearTimeout(self._timeout);
         }
-        self._timeout = setTimeout(function() {
-            self._runHearbeatPupil();
-        }, 10000);
+        if (self._run_hearbeat_pupil) {
+            self._timeout = setTimeout(function() {
+                self._runHearbeatPupil();
+            }, 10000);
+        }
     }
 
     private _checkLastMessageFromPupil(): boolean {
