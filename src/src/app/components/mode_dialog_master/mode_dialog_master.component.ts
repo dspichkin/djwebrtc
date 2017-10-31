@@ -59,6 +59,7 @@ export class ModeDialogMasterComponent implements OnInit, OnDestroy {
     ngOnInit() {
         let self = this;
         self.user = self.statusService.user;
+        console.log('getActiveDialog')
         self.dialogsService.getActiveDialog(self.activedialogid).subscribe((data) => {
             self.activedialog = data;
             self._getPersonageName();
@@ -70,6 +71,7 @@ export class ModeDialogMasterComponent implements OnInit, OnDestroy {
         self.webSocketSubscription = self.webSocketService.message.subscribe((data) => {
             let message = JSON.parse(data);
             if (message.command == "DIALOG_STOP") {
+                console.log('get DIALOG_STOP')
                 self._closeVoiceConnection();
                 self.status_activedialog = 'stop';
             }

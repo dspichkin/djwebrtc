@@ -16,8 +16,6 @@ import { AppSettings } from '../../app.settings';
 })
 
 export class ModeWaitPupilViewComponent implements OnInit, OnDestroy {
-    //@Input() public  user;
-    //@Input() public activedialog;
     @Output() public stopwaitingdialog = new EventEmitter();
     @Output() public acceptcall = new EventEmitter();
 
@@ -29,7 +27,8 @@ export class ModeWaitPupilViewComponent implements OnInit, OnDestroy {
     public audio_enable: boolean = true;
     private audio;
     private loading: boolean = false;
-
+    private webSocketSubscription;
+    private statusSubscription;
 
     constructor(
         private webSocketService: WebSocketService,
@@ -46,7 +45,7 @@ export class ModeWaitPupilViewComponent implements OnInit, OnDestroy {
         self.createAudioIncoming();
         self._playCallingAudo();
 
-        self.webSocketService.message.subscribe((data) => {
+        self.webSocketSubscription = self.webSocketService.message.subscribe((data) => {
             let message = JSON.parse(data);
             if (message.command == 'CALLING') {
                 if (message.target == 'TAKEPHONE') {
@@ -89,14 +88,11 @@ export class ModeWaitPupilViewComponent implements OnInit, OnDestroy {
             }
         })
 
-        self.statusService.ready.subscribe((date)=> {
+        self.statusSubscription = self.statusService.ready.subscribe((date)=> {
             self.user = self.statusService.user;
             if (!self.user) {
                 return;
             }
-            //if (self.statusService.activedialog) {
-            //    self.activedialog = self.statusService.activedialog;
-            //}
         });
 
         if (!self.user) {
@@ -114,6 +110,7 @@ export class ModeWaitPupilViewComponent implements OnInit, OnDestroy {
 
 
     private _getActiveDialog(activedialogid, callback) {
+        console.log('wait pupil _getActiveDialog')
         let self = this;
         this.dialogsService.getActiveDialog(activedialogid)
             .subscribe((activedialog) => {
@@ -135,6 +132,8 @@ export class ModeWaitPupilViewComponent implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         this.ref.detach(); 
+        this.webSocketSubscription.unsubscribe();
+        this.statusSubscription.unsubscribe();
         //this.statusService.ready.unsubscribe();
     }
 
