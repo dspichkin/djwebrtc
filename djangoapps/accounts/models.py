@@ -79,12 +79,14 @@ class Account(AbstractUser):
         return AccountSerializer(self).data
 
     def start_dialog(self):
-        self.last_dialog_started = timezone.now()
+        print "accounts start_dialog"
+        self.last_dialog_started = timezone.localtime(timezone.now())
         self.last_dialog_active = True
         self.save()
 
     def stop_dialog(self):
-        self.last_dialog_end = timezone.now()
+        print "accounts stop_dialog"
+        self.last_dialog_end = timezone.localtime(timezone.now())
         self.last_dialog_active = False
         self.save()
 

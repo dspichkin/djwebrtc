@@ -182,7 +182,7 @@ class ActiveDialog(models.Model):
         self.running_at = timezone.now()
         self.chat_messages = []
         self.save()
-
+        print "!!!! run_dialog"
         self.master.start_dialog()
         self.pupil.start_dialog()
         return True
