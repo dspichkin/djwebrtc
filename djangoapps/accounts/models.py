@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 import os
+import hashlib
+import random
+
 from uuid import uuid4
 from datetime import timedelta
 
@@ -10,8 +13,10 @@ from django.utils.deconstruct import deconstructible
 from django.utils.crypto import get_random_string
 from django.conf import settings
 from django.utils import timezone
-from django.template import loader, RequestContext
+from django.template import loader
 from django.core.mail import EmailMultiAlternatives
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 
 @deconstructible
@@ -53,7 +58,7 @@ class Account(AbstractUser):
 
     created_at = models.DateTimeField(u'дата создания', auto_now_add=True)
     key = models.CharField(u'ключ', max_length=50, unique=True, blank=True, null=True)
-    key_id = models.CharField(u'идетификатор ключа', max_length=50, unique=True, blank=True, null=True)
+    key_id = models.CharField(u'идентификатор ключа', max_length=50, unique=True, blank=True, null=True)
     avatar = models.ImageField(u'аватар', upload_to=path_and_rename_account_avatar, blank=True, null=True)
     level = models.SmallIntegerField(u'уровень знания', choices=ENGLISH_LEVELS, default=10)
     is_confirm = models.BooleanField(u'email подтвержден', default=False)
@@ -106,6 +111,48 @@ class Account(AbstractUser):
 
     def get_age(self):
         return timezone.now().year - self.birth_year
+
+    def get_new_key(self):
+        """
+        геренируем новый код для приглашения других пользователей
+        """
+        def genereate():
+            numbers = [
+                '1', '2', '3', '4', '5', '6', '7', '8', '9']
+
+            num = ""
+            for i in xrange(0, 15):
+                num += random.choice(numbers)
+            e = Account.objects.filter(key=num).exists()
+            if e:
+                genereate()
+            return num
+
+        self.key = genereate()
+        self.save()
+
+    def check_key_id(self):
+        hash_object = hashlib.sha256(self.key)
+        hex_dig = hash_object.hexdigest()[:15]
+        if self.key_id != hex_dig:
+            return False
+        return True
+
+
+@receiver(post_save, sender=Account)
+def account_post_save(sender, instance, created, **kwargs):
+    if not instance.key:
+        post_save.disconnect(account_post_save, sender=sender)
+        instance.get_new_key()
+        post_save.connect(account_post_save, sender=sender)
+
+    if instance.check_key_id() is False:
+        post_save.disconnect(account_post_save, sender=sender)
+        hash_object = hashlib.sha256(instance.key)
+        hex_dig = hash_object.hexdigest()[:15]
+        instance.key_id = hex_dig
+        instance.save()
+        post_save.connect(account_post_save, sender=sender)
 
 
 @python_2_unicode_compatible
