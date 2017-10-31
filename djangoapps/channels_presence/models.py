@@ -17,7 +17,6 @@ from channels_presence.signals import presence_changed
 
 class PresenceManager(models.Manager):
     def touch(self, channel_name, user=None):
-        print "user", user
         presense = Presence.objects.filter(channel_name=channel_name)
         if presense:
             presense.update(last_seen=now())
