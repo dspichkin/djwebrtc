@@ -184,14 +184,13 @@ class ActiveDialog(models.Model):
         self.save()
         self.master.start_dialog()
         self.pupil.start_dialog()
-        print "run_dialog !!!!"
         self.broadcast_changed(update=True)
         return True
 
     def stop_dialog(self):
         self.master.stop_dialog()
         self.pupil.stop_dialog()
-        self.broadcast_changed()
+        self.broadcast_changed(update=True)
 
 
 @receiver(post_save, sender=ActiveDialog)
@@ -208,7 +207,6 @@ def activedialog_post_delete(sender, instance, **kwargs):
 @receiver(activedialog_changed)
 def handle_activedialog_changed(sender, room, update, removed, **kwargs):
     if update:
-        print "SEND UPDATE 1"
         broadcast_to_room({
             "command": "UPDATE",
             "target": "activedialogs"
@@ -216,7 +214,6 @@ def handle_activedialog_changed(sender, room, update, removed, **kwargs):
 
 
 def broadcast_to_room(message):
-    print "SEND UPDATE 2"
     Group("Clients").send({
         'text': json.dumps(message)
     })
