@@ -294,7 +294,7 @@ def ws_message(message):
             })
 
         if command == 'DIALOG_STOP_ERROR':
-            print "get DIALOG_STOP_ERROR"
+            print "get DIALOG_STOP_ERROR", data
             target = data.get("target")
             ac = get_object_or_404(ActiveDialog, pk=target)
             ac.master.stop_dialog()
