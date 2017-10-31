@@ -42,12 +42,26 @@ def get_dialogs(request):
     page = request.GET.get('page', 1)
     search = request.GET.get('search')
     level = request.GET.get('level')
+    inputed = request.GET.get('inputed')
 
     queryset = Dialog.objects.filter(is_published=True)
-    if search:
-        queryset = queryset.filter(Q(tags__name__icontains=search) | Q(name=search))
-    if level:
-        queryset = queryset.filter(level=level)
+
+    if inputed:
+        arraylist = []
+        for dialog in queryset:
+            activedialog = ActiveDialog.objects.filter(master=request.user, dialog=dialog, status=DIALOG_WAIT)
+            if activedialog:
+                arraylist.append(dialog)
+        queryset = arraylist
+    else:
+        if search:
+            queryset = queryset.filter(Q(tags__name__icontains=search) | Q(name=search))
+        if level:
+            try:
+                if int(level) > 0:
+                    queryset = queryset.filter(level=level)
+            except:
+                pass
 
     paginator = Paginator(queryset, paginate_by)
     try:

@@ -196,6 +196,7 @@ export class DialogsViewComponent implements OnInit  {
 
     public showInputDialogs() {
         this.show_inputed_dialogs = !this.show_inputed_dialogs;
+        this._getDialogs();
     }
 
     public searchTags(value:any) {
