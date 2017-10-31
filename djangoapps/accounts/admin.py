@@ -10,7 +10,7 @@ from accounts.models import (Account, ConfirmationCode)
 
 class UserAdmin(BaseUserAdmin):
     list_display = (
-        'id', 'fio', 'email', 'is_superuser',)
+        'id', 'fio', 'email', 'is_superuser', 'last_dialog_active')
     list_filter = ('is_superuser',)
 
     fieldsets = (

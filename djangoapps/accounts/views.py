@@ -14,6 +14,8 @@ from django.core.mail import EmailMessage
 from django.conf import settings
 from dialogs.utils import IsConfirmAndIsAuthenticated
 
+from channels_presence.models import Presence
+
 from accounts.serializers import AccountSerializer
 from accounts.models import Account, ConfirmationCode
 
@@ -316,9 +318,10 @@ def lendingmessage(request):
 @api_view(['GET'])
 def check_user(request):
     if request.user.is_authenticated():
-        return Response({
-            "status": True
-            }, status.HTTP_200_OK)
+        if Presence.objects.filter(user=request.user).exists():
+            return Response({
+                "status": True
+                }, status.HTTP_200_OK)
     return Response({
         "status": False
         }, status.HTTP_200_OK)

@@ -238,6 +238,8 @@ def ws_message(message):
             target = data.get("target")
             if target:
                 ac = get_object_or_404(ActiveDialog, pk=target)
+                # ac.status = DIALOG_WAIT
+                # ac.save()
                 ac.master.stop_dialog()
                 ac.pupil.stop_dialog()
                 Group("call-client-%s" % ac.master.key_id).send({
