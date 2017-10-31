@@ -276,8 +276,6 @@ def ws_message(message):
             target = data.get("target")
             message = data.get("message")
             ac = get_object_or_404(ActiveDialog, pk=target)
-            ac.master.stop_dialog()
-            ac.pupil.stop_dialog()
             Group("call-client-%s" % ac.master.key_id).send({
                 'text': json.dumps({
                     'command': "DIALOG_VOICE_CONNECTION_ERROR",
