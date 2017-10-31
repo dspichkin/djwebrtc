@@ -18,8 +18,82 @@
                     </div>
                 </div>
                 <!-- END Loading -->
-
-
+                <div class="row" style="margin: 20px 0;display: flex;flex-wrap: wrap;"> 
+                    <div class="list-group">
+                        <div href="#" class="list-group-item" *ngFor="let item of activedialogs">
+                            <h4 class="list-group-item-heading">{{item.user.fio}}</h4>
+                            <div class="list-group-item-text">
+                                <div class="media">
+                                    <div class="media-left">
+                                        <div *ngIf="item.avatar" 
+                                            [ngStyle]="{'background-image': 'url(' + item.avatar + ')'}"
+                                            class="media-object" style="
+                                                height: 50px; 
+                                                width: 50px; 
+                                                background-size: contain;
+                                                border-radius: 50%;
+                                                margin: 10px;">
+                                        </div>
+                                        <div *ngIf="!item.avatar" 
+                                            class="media-object" style="
+                                                height: 50px; 
+                                                width: 50px; 
+                                                margin: 10px;">
+                                                <i class="fa fa-user-circle-o" aria-hidden="true" style="font-size: 50px;"></i>
+                                        </div>
+                                    </div>
+                                    <div class="media-body">
+                                        <div style="display: flex;">
+                                            <div style="flex: 1">
+                                                <div>
+                                                    <p *ngIf="item.user.age" style="margin: 0;font-size: 12px;">Возраст: {{item.user.age}}</p>
+                                                    <p *ngIf="item.user.sex" style="margin: 0;font-size: 12px;">Пол: {{item.user.sex}}</p>
+                                                </div>
+                                                <div class="badge" style="background-color: indianred;">
+                                                    {{item.user.level_display}}
+                                                </div>
+                                            </div>
+                                            <div style="flex: 2">
+                                                <div *ngIf="item.activedialogs.length == 0">
+                                                    <p style="margin:0;">Пользователь онлайн, но не выбрал ни один диалог для звонка</p>
+                                                    <p style="margin:0;color: brown;" *ngIf="item.user.skypeid">Попробуйте связаться с ним через скайп. Его скайп id: <span style="font-weight: 800;">{{item.user.skypeid}}</span></p>
+                                                </div>
+                                                <p *ngIf="item.activedialogs.length > 0">
+                                                    В ожидание звонка {{item.activedialogs.length}} диалога
+                                                </p>
+                                                <button *ngIf="item.activedialogs.length > 0" class="btn btn-info btn-xs" (click)="item.show_activedialogs = !item.show_activedialogs">Раскрыть</button>
+                                                <div *ngIf="item.show_activedialogs" class="list-group" style="margin-top: 10px;">
+                                                    <div *ngFor="let ad of item.activedialogs" class="list-group-item" style="display: flex;">
+                                                        <div>
+                                                            <button type="button" class="btn btn-warning btn-xs" style="margin: 10px;" (click)="callDialog(ad)">Позвонить</button>
+                                                        </div>
+                                                        <div style="display: flex;">
+                                                            <div class="thumbnail" style="">
+                                                                <div *ngIf="!ad.dialog.background_image" style="height: 50px; width: 50px; display: block;"></div>
+                                                                <div *ngIf="ad.dialog.background_image" 
+                                                                    [ngStyle]="{'background-image': 'url(' + ad.dialog.background_image + ')'}"
+                                                                    style="
+                                                                        height: 50px; 
+                                                                        width: 50px; 
+                                                                        background-size: cover;
+                                                                        display: block;"></div>
+                                                            </div>
+                                                            <div style="margin-left: 10px;">
+                                                                <p style="margin:0; font-weight: 800;">{{ad.dialog.name}}</p>
+                                                                <p style="margin: 0;font-size: 12px;">{{ad.dialog.description}}</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--
                 <div class="row" style="margin: 20px 0;display: flex;flex-wrap: wrap;"> 
                     <div *ngIf="activedialogs.length == 0">
                         <h4 style="text-align: center;">Пока еще нет ни одного диалога в режиме ожидания ученика</h4>
@@ -94,7 +168,7 @@
                     </div> 
                 </div>
 
-
+                -->
             </div>
         </div>
         

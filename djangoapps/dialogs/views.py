@@ -14,12 +14,13 @@ from rest_framework.decorators import api_view, permission_classes
 
 from channels_presence.models import Presence
 
+from accounts.models import Account
 from accounts.serializers import AccountSerializer
 # from dialogs.signals import activedialog_changed
 from dialogs.models import (
     Dialog, ActiveDialog, DIALOG_STOP, DIALOG_WAIT, Tag)
 from dialogs.serializers import (
-    DialogSerializer, ActiveDialogSerializer,
+    DialogSerializer, ActiveDialogSerializer, ActiveDialogShortSerializer,
     TagSerializer)
 from dialogs.utils import IsConfirmAndIsAuthenticated
 
@@ -100,6 +101,29 @@ def get_dialogs(request):
 def get_activedialogs(request):
     request.user.check_activity()
 
+    users = []
+    for user in Account.objects.filter(is_accept_call=True, last_dialog_active=False).exclude(pk=request.user.pk):
+        activedialogs = []
+        for activedialig in ActiveDialog.objects.filter(
+                status=DIALOG_WAIT, master=user, dialog__is_published=True):
+            if Presence.objects.filter(user=activedialig.master).exists():
+                activedialogs.append(
+                    ActiveDialogShortSerializer(activedialig).data
+                )
+        users.append({
+            "user": {
+                "fio": user.fio(),
+                "skypeid": user.skypeid,
+                "avatar": user.get_avatar_url(),
+                "key_id": user.key_id,
+                "level_display": user.get_level_display(),
+                "age": user.get_age(),
+                "sex": user.get_sex_display()
+            },
+            "show_activedialogs": False,
+            "activedialogs": activedialogs
+        })
+    """
     activedialogs = []
     for activedialig in ActiveDialog.objects.filter(
         status=DIALOG_WAIT,
@@ -108,8 +132,9 @@ def get_activedialogs(request):
             ).exclude(master=request.user):
         if Presence.objects.filter(user=activedialig.master).exists():
             activedialogs.append(ActiveDialogSerializer(activedialig).data)
+    """
 
-    return Response(activedialogs, status.HTTP_200_OK)
+    return Response(users, status.HTTP_200_OK)
 
 
 @api_view(['GET'])

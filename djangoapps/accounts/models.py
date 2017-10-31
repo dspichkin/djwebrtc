@@ -46,6 +46,11 @@ class Account(AbstractUser):
         (60, u'Proficiency'),
     )
 
+    TYPE_SEX = (
+        (1, u'Мужской'),
+        (2, u'Женский')
+    )
+
     created_at = models.DateTimeField(u'дата создания', auto_now_add=True)
     key = models.CharField(u'ключ', max_length=50, unique=True, blank=True, null=True)
     key_id = models.CharField(u'идетификатор ключа', max_length=50, unique=True, blank=True, null=True)
@@ -58,6 +63,9 @@ class Account(AbstractUser):
     last_dialog_started = models.DateTimeField(u'дата старта последнего диалога', blank=True, null=True)
     last_dialog_end = models.DateTimeField(u'дата окончания последнего диалога', blank=True, null=True)
     last_dialog_active = models.BooleanField(u'в процессе диалога', default=False)
+
+    birth_year = models.SmallIntegerField(u'год рождения')
+    sex = models.SmallIntegerField(u'пол', choices=TYPE_SEX)
 
     class Meta(AbstractUser.Meta):
         verbose_name = u'Пользователь'
@@ -95,6 +103,9 @@ class Account(AbstractUser):
     def get_avatar_url(self):
         if self.avatar and self.avatar.url:
             return self.avatar.url
+
+    def get_age(self):
+        return timezone.now().year - self.birth_year
 
 
 @python_2_unicode_compatible
