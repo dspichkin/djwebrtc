@@ -54,6 +54,7 @@ export class ActiveDialogsViewComponent implements OnInit  {
             let message = JSON.parse(data);
             //console.log('message', message)
             if (message.command == "UPDATE") {
+                console.log("UPDATE")
                 if (message.target == "activedialogs") {
                     self._updateActiveDialogs();
                 }

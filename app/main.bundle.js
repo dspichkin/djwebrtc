@@ -1524,7 +1524,6 @@ var ModeDialogPupilComponent = (function () {
     ModeDialogPupilComponent.prototype.ngOnChanges = function (changes) {
     };
     ModeDialogPupilComponent.prototype.ngOnDestroy = function () {
-        console.log('ngOnDestroy');
         if (this._timeout) {
             clearTimeout(this._timeout);
         }
@@ -3903,6 +3902,7 @@ var ActiveDialogsViewComponent = (function () {
             var message = JSON.parse(data);
             //console.log('message', message)
             if (message.command == "UPDATE") {
+                console.log("UPDATE");
                 if (message.target == "activedialogs") {
                     self._updateActiveDialogs();
                 }
