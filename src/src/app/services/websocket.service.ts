@@ -53,6 +53,7 @@ export class WebSocketService {
 
 
     public sendCommand(command) {
+        console.log('command', command)
         this.ws.send(command).subscribe(
             (msg)=> {
                 //console.log("msg", msg);

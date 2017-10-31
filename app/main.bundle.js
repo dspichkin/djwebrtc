@@ -3584,6 +3584,7 @@ var WebSocketService = (function () {
         });
     };
     WebSocketService.prototype.sendCommand = function (command) {
+        console.log('command', command);
         this.ws.send(command).subscribe(function (msg) {
             //console.log("msg", msg);
         }, function (error) {
