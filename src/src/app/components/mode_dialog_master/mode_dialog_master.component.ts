@@ -46,7 +46,7 @@ export class ModeDialogMasterComponent implements OnInit, OnDestroy {
     private last_hearbeat_from_pupil;
     private start_converstion;
     private _timeout;
-    private _run_hearbeat_pupil: boolean;
+    private _run_hearbeat_master: boolean;
 
     constructor(
         private statusService: StatusService,
@@ -61,7 +61,6 @@ export class ModeDialogMasterComponent implements OnInit, OnDestroy {
         let self = this;
 
         self.user = self.statusService.user;
-        console.log('getActiveDialog')
         self.dialogsService.getActiveDialog(self.activedialogid).subscribe((data) => {
             self.activedialog = data;
             self._getPersonageName();
@@ -91,6 +90,7 @@ export class ModeDialogMasterComponent implements OnInit, OnDestroy {
             if (message.command == "DIALOG_STOP_ERROR") {
                 console.log('get DIALOG_STOP_ERROR')
                 self.status_activedialog = 'error_connection';
+                self._run_hearbeat_master = false;
             }
             if (message.command == "DIALOG_VOICE_CONNECTION_ERROR") {
                 self.status_voice_connection = 'error_connection';
@@ -99,7 +99,7 @@ export class ModeDialogMasterComponent implements OnInit, OnDestroy {
         });
 
         self.status_activedialog = 'run';
-        self._run_hearbeat_pupil = true;
+        self._run_hearbeat_master = true;
         self._runHearbeatPupil();
         
         
@@ -114,6 +114,8 @@ export class ModeDialogMasterComponent implements OnInit, OnDestroy {
 
 
     ngOnDestroy() {
+        console.log('ngOnDestroy')
+        this._run_hearbeat_master = false;
         this.webSocketSubscription.unsubscribe();
     }
 
@@ -297,7 +299,7 @@ export class ModeDialogMasterComponent implements OnInit, OnDestroy {
 
     private _runHearbeatPupil(): void {
         let self = this;
-        if (self._checkLastMessageFromPupil && self._run_hearbeat_pupil) {
+        if (self._checkLastMessageFromPupil && self._run_hearbeat_master) {
             if (self.activedialog && self.activedialog.id) {
                 self.webSocketService.sendCommand({
                     command: "HEARBEAT_DIALOG_MASTER",
@@ -308,7 +310,7 @@ export class ModeDialogMasterComponent implements OnInit, OnDestroy {
         if (self._timeout) {
             clearTimeout(self._timeout);
         }
-        if (self._run_hearbeat_pupil) {
+        if (self._run_hearbeat_master) {
             self._timeout = setTimeout(function() {
                 self._runHearbeatPupil();
             }, 10000);

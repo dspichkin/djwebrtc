@@ -83,6 +83,7 @@ export class ModeDialogPupilComponent implements OnInit, OnDestroy {
                 }
             }
             if (message.command == "DIALOG_STOP_ERROR") {
+                self._run_hearbeat_pupil = false;
                 self.status_activedialog = 'error_connection';
             }
             if (message.command == "DIALOG_VOICE_CONNECTION_ERROR") {

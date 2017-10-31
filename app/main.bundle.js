@@ -1171,7 +1171,6 @@ var ModeDialogMasterComponent = (function () {
     ModeDialogMasterComponent.prototype.ngOnInit = function () {
         var self = this;
         self.user = self.statusService.user;
-        console.log('getActiveDialog');
         self.dialogsService.getActiveDialog(self.activedialogid).subscribe(function (data) {
             self.activedialog = data;
             self._getPersonageName();
@@ -1199,6 +1198,7 @@ var ModeDialogMasterComponent = (function () {
             if (message.command == "DIALOG_STOP_ERROR") {
                 console.log('get DIALOG_STOP_ERROR');
                 self.status_activedialog = 'error_connection';
+                self._run_hearbeat_master = false;
             }
             if (message.command == "DIALOG_VOICE_CONNECTION_ERROR") {
                 self.status_voice_connection = 'error_connection';
@@ -1206,7 +1206,7 @@ var ModeDialogMasterComponent = (function () {
             }
         });
         self.status_activedialog = 'run';
-        self._run_hearbeat_pupil = true;
+        self._run_hearbeat_master = true;
         self._runHearbeatPupil();
     };
     ModeDialogMasterComponent.prototype.ngAfterViewInit = function () {
@@ -1214,6 +1214,8 @@ var ModeDialogMasterComponent = (function () {
     ModeDialogMasterComponent.prototype.ngOnChanges = function (changes) {
     };
     ModeDialogMasterComponent.prototype.ngOnDestroy = function () {
+        console.log('ngOnDestroy');
+        this._run_hearbeat_master = false;
         this.webSocketSubscription.unsubscribe();
     };
     ModeDialogMasterComponent.prototype.callPhone = function () {
@@ -1369,7 +1371,7 @@ var ModeDialogMasterComponent = (function () {
     };
     ModeDialogMasterComponent.prototype._runHearbeatPupil = function () {
         var self = this;
-        if (self._checkLastMessageFromPupil && self._run_hearbeat_pupil) {
+        if (self._checkLastMessageFromPupil && self._run_hearbeat_master) {
             if (self.activedialog && self.activedialog.id) {
                 self.webSocketService.sendCommand({
                     command: "HEARBEAT_DIALOG_MASTER",
@@ -1380,7 +1382,7 @@ var ModeDialogMasterComponent = (function () {
         if (self._timeout) {
             clearTimeout(self._timeout);
         }
-        if (self._run_hearbeat_pupil) {
+        if (self._run_hearbeat_master) {
             self._timeout = setTimeout(function () {
                 self._runHearbeatPupil();
             }, 10000);
@@ -1441,305 +1443,10 @@ module.exports = " <div class=\"panel panel-default\">\n     <div class=\"panel-
 /***/ }),
 
 /***/ "../../../../../src/app/components/mode_dialog_pupil/mode_dialog_pupil.component.ts":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, __webpack_exports__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ModeDialogPupilComponent; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services_status_service__ = __webpack_require__("../../../../../src/app/services/status.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__app_settings__ = __webpack_require__("../../../../../src/app/app.settings.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__services_dialogs_service__ = __webpack_require__("../../../../../src/app/services/dialogs.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__services_websocket_service__ = __webpack_require__("../../../../../src/app/services/websocket.service.ts");
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
 
-
-
-
-
-var ModeDialogPupilComponent = (function () {
-    function ModeDialogPupilComponent(statusService, dialogsService, webSocketService) {
-        this.statusService = statusService;
-        this.dialogsService = dialogsService;
-        this.webSocketService = webSocketService;
-        this.stopdialog = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]();
-        this.userMedia = navigator;
-        this.loading = false;
-        this.connection_error_message = "";
-        this.status_activedialog = 'starting';
-        this.status_voice_connection = 'starting'; //starting, run, stop, error_connection
-        var self = this;
-    }
-    ModeDialogPupilComponent.prototype.ngOnInit = function () {
-        var self = this;
-        self._run_hearbeat_pupil = true;
-        self.user = self.statusService.user;
-        self.dialogsService.getActiveDialog(self.activedialogid).subscribe(function (data) {
-            self.activedialog = data;
-            self._getPersonageName();
-            self._startPeer();
-        });
-        self.webSocketSubscription = self.webSocketService.message.subscribe(function (data) {
-            var message = JSON.parse(data);
-            if (message.command == "DIALOG_STOP") {
-                self._closeVoiceConnection();
-                self.status_activedialog = 'stop';
-            }
-            if (message.command == "DIALOG_STOP_VOICE_CONNECTION") {
-                self._closeVoiceConnection();
-            }
-            if (message.command == "HEARBEAT_DIALOG_MASTER") {
-                self.status_activedialog = 'run';
-                self.last_hearbeat_from_master = new Date();
-                var value = Math.round((self.last_hearbeat_from_master - self.start_converstion) / 1000);
-                if (value) {
-                    self.during_conversation = value;
-                }
-            }
-            if (message.command == "DIALOG_STOP_ERROR") {
-                self.status_activedialog = 'error_connection';
-            }
-            if (message.command == "DIALOG_VOICE_CONNECTION_ERROR") {
-                self.status_voice_connection = 'error_connection';
-                self._closeVoiceConnection();
-            }
-        });
-        self.status_activedialog = 'run';
-        self._runHearbeatPupil();
-    };
-    ModeDialogPupilComponent.prototype.ngAfterViewInit = function () {
-    };
-    ModeDialogPupilComponent.prototype.ngOnChanges = function (changes) {
-    };
-    ModeDialogPupilComponent.prototype.ngOnDestroy = function () {
-        this._run_hearbeat_pupil = false;
-        this.webSocketSubscription.unsubscribe();
-    };
-    ModeDialogPupilComponent.prototype.callPhone = function () {
-        this._startPeer();
-    };
-    ModeDialogPupilComponent.prototype._getPersonageName = function () {
-        for (var i = 0; i < this.activedialog.dialog.scenario.personages.length; i++) {
-            if (this.activedialog.dialog.scenario.personages[i].role == 'pupil') {
-                this.personageName = this.activedialog.dialog.scenario.personages[i].name;
-            }
-        }
-    };
-    ModeDialogPupilComponent.prototype._startPeer = function () {
-        var self = this;
-        self.peer = new Peer({
-            socket: self.webSocketService,
-            host: __WEBPACK_IMPORTED_MODULE_2__app_settings__["a" /* AppSettings */].URL_WEBSOKET_PEER,
-            debug: 0,
-            secure: true,
-            port: 8000,
-            id: self.user.key_id
-        });
-        self.peer.on('open', function (id) {
-            //console.log('Peer: My peer ID is: ' + id);
-            self.peerid = id;
-            self._startLocalVideo(function () {
-                var call = self.peer.call(self.activedialog.master.key_id, self.localStream);
-                self._prepareCall(call);
-            });
-        });
-        self.peer.on('error', function (err) {
-            self.status_voice_connection = 'error_connection';
-            console.log("ERROR:", err.message);
-            var command = {
-                command: "DIALOG_VOICE_CONNECTION_ERROR",
-                target: self.activedialog.id,
-            };
-            if (err.message) {
-                self.connection_error_message = err.message;
-                command['message'] = err.message;
-            }
-            self.webSocketService.sendCommand(command);
-        });
-        // Receiving a call
-        self.peer.on('call', function (call) {
-            //console.log('Receiving a call')
-            // ответный звонок на вызов
-        });
-    };
-    ModeDialogPupilComponent.prototype._startLocalVideo = function (callback) {
-        var self = this;
-        if (!navigator.getUserMedia)
-            this.userMedia.getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
-        if (!navigator.cancelAnimationFrame)
-            this.userMedia.cancelAnimationFrame = navigator.webkitCancelAnimationFrame || navigator.mozCancelAnimationFrame;
-        if (!navigator.requestAnimationFrame)
-            this.userMedia.requestAnimationFrame = navigator.webkitRequestAnimationFrame || navigator.mozRequestAnimationFrame;
-        /*
-        {
-                    "mandatory": {
-                        "googEchoCancellation": "false",
-                        "googAutoGainControl": "false",
-                        "googNoiseSuppression": "false",
-                        "googHighpassFilter": "false"
-                    },
-                    "optional": []
-                }
-        */
-        this.userMedia.getUserMedia({
-            audio: true,
-            video: false
-        }, function (stream) {
-            self.localVideo.nativeElement.src = URL.createObjectURL(stream);
-            self.localStream = stream;
-            if (callback) {
-                callback();
-            }
-        }, function (error) {
-            console.log("ERROR getUserMedia: ", error);
-        });
-    };
-    ModeDialogPupilComponent.prototype._prepareCall = function (call) {
-        var self = this;
-        if (self.callingCall) {
-            self.callingCall.close();
-        }
-        self.callingCall = call;
-        call.on('stream', function (stream) {
-            //console.log('got stream')
-            // get call stream from remote host
-            self.remoteVideo.nativeElement.src = URL.createObjectURL(stream);
-            self.status_voice_connection = 'run';
-            self.start_converstion = new Date();
-        });
-        call.on('close', function () {
-            //console.log("CLOSE");
-            self._closeVoiceConnection();
-        });
-    };
-    ModeDialogPupilComponent.prototype._closeVoiceConnection = function () {
-        var self = this;
-        self.status_voice_connection = 'stop';
-        if (self.callingCall) {
-            self.callingCall.close();
-        }
-        if (self.localStream) {
-            self.localStream.getTracks().forEach(function (track) {
-                track.stop();
-            });
-            self.localStream.src = "";
-        }
-        if (self.remoteVideo.nativeElement.src) {
-            self.remoteVideo.nativeElement.src = "";
-        }
-    };
-    ModeDialogPupilComponent.prototype.exitDialog = function () {
-        this._closeVoiceConnection();
-        this.stopdialog.emit({
-            activedialogid: this.activedialogid,
-            type: 'pupil'
-        });
-    };
-    ModeDialogPupilComponent.prototype.hangPhone = function () {
-        var self = this;
-        this._closeVoiceConnection();
-        self.webSocketService.sendCommand({
-            command: "DIALOG_STOP_VOICE_CONNECTION",
-            target: self.activedialog.id,
-        });
-    };
-    ModeDialogPupilComponent.prototype.displayTime = function (_seconds) {
-        var hours = Math.floor(_seconds / 3600);
-        var minutes = Math.floor((_seconds - (hours * 3600)) / 60);
-        var seconds = _seconds - (hours * 3600) - (minutes * 60);
-        var time = "";
-        if (hours != 0) {
-            time = hours + ":";
-        }
-        if (minutes != 0 || time !== "") {
-            var sminutes = (minutes < 10 && time !== "") ? "0" + minutes : String(minutes);
-            time += sminutes + ":";
-        }
-        if (time === "") {
-            time = seconds + "сек";
-        }
-        else {
-            time += (seconds < 10) ? "0" + seconds : String(seconds);
-        }
-        return time;
-    };
-    ModeDialogPupilComponent.prototype._runHearbeatPupil = function () {
-        var self = this;
-        if (self._checkLastMessageFromPupil && this._run_hearbeat_pupil) {
-            if (self.activedialog && self.activedialog.id) {
-                self.webSocketService.sendCommand({
-                    command: "HEARBEAT_DIALOG_PUPIL",
-                    target: self.activedialog.id
-                });
-            }
-        }
-        if (self._timeout) {
-            clearTimeout(self._timeout);
-        }
-        if (this._run_hearbeat_pupil) {
-            self._timeout = setTimeout(function () {
-                self._runHearbeatPupil();
-            }, 10000);
-        }
-    };
-    ModeDialogPupilComponent.prototype._checkLastMessageFromPupil = function () {
-        var self = this;
-        if (new Date(self.last_hearbeat_from_master).getTime() +
-            __WEBPACK_IMPORTED_MODULE_2__app_settings__["a" /* AppSettings */].HEARTBEAT_DIALOG_TIMEOUT < new Date().getTime()) {
-            self.webSocketService.sendCommand({
-                command: "DIALOG_STOP",
-                target: self.activedialog.id,
-            });
-            return false;
-        }
-        return true;
-    };
-    ModeDialogPupilComponent.prototype.handlerChangeActiveDialog = function (activedialog) {
-        this.activedialog = activedialog;
-        this.activedialogid = activedialog.id;
-    };
-    return ModeDialogPupilComponent;
-}());
-__decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(),
-    __metadata("design:type", Object)
-], ModeDialogPupilComponent.prototype, "activedialogid", void 0);
-__decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Output"])(),
-    __metadata("design:type", Object)
-], ModeDialogPupilComponent.prototype, "stopdialog", void 0);
-__decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewChild"])('remoteVideo'),
-    __metadata("design:type", typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["ElementRef"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_core__["ElementRef"]) === "function" && _a || Object)
-], ModeDialogPupilComponent.prototype, "remoteVideo", void 0);
-__decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewChild"])('localVideo'),
-    __metadata("design:type", typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["ElementRef"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_0__angular_core__["ElementRef"]) === "function" && _b || Object)
-], ModeDialogPupilComponent.prototype, "localVideo", void 0);
-ModeDialogPupilComponent = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
-        selector: 'modedialogpupil',
-        template: __webpack_require__("../../../../../src/app/components/mode_dialog_pupil/mode_dialog_pupil.template.html")
-    }),
-    __metadata("design:paramtypes", [typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_1__services_status_service__["a" /* StatusService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__services_status_service__["a" /* StatusService */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_3__services_dialogs_service__["a" /* DialogsService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__services_dialogs_service__["a" /* DialogsService */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_4__services_websocket_service__["a" /* WebSocketService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__services_websocket_service__["a" /* WebSocketService */]) === "function" && _e || Object])
-], ModeDialogPupilComponent);
-
-var _a, _b, _c, _d, _e;
-//# sourceMappingURL=mode_dialog_pupil.component.js.map
-
-/***/ }),
-
-/***/ "../../../../../src/app/components/mode_dialog_pupil/mode_dialog_pupil.template.html":
-/***/ (function(module, exports) {
-
-module.exports = " <div class=\"panel panel-default\">\n     <div class=\"panel-heading\">\n        <div class=\"container\">\n            <div class=\"col-md-6\">\n                <h4>Диалог \n                    <span *ngIf=\"activedialog\">{{activedialog.dialog.name}}</span>\n                    <span *ngIf=\"!activedialog\">загружается</span>\n                </h4>\n                <p>Роль: ученик</p>\n                <p *ngIf=\"status_activedialog=='run'\"  style=\"font-size: 16px;color:green;font-weight: 400;margin:0;\">Диалог запущен</p>\n                <p *ngIf=\"status_activedialog=='starting'\" style=\"font-size: 16px;color:blue;font-weight: 400;margin:0;\">Устанавливаем диалог</p>\n                <p *ngIf=\"status_activedialog=='stop'\"  style=\"font-size: 16px;color:red;font-weight: 400;margin:0;\">Диалог остановлен связи с партнером нет</p>\n\n\n                <p *ngIf=\"status_voice_connection =='run'\"  style=\"font-size: 16px;color:green;font-weight: 400;margin:0;\">Голосовая связь установлена</p>\n                <p *ngIf=\"status_voice_connection=='stop'\" style=\"font-size: 16px;color:red;font-weight: 400;margin:0;\">Голосовая cвязь с партнером остановлена</p>\n                <p *ngIf=\"status_voice_connection=='starting'\" style=\"font-size: 16px;color:blue;font-weight: 400;margin:0;\">Устанавливаем голосовую связь</p>\n\n                <p *ngIf=\"status_activedialog=='error_connection'\" style=\"font-size: 16px;color:red;font-weight: 400;margin:0;\">Ошибка установки связи\n                </p>\n                <p *ngIf=\"connection_error_message\" style=\"font-size: 12px;color:red;\">{{connection_error_message}}</p>\n                <p *ngIf=\"status_voice_connection == 'error_connection' && activedialog.master.skypeid\" style=\"font-size: 14px;color:darkcyan;\">\n                    Попробуйте установить связь через скайп (скайп id собеседника {{activedialog.master.skypeid}})\n                </p>\n                <p *ngIf=\"status_voice_connection == 'error_connection' && !activedialog.master.skypeid\" style=\"font-size: 14px;color:darkcyan;\">\n                    Попробуйте связаться через другие программы например скайп\n                </p>\n            </div>\n            <div class=\"col-md-6\" style=\"text-align: right;\">\n                <p *ngIf=\"personageName\" style=\"margin: 0 40px;\">Персонаж: {{personageName}}</p>\n                <p *ngIf=\"during_conversation\" style=\"margin: 0 40px;font-size: 8px;\">{{displayTime(during_conversation)}}</p>\n                <button  *ngIf=\"status_voice_connection == 'run'\" class=\"btn btn-warning\" (click)=\"hangPhone()\" style=\"margin-right: 25px;margin-top: 10px;\">\n                    <i class=\"fa fa-microphone-slash\" aria-hidden=\"true\" style=\"margin-right: 10px;\"></i><span>Сбросить голосовую связь</span>\n                </button>\n                <button  *ngIf=\"status_voice_connection != 'run'\" class=\"btn btn-info\" (click)=\"callPhone()\" style=\"margin-right: 25px;margin-top: 10px;\">\n                    <i class=\"fa fa-microphone\" aria-hidden=\"true\" style=\"margin-right: 10px;\"></i><span>Попытаться установить голосовую связь</span>\n                </button>\n            </div>\n        </div>\n    </div>\n    <div class=\"panel-body\" style=\"min-height: 500px;\">\n\n        <!-- Loading -->\n        <div *ngIf=\"loading\" style=\"position: absolute;top:0;left:0;width:100%;height:100%;z-index: 100;\">\n            <div style=\"position: absolute;opacity: 0.5;width:100%;height:100%;background-color: white;\">\n            </div>\n            <div style=\"width: 50px;margin: auto;margin-top: 60px;\">\n                <i class=\"fa fa-spin fa-gear\" style=\"font-size: 50px;\"></i>\n            </div>\n        </div>\n        <!-- END Loading -->\n\n        <div [hidden]=\"status_activedialog != 'run'\" class=\"row\">\n            <div style=\"display: flex;justify-content: flex-start;opacity: 0;height: 0;\">\n                <div style=\"margin: 5px;\">\n                    <video #remoteVideo autoplay=\"\" style=\"border:2px solid red;width: 100px;\"></video>\n                    <p style=\"font-size: 8px;margin-top: -5px;\">Remote</p>\n                </div>\n                <div style=\"margin: 5px;\">\n                    <video #localVideo muted=\"true\" autoplay=\"\" style=\"border:2px solid green;width: 100px;\"></video>\n                    <p style=\"font-size: 8px;margin-top: -5px;\">Local</p>\n                </div>\n            </div>\n        </div>\n\n        <div class=\"row\" *ngIf=\"activedialog\">\n            <playerdialogpupil [activedialog]=\"activedialog\" (changeactivedialog)=\"handlerChangeActiveDialog($event)\" [user]=\"user\"></playerdialogpupil>\n        </div>\n    </div>\n\n    <div class=\"panel-footer\">\n        <button class=\"btn btn-warning\" (click)=\"exitDialog()\"><span>Выход из режима диалога</span></button>\n    </div>\n</div>"
 
 /***/ }),
 
@@ -3965,6 +3672,7 @@ module.exports = "<div class=\"row\">\n    <div class=\"container\">\n        <d
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__activedialogsview_component__ = __webpack_require__("../../../../../src/app/views/activedialogsview.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__components_view_block_calling_callingfroms_component__ = __webpack_require__("../../../../../src/app/components/view_block_calling/callingfroms.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__components_mode_dialog_pupil_mode_dialog_pupil_component__ = __webpack_require__("../../../../../src/app/components/mode_dialog_pupil/mode_dialog_pupil.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__components_mode_dialog_pupil_mode_dialog_pupil_component___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_10__components_mode_dialog_pupil_mode_dialog_pupil_component__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__components_mode_dialog_master_mode_dialog_master_component__ = __webpack_require__("../../../../../src/app/components/mode_dialog_master/mode_dialog_master.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__dialogview_component__ = __webpack_require__("../../../../../src/app/views/dialogview.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__components_player_dialog_master_player_dialog_master_component__ = __webpack_require__("../../../../../src/app/components/player_dialog_master/player_dialog_master.component.ts");
@@ -4029,7 +3737,7 @@ AppviewsModule = __decorate([
             __WEBPACK_IMPORTED_MODULE_7__dialogsview_component__["a" /* DialogsViewComponent */],
             __WEBPACK_IMPORTED_MODULE_8__activedialogsview_component__["a" /* ActiveDialogsViewComponent */],
             __WEBPACK_IMPORTED_MODULE_9__components_view_block_calling_callingfroms_component__["a" /* CallingFromsComponent */],
-            __WEBPACK_IMPORTED_MODULE_10__components_mode_dialog_pupil_mode_dialog_pupil_component__["a" /* ModeDialogPupilComponent */],
+            __WEBPACK_IMPORTED_MODULE_10__components_mode_dialog_pupil_mode_dialog_pupil_component__["ModeDialogPupilComponent"],
             __WEBPACK_IMPORTED_MODULE_11__components_mode_dialog_master_mode_dialog_master_component__["a" /* ModeDialogMasterComponent */],
             __WEBPACK_IMPORTED_MODULE_12__dialogview_component__["a" /* DialogViewComponent */],
             __WEBPACK_IMPORTED_MODULE_13__components_player_dialog_master_player_dialog_master_component__["a" /* PlayerDialogMasterComponent */],
@@ -4060,7 +3768,7 @@ AppviewsModule = __decorate([
             __WEBPACK_IMPORTED_MODULE_7__dialogsview_component__["a" /* DialogsViewComponent */],
             __WEBPACK_IMPORTED_MODULE_8__activedialogsview_component__["a" /* ActiveDialogsViewComponent */],
             __WEBPACK_IMPORTED_MODULE_9__components_view_block_calling_callingfroms_component__["a" /* CallingFromsComponent */],
-            __WEBPACK_IMPORTED_MODULE_10__components_mode_dialog_pupil_mode_dialog_pupil_component__["a" /* ModeDialogPupilComponent */],
+            __WEBPACK_IMPORTED_MODULE_10__components_mode_dialog_pupil_mode_dialog_pupil_component__["ModeDialogPupilComponent"],
             __WEBPACK_IMPORTED_MODULE_11__components_mode_dialog_master_mode_dialog_master_component__["a" /* ModeDialogMasterComponent */],
             __WEBPACK_IMPORTED_MODULE_12__dialogview_component__["a" /* DialogViewComponent */],
             __WEBPACK_IMPORTED_MODULE_13__components_player_dialog_master_player_dialog_master_component__["a" /* PlayerDialogMasterComponent */],
