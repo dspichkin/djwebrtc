@@ -1214,7 +1214,9 @@ var ModeDialogMasterComponent = (function () {
     ModeDialogMasterComponent.prototype.ngOnChanges = function (changes) {
     };
     ModeDialogMasterComponent.prototype.ngOnDestroy = function () {
-        console.log('ngOnDestroy');
+        if (this._timeout) {
+            clearTimeout(this._timeout);
+        }
         this._run_hearbeat_master = false;
         this.webSocketSubscription.unsubscribe();
     };
@@ -1522,6 +1524,10 @@ var ModeDialogPupilComponent = (function () {
     ModeDialogPupilComponent.prototype.ngOnChanges = function (changes) {
     };
     ModeDialogPupilComponent.prototype.ngOnDestroy = function () {
+        console.log('ngOnDestroy');
+        if (this._timeout) {
+            clearTimeout(this._timeout);
+        }
         this._run_hearbeat_pupil = false;
         this.webSocketSubscription.unsubscribe();
     };

@@ -114,7 +114,9 @@ export class ModeDialogMasterComponent implements OnInit, OnDestroy {
 
 
     ngOnDestroy() {
-        console.log('ngOnDestroy')
+        if (this._timeout) {
+            clearTimeout(this._timeout);
+        }
         this._run_hearbeat_master = false;
         this.webSocketSubscription.unsubscribe();
     }

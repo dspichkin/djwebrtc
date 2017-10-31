@@ -110,6 +110,10 @@ export class ModeDialogPupilComponent implements OnInit, OnDestroy {
 
 
     ngOnDestroy() {
+        console.log('ngOnDestroy')
+        if (this._timeout) {
+            clearTimeout(this._timeout);
+        }
         this._run_hearbeat_pupil = false;
         this.webSocketSubscription.unsubscribe();
     }
