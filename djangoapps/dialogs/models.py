@@ -187,9 +187,15 @@ class ActiveDialog(models.Model):
         self.broadcast_changed(update=True)
         return True
 
-    def stop_dialog(self):
-        self.master.stop_dialog()
-        self.pupil.stop_dialog()
+    def stop_dialog(self, personage=None):
+        if personage:
+            if personage == 'master':
+                self.master.stop_dialog()
+            if personage == 'pupil':
+                self.pupil.stop_dialog()
+        else:
+            self.master.stop_dialog()
+            self.pupil.stop_dialog()
         self.broadcast_changed(update=True)
 
 

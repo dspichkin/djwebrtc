@@ -72,7 +72,6 @@ export class ModeDialogMasterComponent implements OnInit, OnDestroy {
         self.webSocketSubscription = self.webSocketService.message.subscribe((data) => {
             let message = JSON.parse(data);
             if (message.command == "DIALOG_STOP") {
-                console.log('get DIALOG_STOP')
                 self._closeVoiceConnection();
                 self.status_activedialog = 'stop';
             }
@@ -88,7 +87,6 @@ export class ModeDialogMasterComponent implements OnInit, OnDestroy {
                 }
             }
             if (message.command == "DIALOG_STOP_ERROR") {
-                console.log('get DIALOG_STOP_ERROR')
                 self.status_activedialog = 'error_connection';
                 self._run_hearbeat_master = false;
             }

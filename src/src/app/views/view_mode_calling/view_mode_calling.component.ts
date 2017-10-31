@@ -127,7 +127,11 @@ export class ModeCallingViewComponent implements OnInit, OnDestroy {
 
     private _playCallingAudo() {
         if (this.audio_enable && this.running_call) {
-            this.audio.play();
+            try {
+                this.audio.play();
+            } catch (e) {
+                console.log(e);
+            }
         }
     }
 

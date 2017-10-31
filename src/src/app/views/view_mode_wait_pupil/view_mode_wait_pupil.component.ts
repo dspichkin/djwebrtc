@@ -71,7 +71,6 @@ export class ModeWaitPupilViewComponent implements OnInit, OnDestroy {
                     self.callingfroms.splice(index, 1);
                     this._detectChanges();
                 }
-                
             }
 
             if (message.command == "START_DIALOG_MASTER") {
@@ -156,7 +155,11 @@ export class ModeWaitPupilViewComponent implements OnInit, OnDestroy {
 
     private _playCallingAudo() {
         if (this.audio_enable) {
-            this.audio.play();
+            try {
+                this.audio.play();
+            } catch (e) {
+                console.log(e);
+            }
         }
     }
 
