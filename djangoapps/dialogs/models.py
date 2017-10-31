@@ -184,8 +184,8 @@ class ActiveDialog(models.Model):
         self.save()
         self.master.start_dialog()
         self.pupil.start_dialog()
-
-        self.broadcast_changed()
+        print "run_dialog !!!!"
+        self.broadcast_changed(update=True)
         return True
 
     def stop_dialog(self):

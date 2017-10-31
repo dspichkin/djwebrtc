@@ -110,7 +110,6 @@ export class ModeWaitPupilViewComponent implements OnInit, OnDestroy {
 
 
     private _getActiveDialog(activedialogid, callback) {
-        console.log('wait pupil _getActiveDialog')
         let self = this;
         this.dialogsService.getActiveDialog(activedialogid)
             .subscribe((activedialog) => {

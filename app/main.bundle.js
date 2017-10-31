@@ -5366,7 +5366,6 @@ var ModeWaitPupilViewComponent = (function () {
         }.bind(this), 10000);
     };
     ModeWaitPupilViewComponent.prototype._getActiveDialog = function (activedialogid, callback) {
-        console.log('wait pupil _getActiveDialog');
         var self = this;
         this.dialogsService.getActiveDialog(activedialogid)
             .subscribe(function (activedialog) {
