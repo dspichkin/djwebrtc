@@ -182,10 +182,15 @@ class ActiveDialog(models.Model):
         self.running_at = timezone.now()
         self.chat_messages = []
         self.save()
-        print "!!!! run_dialog"
         self.master.start_dialog()
         self.pupil.start_dialog()
+
+        self.broadcast_changed()
         return True
+
+    def stop_dialog(self):
+
+        self.broadcast_changed()
 
 
 @receiver(post_save, sender=ActiveDialog)
