@@ -104,7 +104,9 @@ def get_activedialogs(request):
     for activedialig in ActiveDialog.objects.filter(
         status=DIALOG_WAIT,
         master__is_accept_call=True,
-            master__last_dialog_active=False).exclude(master=request.user):
+        master__last_dialog_active=False,
+        pupil__last_dialog_active=False,
+            ).exclude(master=request.user):
         if Presence.objects.filter(user=activedialig.master).exists():
             activedialogs.append(ActiveDialogSerializer(activedialig).data)
 
@@ -233,7 +235,6 @@ def mydialog(request, dialog_pk):
         dialog_name = data.get('dialog_name')
         description = data.get('description')
         level = data.get('level')
-        tags = data.get('tags')
 
         is_dirty = False
 
@@ -259,14 +260,6 @@ def mydialog(request, dialog_pk):
         if personages is not None:
             mydialog.scenario['personages'] = personages
             is_dirty = True
-        #if tags is not None:
-        #    for t in mydialog.tags.through.objects.filter(dialog=mydialog):
-        #        t.delete()
-        #    for tag in tags:
-        #        t = Tag.objects.filter(name=tag).first()
-        #        if t:
-        #            mydialog.tags.add(t)
-        #    is_dirty = True
 
         if is_dirty:
             mydialog.save()
