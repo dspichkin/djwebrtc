@@ -56,7 +56,7 @@ def get_dialogs(request):
         queryset = arraylist
     else:
         if search:
-            queryset = queryset.filter(Q(tags__name__icontains=search) | Q(name=search))
+            queryset = queryset.filter(Q(tags__name__icontains=search) | Q(name__icontains=search)).distinct()
         if level:
             try:
                 if int(level) > 0:

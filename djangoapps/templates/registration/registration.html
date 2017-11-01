@@ -49,6 +49,20 @@
                 <input type="text" name="reg_skypeid" class="form-control" id="skypeid" value="{{reg_skypeid | default:""}}"  maxlength="20">
                 <p class="text-danger pull-right" style="margin:0">{{reg_skypeid_error}}</p>
             </div>
+            <div class="form-group">
+                <label for="inputSex" style="color:white;">Выберите ваш пол *</label>
+                <select name="reg_sex" class="form-control" id="inputSex">
+                    <option value="1" {% if reg_level == '1' %} selected {% endif %}>Мужской</option>
+                    <option value="2" {% if reg_level == '2' %} selected {% endif %}>Женский</option>
+                </select>
+                <p class="text-danger pull-right" style="margin:0">{{reg_sex_error}}</p>
+            </div>
+            <div class="form-group">
+                <label for="birth_year" style="color:white;">Выбирите год вашего рождения * <span style="font-size: 10px;font-weight: 200;">(нужен для отобрадения возраста)</span></label>
+                <select name="reg_birth_year" class="form-control" id="birth_year">
+                </select>
+                <p class="text-danger pull-right" style="margin:0">{{reg_birth_year_error}}</p>
+            </div>
 
             <div class="form-group">
                 <label for="exampleInputPassword1" style="color:white;">Пароль</label>
@@ -75,5 +89,18 @@
 
     </div>
 </div>
+
+<script>
+    $(document).ready(function() {
+        var now = new Date();
+        for (var i = 1950; i < now.getFullYear() - 5; i++) {
+            $('#birth_year').append(
+                $('<option></option>').attr("value", i).text(i)
+            );
+        }
+
+        $('#birth_year option[value=' + {{reg_birth_year|default:"1980"}} + ']').attr('selected','selected');
+    })
+</script>
 
 {% endblock %}

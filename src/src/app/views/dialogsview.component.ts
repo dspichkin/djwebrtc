@@ -60,12 +60,13 @@ export class DialogsViewComponent implements OnInit  {
     public selectedDialogLevel;
     public show_inputed_dialogs: boolean = false;
     public tags = [];
+    public searchValue = "";
 
     private _CALLING_TIME_INTERVAL = 3000;
     private _intervalid;
     private webSocketSubscription;
     private statusSubscription
-    private _searchValue = "";
+    
 
     public constructor(
         private statusService: StatusService,
@@ -83,7 +84,6 @@ export class DialogsViewComponent implements OnInit  {
 
         self.statusSubscription = self.statusService.ready.subscribe((date)=> {
             self.user = this.statusService.user;
-            //console.log('self.user', self.user)
             if (!self.user) {
                 return;
             }
@@ -97,12 +97,10 @@ export class DialogsViewComponent implements OnInit  {
             let message = JSON.parse(data);
             
             if (message.command == "EXIT_FROM_ACTIVE_DIALOG_BY_PUPIL") {
-                console.log("EXIT_FROM_ACTIVE_DIALOG_BY_PUPIL")
                 self.mode = AppSettings.MODE_LIST;
                 self.statusService.init();
             }
             if (message.command == "EXIT_FROM_ACTIVE_DIALOG_BY_MASTER") {
-                console.log("EXIT_FROM_ACTIVE_DIALOG_BY_MASTER")
                 self.mode = AppSettings.MODE_LIST;
                 self.statusService.init();
             }
@@ -126,8 +124,8 @@ export class DialogsViewComponent implements OnInit  {
             if (this.selectedDialogLevel) {
                 params['level'] = this.selectedDialogLevel;
             }
-            if (this._searchValue) {
-                params['search']= this._searchValue;
+            if (this.searchValue) {
+                params['search']= this.searchValue;
             }
         } else {
             params['inputed'] = true;
@@ -214,6 +212,13 @@ export class DialogsViewComponent implements OnInit  {
     }
 
     public onChangeSearchValue(data) {
-        this._searchValue = data;
+        this.searchValue = data;
+    }
+
+    public resetSearch() {
+        console.log('resetSearch')
+        this.searchValue = "";
+        this.selectedDialogLevel = this.levels[0].id;
+        this._getDialogs();
     }
 }

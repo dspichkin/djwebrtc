@@ -1,21 +1,21 @@
 # -*- coding: utf-8 -*-
 import re
-import json
+# import json
 import os
 
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.permissions import IsAuthenticated
+# from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view, permission_classes
 
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.core.mail import EmailMessage
 from django.conf import settings
-from dialogs.utils import IsConfirmAndIsAuthenticated
+from django.utils import timezone
 
 from channels_presence.models import Presence
-
+from dialogs.utils import IsConfirmAndIsAuthenticated
 from accounts.serializers import AccountSerializer
 from accounts.models import Account, ConfirmationCode
 
@@ -36,6 +36,8 @@ def registration(request):
     reg_level = ""
     reg_email = ""
     reg_skypeid = ""
+    reg_sex = ""
+    reg_birth_year = ""
     password = ""
     password1 = ""
 
@@ -44,6 +46,8 @@ def registration(request):
         reg_email = request.POST.get('reg_email')[:30]
         reg_level = request.POST.get('reg_level')[:30]
         reg_skypeid = request.POST.get('reg_skypeid')[:30]
+        reg_sex = request.POST.get('reg_sex')[:1]
+        reg_birth_year = request.POST.get('reg_birth_year')[:4]
         password = request.POST.get('reg_password')[:30]
         password1 = request.POST.get('reg_password1')[:30]
 
@@ -57,12 +61,14 @@ def registration(request):
             "reg_level": reg_level,
             "reg_email": reg_email,
             "reg_skypeid": reg_skypeid,
+            "reg_sex": reg_sex,
+            "reg_birth_year": reg_birth_year,
             "password": password,
             "password1": password1
         }
 
         if not reg_first_name or not reg_level or not password or password != password1 \
-                or not reg_email or email_error:
+                or not reg_email or email_error or not reg_sex or not reg_birth_year:
             if not reg_first_name:
                 data["reg_first_name_error"] = "Поле имени обязательно"
             if not reg_email:
@@ -71,6 +77,10 @@ def registration(request):
                 data["reg_email_error"] = "Введите корректный email"
             if not reg_level:
                 data["reg_level_error"] = "Поле уровня знания английского обязательно"
+            if not reg_sex:
+                data["reg_sex_error"] = "Поле выбора пола обязательно"
+            if not reg_level:
+                data["reg_birth_year_error"] = "Поле даты рождения обязательно"
             if not password:
                 data["reg_password_error"] = "Поле пароль обязательно"
             if not password1:
@@ -88,6 +98,19 @@ def registration(request):
             data["reg_email_error"] = u"Указанный email уже используется. Выберите другой."
             return render(request, 'registration/registration.html', data)
 
+        if str(reg_sex) != '1' and str(reg_sex) != '2':
+            data["reg_sex_error"] = u"Значение пола не верно."
+            return render(request, 'registration/registration.html', data)
+
+        try:
+            reg_birth_year = int(reg_birth_year)
+            if reg_birth_year < 1930 or reg_birth_year > timezone.now().year:
+                data["reg_birth_year_error"] = u"Значение года рождения не верно."
+                return render(request, 'registration/registration.html', data)
+        except:
+            data["reg_birth_year_error"] = u"Значение года рождения не верно."
+            return render(request, 'registration/registration.html', data)
+
         username = reg_email
         if Account.objects.filter(username__iexact=reg_email.lower()).exists():
             username += '' + str(Account.objects.filter(username=reg_email).count() + 1)
@@ -95,7 +118,9 @@ def registration(request):
             username=username,
             first_name=reg_first_name,
             email=reg_email,
-            level=reg_level
+            level=reg_level,
+            sex=reg_sex,
+            birth_year=reg_birth_year
         )
         account.set_password(password)
         if reg_skypeid:
@@ -124,6 +149,8 @@ def registration(request):
             "reg_level": reg_level,
             "reg_email": reg_email,
             "reg_skypeid": reg_skypeid,
+            "reg_sex": reg_sex,
+            "reg_birth_year": reg_birth_year,
             "password": password,
             "password1": password1
         })
@@ -337,6 +364,9 @@ def user(request):
         selectedLevel = data.get("selectedLevel")
         skypeid = data.get("skypeid")
         password = data.get("password")
+        sex = data.get("sex")
+        birth_year = data.get("birth_year")
+
         is_dirty = False
         if first_name and request.user.first_name != first_name:
             if Account.objects.filter(first_name__iexact=first_name.lower()).exists():
@@ -352,6 +382,18 @@ def user(request):
         if skypeid is not None and request.user.skypeid != skypeid:
             request.user.skypeid = skypeid
             is_dirty = True
+        if sex is not None and request.user.sex != sex:
+            if str(sex) == '1' or str(sex) == '2':
+                request.user.sex = sex
+                is_dirty = True
+        if birth_year is not None and request.user.birth_year != birth_year:
+            try:
+                birth_year = int(birth_year)
+                if birth_year > 1930 and birth_year < timezone.now().year:
+                    request.user.birth_year = birth_year
+                    is_dirty = True
+            except Exception as e:
+                print e
         if password is not None:
             request.user.set_password(password)
             is_dirty = True

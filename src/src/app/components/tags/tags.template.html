@@ -24,9 +24,9 @@
             (keyup)="inputEvent($event)"
             (focus)="focusToInput('')"
             (click)="matchClick($event)"
-            [disabled]="disabled">
+            [disabled]="disabled" style="background-color: white;">
         <span class="input-group-btn">
-            <button class="btn btn-info" type="button" (click)="add()" [disabled]="disabled">{{textbtn}}</button>
+            <button class="btn btn-info" type="button" (click)="add()" [disabled]="disabled || !inputedValue">{{textbtn}}</button>
         </span>
     </div>
     <!-- options template -->

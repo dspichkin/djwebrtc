@@ -5,6 +5,9 @@
                 <h4>Выберите диалог</h4>
                 <div style="display: inline-block;">
                     <div>
+                        <div class="col-md-1">
+                            <button class="btn btn-default" type="button" (click)="resetSearch()">Сбросить</button>
+                        </div>
                         <div class="col-md-4">
                              <tags [items]="tags"
                                 (typed)="searchTags($event)" 
@@ -14,10 +17,11 @@
                                 [placeholder]="''"
                                 [disabled]="show_inputed_dialogs"
                                 (onChangeSearchValue)="onChangeSearchValue($event)"
+                                [searchValue]="searchValue"
                                 ></tags>
                         </div>
-                        <div class="col-md-4">
-                            <select name="frm_level" id="level" class="form-control" [(ngModel)]="selectedDialogLevel"(change)="changeLevel()" [disabled]="show_inputed_dialogs">
+                        <div class="col-md-3">
+                            <select name="frm_level" id="level" class="form-control" [(ngModel)]="selectedDialogLevel"(change)="changeLevel()" [disabled]="show_inputed_dialogs" style="background-color: white;">
                                 <option *ngFor="let level of levels" [value]="level.id">{{level.title}}</option>
                             </select>
                         </div>

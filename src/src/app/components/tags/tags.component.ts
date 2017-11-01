@@ -139,6 +139,7 @@ export class TagsComponent implements OnInit {
     @Input() public placeholder: string = "Введите метку";
     @Input() public clearaftereintput: boolean = true;
     @Input() public disabled: boolean = false;
+    @Input() public searchValue: string = "";
     
 
 
@@ -208,7 +209,7 @@ export class TagsComponent implements OnInit {
         this.onChangeSearchValue.emit(cleanInputValue);
     }
 
-    isNumber (text) {
+    private isNumber (text) {
         let reg = new RegExp('[0-9]+$');
         if (text) {
             return reg.test(text);
@@ -216,7 +217,7 @@ export class TagsComponent implements OnInit {
         return false;
     }
 
-    removeSpecials(str) {
+    private removeSpecials(str) {
         var lower = str.toLowerCase();
         var upper = str.toUpperCase();
 
@@ -322,6 +323,12 @@ export class TagsComponent implements OnInit {
         this.doEvent('selected', value);
         this.hideOptions();
         this.focusToInput('');
+    }
+
+    public ngOnChanges(changes) {
+        if (changes.hasOwnProperty('searchValue')) {
+            this.inputedValue = changes.searchValue.currentValue;
+        }
     }
 
 }

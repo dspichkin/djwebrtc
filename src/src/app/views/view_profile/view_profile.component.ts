@@ -52,6 +52,19 @@ export class ProfileViewComponent implements OnInit {
         },
     ]
 
+    public sex_options = [
+        {
+            id: 1,
+            title: "Мужской"
+        },{
+            id: 2,
+            title: "Женский"
+        }
+    ]
+    public year_options = [];
+    public selectedSex;
+    public selectedBirthYear;
+
     public loading: boolean = false;
     public uploader:FileUploader;
 
@@ -89,9 +102,20 @@ export class ProfileViewComponent implements OnInit {
     }
 
     setVars() {
+        let now = new Date();
+        this.year_options = [];
+        for (var i = 1950; i < now.getFullYear() - 5; i++) {
+            this.year_options.push({
+                id: i,
+                title: i
+            })
+        }
+
         this.first_name = this.user.first_name;
         this.selectedLevel = this.user.level;
         this.skypeid = this.user.skypeid;
+        this.selectedSex = this.user.sex;
+        this.selectedBirthYear = this.user.birth_year;
 
         this.uploader = new FileUploader({ 
             url: AppSettings.URL_USER_SETTING + 'avatar/',
@@ -134,7 +158,9 @@ export class ProfileViewComponent implements OnInit {
                 first_name: this.first_name,
                 selectedLevel: this.selectedLevel,
                 password: this.password,
-                skypeid: this.skypeid
+                skypeid: this.skypeid,
+                sex: this.selectedSex,
+                birth_year: this.selectedBirthYear,
             }
             this.loading = true;
             let self = this;

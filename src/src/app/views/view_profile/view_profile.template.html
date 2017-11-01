@@ -20,7 +20,7 @@
                     </div>
                     <div class="form-group">
                         <label for="exampleInputLevel">Ваш уровень английского *</label>
-                        <select name="frm_level" class="form-control" [(ngModel)]="selectedLevel" style="" required="required">
+                        <select name="frm_level" class="form-control" [(ngModel)]="selectedLevel" required="required">
                              <option *ngFor="let pesonage of levels" [value]="pesonage.id">{{pesonage.title}}</option>
                          </select>
                     </div>
@@ -70,6 +70,23 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="form-group">
+                        <label for="inputSex" style="color:white;">Выберите ваш пол *</label>
+                        <select name="sex" class="form-control" id="inputSex" [(ngModel)]="selectedSex" required="required">
+                            <option *ngFor="let s of sex_options" [value]="s.id">{{s.title}}</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="birth_year" style="color:white;">Выбирите год вашего рождения * <span style="font-size: 10px;font-weight: 200;">(нужен для отобрадения возраста)</span></label>
+                            
+                        <select name="birth_year" class="form-control" id="birth_year" [(ngModel)]="selectedBirthYear" required="required">
+                            <option *ngFor="let y of year_options" [value]="y.id">{{y.title}}</option>
+                        </select>
+                    </div>
+
+
+
 
 
                     <div class="form-group">
