@@ -53,7 +53,7 @@ export class WebSocketService {
 
 
     public sendCommand(command) {
-        console.log('command', command)
+        //console.log('command', command)
         if (this.ws.socket.readyState == 1) {
             this.ws.send(command).subscribe(
                 (msg)=> {

@@ -80,11 +80,13 @@ export class ModeWaitPupilViewComponent implements OnInit, OnDestroy {
             }
 
             if (message.command == "CALLING_REJECT") {
-                self.router.navigate(['/activedialogues/']);
+                self.router.navigate(['/activedialogues']);
             }
 
             if (message.command == "EXIT_FROM_ACTIVE_DIALOG_BY_MASTER") {
-                self.router.navigate(['/activedialogues/']);
+                if (self.router.url == '/wait') {
+                    self.router.navigate(['/activedialogues']);
+                }
             }
         })
 
@@ -220,14 +222,17 @@ export class ModeWaitPupilViewComponent implements OnInit, OnDestroy {
 
 
 
-    public handelerStopDialog(data) {
+    public handlerStopDialog(data) {
         let self = this;
         self.loading = true;
         let command = {
             command: 'EXIT_FROM_ACTIVE_DIALOG_BY_MASTER',
             target: data.activedialogid
         }
-        self.webSocketService.sendCommand(command)
+        self.webSocketService.sendCommand(command);
+        self.mode = 'wait';
+        self.router.navigate(['/activedialogues']);
+
     }
     
 }

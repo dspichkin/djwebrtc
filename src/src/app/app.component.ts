@@ -30,6 +30,14 @@ export class AppComponent {
                 this.router.navigate(['/wait']);
             }
         });
+
+        let url = "mydialogs.ru";
+        if (window.location.href.indexOf(url) > 0) {
+            let s = document.createElement('script');
+            s.type = "text/javascript";
+            s.src = "/static/js/y.counter.js";
+            document.head.appendChild(s);
+        }
     }
 
 

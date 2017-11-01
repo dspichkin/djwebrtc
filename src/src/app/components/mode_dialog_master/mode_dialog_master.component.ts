@@ -21,6 +21,7 @@ declare const navigator;
 export class ModeDialogMasterComponent implements OnInit, OnDestroy {
     @Input() public activedialogid;
     @Output() public stopdialog = new EventEmitter();
+    @Output() public exit_by_master = new EventEmitter();
 
     @ViewChild('remoteVideo') private remoteVideo: ElementRef;
     @ViewChild('localVideo') private localVideo: ElementRef;
@@ -261,7 +262,7 @@ export class ModeDialogMasterComponent implements OnInit, OnDestroy {
             if (self.router.url == '/wait') {
                 self.router.navigate(['/dialogs']);
             }
-        }, 2000);
+        }, 1000);
     }   
 
 

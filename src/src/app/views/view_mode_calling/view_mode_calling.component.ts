@@ -137,7 +137,6 @@ export class ModeCallingViewComponent implements OnInit, OnDestroy {
 
     public stopCallingDialog() {
         this.running_call = false;
-        this.router.navigate(['/activedialogues']);
     }
 
      /*
@@ -190,7 +189,7 @@ export class ModeCallingViewComponent implements OnInit, OnDestroy {
     }
     
 
-    public handelerStopDialog(data) {
+    public handlerStopDialog(data) {
         let self = this;
         self.loading = true;
         let command = {
@@ -199,7 +198,8 @@ export class ModeCallingViewComponent implements OnInit, OnDestroy {
             }
         
         self.webSocketService.sendCommand(command)
-       // this._updateActiveDialogs();
+        self.stopCallingDialog();
+        self.router.navigate(['/activedialogues']);
     }
     
     
