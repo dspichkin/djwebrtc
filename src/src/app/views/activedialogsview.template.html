@@ -60,7 +60,7 @@
                                                     <p style="margin:0;color: brown;" *ngIf="item.user.skypeid">Попробуйте связаться с ним через скайп. Его скайп id: <span style="font-weight: 800;">{{item.user.skypeid}}</span></p>
                                                 </div>
                                                 <p *ngIf="item.activedialogs.length > 0">
-                                                    В ожидание звонка {{item.activedialogs.length}} диалога
+                                                    В ожидание звонка {{item.activedialogs.length}} диалогов
                                                 </p>
                                                 <button *ngIf="item.activedialogs.length > 0" class="btn btn-info btn-xs" (click)="item.show_activedialogs = !item.show_activedialogs">
                                                     <span *ngIf="!item.show_activedialogs">Раскрыть</span>
