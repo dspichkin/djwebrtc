@@ -52,6 +52,7 @@ export class ModeCallingViewComponent implements OnInit, OnDestroy {
 
             if (message.command == 'CALLING_MASTER_REJECT') {
                 self.stopCallingDialog();
+                self.router.navigate(['/activedialogues']);
             }
 
             if (message.command == "START_DIALOG_PUPIL") {
@@ -63,6 +64,7 @@ export class ModeCallingViewComponent implements OnInit, OnDestroy {
 
             if (message.command == "EXIT_FROM_ACTIVE_DIALOG_BY_PUPIL") {
                 self.stopCallingDialog();
+                self.router.navigate(['/activedialogues']);
             }
 
             if (message.command == "STOP_CALLING") {
@@ -139,16 +141,6 @@ export class ModeCallingViewComponent implements OnInit, OnDestroy {
         this.running_call = false;
     }
 
-     /*
-    private _startCalling() {
-        let self = this;
-        this.activatedRoute.params
-                .pluck('id')
-                .subscribe((id) => {
-                    self._callingDialog(id)
-                })
-    }
-    */
    
     private _getActiveDialog() {
         let self = this;

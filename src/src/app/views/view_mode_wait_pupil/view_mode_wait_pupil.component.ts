@@ -50,7 +50,6 @@ export class ModeWaitPupilViewComponent implements OnInit, OnDestroy {
             if (message.command == 'CALLING') {
                 if (message.target == 'TAKEPHONE') {
                     if (!self.activedialog) {
-                        console.log('_getActiveDialog', self.activedialog)
                         self._getActiveDialog(message.activedialogid, function() {
                             self._calling(message);
                         })
@@ -61,6 +60,7 @@ export class ModeWaitPupilViewComponent implements OnInit, OnDestroy {
                 }
             }
             if (message.command == 'CALLING_MASTER_REJECT') {
+
                 let index = -1;
                 for (let i = 0; i < self.callingfroms.length; i++) {
                     if (self.callingfroms[i].key_id == message.pupil) {
@@ -68,9 +68,13 @@ export class ModeWaitPupilViewComponent implements OnInit, OnDestroy {
                         break;
                     }
                 } 
+                console.log('CALLING_MASTER_REJECT', index)
                 if (index != -1) {
                     self.callingfroms.splice(index, 1);
                     this._detectChanges();
+                }
+                if (self.callingfroms.length == 0) {
+                    self.router.navigate(['/activedialogues']);
                 }
             }
 

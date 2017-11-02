@@ -5152,6 +5152,7 @@ var ModeCallingViewComponent = (function () {
             //console.log("Calling message", message)
             if (message.command == 'CALLING_MASTER_REJECT') {
                 self.stopCallingDialog();
+                self.router.navigate(['/activedialogues']);
             }
             if (message.command == "START_DIALOG_PUPIL") {
                 self.activedialogid = message.dialog;
@@ -5160,6 +5161,7 @@ var ModeCallingViewComponent = (function () {
             }
             if (message.command == "EXIT_FROM_ACTIVE_DIALOG_BY_PUPIL") {
                 self.stopCallingDialog();
+                self.router.navigate(['/activedialogues']);
             }
             if (message.command == "STOP_CALLING") {
                 _this.running_call = false;
@@ -5220,16 +5222,6 @@ var ModeCallingViewComponent = (function () {
     ModeCallingViewComponent.prototype.stopCallingDialog = function () {
         this.running_call = false;
     };
-    /*
-   private _startCalling() {
-       let self = this;
-       this.activatedRoute.params
-               .pluck('id')
-               .subscribe((id) => {
-                   self._callingDialog(id)
-               })
-   }
-   */
     ModeCallingViewComponent.prototype._getActiveDialog = function () {
         var _this = this;
         var self = this;
@@ -5345,7 +5337,6 @@ var ModeWaitPupilViewComponent = (function () {
             if (message.command == 'CALLING') {
                 if (message.target == 'TAKEPHONE') {
                     if (!self.activedialog) {
-                        console.log('_getActiveDialog', self.activedialog);
                         self._getActiveDialog(message.activedialogid, function () {
                             self._calling(message);
                         });
@@ -5363,9 +5354,13 @@ var ModeWaitPupilViewComponent = (function () {
                         break;
                     }
                 }
+                console.log('CALLING_MASTER_REJECT', index);
                 if (index != -1) {
                     self.callingfroms.splice(index, 1);
                     _this._detectChanges();
+                }
+                if (self.callingfroms.length == 0) {
+                    self.router.navigate(['/activedialogues']);
                 }
             }
             if (message.command == "START_DIALOG_MASTER") {
