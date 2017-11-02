@@ -62,7 +62,10 @@
                                                 <p *ngIf="item.activedialogs.length > 0">
                                                     В ожидание звонка {{item.activedialogs.length}} диалога
                                                 </p>
-                                                <button *ngIf="item.activedialogs.length > 0" class="btn btn-info btn-xs" (click)="item.show_activedialogs = !item.show_activedialogs">Раскрыть</button>
+                                                <button *ngIf="item.activedialogs.length > 0" class="btn btn-info btn-xs" (click)="item.show_activedialogs = !item.show_activedialogs">
+                                                    <span *ngIf="!item.show_activedialogs">Раскрыть</span>
+                                                    <span *ngIf="item.show_activedialogs">Скрыть</span>
+                                                </button>
                                                 <div *ngIf="item.show_activedialogs" class="list-group" style="margin-top: 10px;">
                                                     <div *ngFor="let ad of item.activedialogs" class="list-group-item" style="display: flex;">
                                                         <div>
@@ -94,82 +97,6 @@
                         </div>
                     </div>
                 </div>
-                <!--
-                <div class="row" style="margin: 20px 0;display: flex;flex-wrap: wrap;"> 
-                    <div *ngIf="activedialogs.length == 0">
-                        <h4 style="text-align: center;">Пока еще нет ни одного диалога в режиме ожидания ученика</h4>
-                    </div>
-                    <div class="col-sm-6 col-md-4" *ngFor="let item of activedialogs"> 
-                        <div class="thumbnail">
-                            <div class="" style="width: 100%;position: relative;"> 
-                                <img *ngIf="!item.dialog.background_image" alt="100%x200" data-src="holder.js/100%x200" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/PjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iMjQyIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDI0MiAyMDAiIHByZXNlcnZlQXNwZWN0UmF0aW89Im5vbmUiPjwhLS0KU291cmNlIFVSTDogaG9sZGVyLmpzLzEwMCV4MjAwCkNyZWF0ZWQgd2l0aCBIb2xkZXIuanMgMi42LjAuCkxlYXJuIG1vcmUgYXQgaHR0cDovL2hvbGRlcmpzLmNvbQooYykgMjAxMi0yMDE1IEl2YW4gTWFsb3BpbnNreSAtIGh0dHA6Ly9pbXNreS5jbwotLT48ZGVmcz48c3R5bGUgdHlwZT0idGV4dC9jc3MiPjwhW0NEQVRBWyNob2xkZXJfMTVlOTZiYzA5NjUgdGV4dCB7IGZpbGw6I0FBQUFBQTtmb250LXdlaWdodDpib2xkO2ZvbnQtZmFtaWx5OkFyaWFsLCBIZWx2ZXRpY2EsIE9wZW4gU2Fucywgc2Fucy1zZXJpZiwgbW9ub3NwYWNlO2ZvbnQtc2l6ZToxMnB0IH0gXV0+PC9zdHlsZT48L2RlZnM+PGcgaWQ9ImhvbGRlcl8xNWU5NmJjMDk2NSI+PHJlY3Qgd2lkdGg9IjI0MiIgaGVpZ2h0PSIyMDAiIGZpbGw9IiNFRUVFRUUiLz48Zz48dGV4dCB4PSI4OS44NTkzNzUiIHk9IjEwNS40Ij4yNDJ4MjAwPC90ZXh0PjwvZz48L2c+PC9zdmc+" data-holder-rendered="true" style="height: 60px; width: 90px; display: block;float: left;"> 
-                                <div *ngIf="item.dialog.background_image" 
-                                    [ngStyle]="{'background-image': 'url(' + item.dialog.background_image + ')'}"
-                                    style="
-                                        height: 60px; 
-                                        width: 90px; 
-                                        background-size: cover;
-                                        display: block;
-                                        float: left;"></div>
-                                <div style="position: absolute; right: 0;top:0;display: flex;align-items: center;">
-                                    <p class="badge" style="margin: 5px;">{{item.dialog.level_display}}</p>
-                                </div>
-
-                                <div style="text-align: right;padding-top: 25px;">
-                                    <p class="badge badge-info" style="margin:5px;background-color: darkcyan;" *ngFor="let item of item.dialog.tags">{{item.name}}</p>
-                                </div>
-                            </div>
-                            <div class="caption"> 
-
-                                <p *ngIf="item.dialog" style="font-size: 8px;margin:0;">Кол-во шагов: {{item.dialog.scenario.steps.length || 0}}</p> 
-                                <p *ngIf="item.dialog && item.dialog.owner" style="font-size: 8px;margin:0;">Создано: {{item.dialog.owner?.fio}}</p> 
-
-                                <h3>{{item.dialog?.name}}</h3> 
-                                <div>
-                                    <p style="font-size: 12px;">{{item.dialog.description}}</p> 
-                                </div>
-                                <div class="well" style="padding: 0;">
-                                    <div class="media">
-                                        <div class="media-left">
-                                            <div *ngIf="item.master.avatar" 
-                                                [ngStyle]="{'background-image': 'url(' + item.master.avatar + ')'}"
-                                                class="media-object" style="
-                                                    height: 50px; 
-                                                    width: 50px; 
-                                                    background-size: contain;
-                                                    border-radius: 50%;
-                                                    margin: 10px;">
-                                            </div>
-                                            <div *ngIf="!item.master.avatar" 
-                                                class="media-object" style="
-                                                    height: 50px; 
-                                                    width: 50px; 
-                                                    margin: 10px;">
-                                                    <i class="fa fa-user-circle-o" aria-hidden="true" style="font-size: 50px;"></i>
-                                            </div>
-                                        </div>
-                                        <div class="media-body">
-                                            <div>
-                                                <p style="text-align: right;margin: 5px 10px;">{{item.master?.fio}}</p>
-                                            </div>
-                                            <div class="badge" style="background-color: indianred;">
-                                                {{item.master.level_display}}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                               
-                                <p>
-                                    <button class="btn btn-primary" (click)="callDialog(item)">
-                                        Позвонить
-                                    </button> 
-                                </p> 
-                            </div> 
-                        </div> 
-                    </div> 
-                </div>
-
-                -->
             </div>
         </div>
         
