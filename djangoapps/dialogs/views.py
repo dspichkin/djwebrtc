@@ -102,27 +102,28 @@ def get_activedialogs(request):
     request.user.check_activity()
 
     users = []
-    for user in Account.objects.filter(is_accept_call=True, last_dialog_active=False).exclude(pk=request.user.pk):
-        activedialogs = []
-        for activedialig in ActiveDialog.objects.filter(
-                status=DIALOG_WAIT, master=user, dialog__is_published=True):
-            if Presence.objects.filter(user=activedialig.master).exists():
-                activedialogs.append(
-                    ActiveDialogShortSerializer(activedialig).data
-                )
-        users.append({
-            "user": {
-                "fio": user.fio(),
-                "skypeid": user.skypeid,
-                "avatar": user.get_avatar_url(),
-                "key_id": user.key_id,
-                "level_display": user.get_level_display(),
-                "age": user.get_age(),
-                "sex": user.get_sex_display()
-            },
-            "show_activedialogs": False,
-            "activedialogs": activedialogs
-        })
+    for presence in Presence.objects.all():
+        for user in Account.objects.filter(pk=presence.user.pk, is_accept_call=True, last_dialog_active=False).exclude(pk=request.user.pk):
+            activedialogs = []
+            for activedialig in ActiveDialog.objects.filter(
+                    status=DIALOG_WAIT, master=user, dialog__is_published=True):
+                if Presence.objects.filter(user=activedialig.master).exists():
+                    activedialogs.append(
+                        ActiveDialogShortSerializer(activedialig).data
+                    )
+            users.append({
+                "user": {
+                    "fio": user.fio(),
+                    "skypeid": user.skypeid,
+                    "avatar": user.get_avatar_url(),
+                    "key_id": user.key_id,
+                    "level_display": user.get_level_display(),
+                    "age": user.get_age(),
+                    "sex": user.get_sex_display()
+                },
+                "show_activedialogs": False,
+                "activedialogs": activedialogs
+            })
     """
     activedialogs = []
     for activedialig in ActiveDialog.objects.filter(
