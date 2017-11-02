@@ -26,6 +26,10 @@ def app(request):
         return render(request, 'index.html')
     return render(request, 'landing.html')
 
+
+def robot(request):
+    return render(request, 'robots.txt', content_type='text/plain')
+
 urlpatterns = []
 
 if settings.DEBUG:
@@ -41,8 +45,12 @@ urlpatterns += [
     url(r'^dialogs/', include('dialogs.urls')),
     # JS-приложение
     url(r'^$', app, name='app'),
-    url(r'^idia/?', TemplateView.as_view(template_name="idia.html"), name="idia"),
-    url(r'^interface/?', TemplateView.as_view(template_name="interface.html"), name="interface"),
+    # лендинг
+    url(r'^idia/?$', TemplateView.as_view(template_name="idia.html"), name="idia"),
+    url(r'^interface/?$', TemplateView.as_view(template_name="interface.html"), name="interface"),
+    # auth app
     url(r'^close/', closepopup, name="login_popup_close"),
-    # url(r'^(?P<url>.*)$', sredirect),
+
+    url(r'^robots\.txt$', robot, name="robots.txt"),
+    url(r'^(?P<url>.*)$', sredirect),
 ]
