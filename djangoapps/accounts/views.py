@@ -18,6 +18,7 @@ from channels_presence.models import Presence
 from dialogs.utils import IsConfirmAndIsAuthenticated
 from accounts.serializers import AccountSerializer
 from accounts.models import Account, ConfirmationCode
+from dialogs.models import broadcast_to_room
 
 
 def email_has_error(email):
@@ -301,6 +302,10 @@ def accept_call(request):
     if accept_call is False or accept_call is True:
         request.user.is_accept_call = accept_call
         request.user.save()
+        broadcast_to_room({
+            "command": "UPDATE",
+            "target": "activedialogs"
+        })
 
     return Response(AccountSerializer(request.user).data, status.HTTP_200_OK)
 
