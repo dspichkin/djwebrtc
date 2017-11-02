@@ -1,8 +1,8 @@
 (function (d, w, c) {
     (w[c] = w[c] || []).push(function() {
         try {
-            w.yaCounter46422360 = new Ya.Metrika({
-                id:46422360,
+            w.yaCounter46508196 = new Ya.Metrika({
+                id:46508196,
                 clickmap:true,
                 trackLinks:true,
                 accurateTrackBounce:true,
