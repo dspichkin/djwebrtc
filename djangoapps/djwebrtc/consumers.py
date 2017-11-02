@@ -310,6 +310,9 @@ def ws_message(message):
             next_activedialogid = data.get("next_activedialogid")
             old_ac = get_object_or_404(ActiveDialog, pk=old_activedialogid)
             next_ac = get_object_or_404(ActiveDialog, pk=next_activedialogid)
+            next_ac.chat_messages = []
+            next_ac.save()
+
             if old_ac and next_ac:
                 next_ac.pupil = old_ac.pupil
                 next_ac.save()
