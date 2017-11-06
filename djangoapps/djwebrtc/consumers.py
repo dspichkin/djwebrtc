@@ -34,7 +34,8 @@ def ws_connect(message):
 
 @channel_session_user
 def ws_message(message):
-    Presence.objects.touch(message.reply_channel.name, user=message.user)
+    if message.user and message.user.is_accept_call is True:
+        Presence.objects.touch(message.reply_channel.name, user=message.user)
 
     data = message.content.get('text')
     data = json.loads(data)
