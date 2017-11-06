@@ -6,7 +6,7 @@ from django.http import HttpResponseRedirect
 
 from accounts.views import (
     accept_call, message, lendingmessage, check_user, registration, confirm_email,
-    remember, user, user_avatar
+    remember, user, user_avatar, verification_sent
     )
 
 
@@ -31,6 +31,7 @@ urlpatterns = [
     url(r'^user/?$', user, name="user"),
     url(r'^confirm/(?P<key>\w+)/?$', confirm_email, name="confirm_key"),
     url(r'^confirm/', confirm_email, name="confirm"),
+    url(r'^confirm_email/', verification_sent, name="verification_sent"),
     url(r'^remember/(?P<key>\w+)/?$', remember, name="remember_key"),
     url(r'^remember/', remember, name="remember"),
 ]

@@ -5,7 +5,6 @@ import os
 
 from rest_framework.response import Response
 from rest_framework import status
-# from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view, permission_classes
 
 from django.http import HttpResponseRedirect
@@ -13,6 +12,7 @@ from django.shortcuts import render
 from django.core.mail import EmailMessage
 from django.conf import settings
 from django.utils import timezone
+from django.core.urlresolvers import reverse
 
 from channels_presence.models import Presence
 from dialogs.utils import IsConfirmAndIsAuthenticated
@@ -141,8 +141,7 @@ def registration(request):
             mail.send()
         except Exception as e:
             print(e)
-
-        return HttpResponseRedirect("/accounts/confirm-email")
+        return HttpResponseRedirect(reverse("verification_sent"))
 
     return render(
         request, 'registration/registration.html', {
@@ -154,6 +153,12 @@ def registration(request):
             "reg_birth_year": reg_birth_year,
             "password": password,
             "password1": password1
+        })
+
+
+def verification_sent(request):
+    return render(
+        request, 'account/verification_sent.html', {
         })
 
 
