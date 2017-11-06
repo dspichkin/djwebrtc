@@ -6,6 +6,7 @@ from django.shortcuts import get_object_or_404
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.urlresolvers import reverse
 from django.db.models import Q
+from django.http import Http404
 
 from rest_framework.response import Response
 from rest_framework import status
@@ -28,10 +29,11 @@ from dialogs.utils import IsConfirmAndIsAuthenticated
 @api_view(['GET'])
 @permission_classes((IsConfirmAndIsAuthenticated,))
 def get_dialog(request, dialog_pk):
-    queryset = get_object_or_404(Dialog, pk=dialog_pk, is_published=True)
-    serializer = DialogSerializer(queryset)
-
-    return Response(serializer.data, status.HTTP_200_OK)
+    dialog = get_object_or_404(Dialog, pk=dialog_pk)
+    if dialog.owner == request.user or dialog.is_published is True:
+        serializer = DialogSerializer(dialog)
+        return Response(serializer.data, status.HTTP_200_OK)
+    raise Http404
 
 
 @api_view(['GET'])
