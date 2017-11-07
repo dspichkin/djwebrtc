@@ -354,8 +354,13 @@ DJANGODASHPANEL_NGINX_ACCESS_EXCLUDES = [
 DJANGODASHPANEL_NGINX_LOGS = [{
     'name': 'mydialogs.ru',
     'slug': 'mydialogs',
+    'access':  '/var/log/nginx/mydialogs.access.log',
+    'error': '/var/log/mydialogs.error.log',
+}, {
+    'name': 'nginx',
+    'slug': 'nginx',
     'access':  '/var/log/nginx/access.log',
-    'error': '/var/log/nginx.error.log',
+    'error': '/var/log/nginx/error.log',
 }]
 
 TEMP_DIR = os.path.join(BASE_DIR, '..', 'temp')
