@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, unicode_literals
 
+from django.contrib.sitemaps import Sitemap
+
 from django.conf.urls import url, include
 from django.http import HttpResponseRedirect
 from django.contrib import admin
@@ -8,6 +10,8 @@ from django.views.generic.base import TemplateView
 from django.shortcuts import render
 from django.conf import settings
 from django.conf.urls.static import static
+from django.contrib.sitemaps.views import sitemap
+from django.urls import reverse
 
 
 def closepopup(request):
@@ -30,6 +34,22 @@ def app(request):
 def robot(request):
     return render(request, 'robots.txt', content_type='text/plain')
 
+
+class StaticViewSitemap(Sitemap):
+    priority = 1
+    changefreq = 'monthly'
+
+    def items(self):
+        return ['app', 'idia', 'interface']
+
+    def location(self, item):
+        return reverse(item)
+
+
+staticsitemaps = {
+    'static': StaticViewSitemap,
+}
+
 urlpatterns = []
 
 if settings.DEBUG:
@@ -50,6 +70,8 @@ urlpatterns += [
     url(r'^interface/?$', TemplateView.as_view(template_name="interface.html"), name="interface"),
 
     url(r'^googlef93e055d62dd30d6.html$', TemplateView.as_view(template_name="googlef93e055d62dd30d6.html")),
+    url(r'^sitemap\.xml$', sitemap, {'sitemaps': staticsitemaps}),
+
     # auth app
     url(r'^close/', closepopup, name="login_popup_close"),
 
