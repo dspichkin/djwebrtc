@@ -48,6 +48,8 @@ urlpatterns += [
     # лендинг
     url(r'^idia/?$', TemplateView.as_view(template_name="idia.html"), name="idia"),
     url(r'^interface/?$', TemplateView.as_view(template_name="interface.html"), name="interface"),
+
+    url(r'^googlef93e055d62dd30d6.html$', TemplateView.as_view(template_name="googlef93e055d62dd30d6.html")),
     # auth app
     url(r'^close/', closepopup, name="login_popup_close"),
 
