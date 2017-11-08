@@ -218,7 +218,11 @@ AppModule = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__views_mydialogues_mydialogues_component__ = __webpack_require__("../../../../../src/app/views/mydialogues/mydialogues.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__views_mydialogues_mydialogue_edit_component__ = __webpack_require__("../../../../../src/app/views/mydialogues/mydialogue.edit.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__views_view_help_view_help_component__ = __webpack_require__("../../../../../src/app/views/view_help/view_help.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__services_guards_service__ = __webpack_require__("../../../../../src/app/services/guards.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__views_view_blog_view_blogs_component__ = __webpack_require__("../../../../../src/app/views/view_blog/view_blogs.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__views_view_blog_view_blog_component__ = __webpack_require__("../../../../../src/app/views/view_blog/view_blog.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__services_guards_service__ = __webpack_require__("../../../../../src/app/services/guards.service.ts");
+
+
 
 
 
@@ -241,7 +245,7 @@ var ROUTES = [
             {
                 path: 'dialogues',
                 component: __WEBPACK_IMPORTED_MODULE_0__views_dialogsview_component__["a" /* DialogsViewComponent */],
-                canActivate: [__WEBPACK_IMPORTED_MODULE_11__services_guards_service__["a" /* AuthGuard */]]
+                canActivate: [__WEBPACK_IMPORTED_MODULE_13__services_guards_service__["a" /* AuthGuard */]]
             }
         ]
     },
@@ -251,7 +255,7 @@ var ROUTES = [
             {
                 path: 'activedialogues',
                 component: __WEBPACK_IMPORTED_MODULE_1__views_activedialogsview_component__["a" /* ActiveDialogsViewComponent */],
-                canActivate: [__WEBPACK_IMPORTED_MODULE_11__services_guards_service__["a" /* AuthGuard */]]
+                canActivate: [__WEBPACK_IMPORTED_MODULE_13__services_guards_service__["a" /* AuthGuard */]]
             }
         ]
     },
@@ -261,7 +265,7 @@ var ROUTES = [
             {
                 path: 'dialogue/:dialog_id',
                 component: __WEBPACK_IMPORTED_MODULE_2__views_dialogview_component__["a" /* DialogViewComponent */],
-                canActivate: [__WEBPACK_IMPORTED_MODULE_11__services_guards_service__["a" /* AuthGuard */]]
+                canActivate: [__WEBPACK_IMPORTED_MODULE_13__services_guards_service__["a" /* AuthGuard */]]
             }
         ]
     },
@@ -271,7 +275,7 @@ var ROUTES = [
             {
                 path: 'message',
                 component: __WEBPACK_IMPORTED_MODULE_6__views_view_message_view_message_component__["a" /* MessageViewComponent */],
-                canActivate: [__WEBPACK_IMPORTED_MODULE_11__services_guards_service__["a" /* AuthGuard */]]
+                canActivate: [__WEBPACK_IMPORTED_MODULE_13__services_guards_service__["a" /* AuthGuard */]]
             }
         ]
     },
@@ -281,19 +285,19 @@ var ROUTES = [
             {
                 path: 'profile',
                 component: __WEBPACK_IMPORTED_MODULE_7__views_view_profile_view_profile_component__["a" /* ProfileViewComponent */],
-                canActivate: [__WEBPACK_IMPORTED_MODULE_11__services_guards_service__["a" /* AuthGuard */]]
+                canActivate: [__WEBPACK_IMPORTED_MODULE_13__services_guards_service__["a" /* AuthGuard */]]
             }
         ]
     },
     {
         path: 'wait',
         component: __WEBPACK_IMPORTED_MODULE_4__views_view_mode_wait_pupil_view_mode_wait_pupil_component__["a" /* ModeWaitPupilViewComponent */],
-        canActivate: [__WEBPACK_IMPORTED_MODULE_11__services_guards_service__["a" /* AuthGuard */]]
+        canActivate: [__WEBPACK_IMPORTED_MODULE_13__services_guards_service__["a" /* AuthGuard */]]
     },
     {
         path: 'calling/:id',
         component: __WEBPACK_IMPORTED_MODULE_5__views_view_mode_calling_view_mode_calling_component__["a" /* ModeCallingViewComponent */],
-        canActivate: [__WEBPACK_IMPORTED_MODULE_11__services_guards_service__["a" /* AuthGuard */]]
+        canActivate: [__WEBPACK_IMPORTED_MODULE_13__services_guards_service__["a" /* AuthGuard */]]
     },
     {
         path: '', component: __WEBPACK_IMPORTED_MODULE_3__components_common_layouts_basicLayout_component__["a" /* BasicLayoutComponent */],
@@ -301,7 +305,7 @@ var ROUTES = [
             {
                 path: 'mydialogues',
                 component: __WEBPACK_IMPORTED_MODULE_8__views_mydialogues_mydialogues_component__["a" /* MyDialoguesViewComponent */],
-                canActivate: [__WEBPACK_IMPORTED_MODULE_11__services_guards_service__["a" /* AuthGuard */]]
+                canActivate: [__WEBPACK_IMPORTED_MODULE_13__services_guards_service__["a" /* AuthGuard */]]
             }
         ]
     },
@@ -311,7 +315,7 @@ var ROUTES = [
             {
                 path: 'mydialogues/:dialogue_id',
                 component: __WEBPACK_IMPORTED_MODULE_9__views_mydialogues_mydialogue_edit_component__["a" /* MyDialogueEditViewComponent */],
-                canActivate: [__WEBPACK_IMPORTED_MODULE_11__services_guards_service__["a" /* AuthGuard */]]
+                canActivate: [__WEBPACK_IMPORTED_MODULE_13__services_guards_service__["a" /* AuthGuard */]]
             }
         ]
     },
@@ -321,7 +325,27 @@ var ROUTES = [
             {
                 path: 'help',
                 component: __WEBPACK_IMPORTED_MODULE_10__views_view_help_view_help_component__["a" /* HelpViewComponent */],
-                canActivate: [__WEBPACK_IMPORTED_MODULE_11__services_guards_service__["a" /* AuthGuard */]]
+                canActivate: [__WEBPACK_IMPORTED_MODULE_13__services_guards_service__["a" /* AuthGuard */]]
+            }
+        ]
+    },
+    {
+        path: '', component: __WEBPACK_IMPORTED_MODULE_3__components_common_layouts_basicLayout_component__["a" /* BasicLayoutComponent */],
+        children: [
+            {
+                path: 'blog',
+                component: __WEBPACK_IMPORTED_MODULE_11__views_view_blog_view_blogs_component__["a" /* BlogsViewComponent */],
+                canActivate: [__WEBPACK_IMPORTED_MODULE_13__services_guards_service__["a" /* AuthGuard */]]
+            }
+        ]
+    },
+    {
+        path: '', component: __WEBPACK_IMPORTED_MODULE_3__components_common_layouts_basicLayout_component__["a" /* BasicLayoutComponent */],
+        children: [
+            {
+                path: 'blog/:blog_id',
+                component: __WEBPACK_IMPORTED_MODULE_12__views_view_blog_view_blog_component__["a" /* BlogViewComponent */],
+                canActivate: [__WEBPACK_IMPORTED_MODULE_13__services_guards_service__["a" /* AuthGuard */]]
             }
         ]
     },
@@ -343,28 +367,29 @@ var AppSettings = (function () {
     AppSettings.initialized = function () {
         if (AppSettings.host.indexOf('localhost') > -1 || AppSettings.host.indexOf('127.0.0.1') > -1) {
             AppSettings.base_url = AppSettings.protocol + '//' + AppSettings.host + ':8000';
-            AppSettings.URL_WEBSOKET = "wss://" + document.location.hostname + ':8000/peerjs';
+            AppSettings.URL_WEBSOKET = 'wss://' + document.location.hostname + ':8000/peerjs';
             AppSettings.URL_WEBSOKET_PEER = document.location.hostname + ':8000';
         }
         else {
             AppSettings.base_url = AppSettings.protocol + '//' + AppSettings.host;
-            AppSettings.URL_WEBSOKET = "wss://" + document.location.hostname + ':8000/peerjs';
+            AppSettings.URL_WEBSOKET = 'wss://' + document.location.hostname + ':8000/peerjs';
             AppSettings.URL_WEBSOKET_PEER = document.location.hostname;
         }
-        AppSettings.URL_STATUS = AppSettings.base_url + "/dialogs/api/status/";
-        AppSettings.URL_DIALOGS = AppSettings.base_url + "/dialogs/api/dialogues/";
-        AppSettings.URL_ACTIVEDIALOGS = AppSettings.base_url + "/dialogs/api/activedialogues/";
-        AppSettings.URL_MYDIALOGS = AppSettings.base_url + "/dialogs/api/mydialogues/";
-        AppSettings.URL_MYACTIVEDIALOGS = AppSettings.base_url + "/dialogs/api/myactivedialogues/";
-        AppSettings.URL_DIALOG_RUN = AppSettings.base_url + "/dialogs/api/run/";
-        AppSettings.URL_DIALOG_RUNINTO = AppSettings.base_url + "/dialogs/api/runinto/";
-        AppSettings.URL_DIALOG_ACTIVESTOP = AppSettings.base_url + "/dialogs/api/stop/";
-        AppSettings.URL_DIALOG_STOP = AppSettings.base_url + "/dialogs/api/stop/";
-        AppSettings.URL_CHANGE_ACCEPT_CALL = AppSettings.base_url + "/accounts/accept_call/";
-        AppSettings.URL_MESSAGE = AppSettings.base_url + "/accounts/message/";
-        AppSettings.URL_CHECK_USER = AppSettings.base_url + "/accounts/check_user/";
-        AppSettings.URL_USER_SETTING = AppSettings.base_url + "/accounts/user/";
-        AppSettings.URL_TAGS = AppSettings.base_url + "/dialogs/tags/";
+        AppSettings.URL_STATUS = AppSettings.base_url + '/dialogs/api/status/';
+        AppSettings.URL_DIALOGS = AppSettings.base_url + '/dialogs/api/dialogues/';
+        AppSettings.URL_ACTIVEDIALOGS = AppSettings.base_url + '/dialogs/api/activedialogues/';
+        AppSettings.URL_MYDIALOGS = AppSettings.base_url + '/dialogs/api/mydialogues/';
+        AppSettings.URL_MYACTIVEDIALOGS = AppSettings.base_url + '/dialogs/api/myactivedialogues/';
+        AppSettings.URL_DIALOG_RUN = AppSettings.base_url + '/dialogs/api/run/';
+        AppSettings.URL_DIALOG_RUNINTO = AppSettings.base_url + '/dialogs/api/runinto/';
+        AppSettings.URL_DIALOG_ACTIVESTOP = AppSettings.base_url + '/dialogs/api/stop/';
+        AppSettings.URL_DIALOG_STOP = AppSettings.base_url + '/dialogs/api/stop/';
+        AppSettings.URL_CHANGE_ACCEPT_CALL = AppSettings.base_url + '/accounts/accept_call/';
+        AppSettings.URL_MESSAGE = AppSettings.base_url + '/accounts/message/';
+        AppSettings.URL_CHECK_USER = AppSettings.base_url + '/accounts/check_user/';
+        AppSettings.URL_USER_SETTING = AppSettings.base_url + '/accounts/user/';
+        AppSettings.URL_TAGS = AppSettings.base_url + '/dialogs/tags/';
+        AppSettings.URL_BLOGS = AppSettings.base_url + '/blog/api/blog/';
         //AppSettings.URL_WEBSOKET_PEER = document.location.hostname;
     };
     return AppSettings;
@@ -619,7 +644,7 @@ FooterComponent = __decorate([
 /***/ "../../../../../src/app/components/common/footer/footer.template.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"\" style=\"width:100%;background: rgba(64,75,97, 0.9);display: flex;justify-content: space-between;flex-wrap: wrap;\">\n    <div style=\"height: 80px;color: white;margin:20px;font-size: 14px;\">\n        <ol>\n            <li>\n                <a [routerLink]=\"['/message']\" style=\"color: blanchedalmond;\">Задать вопрос</a>\n            </li>\n            <li>\n                <a style=\"color:white;cursor: pointer;\" (click)=\"show_error_dialog=true\">Сообщить об ошибке</a>\n            </li>\n        </ol>\n    </div>\n\n    <div style=\"height: 80px;color: white;margin:20px;font-size: 14px;\">\n        <ol>\n            <li>\n                <a [routerLink]=\"['/mydialogues']\" style=\"color:white;\">Мои диалоги</a>\n            </li>\n            <li>\n                <a [routerLink]=\"['/dialogues']\" style=\"color:white;\">Все диалоги</a>\n            </li>\n            <li>\n                <a [routerLink]=\"['/activedialogues']\" style=\"color:white;\">Диалоги в ожидание диалоги</a>\n            </li>\n            <li>\n                <a [routerLink]=\"['/profile']\" style=\"color:white;\">Настройки профиля</a>\n            </li>\n        </ol>\n    </div>\n\n\n    <div style=\"height: 80px;color: white;margin: 20px 40px 0px 20px;font-size: 14px;\">\n        <ol>\n            <li>\n                <a [routerLink]=\"['/help']\" style=\"color:white;\">Помощь с интерфейсом</a>\n            </li>\n           \n        </ol>\n    </div>\n</div>\n\n\n<messageerrors [(visible)]=\"show_error_dialog\"></messageerrors>"
+module.exports = "<div class=\"\" style=\"width:100%;background: rgba(64,75,97, 0.9);display: flex;justify-content: space-between;flex-wrap: wrap;\">\n    <div style=\"height: 80px;color: white;margin:20px;font-size: 14px;\">\n        <ol>\n            <li>\n                <a [routerLink]=\"['/message']\" style=\"color: blanchedalmond;\">Задать вопрос</a>\n            </li>\n            <li>\n                <a style=\"color:white;cursor: pointer;\" (click)=\"show_error_dialog=true\">Сообщить об ошибке</a>\n            </li>\n        </ol>\n    </div>\n\n    <div style=\"height: 80px;color: white;margin:20px;font-size: 14px;\">\n        <ol>\n            <li>\n                <a [routerLink]=\"['/mydialogues']\" style=\"color:white;\">Мои диалоги</a>\n            </li>\n            <li>\n                <a [routerLink]=\"['/dialogues']\" style=\"color:white;\">Все диалоги</a>\n            </li>\n            <li>\n                <a [routerLink]=\"['/activedialogues']\" style=\"color:white;\">Диалоги в ожидание диалоги</a>\n            </li>\n            <li>\n                <a [routerLink]=\"['/profile']\" style=\"color:white;\">Настройки профиля</a>\n            </li>\n        </ol>\n    </div>\n\n\n    <div style=\"height: 80px;color: white;margin: 20px 40px 0px 20px;font-size: 14px;\">\n        <ol>\n            <li>\n                <a [routerLink]=\"['/help']\" style=\"color:white;\">Помощь с интерфейсом</a>\n            </li>\n           <li>\n                <a [routerLink]=\"['/blog']\" style=\"color:white;\">Блог</a>\n            </li>\n        </ol>\n    </div>\n</div>\n\n\n<messageerrors [(visible)]=\"show_error_dialog\"></messageerrors>"
 
 /***/ }),
 
@@ -3405,6 +3430,43 @@ NotificationService = __decorate([
 
 /***/ }),
 
+/***/ "../../../../../src/app/services/pipe.safehtml.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SafeHtmlPipe; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser__ = __webpack_require__("../../../platform-browser/@angular/platform-browser.es5.js");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+var SafeHtmlPipe = (function () {
+    function SafeHtmlPipe(sanitized) {
+        this.sanitized = sanitized;
+    }
+    SafeHtmlPipe.prototype.transform = function (value) {
+        return this.sanitized.bypassSecurityTrustHtml(value);
+    };
+    return SafeHtmlPipe;
+}());
+SafeHtmlPipe = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Pipe"])({ name: 'safeHtml' }),
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser__["DomSanitizer"] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser__["DomSanitizer"]) === "function" && _a || Object])
+], SafeHtmlPipe);
+
+var _a;
+//# sourceMappingURL=pipe.safehtml.js.map
+
+/***/ }),
+
 /***/ "../../../../../src/app/services/status.service.ts":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -4003,13 +4065,16 @@ module.exports = "<div class=\"row\">\n    <div class=\"container\">\n        <d
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__view_message_view_message_component__ = __webpack_require__("../../../../../src/app/views/view_message/view_message.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__view_profile_view_profile_component__ = __webpack_require__("../../../../../src/app/views/view_profile/view_profile.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__view_help_view_help_component__ = __webpack_require__("../../../../../src/app/views/view_help/view_help.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__components_common_notification_notification_component__ = __webpack_require__("../../../../../src/app/components/common/notification/notification.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__components_chat_chat_component__ = __webpack_require__("../../../../../src/app/components/chat/chat.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__mydialogues_mydialogues_component__ = __webpack_require__("../../../../../src/app/views/mydialogues/mydialogues.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__mydialogues_mydialogue_edit_component__ = __webpack_require__("../../../../../src/app/views/mydialogues/mydialogue.edit.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_25__components_scenario_scenario_component__ = __webpack_require__("../../../../../src/app/components/scenario/scenario.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_26__components_tags_tags_component__ = __webpack_require__("../../../../../src/app/components/tags/tags.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_27__view_profile_equal_validator_directive__ = __webpack_require__("../../../../../src/app/views/view_profile/equal_validator.directive.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__view_blog_view_blog_component__ = __webpack_require__("../../../../../src/app/views/view_blog/view_blog.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__view_blog_view_blogs_component__ = __webpack_require__("../../../../../src/app/views/view_blog/view_blogs.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__components_common_notification_notification_component__ = __webpack_require__("../../../../../src/app/components/common/notification/notification.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__components_chat_chat_component__ = __webpack_require__("../../../../../src/app/components/chat/chat.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_25__mydialogues_mydialogues_component__ = __webpack_require__("../../../../../src/app/views/mydialogues/mydialogues.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_26__mydialogues_mydialogue_edit_component__ = __webpack_require__("../../../../../src/app/views/mydialogues/mydialogue.edit.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_27__components_scenario_scenario_component__ = __webpack_require__("../../../../../src/app/components/scenario/scenario.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_28__components_tags_tags_component__ = __webpack_require__("../../../../../src/app/components/tags/tags.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_29__view_profile_equal_validator_directive__ = __webpack_require__("../../../../../src/app/views/view_profile/equal_validator.directive.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_30__services_pipe_safehtml__ = __webpack_require__("../../../../../src/app/services/pipe.safehtml.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -4023,6 +4088,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 //import { FileSelectDirective } from 'ng2-file-upload';
 //import { FileSelectDirective } from '../../../node_modules/ng2-file-upload';
+
+
+
 
 
 
@@ -4068,13 +4136,16 @@ AppviewsModule = __decorate([
             __WEBPACK_IMPORTED_MODULE_18__view_message_view_message_component__["a" /* MessageViewComponent */],
             __WEBPACK_IMPORTED_MODULE_19__view_profile_view_profile_component__["a" /* ProfileViewComponent */],
             __WEBPACK_IMPORTED_MODULE_20__view_help_view_help_component__["a" /* HelpViewComponent */],
-            __WEBPACK_IMPORTED_MODULE_27__view_profile_equal_validator_directive__["a" /* EqualValidator */],
-            __WEBPACK_IMPORTED_MODULE_21__components_common_notification_notification_component__["a" /* NotificationComponent */],
-            __WEBPACK_IMPORTED_MODULE_22__components_chat_chat_component__["a" /* ChatComponent */],
-            __WEBPACK_IMPORTED_MODULE_23__mydialogues_mydialogues_component__["a" /* MyDialoguesViewComponent */],
-            __WEBPACK_IMPORTED_MODULE_24__mydialogues_mydialogue_edit_component__["a" /* MyDialogueEditViewComponent */],
-            __WEBPACK_IMPORTED_MODULE_25__components_scenario_scenario_component__["a" /* ScenarioComponent */],
-            __WEBPACK_IMPORTED_MODULE_26__components_tags_tags_component__["a" /* TagsComponent */],
+            __WEBPACK_IMPORTED_MODULE_29__view_profile_equal_validator_directive__["a" /* EqualValidator */],
+            __WEBPACK_IMPORTED_MODULE_23__components_common_notification_notification_component__["a" /* NotificationComponent */],
+            __WEBPACK_IMPORTED_MODULE_24__components_chat_chat_component__["a" /* ChatComponent */],
+            __WEBPACK_IMPORTED_MODULE_25__mydialogues_mydialogues_component__["a" /* MyDialoguesViewComponent */],
+            __WEBPACK_IMPORTED_MODULE_26__mydialogues_mydialogue_edit_component__["a" /* MyDialogueEditViewComponent */],
+            __WEBPACK_IMPORTED_MODULE_27__components_scenario_scenario_component__["a" /* ScenarioComponent */],
+            __WEBPACK_IMPORTED_MODULE_28__components_tags_tags_component__["a" /* TagsComponent */],
+            __WEBPACK_IMPORTED_MODULE_21__view_blog_view_blog_component__["a" /* BlogViewComponent */],
+            __WEBPACK_IMPORTED_MODULE_22__view_blog_view_blogs_component__["a" /* BlogsViewComponent */],
+            __WEBPACK_IMPORTED_MODULE_30__services_pipe_safehtml__["a" /* SafeHtmlPipe */],
         ],
         imports: [
             __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser__["BrowserModule"],
@@ -4099,13 +4170,15 @@ AppviewsModule = __decorate([
             __WEBPACK_IMPORTED_MODULE_18__view_message_view_message_component__["a" /* MessageViewComponent */],
             __WEBPACK_IMPORTED_MODULE_19__view_profile_view_profile_component__["a" /* ProfileViewComponent */],
             __WEBPACK_IMPORTED_MODULE_20__view_help_view_help_component__["a" /* HelpViewComponent */],
-            __WEBPACK_IMPORTED_MODULE_27__view_profile_equal_validator_directive__["a" /* EqualValidator */],
-            __WEBPACK_IMPORTED_MODULE_21__components_common_notification_notification_component__["a" /* NotificationComponent */],
-            __WEBPACK_IMPORTED_MODULE_22__components_chat_chat_component__["a" /* ChatComponent */],
-            __WEBPACK_IMPORTED_MODULE_23__mydialogues_mydialogues_component__["a" /* MyDialoguesViewComponent */],
-            __WEBPACK_IMPORTED_MODULE_24__mydialogues_mydialogue_edit_component__["a" /* MyDialogueEditViewComponent */],
-            __WEBPACK_IMPORTED_MODULE_25__components_scenario_scenario_component__["a" /* ScenarioComponent */],
-            __WEBPACK_IMPORTED_MODULE_26__components_tags_tags_component__["a" /* TagsComponent */],
+            __WEBPACK_IMPORTED_MODULE_29__view_profile_equal_validator_directive__["a" /* EqualValidator */],
+            __WEBPACK_IMPORTED_MODULE_23__components_common_notification_notification_component__["a" /* NotificationComponent */],
+            __WEBPACK_IMPORTED_MODULE_24__components_chat_chat_component__["a" /* ChatComponent */],
+            __WEBPACK_IMPORTED_MODULE_25__mydialogues_mydialogues_component__["a" /* MyDialoguesViewComponent */],
+            __WEBPACK_IMPORTED_MODULE_26__mydialogues_mydialogue_edit_component__["a" /* MyDialogueEditViewComponent */],
+            __WEBPACK_IMPORTED_MODULE_27__components_scenario_scenario_component__["a" /* ScenarioComponent */],
+            __WEBPACK_IMPORTED_MODULE_28__components_tags_tags_component__["a" /* TagsComponent */],
+            __WEBPACK_IMPORTED_MODULE_21__view_blog_view_blog_component__["a" /* BlogViewComponent */],
+            __WEBPACK_IMPORTED_MODULE_22__view_blog_view_blogs_component__["a" /* BlogsViewComponent */],
         ],
     })
 ], AppviewsModule);
@@ -4965,6 +5038,194 @@ var _a, _b, _c, _d, _e, _f;
 /***/ (function(module, exports) {
 
 module.exports = "<div class=\"row\">\n    <div class=\"container\">\n        <div class=\"panel panel-default\">\n            <div class=\"panel-heading\">\n                <h4 style=\"display: inline-block;\">Выберите диалог для редактирования</h4>\n                <button type=\"button\" class=\"btn btn-info pull-right\" (click)=\"showCreateDialog()\">Создать диалог</button>\n            </div>\n            <div class=\"panel-body\" style=\"position: relative;\">\n                <!-- Loading -->\n                <div *ngIf=\"loading\" style=\"position: absolute;top:0;left:0;width:100%;height:100%;z-index: 100;\">\n                    <div style=\"position: absolute;opacity: 0.5;width:100%;height:100%;background-color: white;\">\n                    </div>\n                    <div style=\"width: 50px;margin: auto;margin-top: 160px;\">\n                        <i class=\"fa fa-spin fa-gear\" style=\"font-size: 50px;\"></i>\n                    </div>\n                </div>\n                <!-- END Loading -->\n\n                <div class=\"row\" style=\"margin: 20px 0;display: flex;flex-wrap: wrap;\"> \n                    <div class=\"col-sm-6 col-md-4\" *ngFor=\"let item of dialogs\"> \n                        <div class=\"thumbnail\"> \n                            <div class=\"\" style=\"width: 100%;position: relative;\">\n                                <div>\n                                    <div *ngIf=\"!item.background_image\" \n                                        style=\"\n                                            height: 60px; \n                                            width: 90px; \n                                            border: 1px solid #ccc;\n                                            background-color: #ddd;\n                                            margin: 0 10px;\">\n                                    </div>\n                                    <div *ngIf=\"item.background_image\" \n                                        [ngStyle]=\"{'background-image': 'url(' + item.background_image + ')'}\"\n                                        style=\"\n                                            height: 60px; \n                                            width: 90px; \n                                            background-size: cover;\n                                            display: block;\n                                            margin: 0 10px;\">\n                                    </div>\n                                    <p  class=\"badge\" [ngClass]=\"{\n                                            'bg-color-begin': item.level == 10,\n                                            'bg-color-preintermediate': item.level == 20,\n                                            'bg-color-intermediate': item.level == 30\n                                        }\" style=\"margin: 5px;\">{{item.level_display}}</p>\n\n                                    <div style=\"text-align: left;\">\n                                    <p class=\"badge badge-info\" style=\"margin:5px;background-color: darkcyan;\" *ngFor=\"let item of item.tags\">{{item.name}}</p>\n                                </div>\n                                </div>\n\n                                <div style=\"position: absolute; right: 0;top:0;display: flex;align-items: center;    flex-wrap: wrap;justify-content: flex-end;\">\n                                    <div>\n                                        <p style=\"font-size: 10px;width: 100%;text-align: right;margin: 0;\">Доступно для всех?</p>\n                                        <div style=\"width: 40px;height: 40px;border: 2px solid darkslateblue;border-radius: 4px;cursor: pointer;margin: auto;\" (click)=\"publishDialog(item)\">\n                                            <div *ngIf=\"item.is_published\" style=\"width: 28px;height: 28px;background-color: darkslateblue;border-radius: 4px;margin:4px;\"></div>\n                                        </div>\n                                    </div>\n                                    <div style=\"margin-left: 5px;\">\n                                        <p style=\"font-size: 10px;width: 100%;text-align: right;margin: 0;\">Принимать звонки?</p>\n                                        <div style=\"width: 40px;height: 40px;border: 2px solid darkcyan;border-radius: 4px;cursor: pointer;margin: auto;\" (click)=\"turnActiveDialog(item)\">\n                                            <div *ngIf=\"item.checked\" style=\"width: 28px;height: 28px;background-color: darkcyan;border-radius: 4px;margin:4px;\"></div>\n                                        </div>\n                                    </div>\n                                </div>\n                                \n                            </div>\n                            <div class=\"caption\" style=\"clear:both;\"> \n                                <p style=\"font-size: 8px;margin:0;\">Кол-во шагов: {{item.scenario.steps.length || 0}}</p> \n                                <h4>{{item.name}}</h4> \n                                <p style=\"font-size: 12px;\">{{item.description}}</p> \n                                <div style=\"display: flex;justify-content: space-between;align-items: baseline;\">\n                                    <button class=\"btn btn-info btn-xs\" [routerLink]=\"['/dialogue', item.id]\">\n                                        Просмотреть\n                                    </button> \n                                    <button class=\"btn btn-success\" [routerLink]=\"['/mydialogues', item.id]\">\n                                        Редактировать\n                                    </button> \n                                </div> \n                            </div> \n                        </div> \n                    </div> \n                </div>\n\n            </div>\n        </div>\n        \n    </div>\n</div>\n\n\n<ng-template #template>\n    <form #frm=\"ngForm\" (ngSubmit)=\"createDialog()\">\n        <div class=\"modal-header\">\n            <h4 class=\"modal-title pull-left\">Создание нового диалога</h4>\n            <button type=\"button\" class=\"close pull-right\" aria-label=\"Close\" (click)=\"closeCreateDialog()\">\n                <span aria-hidden=\"true\">&times;</span>\n            </button>\n        </div>\n        <div class=\"modal-body\" style=\"text-align: center;\">\n            <div class=\"form-group\">\n                <label for=\"name\">Введите название диалога</label>\n                <input name=\"frm_name\" type=\"text\" class=\"form-control\" id=\"name\" [(ngModel)]=\"new_dialog_name\" required=\"required\" maxlength=\"100\" [autofocus]=\"true\">\n            </div>\n        </div>\n        <div class=\"modal-footer\">\n            <button type=\"submit\" class=\"btn btn-primary\" [disabled]=\"!frm.valid || loading\">Создать</button>\n            <button type=\"button\" class=\"btn btn-default pull-right\" (click)=\"closeCreateDialog()\">Отмена</button>\n        </div>\n    </form>\n</ng-template>\n\n"
+
+/***/ }),
+
+/***/ "../../../../../src/app/views/view_blog/view_blog.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return BlogViewComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_router__ = __webpack_require__("../../../router/@angular/router.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_common_http__ = __webpack_require__("../../../common/@angular/common/http.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__app_settings__ = __webpack_require__("../../../../../src/app/app.settings.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__services_status_service__ = __webpack_require__("../../../../../src/app/services/status.service.ts");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+
+var BlogViewComponent = (function () {
+    function BlogViewComponent(http, router, statusService, activatedRoute) {
+        this.http = http;
+        this.router = router;
+        this.statusService = statusService;
+        this.activatedRoute = activatedRoute;
+        this.loading = false;
+    }
+    BlogViewComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this.loading = true;
+        this.activatedRoute.params
+            .pluck('blog_id')
+            .switchMap(function (blog_id) { return _this.getInitBlog(blog_id); })
+            .subscribe(function (response) {
+            _this.blog = response.blog;
+            _this.next_blog = response.next_blog;
+            _this.prev_blog = response.prev_blog;
+            _this.loading = false;
+        }, function (error) {
+            _this.loading = false;
+        });
+    };
+    BlogViewComponent.prototype.getInitBlog = function (blog_id) {
+        return this.http.get(__WEBPACK_IMPORTED_MODULE_3__app_settings__["a" /* AppSettings */].URL_BLOGS + blog_id + '/');
+    };
+    BlogViewComponent.prototype.getBlog = function (blog_id, $event) {
+        var _this = this;
+        $event.preventDefault();
+        this.loading = true;
+        this.http.get(__WEBPACK_IMPORTED_MODULE_3__app_settings__["a" /* AppSettings */].URL_BLOGS + blog_id + '/')
+            .subscribe(function (response) {
+            _this.blog = response.blog;
+            _this.next_blog = response.next_blog;
+            _this.prev_blog = response.prev_blog;
+            _this.loading = false;
+        }, function (error) {
+            _this.loading = false;
+        });
+    };
+    return BlogViewComponent;
+}());
+BlogViewComponent = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+        selector: 'app-blog',
+        template: __webpack_require__("../../../../../src/app/views/view_blog/view_blog.template.html")
+    }),
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__angular_common_http__["a" /* HttpClient */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__angular_common_http__["a" /* HttpClient */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1__angular_router__["b" /* Router */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_router__["b" /* Router */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_4__services_status_service__["a" /* StatusService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__services_status_service__["a" /* StatusService */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_1__angular_router__["a" /* ActivatedRoute */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_router__["a" /* ActivatedRoute */]) === "function" && _d || Object])
+], BlogViewComponent);
+
+var _a, _b, _c, _d;
+//# sourceMappingURL=view_blog.component.js.map
+
+/***/ }),
+
+/***/ "../../../../../src/app/views/view_blog/view_blog.template.html":
+/***/ (function(module, exports) {
+
+module.exports = "<div class=\"container\" style=\"background-color: white;padding: 40px;border-radius: 5px;\">\n    <div>\n      <a href=\"/#/blog\" style=\"float: left;\">Перейти к странице блога</a>\n      <a href=\"/\" style=\"float: right;\">Перейти к главную страницу</a>\n    </div>\n    <!-- Loading -->\n    <div *ngIf=\"loading\" style=\"position: absolute;top:0;left:0;width:100%;height:100%;z-index: 100;\">\n        <div style=\"position: absolute;opacity: 0.5;width:100%;height:100%;background-color: white;\">\n        </div>\n        <div style=\"width: 50px;margin: auto;margin-top: 160px;\">\n            <i class=\"fa fa-spin fa-gear\" style=\"font-size: 50px;\"></i>\n        </div>\n    </div>\n    <!-- END Loading -->\n    \n    <div class=\"blog-header\" style=\"margin-top: 100px;clear: both;\">\n        <h1 class=\"blog-title\">{{blog?.title}}</h1>\n        <p class=\"lead blog-description\"></p>\n    </div>\n    <div class=\"row\">\n\n    <div class=\"col-sm-12 blog-main\" style=\"padding: 40px;\">\n        <div class=\"blog-post\">\n            <img src=\"{{ blog?.title_image }}\" class=\"img-responsive\" style=\"float: left; margin:40px;max-width: 300px;max-height: 300px\">\n            <div [innerHTML]=\"blog?.content | safeHtml\"></div>\n        </div><!-- /.blog-post -->\n\n        <nav style=\"clear: both;margin-top: 40px;\">\n            <ul class=\"pager\">\n                <li *ngIf=\"prev_blog\"><a href=\"#\" (click)=\"getBlog(prev_blog, $event)\">Более новая заметка</a></li>\n                <li *ngIf=\"next_blog\"><a href=\"#\"  (click)=\"getBlog(next_blog, $event)\">Предыдущая заметка</a></li>\n            </ul>\n        </nav>\n    </div>\n  </div>\n  <div>\n      <a href=\"/blog\" style=\"float: left;\">Перейти к странице блога</a>\n      <a href=\"/\" style=\"float: right;\">Перейти к главную страницу</a>\n  </div>\n</div>\n\n"
+
+/***/ }),
+
+/***/ "../../../../../src/app/views/view_blog/view_blogs.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return BlogsViewComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_router__ = __webpack_require__("../../../router/@angular/router.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_common_http__ = __webpack_require__("../../../common/@angular/common/http.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs__ = __webpack_require__("../../../../rxjs/Rx.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_rxjs__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__app_settings__ = __webpack_require__("../../../../../src/app/app.settings.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__services_status_service__ = __webpack_require__("../../../../../src/app/services/status.service.ts");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+
+
+var BlogsViewComponent = (function () {
+    function BlogsViewComponent(http, router, statusService, activatedRoute) {
+        this.http = http;
+        this.router = router;
+        this.statusService = statusService;
+        this.activatedRoute = activatedRoute;
+        this.loading = false;
+        this.blogs = [];
+    }
+    BlogsViewComponent.prototype.ngOnInit = function () {
+        this.getBlogs();
+    };
+    BlogsViewComponent.prototype.getBlogs = function (_params) {
+        var _this = this;
+        var data = _params || {};
+        var params = new __WEBPACK_IMPORTED_MODULE_2__angular_common_http__["c" /* HttpParams */]();
+        for (var key in data) {
+            if (data.hasOwnProperty(key)) {
+                params = params.set(key, data[key]);
+            }
+        }
+        this.loading = true;
+        this.http.get(__WEBPACK_IMPORTED_MODULE_4__app_settings__["a" /* AppSettings */].URL_BLOGS, { params: params })
+            .subscribe(function (response) {
+            _this.blogs = response.blogs;
+            _this.previouspage = response.previouspage;
+            _this.nextpage = response.nextpage;
+            _this.count_page = response.count_page;
+            _this.loading = false;
+        }, function (error) {
+            _this.loading = false;
+            console.error(error);
+            if (error.status === 403) {
+                _this.router.navigate(['/accounts/login/']);
+            }
+            if (error.status === 404) {
+                _this.router.navigate(['/dialogues/']);
+            }
+            return __WEBPACK_IMPORTED_MODULE_3_rxjs__["Observable"].throw('Server error');
+        });
+    };
+    BlogsViewComponent.prototype.getOld = function ($event) {
+        $event.preventDefault();
+        this.getBlogs({
+            page: this.nextpage
+        });
+    };
+    BlogsViewComponent.prototype.getNew = function ($event) {
+        $event.preventDefault();
+        this.getBlogs({
+            page: this.previouspage
+        });
+    };
+    return BlogsViewComponent;
+}());
+BlogsViewComponent = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+        selector: 'app-blogs',
+        template: __webpack_require__("../../../../../src/app/views/view_blog/view_blogs.template.html")
+    }),
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__angular_common_http__["a" /* HttpClient */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__angular_common_http__["a" /* HttpClient */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1__angular_router__["b" /* Router */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_router__["b" /* Router */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_5__services_status_service__["a" /* StatusService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_5__services_status_service__["a" /* StatusService */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_1__angular_router__["a" /* ActivatedRoute */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_router__["a" /* ActivatedRoute */]) === "function" && _d || Object])
+], BlogsViewComponent);
+
+var _a, _b, _c, _d;
+//# sourceMappingURL=view_blogs.component.js.map
+
+/***/ }),
+
+/***/ "../../../../../src/app/views/view_blog/view_blogs.template.html":
+/***/ (function(module, exports) {
+
+module.exports = "<div style=\"display: flex;flex-wrap: wrap;padding: 40px;justify-content: center\">\n    <div *ngFor=\"let blog of blogs\" class=\"col-md-4 col-sm-6 col-xs-12\" >\n        <div class=\"blog-sec\" style=\"background-color: white;margin: 5px;border-radius: 5px;padding: 20px;\">\n          <div class=\"blog-img\">\n            <a href=\"\">\n              <img src=\"{{ blog.title_image }}\" class=\"img-responsive\" style=\"margin: auto;max-width: 300px;max-height: 300px\">\n            </a>\n          </div>\n          <div class=\"blog-info\">\n            <h2>{{blog.title}}</h2>\n            \n            <p [innerHTML]=\"blog?.short_content | safeHtml\"></p>\n            <a href=\"/#/blog/{{blog.id}}\" class=\"read-more\" style=\"color: black;\">Читать дальше →</a>\n          </div>\n        </div>\n    </div>\n    <!-- Loading -->\n    <div *ngIf=\"loading\" style=\"position: absolute;top:0;left:0;width:100%;height:100%;z-index: 100;\">\n        <div style=\"position: absolute;opacity: 0.5;width:100%;height:100%;background-color: white;\">\n        </div>\n        <div style=\"width: 50px;margin: auto;margin-top: 160px;\">\n            <i class=\"fa fa-spin fa-gear\" style=\"font-size: 50px;\"></i>\n        </div>\n    </div>\n    <!-- END Loading -->\n      <div class=\"col-md-12\" style=\"clear: both;margin-top: 40px;\">\n          <nav>\n            <ul class=\"pager\" style=\"display: flex;justify-content: space-around;\">\n                <li *ngIf=\"previouspage\" class=\"pull-left\">\n                    <a href=\"#\" (click)=\"getNew($event)\">Новые заметки</a>\n                </li>\n                <li *ngIf=\"count_page > 0 && previouspage && nextpage\"><p style=\"color: #ccc\">Всего страниц: {{ count_page }}</p></li>\n                <li *ngIf=\"nextpage\" class=\"pull-right\">\n                    <a href=\"#\" (click)=\"getOld($event)\">Более старые заметки</a>\n                </li>\n            </ul>\n        </nav>\n    </div>\n</div>\n"
 
 /***/ }),
 

@@ -27,7 +27,6 @@ urlpatterns = [
     url(r'^tags/(?P<dialog_pk>\d+)/(?P<tag_pk>\d+)/?$', delete_dialog_tag, name="delete_dialog_tag"),
     url(r'^tags/(?P<dialog_pk>\d+)/?$', dialog_tag, name="dialog_tag"),
     url(r'^tags/?$', tags, name="tags"),
-    
-    #url(r'^(?P<key>\w+)/(?P<id>\w+)/(?P<token>\w+)/id$', set_streaming, name="set_streaming"),
-    #url(r'^(?P<key>\w+)/(?P<id>\w+)/(?P<token>\w+)/candidate$', handle, name="handle"),
+
+
 ]

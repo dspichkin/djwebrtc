@@ -1,0 +1,41 @@
+<div class="container" style="background-color: white;padding: 40px;border-radius: 5px;">
+    <div>
+      <a href="/#/blog" style="float: left;">Перейти к странице блога</a>
+      <a href="/" style="float: right;">Перейти к главную страницу</a>
+    </div>
+    <!-- Loading -->
+    <div *ngIf="loading" style="position: absolute;top:0;left:0;width:100%;height:100%;z-index: 100;">
+        <div style="position: absolute;opacity: 0.5;width:100%;height:100%;background-color: white;">
+        </div>
+        <div style="width: 50px;margin: auto;margin-top: 160px;">
+            <i class="fa fa-spin fa-gear" style="font-size: 50px;"></i>
+        </div>
+    </div>
+    <!-- END Loading -->
+    
+    <div class="blog-header" style="margin-top: 100px;clear: both;">
+        <h1 class="blog-title">{{blog?.title}}</h1>
+        <p class="lead blog-description"></p>
+    </div>
+    <div class="row">
+
+    <div class="col-sm-12 blog-main" style="padding: 40px;">
+        <div class="blog-post">
+            <img src="{{ blog?.title_image }}" class="img-responsive" style="float: left; margin:40px;max-width: 300px;max-height: 300px">
+            <div [innerHTML]="blog?.content | safeHtml"></div>
+        </div><!-- /.blog-post -->
+
+        <nav style="clear: both;margin-top: 40px;">
+            <ul class="pager">
+                <li *ngIf="prev_blog"><a href="#" (click)="getBlog(prev_blog, $event)">Более новая заметка</a></li>
+                <li *ngIf="next_blog"><a href="#"  (click)="getBlog(next_blog, $event)">Предыдущая заметка</a></li>
+            </ul>
+        </nav>
+    </div>
+  </div>
+  <div>
+      <a href="/blog" style="float: left;">Перейти к странице блога</a>
+      <a href="/" style="float: right;">Перейти к главную страницу</a>
+  </div>
+</div>
+

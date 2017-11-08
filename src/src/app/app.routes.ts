@@ -1,18 +1,20 @@
-import { Routes } from "@angular/router";
+import { Routes } from '@angular/router';
 
-import { DialogsViewComponent } from "./views/dialogsview.component";
-import { ActiveDialogsViewComponent } from "./views/activedialogsview.component";
-import { DialogViewComponent } from "./views/dialogview.component";
+import { DialogsViewComponent } from './views/dialogsview.component';
+import { ActiveDialogsViewComponent } from './views/activedialogsview.component';
+import { DialogViewComponent } from './views/dialogview.component';
 
-import {BlankLayoutComponent} from "./components/common/layouts/blankLayout.component";
-import { BasicLayoutComponent } from "./components/common/layouts/basicLayout.component";
-import { ModeWaitPupilViewComponent } from "./views/view_mode_wait_pupil/view_mode_wait_pupil.component";
-import { ModeCallingViewComponent } from "./views/view_mode_calling/view_mode_calling.component";
-import { MessageViewComponent } from "./views/view_message/view_message.component";
-import { ProfileViewComponent } from "./views/view_profile/view_profile.component";
-import { MyDialoguesViewComponent } from "./views/mydialogues/mydialogues.component";
-import { MyDialogueEditViewComponent } from "./views/mydialogues/mydialogue.edit.component";
-import { HelpViewComponent } from "./views/view_help/view_help.component";
+import {BlankLayoutComponent} from './components/common/layouts/blankLayout.component';
+import { BasicLayoutComponent } from './components/common/layouts/basicLayout.component';
+import { ModeWaitPupilViewComponent } from './views/view_mode_wait_pupil/view_mode_wait_pupil.component';
+import { ModeCallingViewComponent } from './views/view_mode_calling/view_mode_calling.component';
+import { MessageViewComponent } from './views/view_message/view_message.component';
+import { ProfileViewComponent } from './views/view_profile/view_profile.component';
+import { MyDialoguesViewComponent } from './views/mydialogues/mydialogues.component';
+import { MyDialogueEditViewComponent } from './views/mydialogues/mydialogue.edit.component';
+import { HelpViewComponent } from './views/view_help/view_help.component';
+import { BlogsViewComponent } from './views/view_blog/view_blogs.component';
+import { BlogViewComponent } from './views/view_blog/view_blog.component';
 
 import { AuthGuard } from './services/guards.service';
 
@@ -25,7 +27,7 @@ export const ROUTES:Routes = [
     path: '', component: BasicLayoutComponent,
     children: [
         {
-            path: 'dialogues', 
+            path: 'dialogues',
             component: DialogsViewComponent,
             canActivate: [AuthGuard]
         }
@@ -35,7 +37,7 @@ export const ROUTES:Routes = [
     path: '', component: BasicLayoutComponent,
     children: [
         {
-            path: 'activedialogues', 
+            path: 'activedialogues',
             component: ActiveDialogsViewComponent,
             canActivate: [AuthGuard]
         }
@@ -45,7 +47,7 @@ export const ROUTES:Routes = [
     path: '', component: BasicLayoutComponent,
     children: [
         {
-            path: 'dialogue/:dialog_id', 
+            path: 'dialogue/:dialog_id',
             component: DialogViewComponent,
             canActivate: [AuthGuard]
         }
@@ -55,7 +57,7 @@ export const ROUTES:Routes = [
     path: '', component: BasicLayoutComponent,
     children: [
         {
-            path: 'message', 
+            path: 'message',
             component: MessageViewComponent,
             canActivate: [AuthGuard]
         }
@@ -65,19 +67,19 @@ export const ROUTES:Routes = [
     path: '', component: BasicLayoutComponent,
     children: [
         {
-            path: 'profile', 
+            path: 'profile',
             component: ProfileViewComponent,
             canActivate: [AuthGuard]
         }
     ]
   },
   {
-    path: 'wait', 
+    path: 'wait',
     component: ModeWaitPupilViewComponent,
     canActivate: [AuthGuard]
   },
   {
-    path: 'calling/:id', 
+    path: 'calling/:id',
     component: ModeCallingViewComponent,
     canActivate: [AuthGuard]
   },
@@ -85,7 +87,7 @@ export const ROUTES:Routes = [
     path: '', component: BasicLayoutComponent,
     children: [
         {
-            path: 'mydialogues', 
+            path: 'mydialogues',
             component: MyDialoguesViewComponent,
             canActivate: [AuthGuard]
         }
@@ -95,7 +97,7 @@ export const ROUTES:Routes = [
     path: '', component: BasicLayoutComponent,
     children: [
         {
-            path: 'mydialogues/:dialogue_id', 
+            path: 'mydialogues/:dialogue_id',
             component: MyDialogueEditViewComponent,
             canActivate: [AuthGuard]
         }
@@ -105,14 +107,34 @@ export const ROUTES:Routes = [
     path: '', component: BasicLayoutComponent,
     children: [
         {
-            path: 'help', 
+            path: 'help',
             component: HelpViewComponent,
             canActivate: [AuthGuard]
         }
     ]
   },
-  
- 
+  {
+    path: '', component: BasicLayoutComponent,
+    children: [
+        {
+            path: 'blog',
+            component: BlogsViewComponent,
+            canActivate: [AuthGuard]
+        }
+    ]
+  },
+  {
+    path: '', component: BasicLayoutComponent,
+    children: [
+        {
+            path: 'blog/:blog_id',
+            component: BlogViewComponent,
+            canActivate: [AuthGuard]
+        }
+    ]
+  },
+
+
   // Handle all other routes
   {path: '**',  redirectTo: 'dialogues'}
 ];

@@ -425,4 +425,3 @@ def dialog_tag(request, dialog_pk):
                 dialog.save()
     return Response(status.HTTP_200_OK)
 
-

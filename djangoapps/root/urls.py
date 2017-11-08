@@ -60,6 +60,8 @@ urlpatterns += [
     url(r'^accounts/', include('accounts.urls')),
     url(r'^pj/', include('peerjs.urls')),
     url(r'^dialogs/', include('dialogs.urls')),
+    url(r'^blog/', include('blog.urls')),
+
     # JS-приложение
     url(r'^$', app, name='app'),
     # лендинг

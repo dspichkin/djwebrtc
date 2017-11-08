@@ -5,16 +5,16 @@ import { HttpClientModule, HttpClient } from '@angular/common/http';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { RouterModule } from "@angular/router";
+import { RouterModule } from '@angular/router';
 import { JWBootstrapSwitchModule } from '../../node_modules/jw-bootstrap-switch-ng2';
 import { ModalModule } from 'ngx-bootstrap';
 
-import { WebSocketService } from "./services/websocket.service";
+import { WebSocketService } from './services/websocket.service';
 
-import { ROUTES } from "./app.routes";
+import { ROUTES } from './app.routes';
 import { AppComponent } from './app.component';
-import { AppviewsModule } from "./views/appviews.module";
-import { LayoutsModule } from "./components/common/layouts/layouts.module";
+import { AppviewsModule } from './views/appviews.module';
+import { LayoutsModule } from './components/common/layouts/layouts.module';
 
 import { DialogsService } from './services/dialogs.service';
 import { StatusService } from './services/status.service';

@@ -1,0 +1,39 @@
+<div style="display: flex;flex-wrap: wrap;padding: 40px;justify-content: center">
+    <div *ngFor="let blog of blogs" class="col-md-4 col-sm-6 col-xs-12" >
+        <div class="blog-sec" style="background-color: white;margin: 5px;border-radius: 5px;padding: 20px;">
+          <div class="blog-img">
+            <a href="">
+              <img src="{{ blog.title_image }}" class="img-responsive" style="margin: auto;max-width: 300px;max-height: 300px">
+            </a>
+          </div>
+          <div class="blog-info">
+            <h2>{{blog.title}}</h2>
+            
+            <p [innerHTML]="blog?.short_content | safeHtml"></p>
+            <a href="/#/blog/{{blog.id}}" class="read-more" style="color: black;">Читать дальше →</a>
+          </div>
+        </div>
+    </div>
+    <!-- Loading -->
+    <div *ngIf="loading" style="position: absolute;top:0;left:0;width:100%;height:100%;z-index: 100;">
+        <div style="position: absolute;opacity: 0.5;width:100%;height:100%;background-color: white;">
+        </div>
+        <div style="width: 50px;margin: auto;margin-top: 160px;">
+            <i class="fa fa-spin fa-gear" style="font-size: 50px;"></i>
+        </div>
+    </div>
+    <!-- END Loading -->
+      <div class="col-md-12" style="clear: both;margin-top: 40px;">
+          <nav>
+            <ul class="pager" style="display: flex;justify-content: space-around;">
+                <li *ngIf="previouspage" class="pull-left">
+                    <a href="#" (click)="getNew($event)">Новые заметки</a>
+                </li>
+                <li *ngIf="count_page > 0 && previouspage && nextpage"><p style="color: #ccc">Всего страниц: {{ count_page }}</p></li>
+                <li *ngIf="nextpage" class="pull-right">
+                    <a href="#" (click)="getOld($event)">Более старые заметки</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>

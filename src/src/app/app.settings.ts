@@ -20,6 +20,7 @@ export class AppSettings {
     public static URL_WEBSOKET;
     public static URL_WEBSOKET_PEER;
     public static URL_TAGS;
+    public static URL_BLOGS;
 
 
     public static CALLING_TIME_INTERVAL = 5000;
@@ -37,31 +38,32 @@ export class AppSettings {
 
         if (AppSettings.host.indexOf('localhost') > -1 || AppSettings.host.indexOf('127.0.0.1') > -1) {
             AppSettings.base_url = AppSettings.protocol + '//' + AppSettings.host + ':8000';
-            AppSettings.URL_WEBSOKET = "wss://" + document.location.hostname + ':8000/peerjs';
+            AppSettings.URL_WEBSOKET = 'wss://' + document.location.hostname + ':8000/peerjs';
             AppSettings.URL_WEBSOKET_PEER = document.location.hostname + ':8000';
         } else {
             AppSettings.base_url = AppSettings.protocol + '//' + AppSettings.host;
-            AppSettings.URL_WEBSOKET = "wss://" + document.location.hostname + ':8000/peerjs';
+            AppSettings.URL_WEBSOKET = 'wss://' + document.location.hostname + ':8000/peerjs';
             AppSettings.URL_WEBSOKET_PEER = document.location.hostname;
         }
 
 
 
-        AppSettings.URL_STATUS = AppSettings.base_url + "/dialogs/api/status/";
-        AppSettings.URL_DIALOGS = AppSettings.base_url + "/dialogs/api/dialogues/";
-        AppSettings.URL_ACTIVEDIALOGS = AppSettings.base_url + "/dialogs/api/activedialogues/";
-        AppSettings.URL_MYDIALOGS = AppSettings.base_url + "/dialogs/api/mydialogues/";
-        AppSettings.URL_MYACTIVEDIALOGS = AppSettings.base_url + "/dialogs/api/myactivedialogues/";
-        AppSettings.URL_DIALOG_RUN = AppSettings.base_url + "/dialogs/api/run/";
-        AppSettings.URL_DIALOG_RUNINTO = AppSettings.base_url + "/dialogs/api/runinto/";
-        AppSettings.URL_DIALOG_ACTIVESTOP = AppSettings.base_url + "/dialogs/api/stop/";
-        AppSettings.URL_DIALOG_STOP = AppSettings.base_url + "/dialogs/api/stop/";
-        AppSettings.URL_CHANGE_ACCEPT_CALL = AppSettings.base_url + "/accounts/accept_call/";
-        AppSettings.URL_MESSAGE = AppSettings.base_url + "/accounts/message/";
-        AppSettings.URL_CHECK_USER  = AppSettings.base_url + "/accounts/check_user/";
-        AppSettings.URL_USER_SETTING = AppSettings.base_url + "/accounts/user/";
-        AppSettings.URL_TAGS =  AppSettings.base_url + "/dialogs/tags/";
-        
+        AppSettings.URL_STATUS = AppSettings.base_url + '/dialogs/api/status/';
+        AppSettings.URL_DIALOGS = AppSettings.base_url + '/dialogs/api/dialogues/';
+        AppSettings.URL_ACTIVEDIALOGS = AppSettings.base_url + '/dialogs/api/activedialogues/';
+        AppSettings.URL_MYDIALOGS = AppSettings.base_url + '/dialogs/api/mydialogues/';
+        AppSettings.URL_MYACTIVEDIALOGS = AppSettings.base_url + '/dialogs/api/myactivedialogues/';
+        AppSettings.URL_DIALOG_RUN = AppSettings.base_url + '/dialogs/api/run/';
+        AppSettings.URL_DIALOG_RUNINTO = AppSettings.base_url + '/dialogs/api/runinto/';
+        AppSettings.URL_DIALOG_ACTIVESTOP = AppSettings.base_url + '/dialogs/api/stop/';
+        AppSettings.URL_DIALOG_STOP = AppSettings.base_url + '/dialogs/api/stop/';
+        AppSettings.URL_CHANGE_ACCEPT_CALL = AppSettings.base_url + '/accounts/accept_call/';
+        AppSettings.URL_MESSAGE = AppSettings.base_url + '/accounts/message/';
+        AppSettings.URL_CHECK_USER  = AppSettings.base_url + '/accounts/check_user/';
+        AppSettings.URL_USER_SETTING = AppSettings.base_url + '/accounts/user/';
+        AppSettings.URL_TAGS = AppSettings.base_url + '/dialogs/tags/';
+        AppSettings.URL_BLOGS = AppSettings.base_url + '/blog/api/blog/';
+
         //AppSettings.URL_WEBSOKET_PEER = document.location.hostname;
 
     }
