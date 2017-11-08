@@ -53,12 +53,14 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.facebook',
     'allauth.socialaccount.providers.vk',
-
+    'ckeditor',
+    
     'djangodashpanel',
     'accounts',
     'djwebrtc',
     'peerjs',
     'dialogs',
+    'blog',
 ]
 
 SITE_ID = 1

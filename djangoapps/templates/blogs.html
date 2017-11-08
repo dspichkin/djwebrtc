@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div style="display: flex;flex-wrap: wrap;padding: 40px;justify-content: center">
+    {% for blog in blogs %}
+      <div class="col-md-4 col-sm-6 col-xs-12" >
+        <div class="blog-sec" style="background-color: white;margin: 5px;border-radius: 5px;padding: 20px;">
+          <div class="blog-img">
+            <a href="">
+              <img src="{{ blog.get_title_image }}" class="img-responsive" style="margin: auto;max-width: 300px;max-height: 300px">
+            </a>
+          </div>
+          <div class="blog-info">
+            <h2>{{blog.title}}</h2>
+            <!--
+            <div class="blog-comment">
+                <p>Posted In: <span>Legal Advice</span></p>
+                <p>
+                  <span><a href="#"><i class="fa fa-comments"></i></a> 15</span>
+                  <span><a href="#"><i class="fa fa-eye"></i></a> 11</span></p>
+            </div>
+            -->
+            <p>{{ blog.get_short_content | safe }}</p>
+            <a href="/blog/{{blog.pk}}" class="read-more" style="color: black;">Читать дальше →</a>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+
+      <div class="col-md-12" style="clear: both;margin-top: 40px;">
+          <nav>
+            <ul class="pager" style="display: flex;justify-content: space-around;">
+                {% if previouspage %}
+                    <li class="pull-left"><a href="/blog/?page={{previouspage}}">Новые заметки</a></li>
+                {% endif %}
+                {% if count_page > 0 and previouspage and nextpage %}
+                    <li class=""><p style="color: #ccc">Всего страниц: {{ count_page }}</p></li>
+                 {% endif %}
+                {% if nextpage %}
+                    <li class="pull-right"><a href="/blog/?page={{nextpage}}">Более старые заметки</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+</div>
+{% endblock %}

@@ -506,7 +506,6 @@ Blog
 ************************************
 ***********************************/
 .blog-info h2 {
-    text-transform: capitalize;
     font-weight: 600;
     font-size: 20px;
     letter-spacing: 1px;

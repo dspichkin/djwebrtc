@@ -1,0 +1,62 @@
+# -*- coding: utf-8 -*-
+
+from django.shortcuts import render
+from django.http import Http404
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
+from blog.models import Blog
+
+
+def blogs(request, blog_id=None):
+    paginate_by = 2
+    blogs = Blog.objects.filter(is_published=True).order_by('created_at')
+
+    if not blog_id:
+        page = request.GET.get('page', 1)
+        paginator = Paginator(blogs, paginate_by)
+
+        try:
+            rdata = paginator.page(page)
+        except PageNotAnInteger:
+            rdata = paginator.page(1)
+        except EmptyPage:
+            rdata = paginator.page(1)
+
+        count = paginator.count
+        count_page = count / paginate_by
+        previouspage = None if not rdata.has_previous() else rdata.previous_page_number()
+        nextpage = None if not rdata.has_next() else rdata.next_page_number()
+
+        return render(request, 'blogs.html', {
+            "blogs": rdata,
+            "count": count,
+            "count_page": count_page,
+            "previouspage": previouspage,
+            "nextpage": nextpage
+            })
+    else:
+        blog = blogs.filter(pk=blog_id).first()
+        if not blog:
+            raise Http404
+        next_blog = None
+        prev_blog = None
+        if len(blogs) > 1:
+            found = False
+            for index, item in enumerate(blogs):
+                print "item", item
+                if found is True:
+                    next_blog = item
+                    break
+                if item.pk == blog.pk:
+                    found = True
+                if index > 0:
+                    prev_blog = blogs[index - 1]
+
+        return render(request, 'blog.html', {
+            "blog": blog,
+            "next_blog": next_blog,
+            "prev_blog": prev_blog
+            })
+
+
+
