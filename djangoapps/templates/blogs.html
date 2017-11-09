@@ -33,8 +33,8 @@
       </div>
       {% endfor %}
 
-      <div class="col-md-12" style="clear: both;margin-top: 40px;">
-          <nav>
+    <div class="col-md-12" style="clear: both;margin-top: 40px;">
+        <nav>
             <ul class="pager" style="display: flex;justify-content: space-around;">
                 {% if previouspage %}
                     <li class="pull-left"><a href="/blog/?page={{previouspage}}">Новые заметки</a></li>
@@ -48,5 +48,10 @@
             </ul>
         </nav>
     </div>
+
+    <div style="width: 100%;text-align: center;">
+        <a href="/" class="btn btn-default" style="margin: 20px auto;">Вернутся на главную</a>
+    </div>
+
 </div>
 {% endblock %}
