@@ -53,6 +53,8 @@ class Blog(models.Model):
 
     title = models.CharField(u'имя диалога', max_length=255)
     content = models.TextField(u'описание диалога', null=True, blank=True)
+    source_url = models.CharField(u'url источника', max_length=255, null=True, blank=True)
+    source_author = models.CharField(u'автор', max_length=100, null=True, blank=True)
 
     title_image = models.ImageField(upload_to=path_and_rename_blog_title_images, blank=True, null=True)
     is_published = models.BooleanField(u'заметка опубликован', default=False)
