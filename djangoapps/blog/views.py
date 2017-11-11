@@ -14,7 +14,7 @@ from blog.serializers import BlogSerializer
 
 def blogs(request, blog_id=None):
     paginate_by = 2
-    blogs = Blog.objects.filter(is_published=True).order_by('created_at')
+    blogs = Blog.objects.filter(is_published=True).order_by('-created_at')
 
     if not blog_id:
         page = request.GET.get('page', 1)
@@ -67,7 +67,7 @@ def blogs(request, blog_id=None):
 @api_view(['GET'])
 def get_blog(request, blog_id=None):
     paginate_by = 2
-    blogs = Blog.objects.filter(is_published=True).order_by('created_at')
+    blogs = Blog.objects.filter(is_published=True).order_by('-created_at')
 
     if not blog_id:
         page = request.GET.get('page', 1)
