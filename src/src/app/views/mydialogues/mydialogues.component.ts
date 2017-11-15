@@ -20,15 +20,15 @@ import { AppSettings } from '../../app.settings';
   templateUrl: 'mydialogues.template.html'
 })
 
-export class MyDialoguesViewComponent implements OnInit {
+export class MyDialoguesViewComponent implements OnInit, OnDestroy {
 
     user;
     public dialogs = [];
-    public loading: boolean = false;
+    public loading = false;
 
-    private new_dialog_name = "";
-    private show_create_dialog: boolean = false;
-
+    private new_dialog_name = '';
+    private show_create_dialog = false;
+    private subscribes = [];
 
     public modalRef: BsModalRef;
     @ViewChild('template') template;
@@ -44,25 +44,25 @@ export class MyDialoguesViewComponent implements OnInit {
     }
 
     ngOnInit() {
-        let self = this;
-        
-
-        self.statusService.ready.subscribe((date)=> {
-            self.user = self.statusService.user;
-            if (!self.user) {
+        this.subscribes.push(this.statusService.ready.subscribe((date) => {
+            this.user = this.statusService.user;
+            if (!this.user) {
                 return;
             }
-        });
-        if (self.statusService.user) {
-            self.user = self.statusService.user;
+        }));
+
+        if (this.statusService.user) {
+            this.user = this.statusService.user;
         } else {
-            self.statusService.getStatus();
+            this.statusService.getStatus();
         }
         this._updateActiveDialogs();
     }
 
-    ngAfterViewInit() {
-        
+    public ngOnDestroy(): any {
+        this.subscribes.map(subscribe => {
+          subscribe.unsubscribe();
+        });
     }
 
     private _updateActiveDialogs() {
@@ -73,23 +73,20 @@ export class MyDialoguesViewComponent implements OnInit {
         });
     }
 
-    
+
     private turnActiveDialog(dialog) {
-        let self = this;
+        const self = this;
         self.loading = true;
         self.dialogsService.runDialog(dialog.id).subscribe((data) => {
             self.loading = false;
             if (data.status) {
-                for (let i = 0; i < self.dialogs.length; i++) {
-                    if (self.dialogs[i].id == dialog.id) {
-                         self.dialogs[i] = data.dialog;
-                    }
-                }
+                const dialogIndex = self.dialogs.findIndex(d => +d.id === +dialog.id);
+                self.dialogs[dialogIndex] = data.dialog;
                 self._detectChanges();
             }
         });
     }
-    
+
 
     private _detectChanges() {
         // Programmatically run change detection to fix issue in Safari
@@ -101,23 +98,22 @@ export class MyDialoguesViewComponent implements OnInit {
             }
         }, 250);
     }
-    
+
     private publishDialog(item) {
         item.is_published = !item.is_published;
-        console.log('item', item)
         this.loading = true;
-        let params = {
+        const params = {
             is_published: item.is_published
-        }
+        };
         this.dialogsService.saveMyDialogs(item.id, params).subscribe((data) => {
             this.loading = false;
         });
     }
-    
+
     public showCreateDialog() {
         if (!this.show_create_dialog) {
             this.show_create_dialog = true;
-            this.new_dialog_name = "";
+            this.new_dialog_name = '';
             this.modalRef = this.modalService.show(this.template, {
                 class: 'modal-sm',
                 animated: true,
@@ -129,7 +125,7 @@ export class MyDialoguesViewComponent implements OnInit {
             this.closeCreateDialog();
         }
     }
-    
+
 
     private closeCreateDialog() {
         this.show_create_dialog = false;
@@ -138,9 +134,10 @@ export class MyDialoguesViewComponent implements OnInit {
     }
 
     private createDialog() {
-        let params = {
+        const params = {
             dialog_name: this.new_dialog_name
-        }
+        };
+
         if (this.new_dialog_name) {
             this.loading = true;
             this.dialogsService.createDialog(params).subscribe((data) => {
@@ -149,7 +146,6 @@ export class MyDialoguesViewComponent implements OnInit {
                 this.router.navigate(['/mydialogues', data.id]);
             });
         }
-        
     }
 
 

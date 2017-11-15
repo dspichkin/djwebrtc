@@ -27,17 +27,15 @@ export class TopNavbarComponent implements OnInit {
         private statusService: StatusService,
         private webSocketService: WebSocketService,
         private errorService: ErrorService,
-        //private authenticationService: AuthenticationService
         ) {
-        
     }
 
     ngOnInit() {
-        let self = this;
+        const self = this;
 
         self.webSocketService.open.subscribe(function() {
             self.server_error = false;
-        })
+        });
 
 
         self.statusService.ready.subscribe((date) => {
@@ -48,23 +46,23 @@ export class TopNavbarComponent implements OnInit {
 
 
         for (let i in this.errorService.errors) {
-            this.errors.push(this.errorService.errors[i])
+            this.errors.push(this.errorService.errors[i]);
         }
         this.errorService.errors_update.subscribe(item => {
             this.errors = [];
             for (let i in this.errorService.errors) {
-                if (this.errorService.errors[i].code == 1000) {
+                if (+this.errorService.errors[i].code === 1000) {
                     this.server_error = true;
                     delete this.errorService.errors[i];
                     continue;
                 }
-                this.errors.push(this.errorService.errors[i])
+                this.errors.push(this.errorService.errors[i]);
             }
-        })
+        });
         this.messages = this.errorService.messages;
         this.errorService.messages_update.subscribe(item => {
             this.messages = this.errorService.messages;
-        })
+        });
 
 
         if (!self.user) {
@@ -77,7 +75,6 @@ export class TopNavbarComponent implements OnInit {
         }
 
         self.initVars();
-        
     }
 
     initVars() {
@@ -88,26 +85,26 @@ export class TopNavbarComponent implements OnInit {
 
     removeError(index) {
         delete this.errorService.errors[this.errors[index].code];
-        this.errors.splice(index, 1)
+        this.errors.splice(index, 1);
     }
 
     removeMessage(index) {
-        this.messages.splice(index, 1)
+        this.messages.splice(index, 1);
     }
 
     logout() {
-        console.log('logout')
         this.loading = true;
         this.router.navigate(['/login']);
     }
 
-    activeRoute(routename: string): boolean{
+    activeRoute(routename: string): boolean {
         return this.router.url.startsWith(routename);
     }
 
     onChangeInputCall() {
         this.statusService.changeAcceptCall(!this.state_input_call).subscribe((data) => {
-        })
+            this.statusService.getStatus();
+        });
     }
 
 }

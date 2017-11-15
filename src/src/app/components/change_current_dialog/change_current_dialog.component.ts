@@ -12,7 +12,7 @@ export class ChangeCurrentDialogComponent implements OnInit, OnDestroy {
     @Output() public close_dialog  = new EventEmitter();
     @Output() public selected_dialog  = new EventEmitter();
 
-    loading: boolean = false;
+    loading = false;
     mydialogs = [];
 
 
@@ -25,37 +25,24 @@ export class ChangeCurrentDialogComponent implements OnInit, OnDestroy {
         this._getMyActiveDialog();
     }
 
-    ngAfterViewInit() {
-    }
-
-    ngOnChanges(changes) {
-    }
-    
     private _getMyActiveDialog() {
-        let self = this;
-        self.loading = true;
-        self.dialogsService.getMyActiveDialogs().subscribe((dialogs) => {
-            self.loading = false;
-            self.mydialogs = dialogs;
+        this.loading = true;
+        this.dialogsService.getMyActiveDialogs().subscribe((dialogs) => {
+            this.loading = false;
+            this.mydialogs = dialogs;
         });
 
     }
 
     public changeSelectedDialog(item) {
-        for (let i = 0; i < this.mydialogs.length; i++) {
-            this.mydialogs[i].select = false;
-        }
+        this.mydialogs.map(dialog => {
+            dialog.select = false;
+        });
         item.select = true;
     }
 
     public selectDialog() {
-        let selected_dialog;
-        for (let i = 0; i < this.mydialogs.length; i++) {
-            if (this.mydialogs[i].select == true) {
-                selected_dialog = this.mydialogs[i];
-                break;
-            };
-        }
+        const selected_dialog = this.mydialogs.find(d => d.select === true);
         this.selected_dialog.emit(selected_dialog);
     }
 
@@ -66,5 +53,4 @@ export class ChangeCurrentDialogComponent implements OnInit, OnDestroy {
     closeChangeDialog() {
         this.close_dialog.emit(false);
     }
-    
 }

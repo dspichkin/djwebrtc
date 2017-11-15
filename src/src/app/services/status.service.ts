@@ -16,7 +16,7 @@ export class StatusService {
     calling: EventEmitter<any> = new EventEmitter();
 
     user;
-    mode: string = 'mode_list';
+    mode = 'mode_list';
     activedialog;
     runhearbeatid;
     runcheckloginid;
@@ -29,47 +29,50 @@ export class StatusService {
 
 
     init() {
-        let self = this;
-        this.getStatus().subscribe((data) => {
-            self.user = data.user;
+        const self = this;
+        this.getStatus((data) => {
             if (data.status) {
                 if (data.activedialog) {
                     self.activedialog = data.activedialog;
                 }
             }
-            self.webSocketService.init(self.user.key_id, function() {
+            this.webSocketService.init(self.user.key_id, function() {
                 self.ready.emit(new Date());
                 self.runHearbeat();
                 self.runCheckLogin();
             });
         });
 
-
-        self.webSocketService.message.subscribe((data) => {
-            let message = JSON.parse(data);
-            if (message.command == 'CALLING') {
-                if (message.target == 'TAKEPHONE') {
+        this.webSocketService.message.subscribe((data) => {
+            const message = JSON.parse(data);
+            if (message.command === 'CALLING') {
+                if (message.target === 'TAKEPHONE') {
                     self.calling.emit(message);
                 }
             }
-            
-        })
+        });
     }
-    
-    getStatus(): any {
+
+    getStatus(callback?) {
         return this._http.get(AppSettings.URL_STATUS)
             .map((response: Response) => {
                 return response.json();
             })
-            .catch(this.handleError);
+            .subscribe((data) => {
+                this.user = data.user;
+                if (callback) {
+                    callback(data);
+                }
+            }, (error) => {
+                this.handleError(error);
+            });
     }
 
     runHearbeat(): void {
-        let self = this;
-        
+        const self = this;
         self.webSocketService.sendCommand({
-            type: "HEARBEAT",
-        })
+            type: 'HEARBEAT',
+        });
         if (self.runhearbeatid) {
             clearTimeout(self.runhearbeatid);
         }
@@ -80,21 +83,20 @@ export class StatusService {
     }
 
     runCheckLogin(): void {
-        let self = this;
+        const self = this;
         this._http.get(AppSettings.URL_CHECK_USER)
             .map((response: Response) => {
                 return response.json();
             })
             .catch(this.handleError)
             .subscribe((result) => {
-                console.log("runCheckLogin", result)
                 if (self.runcheckloginid) {
                     clearTimeout(self.runcheckloginid);
                 }
                 self.runcheckloginid = setTimeout(function() {
                     self.runCheckLogin();
                 }, 1200000);
-        })
+        });
     }
 
     changeAcceptCall(status) {
@@ -123,12 +125,11 @@ export class StatusService {
 
     private handleError(error: Response) {
         console.error(error);
-        //error.json().error || 
-        if (error.status == 403) {
+        if (error.status === 403) {
             console.log("XXXX")
             this.router.navigate(['/accounts/login/']);
         }
-        if (error.status == 404) {
+        if (error.status === 404) {
             this.router.navigate(['/dialogues']);
         }
         return Observable.throw('Server error');

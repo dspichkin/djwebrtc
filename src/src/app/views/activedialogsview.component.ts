@@ -3,6 +3,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { Http } from "@angular/http";
 import { Observable } from 'rxjs/Observable';
 import { Router, NavigationExtras } from '@angular/router';
+import { Subscription } from 'rxjs/Subscription';
 
 import { StatusService } from '../services/status.service';
 import { DialogsService } from '../services/dialogs.service';
@@ -16,7 +17,7 @@ import { AppSettings } from '../app.settings';
   selector: 'activedialogsview',
   templateUrl: 'activedialogsview.template.html'
 })
-export class ActiveDialogsViewComponent implements OnInit  {
+export class ActiveDialogsViewComponent implements OnInit, OnDestroy  {
 
     public user;
     public activedialogs = [];
@@ -29,60 +30,52 @@ export class ActiveDialogsViewComponent implements OnInit  {
 
     private _CALLING_TIME_INTERVAL = 3000;
     private _intervalid;
-    private webSocketSubscription;
-    private webSocketSubscriptionError;
-    private statusSubscription
+
+    private subscribes = [];
 
     public constructor(
         private statusService: StatusService,
         private dialogsService: DialogsService,
         private webSocketService: WebSocketService,
         private router: Router) {
-        
     }
 
-    public ngOnInit():any {
-        let self = this;
-        self.statusSubscription = self.statusService.ready.subscribe((date)=> {
-            self.user = this.statusService.user;
-            if (!self.user) {
+    public ngOnInit(): any {
+        this.subscribes.push(this.statusService.ready.subscribe((date) => {
+            this.user = this.statusService.user;
+            if (!this.user) {
                 return;
             }
-        });
+        }));
 
-        self.webSocketSubscription = self.webSocketService.message.subscribe((data) => {
-            let message = JSON.parse(data);
-            //console.log('message', message)
-            if (message.command == "UPDATE") {
-                if (message.target == "activedialogs") {
-                    self._updateActiveDialogs();
+        this.subscribes.push(this.webSocketService.message.subscribe((data) => {
+            const message = JSON.parse(data);
+            if (message.command === 'UPDATE') {
+                if (message.target === 'activedialogs') {
+                    this._updateActiveDialogs();
                 }
             }
+        }));
 
-        })
-
-        self.webSocketSubscriptionError = self.webSocketService.error.subscribe((err) => {
-            console.log("Error", err)
-        })
+        this.subscribes.push(this.webSocketService.error.subscribe((err) => {
+            console.log('Error', err);
+        }));
 
 
-        if (self.loading) {
-            self._updateActiveDialogs();
+        if (this.loading) {
+            this._updateActiveDialogs();
         }
     }
 
-    
 
-    public ngOnDestroy():any {
-        this.webSocketSubscription.unsubscribe();
-        this.statusSubscription.unsubscribe();
-        this.webSocketSubscriptionError.unsubscribe();
+    public ngOnDestroy(): any {
+        this.subscribes.map(subscribe => {
+          subscribe.unsubscribe();
+        });
     }
-    
 
     public showActiveDialogs() {
         this._updateActiveDialogs();
-        
     }
 
     private _updateActiveDialogs() {
@@ -93,14 +86,10 @@ export class ActiveDialogsViewComponent implements OnInit  {
         });
     }
 
-    
-
-    
 
     public callDialog(activedialog) {
-        this.router.navigate(['/calling/' + activedialog.id  ])
+        this.router.navigate(['/calling/' + activedialog.id  ]);
     }
 
-    
 
 }

@@ -51,12 +51,12 @@ class Blog(models.Model):
     updated_at = models.DateTimeField(u'дата редактирования', auto_now=True)
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL)
 
-    title = models.CharField(u'имя диалога', max_length=255)
+    title = models.CharField(u'имя заметки', max_length=255)
     content = models.TextField(u'описание диалога', null=True, blank=True)
     source_url = models.CharField(u'url источника', max_length=255, null=True, blank=True)
     source_author = models.CharField(u'автор', max_length=100, null=True, blank=True)
 
-    title_image = models.ImageField(upload_to=path_and_rename_blog_title_images, blank=True, null=True)
+    title_image = models.ImageField(u'заглавная картинка', upload_to=path_and_rename_blog_title_images, blank=True, null=True)
     is_published = models.BooleanField(u'заметка опубликован', default=False)
 
     def __str__(self):

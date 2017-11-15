@@ -162,7 +162,6 @@ export class TagsComponent implements OnInit {
     }
 
     public inputEvent(e:any):void {
-        console.log(e)
         // esc
         if (e.keyCode === 27) {
             this.hideOptions();

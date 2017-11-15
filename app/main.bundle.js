@@ -437,33 +437,22 @@ var ChangeCurrentDialogComponent = (function () {
     ChangeCurrentDialogComponent.prototype.ngOnInit = function () {
         this._getMyActiveDialog();
     };
-    ChangeCurrentDialogComponent.prototype.ngAfterViewInit = function () {
-    };
-    ChangeCurrentDialogComponent.prototype.ngOnChanges = function (changes) {
-    };
     ChangeCurrentDialogComponent.prototype._getMyActiveDialog = function () {
-        var self = this;
-        self.loading = true;
-        self.dialogsService.getMyActiveDialogs().subscribe(function (dialogs) {
-            self.loading = false;
-            self.mydialogs = dialogs;
+        var _this = this;
+        this.loading = true;
+        this.dialogsService.getMyActiveDialogs().subscribe(function (dialogs) {
+            _this.loading = false;
+            _this.mydialogs = dialogs;
         });
     };
     ChangeCurrentDialogComponent.prototype.changeSelectedDialog = function (item) {
-        for (var i = 0; i < this.mydialogs.length; i++) {
-            this.mydialogs[i].select = false;
-        }
+        this.mydialogs.map(function (dialog) {
+            dialog.select = false;
+        });
         item.select = true;
     };
     ChangeCurrentDialogComponent.prototype.selectDialog = function () {
-        var selected_dialog;
-        for (var i = 0; i < this.mydialogs.length; i++) {
-            if (this.mydialogs[i].select == true) {
-                selected_dialog = this.mydialogs[i];
-                break;
-            }
-            ;
-        }
+        var selected_dialog = this.mydialogs.find(function (d) { return d.select === true; });
         this.selected_dialog.emit(selected_dialog);
     };
     ChangeCurrentDialogComponent.prototype.ngOnDestroy = function () {
@@ -497,7 +486,7 @@ var _a;
 /***/ "../../../../../src/app/components/change_current_dialog/change_current_dialog.template.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div style=\"position: fixed;top:0;left:0;width: 100%; height: 100%;z-index: 100;\">\n    <div style=\"width: 100%;height: 100%;background-color: black;opacity: 0.5;\"></div>\n\n    <div style=\"width: 600px;height: 500px;position: absolute;\n        top: 0;left: 0;right: 0;bottom: 0;margin: 50px auto;z-index: 1000;\">\n\n        <div class=\"panel panel-primary\">\n            <div class=\"panel-heading\">\n                Выберите новый диалог\n            </div>\n            <div class=\"panel-body\" style=\"min-height: 200px;max-height: 300px;overflow: auto;\">\n\n                <ul class=\"list-group\">\n                    <li *ngFor=\"let item of mydialogs\" class=\"list-group-item\" style=\"display:flex;cursor: pointer;justify-content: space-between;\" (click)=\"changeSelectedDialog(item)\">\n                        <div style=\"margin-right: 20px;flex:0;\">\n                            <input type=\"radio\" [(ngModel)]=\"item.select\" name=\"dialog\" [value]=\"true\">\n                        </div>\n                        <div style=\"flex: 3;\">\n                            <p>{{item.dialog.name}}</p>\n                            <p style=\"font-size: 9px;\">{{item.dialog.description}}</p>\n                        </div>\n                        <div *ngIf=\"item.dialog.background_image\" style=\"flex:0;width: 50px;height:50px\">\n                            <div *ngIf=\"item.dialog.background_image\" \n                                [ngStyle]=\"{'background-image': 'url(' + item.dialog.background_image + ')'}\"\n                                style=\"\n                                    height: 50px; \n                                    width: 50px; \n                                    background-size: cover;\n                                    display: block;\"></div>\n                        </div>\n                    </li>\n                </ul>\n            </div>\n            <div class=\"panel-footer\" style=\"\">\n                <button type=\"button\" class=\"btn btn-primary\" (click)=\"selectDialog()\">Выбрать диалог</button>\n                <button type=\"button\" class=\"btn btn-default\" (click)=\"closeChangeDialog()\">Закрыть</button>\n            </div>\n        </div>\n        \n    </div>\n</div>"
+module.exports = "<div style=\"position: fixed;top:0;left:0;width: 100%; height: 100%;z-index: 100;\">\n    <div style=\"width: 100%;height: 100%;background-color: black;opacity: 0.5;\"></div>\n\n    <div style=\"width: 600px;height: 500px;position: absolute;\n        top: 0;left: 0;right: 0;bottom: 0;margin: 50px auto;z-index: 1000;\">\n\n        <div class=\"panel panel-primary\">\n            <div class=\"panel-heading\">\n                Выберите новый диалог\n            </div>\n            <div class=\"panel-body\" style=\"min-height: 200px;max-height: 300px;overflow: auto;\">\n                <ul class=\"list-group\">\n                    <li *ngFor=\"let item of mydialogs\" class=\"list-group-item\" style=\"display:flex;cursor: pointer;justify-content: space-between;\" (click)=\"changeSelectedDialog(item)\">\n                        <div style=\"margin-right: 20px;flex:0;\">\n                            <img *ngIf=\"item.select\" src=\"/static/assets/images/tick_on.png\" style=\"width: 40px;height: 40px;\">\n                            <img *ngIf=\"!item.select\" src=\"/static/assets/images/tick_off.png\" style=\"width: 40px;height: 40px;\">\n                        </div>\n                        <div style=\"flex: 3;\" (click)=\"changeSelectedDialog(item)\">\n                            <p>{{item.dialog.name}}</p>\n                            <p style=\"font-size: 9px;\">{{item.dialog.description}}</p>\n                        </div>\n                        <div *ngIf=\"item.dialog.background_image\" style=\"flex:0;width: 50px;height:50px\">\n                            <div *ngIf=\"item.dialog.background_image\" \n                                [ngStyle]=\"{'background-image': 'url(' + item.dialog.background_image + ')'}\"\n                                style=\"\n                                    height: 50px; \n                                    width: 50px; \n                                    background-size: cover;\n                                    display: block;\"></div>\n                        </div>\n                    </li>\n                </ul>\n            </div>\n            <div class=\"panel-footer\" style=\"\">\n                <button type=\"button\" class=\"btn btn-primary\" (click)=\"selectDialog()\">Выбрать диалог</button>\n                <button type=\"button\" class=\"btn btn-default\" (click)=\"closeChangeDialog()\">Закрыть</button>\n            </div>\n        </div>\n         <!-- Loading -->\n        <div *ngIf=\"loading\" style=\"position: absolute;top:0;left:0;width:100%;height:100%;z-index: 100;\">\n            <div style=\"width: 50px;margin: auto;margin-top: 140px;\">\n                <i class=\"fa fa-spin fa-gear\" style=\"font-size: 50px;\"></i>\n            </div>\n        </div>\n        <!-- END Loading -->\n\n\n    </div>\n</div>"
 
 /***/ }),
 
@@ -1003,7 +992,7 @@ var TopNavbarComponent = (function () {
         this.errorService.errors_update.subscribe(function (item) {
             _this.errors = [];
             for (var i in _this.errorService.errors) {
-                if (_this.errorService.errors[i].code == 1000) {
+                if (+_this.errorService.errors[i].code === 1000) {
                     _this.server_error = true;
                     delete _this.errorService.errors[i];
                     continue;
@@ -1038,7 +1027,6 @@ var TopNavbarComponent = (function () {
         this.messages.splice(index, 1);
     };
     TopNavbarComponent.prototype.logout = function () {
-        console.log('logout');
         this.loading = true;
         this.router.navigate(['/login']);
     };
@@ -1046,7 +1034,9 @@ var TopNavbarComponent = (function () {
         return this.router.url.startsWith(routename);
     };
     TopNavbarComponent.prototype.onChangeInputCall = function () {
+        var _this = this;
         this.statusService.changeAcceptCall(!this.state_input_call).subscribe(function (data) {
+            _this.statusService.getStatus();
         });
     };
     return TopNavbarComponent;
@@ -1475,7 +1465,7 @@ var _a, _b, _c, _d, _e, _f;
 /***/ "../../../../../src/app/components/mode_dialog_master/mode_dialog_master.template.html":
 /***/ (function(module, exports) {
 
-module.exports = " <div class=\"panel panel-default\">\n     <div class=\"panel-heading\">\n        <div class=\"container\">\n            <div class=\"col-md-6\">\n                <h4>Диалог: \n                    <span *ngIf=\"activedialog\">{{activedialog.dialog?.name}}</span>\n                    <span *ngIf=\"!activedialog\">загружается</span>\n                </h4>\n                <p>Роль: ведущий</p>\n                <p *ngIf=\"status_activedialog=='run'\"  style=\"font-size: 16px;color:green;font-weight: 400;margin:0;\">Диалог запущен</p>\n                <p *ngIf=\"status_activedialog=='starting'\" style=\"font-size: 16px;color:blue;font-weight: 400;margin:0;\">Устанавливаем диалог</p>\n                <p *ngIf=\"status_activedialog=='stop'\"  style=\"font-size: 16px;color:red;font-weight: 400;margin:0;\">Диалог остановлен связи с партнером нет</p>\n                <p *ngIf=\"status_activedialog=='error_connection'\" style=\"font-size: 16px;color:red;font-weight: 400;margin:0;\">Ошибка установки связи</p>\n\n                <p *ngIf=\"status_voice_connection =='run'\"  style=\"font-size: 16px;color:green;font-weight: 400;margin:0;\">Голосовая связь установлена</p>\n                <p *ngIf=\"status_voice_connection=='stop'\" style=\"font-size: 16px;color:red;font-weight: 400;margin:0;\">Голосовая cвязь с партнером остановлена</p>\n                <p *ngIf=\"status_voice_connection=='starting'\" style=\"font-size: 16px;color:blue;font-weight: 400;margin:0;\">Устанавливаем голосовую связь</p>\n                \n                <p *ngIf=\"connection_error_message\" style=\"font-size: 12px;color:red;\">{{connection_error_message}}</p>\n                <p *ngIf=\"status_voice_connection=='error_connection' && activedialog.pupil.skypeid\" style=\"font-size: 14px;color:darkcyan;\">\n                    Попробуйте установить связь через скайп (скайп id собеседника {{activedialog.pupil.skypeid}})\n                </p>\n                <p *ngIf=\"status_voice_connection=='error_connection' && !activedialog.pupil.skypeid\" style=\"font-size: 14px;color:darkcyan;\">\n                    Попробуйте связаться через другие программы например скайп\n                </p>\n            </div>\n            <div class=\"col-md-6\" style=\"text-align: right;\">\n                <p *ngIf=\"personageName\" style=\"margin: 0 40px;\">Персонаж: {{personageName}}</p>\n                <p *ngIf=\"during_conversation\" style=\"margin: 0 40px;font-size: 8px;\">{{displayTime(during_conversation)}}</p>\n                <button  *ngIf=\"status_voice_connection == 'run'\" class=\"btn btn-warning\" (click)=\"hangPhone()\" style=\"margin-right: 25px;margin-top: 10px;\">\n                    <i class=\"fa fa-microphone-slash\" aria-hidden=\"true\" style=\"margin-right: 10px;\"></i><span>Сбросить голосовую связь</span>\n                </button>\n                <!--\n                <button  *ngIf=\"status_voice_connection != 'run'\" class=\"btn btn-info\" (click)=\"callPhone()\" style=\"margin-right: 25px;margin-top: 10px;\">\n                    <i class=\"fa fa-microphone\" aria-hidden=\"true\" style=\"margin-right: 10px;\"></i><span>Попытаться установить голосовую связь</span>\n                </button>\n            -->\n            </div>\n        </div>\n    </div>\n    <div class=\"panel-body\" style=\"min-height: 500px;\">\n        <div [hidden]=\"status_activedialog != 'run'\" class=\"row\">\n            <div style=\"display: flex;justify-content: flex-start;\">\n                <div style=\"display: flex;opacity: 0;height: 0;\">\n                    <div style=\"margin: 5px;\">\n                        <video #remoteVideo autoplay=\"\" style=\"border:2px solid red;width: 100px;\"></video>\n                        <p style=\"font-size: 8px;margin-top: -5px;\">Remote</p>\n                    </div>\n                    <div style=\"margin: 5px;\">\n                        <video #localVideo muted=\"true\" autoplay=\"\" style=\"border:2px solid green;width: 100px;\"></video>\n                        <p style=\"font-size: 8px;margin-top: -5px;\">Local</p>\n                    </div>\n                </div>\n            </div>\n        </div>\n\n        <div class=\"row\" *ngIf=\"activedialog\">\n            <playerdialogmaster [user]=\"user\" [activedialog]=\"activedialog\" (changeactivedialog)=\"handlerChangeActiveDialog($event)\"></playerdialogmaster>\n        </div>\n        \n    </div>\n    <div class=\"panel-footer\">\n        <div>\n            <button class=\"btn btn-warning\" (click)=\"exitDialog()\"><span>Выход из режима диалога</span></button>\n        </div>\n    </div>\n</div>"
+module.exports = " <div class=\"panel panel-default\">\n     <div class=\"panel-heading\">\n        <div class=\"container\">\n            <div class=\"col-md-6\">\n                <h4>Диалог: \n                    <span *ngIf=\"activedialog\">{{activedialog.dialog?.name}}</span>\n                    <span *ngIf=\"!activedialog\">загружается</span>\n                </h4>\n                <p>Роль: ведущий</p>\n                <p *ngIf=\"status_activedialog=='run'\"  style=\"font-size: 16px;color:green;font-weight: 400;margin:0;\">Диалог запущен</p>\n                <p *ngIf=\"status_activedialog=='starting'\" style=\"font-size: 16px;color:blue;font-weight: 400;margin:0;\">Устанавливаем диалог</p>\n                <p *ngIf=\"status_activedialog=='stop'\"  style=\"font-size: 16px;color:red;font-weight: 400;margin:0;\">Диалог остановлен связи с партнером нет</p>\n                <p *ngIf=\"status_activedialog=='error_connection'\" style=\"font-size: 16px;color:red;font-weight: 400;margin:0;\">Ошибка установки связи</p>\n\n                <p *ngIf=\"status_voice_connection =='run'\"  style=\"font-size: 16px;color:green;font-weight: 400;margin:0;\">Голосовая связь установлена</p>\n                <p *ngIf=\"status_voice_connection=='stop'\" style=\"font-size: 16px;color:red;font-weight: 400;margin:0;\">Голосовая cвязь с партнером остановлена</p>\n                <p *ngIf=\"status_voice_connection=='starting'\" style=\"font-size: 16px;color:blue;font-weight: 400;margin:0;\">Устанавливаем голосовую связь</p>\n                \n                <p *ngIf=\"connection_error_message\" style=\"font-size: 12px;color:red;\">{{connection_error_message}}</p>\n                <p *ngIf=\"(status_voice_connection=='stop' || status_voice_connection=='error_connection') && activedialog.pupil.skypeid\" style=\"font-size: 14px;color:darkcyan;\">\n                    Попробуйте установить связь через скайп (скайп id собеседника {{activedialog.pupil.skypeid}})\n                </p>\n                <p *ngIf=\"(status_voice_connection=='stop' || status_voice_connection=='error_connection') && !activedialog.pupil.skypeid\" style=\"font-size: 14px;color:darkcyan;\">\n                    Попробуйте связаться через другие программы например скайп\n                </p>\n            </div>\n            <div class=\"col-md-6\" style=\"text-align: right;\">\n                <p *ngIf=\"personageName\" style=\"margin: 0 40px;\">Персонаж: {{personageName}}</p>\n                <p *ngIf=\"during_conversation\" style=\"margin: 0 40px;font-size: 8px;\">{{displayTime(during_conversation)}}</p>\n                <button  *ngIf=\"status_voice_connection == 'run'\" class=\"btn btn-warning\" (click)=\"hangPhone()\" style=\"margin-right: 25px;margin-top: 10px;\">\n                    <i class=\"fa fa-microphone-slash\" aria-hidden=\"true\" style=\"margin-right: 10px;\"></i><span>Сбросить голосовую связь</span>\n                </button>\n            </div>\n        </div>\n    </div>\n    <div class=\"panel-body\" style=\"min-height: 500px;\">\n        <div [hidden]=\"status_activedialog != 'run'\" class=\"row\">\n            <div style=\"display: flex;justify-content: flex-start;\">\n                <div style=\"display: flex;opacity: 0;height: 0;\">\n                    <div style=\"margin: 5px;\">\n                        <video #remoteVideo autoplay=\"\" style=\"border:2px solid red;width: 100px;\"></video>\n                        <p style=\"font-size: 8px;margin-top: -5px;\">Remote</p>\n                    </div>\n                    <div style=\"margin: 5px;\">\n                        <video #localVideo muted=\"true\" autoplay=\"\" style=\"border:2px solid green;width: 100px;\"></video>\n                        <p style=\"font-size: 8px;margin-top: -5px;\">Local</p>\n                    </div>\n                </div>\n            </div>\n        </div>\n\n        <div class=\"row\" *ngIf=\"activedialog\">\n            <playerdialogmaster [user]=\"user\" [activedialog]=\"activedialog\" (changeactivedialog)=\"handlerChangeActiveDialog($event)\"></playerdialogmaster>\n        </div>\n        \n    </div>\n    <div class=\"panel-footer\">\n        <div>\n            <button class=\"btn btn-warning\" (click)=\"exitDialog()\"><span>Выход из режима диалога</span></button>\n        </div>\n    </div>\n</div>"
 
 /***/ }),
 
@@ -1782,7 +1772,7 @@ var _a, _b, _c, _d, _e;
 /***/ "../../../../../src/app/components/mode_dialog_pupil/mode_dialog_pupil.template.html":
 /***/ (function(module, exports) {
 
-module.exports = " <div class=\"panel panel-default\">\n     <div class=\"panel-heading\">\n        <div class=\"container\">\n            <div class=\"col-md-6\">\n                <h4>Диалог \n                    <span *ngIf=\"activedialog\">{{activedialog.dialog.name}}</span>\n                    <span *ngIf=\"!activedialog\">загружается</span>\n                </h4>\n                <p>Роль: ученик</p>\n                <p *ngIf=\"status_activedialog=='run'\"  style=\"font-size: 16px;color:green;font-weight: 400;margin:0;\">Диалог запущен</p>\n                <p *ngIf=\"status_activedialog=='starting'\" style=\"font-size: 16px;color:blue;font-weight: 400;margin:0;\">Устанавливаем диалог</p>\n                <p *ngIf=\"status_activedialog=='stop'\"  style=\"font-size: 16px;color:red;font-weight: 400;margin:0;\">Диалог остановлен связи с партнером нет</p>\n\n\n                <p *ngIf=\"status_voice_connection =='run'\"  style=\"font-size: 16px;color:green;font-weight: 400;margin:0;\">Голосовая связь установлена</p>\n                <p *ngIf=\"status_voice_connection=='stop'\" style=\"font-size: 16px;color:red;font-weight: 400;margin:0;\">Голосовая cвязь с партнером остановлена</p>\n                <p *ngIf=\"status_voice_connection=='starting'\" style=\"font-size: 16px;color:blue;font-weight: 400;margin:0;\">Устанавливаем голосовую связь</p>\n\n                <p *ngIf=\"status_activedialog=='error_connection'\" style=\"font-size: 16px;color:red;font-weight: 400;margin:0;\">Ошибка установки связи\n                </p>\n                <p *ngIf=\"connection_error_message\" style=\"font-size: 12px;color:red;\">{{connection_error_message}}</p>\n                <p *ngIf=\"status_voice_connection == 'error_connection' && activedialog.master.skypeid\" style=\"font-size: 14px;color:darkcyan;\">\n                    Попробуйте установить связь через скайп (скайп id собеседника {{activedialog.master.skypeid}})\n                </p>\n                <p *ngIf=\"status_voice_connection == 'error_connection' && !activedialog.master.skypeid\" style=\"font-size: 14px;color:darkcyan;\">\n                    Попробуйте связаться через другие программы например скайп\n                </p>\n            </div>\n            <div class=\"col-md-6\" style=\"text-align: right;\">\n                <p *ngIf=\"personageName\" style=\"margin: 0 40px;\">Персонаж: {{personageName}}</p>\n                <p *ngIf=\"during_conversation\" style=\"margin: 0 40px;font-size: 8px;\">{{displayTime(during_conversation)}}</p>\n                <button  *ngIf=\"status_voice_connection == 'run'\" class=\"btn btn-warning\" (click)=\"hangPhone()\" style=\"margin-right: 25px;margin-top: 10px;\">\n                    <i class=\"fa fa-microphone-slash\" aria-hidden=\"true\" style=\"margin-right: 10px;\"></i><span>Сбросить голосовую связь</span>\n                </button>\n                <button  *ngIf=\"status_voice_connection != 'run'\" class=\"btn btn-info\" (click)=\"callPhone()\" style=\"margin-right: 25px;margin-top: 10px;\">\n                    <i class=\"fa fa-microphone\" aria-hidden=\"true\" style=\"margin-right: 10px;\"></i><span>Попытаться установить голосовую связь</span>\n                </button>\n            </div>\n        </div>\n    </div>\n    <div class=\"panel-body\" style=\"min-height: 500px;\">\n\n        <!-- Loading -->\n        <div *ngIf=\"loading\" style=\"position: absolute;top:0;left:0;width:100%;height:100%;z-index: 100;\">\n            <div style=\"position: absolute;opacity: 0.5;width:100%;height:100%;background-color: white;\">\n            </div>\n            <div style=\"width: 50px;margin: auto;margin-top: 60px;\">\n                <i class=\"fa fa-spin fa-gear\" style=\"font-size: 50px;\"></i>\n            </div>\n        </div>\n        <!-- END Loading -->\n\n        <div [hidden]=\"status_activedialog != 'run'\" class=\"row\">\n            <div style=\"display: flex;justify-content: flex-start;opacity: 0;height: 0;\">\n                <div style=\"margin: 5px;\">\n                    <video #remoteVideo autoplay=\"\" style=\"border:2px solid red;width: 100px;\"></video>\n                    <p style=\"font-size: 8px;margin-top: -5px;\">Remote</p>\n                </div>\n                <div style=\"margin: 5px;\">\n                    <video #localVideo muted=\"true\" autoplay=\"\" style=\"border:2px solid green;width: 100px;\"></video>\n                    <p style=\"font-size: 8px;margin-top: -5px;\">Local</p>\n                </div>\n            </div>\n        </div>\n\n        <div class=\"row\" *ngIf=\"activedialog\">\n            <playerdialogpupil [activedialog]=\"activedialog\" (changeactivedialog)=\"handlerChangeActiveDialog($event)\" [user]=\"user\"></playerdialogpupil>\n        </div>\n    </div>\n\n    <div class=\"panel-footer\">\n        <button class=\"btn btn-warning\" (click)=\"exitDialog()\"><span>Выход из режима диалога</span></button>\n    </div>\n</div>"
+module.exports = " <div class=\"panel panel-default\">\n     <div class=\"panel-heading\">\n        <div class=\"container\">\n            <div class=\"col-md-6\">\n                <h4>Диалог \n                    <span *ngIf=\"activedialog\">{{activedialog.dialog.name}}</span>\n                    <span *ngIf=\"!activedialog\">загружается</span>\n                </h4>\n                <p>Роль: ученик</p>\n                <p *ngIf=\"status_activedialog=='run'\"  style=\"font-size: 16px;color:green;font-weight: 400;margin:0;\">Диалог запущен</p>\n                <p *ngIf=\"status_activedialog=='starting'\" style=\"font-size: 16px;color:blue;font-weight: 400;margin:0;\">Устанавливаем диалог</p>\n                <p *ngIf=\"status_activedialog=='stop'\"  style=\"font-size: 16px;color:red;font-weight: 400;margin:0;\">Диалог остановлен связи с партнером нет</p>\n\n\n                <p *ngIf=\"status_voice_connection =='run'\"  style=\"font-size: 16px;color:green;font-weight: 400;margin:0;\">Голосовая связь установлена</p>\n                <p *ngIf=\"status_voice_connection=='stop'\" style=\"font-size: 16px;color:red;font-weight: 400;margin:0;\">Голосовая cвязь с партнером остановлена</p>\n                <p *ngIf=\"status_voice_connection=='starting'\" style=\"font-size: 16px;color:blue;font-weight: 400;margin:0;\">Устанавливаем голосовую связь</p>\n\n                <p *ngIf=\"status_activedialog=='error_connection'\" style=\"font-size: 16px;color:red;font-weight: 400;margin:0;\">Ошибка установки связи\n                </p>\n                <p *ngIf=\"connection_error_message\" style=\"font-size: 12px;color:red;\">{{connection_error_message}}</p>\n                <p *ngIf=\"(status_voice_connection=='stop' || status_voice_connection == 'error_connection') && activedialog.master.skypeid\" style=\"font-size: 14px;color:darkcyan;\">\n                    Попробуйте установить связь через скайп (скайп id собеседника {{activedialog.master.skypeid}})\n                </p>\n                <p *ngIf=\"(status_voice_connection=='stop' || status_voice_connection == 'error_connection') && !activedialog.master.skypeid\" style=\"font-size: 14px;color:darkcyan;\">\n                    Попробуйте связаться через другие программы например скайп\n                </p>\n            </div>\n            <div class=\"col-md-6\" style=\"text-align: right;\">\n                <p *ngIf=\"personageName\" style=\"margin: 0 40px;\">Персонаж: {{personageName}}</p>\n                <p *ngIf=\"during_conversation\" style=\"margin: 0 40px;font-size: 8px;\">{{displayTime(during_conversation)}}</p>\n                <button  *ngIf=\"status_voice_connection == 'run'\" class=\"btn btn-warning\" (click)=\"hangPhone()\" style=\"margin-right: 25px;margin-top: 10px;\">\n                    <i class=\"fa fa-microphone-slash\" aria-hidden=\"true\" style=\"margin-right: 10px;\"></i><span>Сбросить голосовую связь</span>\n                </button>\n                <button  *ngIf=\"status_voice_connection != 'run'\" class=\"btn btn-info\" (click)=\"callPhone()\" style=\"margin-right: 25px;margin-top: 10px;\">\n                    <i class=\"fa fa-microphone\" aria-hidden=\"true\" style=\"margin-right: 10px;\"></i><span>Попытаться установить голосовую связь</span>\n                </button>\n            </div>\n        </div>\n    </div>\n    <div class=\"panel-body\" style=\"min-height: 500px;\">\n\n        <!-- Loading -->\n        <div *ngIf=\"loading\" style=\"position: absolute;top:0;left:0;width:100%;height:100%;z-index: 100;\">\n            <div style=\"position: absolute;opacity: 0.5;width:100%;height:100%;background-color: white;\">\n            </div>\n            <div style=\"width: 50px;margin: auto;margin-top: 60px;\">\n                <i class=\"fa fa-spin fa-gear\" style=\"font-size: 50px;\"></i>\n            </div>\n        </div>\n        <!-- END Loading -->\n\n        <div [hidden]=\"status_activedialog != 'run'\" class=\"row\">\n            <div style=\"display: flex;justify-content: flex-start;opacity: 0;height: 0;\">\n                <div style=\"margin: 5px;\">\n                    <video #remoteVideo autoplay=\"\" style=\"border:2px solid red;width: 100px;\"></video>\n                    <p style=\"font-size: 8px;margin-top: -5px;\">Remote</p>\n                </div>\n                <div style=\"margin: 5px;\">\n                    <video #localVideo muted=\"true\" autoplay=\"\" style=\"border:2px solid green;width: 100px;\"></video>\n                    <p style=\"font-size: 8px;margin-top: -5px;\">Local</p>\n                </div>\n            </div>\n        </div>\n\n        <div class=\"row\" *ngIf=\"activedialog\">\n            <playerdialogpupil [activedialog]=\"activedialog\" (changeactivedialog)=\"handlerChangeActiveDialog($event)\" [user]=\"user\"></playerdialogpupil>\n        </div>\n    </div>\n\n    <div class=\"panel-footer\">\n        <button class=\"btn btn-warning\" (click)=\"exitDialog()\"><span>Выход из режима диалога</span></button>\n    </div>\n</div>"
 
 /***/ }),
 
@@ -2704,7 +2694,6 @@ var TagsComponent = (function () {
         this.delete.next(item);
     };
     TagsComponent.prototype.inputEvent = function (e) {
-        console.log(e);
         // esc
         if (e.keyCode === 27) {
             this.hideOptions();
@@ -3504,40 +3493,48 @@ var StatusService = (function () {
         this.mode = 'mode_list';
     }
     StatusService.prototype.init = function () {
+        var _this = this;
         var self = this;
-        this.getStatus().subscribe(function (data) {
-            self.user = data.user;
+        this.getStatus(function (data) {
             if (data.status) {
                 if (data.activedialog) {
                     self.activedialog = data.activedialog;
                 }
             }
-            self.webSocketService.init(self.user.key_id, function () {
+            _this.webSocketService.init(self.user.key_id, function () {
                 self.ready.emit(new Date());
                 self.runHearbeat();
                 self.runCheckLogin();
             });
         });
-        self.webSocketService.message.subscribe(function (data) {
+        this.webSocketService.message.subscribe(function (data) {
             var message = JSON.parse(data);
-            if (message.command == 'CALLING') {
-                if (message.target == 'TAKEPHONE') {
+            if (message.command === 'CALLING') {
+                if (message.target === 'TAKEPHONE') {
                     self.calling.emit(message);
                 }
             }
         });
     };
-    StatusService.prototype.getStatus = function () {
+    StatusService.prototype.getStatus = function (callback) {
+        var _this = this;
         return this._http.get(__WEBPACK_IMPORTED_MODULE_4__app_settings__["a" /* AppSettings */].URL_STATUS)
             .map(function (response) {
             return response.json();
         })
-            .catch(this.handleError);
+            .subscribe(function (data) {
+            _this.user = data.user;
+            if (callback) {
+                callback(data);
+            }
+        }, function (error) {
+            _this.handleError(error);
+        });
     };
     StatusService.prototype.runHearbeat = function () {
         var self = this;
         self.webSocketService.sendCommand({
-            type: "HEARBEAT",
+            type: 'HEARBEAT',
         });
         if (self.runhearbeatid) {
             clearTimeout(self.runhearbeatid);
@@ -3554,7 +3551,6 @@ var StatusService = (function () {
         })
             .catch(this.handleError)
             .subscribe(function (result) {
-            console.log("runCheckLogin", result);
             if (self.runcheckloginid) {
                 clearTimeout(self.runcheckloginid);
             }
@@ -3586,12 +3582,11 @@ var StatusService = (function () {
     };
     StatusService.prototype.handleError = function (error) {
         console.error(error);
-        //error.json().error || 
-        if (error.status == 403) {
+        if (error.status === 403) {
             console.log("XXXX");
             this.router.navigate(['/accounts/login/']);
         }
-        if (error.status == 404) {
+        if (error.status === 404) {
             this.router.navigate(['/dialogues']);
         }
         return __WEBPACK_IMPORTED_MODULE_1_rxjs__["Observable"].throw('Server error');
@@ -3970,36 +3965,35 @@ var ActiveDialogsViewComponent = (function () {
         this.loading = true;
         this.reject_call_from = null;
         this._CALLING_TIME_INTERVAL = 3000;
+        this.subscribes = [];
     }
     ActiveDialogsViewComponent.prototype.ngOnInit = function () {
         var _this = this;
-        var self = this;
-        self.statusSubscription = self.statusService.ready.subscribe(function (date) {
-            self.user = _this.statusService.user;
-            if (!self.user) {
+        this.subscribes.push(this.statusService.ready.subscribe(function (date) {
+            _this.user = _this.statusService.user;
+            if (!_this.user) {
                 return;
             }
-        });
-        self.webSocketSubscription = self.webSocketService.message.subscribe(function (data) {
+        }));
+        this.subscribes.push(this.webSocketService.message.subscribe(function (data) {
             var message = JSON.parse(data);
-            //console.log('message', message)
-            if (message.command == "UPDATE") {
-                if (message.target == "activedialogs") {
-                    self._updateActiveDialogs();
+            if (message.command === 'UPDATE') {
+                if (message.target === 'activedialogs') {
+                    _this._updateActiveDialogs();
                 }
             }
-        });
-        self.webSocketSubscriptionError = self.webSocketService.error.subscribe(function (err) {
-            console.log("Error", err);
-        });
-        if (self.loading) {
-            self._updateActiveDialogs();
+        }));
+        this.subscribes.push(this.webSocketService.error.subscribe(function (err) {
+            console.log('Error', err);
+        }));
+        if (this.loading) {
+            this._updateActiveDialogs();
         }
     };
     ActiveDialogsViewComponent.prototype.ngOnDestroy = function () {
-        this.webSocketSubscription.unsubscribe();
-        this.statusSubscription.unsubscribe();
-        this.webSocketSubscriptionError.unsubscribe();
+        this.subscribes.map(function (subscribe) {
+            subscribe.unsubscribe();
+        });
     };
     ActiveDialogsViewComponent.prototype.showActiveDialogs = function () {
         this._updateActiveDialogs();
@@ -4913,26 +4907,30 @@ var MyDialoguesViewComponent = (function () {
         this.modalService = modalService;
         this.dialogs = [];
         this.loading = false;
-        this.new_dialog_name = "";
+        this.new_dialog_name = '';
         this.show_create_dialog = false;
+        this.subscribes = [];
     }
     MyDialoguesViewComponent.prototype.ngOnInit = function () {
-        var self = this;
-        self.statusService.ready.subscribe(function (date) {
-            self.user = self.statusService.user;
-            if (!self.user) {
+        var _this = this;
+        this.subscribes.push(this.statusService.ready.subscribe(function (date) {
+            _this.user = _this.statusService.user;
+            if (!_this.user) {
                 return;
             }
-        });
-        if (self.statusService.user) {
-            self.user = self.statusService.user;
+        }));
+        if (this.statusService.user) {
+            this.user = this.statusService.user;
         }
         else {
-            self.statusService.getStatus();
+            this.statusService.getStatus();
         }
         this._updateActiveDialogs();
     };
-    MyDialoguesViewComponent.prototype.ngAfterViewInit = function () {
+    MyDialoguesViewComponent.prototype.ngOnDestroy = function () {
+        this.subscribes.map(function (subscribe) {
+            subscribe.unsubscribe();
+        });
     };
     MyDialoguesViewComponent.prototype._updateActiveDialogs = function () {
         var _this = this;
@@ -4948,11 +4946,8 @@ var MyDialoguesViewComponent = (function () {
         self.dialogsService.runDialog(dialog.id).subscribe(function (data) {
             self.loading = false;
             if (data.status) {
-                for (var i = 0; i < self.dialogs.length; i++) {
-                    if (self.dialogs[i].id == dialog.id) {
-                        self.dialogs[i] = data.dialog;
-                    }
-                }
+                var dialogIndex = self.dialogs.findIndex(function (d) { return +d.id === +dialog.id; });
+                self.dialogs[dialogIndex] = data.dialog;
                 self._detectChanges();
             }
         });
@@ -4971,7 +4966,6 @@ var MyDialoguesViewComponent = (function () {
     MyDialoguesViewComponent.prototype.publishDialog = function (item) {
         var _this = this;
         item.is_published = !item.is_published;
-        console.log('item', item);
         this.loading = true;
         var params = {
             is_published: item.is_published
@@ -4983,7 +4977,7 @@ var MyDialoguesViewComponent = (function () {
     MyDialoguesViewComponent.prototype.showCreateDialog = function () {
         if (!this.show_create_dialog) {
             this.show_create_dialog = true;
-            this.new_dialog_name = "";
+            this.new_dialog_name = '';
             this.modalRef = this.modalService.show(this.template, {
                 class: 'modal-sm',
                 animated: true,
@@ -5903,31 +5897,31 @@ var ProfileViewComponent = (function () {
         this.levels = [
             {
                 id: 10,
-                title: "Beginner, Elementary"
+                title: 'Beginner, Elementary'
             }, {
                 id: 20,
-                title: "Pre-Intermediate"
+                title: 'Pre-Intermediate'
             }, {
                 id: 30,
-                title: "Intermediate"
+                title: 'Intermediate'
             }, {
                 id: 40,
-                title: "Upper-Intermediate"
+                title: 'Upper-Intermediate'
             }, {
                 id: 50,
-                title: "Advanced"
+                title: 'Advanced'
             }, {
                 id: 60,
-                title: "Proficiency"
+                title: 'Proficiency'
             },
         ];
         this.sex_options = [
             {
                 id: 1,
-                title: "Мужской"
+                title: 'Мужской'
             }, {
                 id: 2,
-                title: "Женский"
+                title: 'Женский'
             }
         ];
         this.year_options = [];
@@ -5940,7 +5934,6 @@ var ProfileViewComponent = (function () {
             if (!self.user) {
                 return;
             }
-            console.log(self.user);
             self.setVars();
         });
         if (self.statusService.user) {
@@ -5950,8 +5943,6 @@ var ProfileViewComponent = (function () {
         else {
             self.statusService.getStatus();
         }
-    };
-    ProfileViewComponent.prototype.ngAfterViewInit = function () {
     };
     ProfileViewComponent.prototype.setVars = function () {
         var _this = this;
@@ -5972,31 +5963,32 @@ var ProfileViewComponent = (function () {
             url: __WEBPACK_IMPORTED_MODULE_6__app_settings__["a" /* AppSettings */].URL_USER_SETTING + 'avatar/',
             headers: [{
                     name: 'X-CSRFToken',
-                    value: this.getCookie("csrftoken")
+                    value: this.getCookie('csrftoken')
                 }]
         });
         var self = this;
         this.uploader.onCompleteItem = function (item, response, status, headers) {
-            _this.statusService.getStatus().subscribe(function (data) {
-                self.user = data.user;
+            _this.statusService.getStatus(function () {
+                self.user = self.statusService.user;
             });
         };
     };
     ProfileViewComponent.prototype.getCookie = function (name) {
-        var value = "; " + document.cookie;
-        var parts = value.split("; " + name + "=");
-        if (parts.length == 2)
-            return decodeURIComponent(parts.pop().split(";").shift());
+        var value = '; ' + document.cookie;
+        var parts = value.split('; ' + name + '=');
+        if (parts.length === 2) {
+            return decodeURIComponent(parts.pop().split(';').shift());
+        }
     };
     ProfileViewComponent.prototype.changePassword = function ($event) {
         if (this.password1) {
-            this.password1 = "";
+            this.password1 = '';
         }
     };
     ProfileViewComponent.prototype.submit = function () {
-        this.first_name_error = "";
+        this.first_name_error = '';
         if (this.first_name && this.selectedLevel) {
-            if (this.password && (this.password != this.password1)) {
+            if (this.password && (this.password !== this.password1)) {
                 return;
             }
             var params = {

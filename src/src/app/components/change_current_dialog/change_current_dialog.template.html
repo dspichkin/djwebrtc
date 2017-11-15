@@ -9,13 +9,13 @@
                 Выберите новый диалог
             </div>
             <div class="panel-body" style="min-height: 200px;max-height: 300px;overflow: auto;">
-
                 <ul class="list-group">
                     <li *ngFor="let item of mydialogs" class="list-group-item" style="display:flex;cursor: pointer;justify-content: space-between;" (click)="changeSelectedDialog(item)">
                         <div style="margin-right: 20px;flex:0;">
-                            <input type="radio" [(ngModel)]="item.select" name="dialog" [value]="true">
+                            <img *ngIf="item.select" src="/static/assets/images/tick_on.png" style="width: 40px;height: 40px;">
+                            <img *ngIf="!item.select" src="/static/assets/images/tick_off.png" style="width: 40px;height: 40px;">
                         </div>
-                        <div style="flex: 3;">
+                        <div style="flex: 3;" (click)="changeSelectedDialog(item)">
                             <p>{{item.dialog.name}}</p>
                             <p style="font-size: 9px;">{{item.dialog.description}}</p>
                         </div>
@@ -36,6 +36,14 @@
                 <button type="button" class="btn btn-default" (click)="closeChangeDialog()">Закрыть</button>
             </div>
         </div>
-        
+         <!-- Loading -->
+        <div *ngIf="loading" style="position: absolute;top:0;left:0;width:100%;height:100%;z-index: 100;">
+            <div style="width: 50px;margin: auto;margin-top: 140px;">
+                <i class="fa fa-spin fa-gear" style="font-size: 50px;"></i>
+            </div>
+        </div>
+        <!-- END Loading -->
+
+
     </div>
 </div>

@@ -28,45 +28,45 @@ export class ProfileViewComponent implements OnInit {
     public avatar;
     public password;
     public password1;
-    public change_password: boolean = false;
+    public change_password = false;
 
     public levels = [
         {
             id: 10,
-            title: "Beginner, Elementary"
-        },{
+            title: 'Beginner, Elementary'
+        }, {
             id: 20,
-            title: "Pre-Intermediate"
-        },{
+            title: 'Pre-Intermediate'
+        }, {
             id: 30,
-            title: "Intermediate"
-        },{
+            title: 'Intermediate'
+        }, {
             id: 40,
-            title: "Upper-Intermediate"
-        },{
+            title: 'Upper-Intermediate'
+        }, {
             id: 50,
-            title: "Advanced"
-        },{
+            title: 'Advanced'
+        }, {
             id: 60,
-            title: "Proficiency"
+            title: 'Proficiency'
         },
-    ]
+    ];
 
     public sex_options = [
         {
             id: 1,
-            title: "Мужской"
-        },{
+            title: 'Мужской'
+        }, {
             id: 2,
-            title: "Женский"
+            title: 'Женский'
         }
-    ]
+    ];
     public year_options = [];
     public selectedSex;
     public selectedBirthYear;
 
-    public loading: boolean = false;
-    public uploader:FileUploader;
+    public loading = false;
+    public uploader: FileUploader;
 
     constructor(
         private statusService: StatusService,
@@ -76,15 +76,13 @@ export class ProfileViewComponent implements OnInit {
     }
 
     ngOnInit() {
-        let self = this;
-        
+        const self = this;
 
-        self.statusService.ready.subscribe((date)=> {
+        self.statusService.ready.subscribe((date) => {
             self.user = self.statusService.user;
             if (!self.user) {
                 return;
             }
-            console.log( self.user)
             self.setVars();
         });
         if (self.statusService.user) {
@@ -94,21 +92,17 @@ export class ProfileViewComponent implements OnInit {
         } else {
             self.statusService.getStatus();
         }
-        
     }
 
-    ngAfterViewInit() {
-        
-    }
 
     setVars() {
-        let now = new Date();
+        const now = new Date();
         this.year_options = [];
-        for (var i = 1950; i < now.getFullYear() - 5; i++) {
+        for (let i = 1950; i < now.getFullYear() - 5; i++) {
             this.year_options.push({
                 id: i,
                 title: i
-            })
+            });
         }
 
         this.first_name = this.user.first_name;
@@ -117,54 +111,55 @@ export class ProfileViewComponent implements OnInit {
         this.selectedSex = this.user.sex;
         this.selectedBirthYear = this.user.birth_year;
 
-        this.uploader = new FileUploader({ 
+        this.uploader = new FileUploader({
             url: AppSettings.URL_USER_SETTING + 'avatar/',
             headers: [{
                 name: 'X-CSRFToken',
-                value: this.getCookie("csrftoken")
+                value: this.getCookie('csrftoken')
             }]
         });
-        
-        let self = this;
 
-        this.uploader.onCompleteItem = (item:any, response:any, status:any, headers:any) => {
-            this.statusService.getStatus().subscribe((data) => {
-                self.user = data.user;
-            })
+        const self = this;
+
+        this.uploader.onCompleteItem = (item: any, response: any, status: any, headers: any) => {
+            this.statusService.getStatus(() => {
+                self.user = self.statusService.user;
+            });
         };
     }
 
     private getCookie(name: string): string {
-        var value = "; " + document.cookie;
-        var parts = value.split("; " + name + "=");
-        if (parts.length == 2) return decodeURIComponent(parts.pop().split(";").shift());
+        const value = '; ' + document.cookie;
+        const parts = value.split('; ' + name + '=');
+        if (parts.length === 2) {
+            return decodeURIComponent(parts.pop().split(';').shift());
+        }
     }
 
-    
     changePassword($event) {
         if (this.password1) {
-            this.password1 = "";
+            this.password1 = '';
         }
     }
 
     submit() {
-        this.first_name_error = "";
+        this.first_name_error = '';
         if (this.first_name && this.selectedLevel) {
-            if (this.password && (this.password != this.password1)) {
+            if (this.password && (this.password !== this.password1)) {
                 return;
             }
 
-            let params = {
+            const params = {
                 first_name: this.first_name,
                 selectedLevel: this.selectedLevel,
                 password: this.password,
                 skypeid: this.skypeid,
                 sex: this.selectedSex,
                 birth_year: this.selectedBirthYear,
-            }
+            };
             this.loading = true;
-            let self = this;
-            this.statusService.saveUser(params).subscribe((data)=>{
+            const self = this;
+            this.statusService.saveUser(params).subscribe((data) => {
                 self.loading = false;
                 if (data.status) {
                     self.notificationService.add(new Notification('Сообщение', 'alert-success', 'Настройки сохранены'));
@@ -174,17 +169,15 @@ export class ProfileViewComponent implements OnInit {
                     }
                 }
             }, function(error) {
-                console.log('error', error)
+                console.log('error', error);
                 self.notificationService.add(new Notification('Ошибка', 'alert-danger', error.statusText));
-            })
+            });
         }
     }
-   
 
     public onFileSelected () {
         this.uploader.uploadAll();
     }
-    
 
     public showChangePassword() {
         this.change_password = !this.change_password;
@@ -194,7 +187,4 @@ export class ProfileViewComponent implements OnInit {
         }
     }
 
-    
-    
-    
 }
