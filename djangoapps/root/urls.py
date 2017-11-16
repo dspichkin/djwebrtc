@@ -32,7 +32,7 @@ def app(request):
             return HttpResponseRedirect("/accounts/confirm/")
         return render(request, 'index.html')
 
-    blogs = Blog.objects.filter(is_published=True)[:3]
+    blogs = Blog.objects.filter(is_published=True)[:6]
     return render(request, 'landing.html', {
         "blogs": blogs
     })

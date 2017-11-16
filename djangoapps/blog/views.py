@@ -13,7 +13,7 @@ from blog.serializers import BlogSerializer
 
 
 def blogs(request, blog_id=None):
-    paginate_by = 2
+    paginate_by = 10
     blogs = Blog.objects.filter(is_published=True).order_by('-created_at')
 
     if not blog_id:
@@ -48,7 +48,6 @@ def blogs(request, blog_id=None):
         if len(blogs) > 1:
             found = False
             for index, item in enumerate(blogs):
-                print "item", item
                 if found is True:
                     next_blog = item
                     break
