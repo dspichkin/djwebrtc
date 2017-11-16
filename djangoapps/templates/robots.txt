@@ -3,3 +3,4 @@ Allow: /
 Disallow: /
 Disallow: /admin
 Disallow: /accounts
+Host: https://www.mydialogs.ru
