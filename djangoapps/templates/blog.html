@@ -26,10 +26,10 @@
             <nav style="clear: both;margin-top: 40px;">
                 <ul class="pager">
                     {% if prev_blog %}
-                        <li><a href="/blog/{{prev_blog.pk}}">Более новая заметка</a></li>
+                        <li><a href="/blog/{{prev_blog.pk}}" rel="nofollow">Более новая заметка</a></li>
                     {% endif %}
                     {% if next_blog %}
-                        <li><a href="/blog/{{next_blog.pk}}">Предыдущая заметка</a></li>
+                        <li><a href="/blog/{{next_blog.pk}}" rel="nofollow">Предыдущая заметка</a></li>
                     {% endif %}
                 </ul>
             </nav>
@@ -65,8 +65,8 @@
         -->
       </div>
       <div>
-          <a href="/blog" style="float: left;">Перейти к странице блога</a>
-          <a href="/" style="float: right;">Перейти к главную страницу</a>
+          <a href="/blog" style="float: left;" rel="nofollow">Перейти к странице блога</a>
+          <a href="/" style="float: right;" rel="nofollow">Перейти к главную страницу</a>
       </div>
     </div>
 
