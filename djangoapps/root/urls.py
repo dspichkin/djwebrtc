@@ -12,7 +12,7 @@ from django.conf.urls.static import static
 from django.contrib.sitemaps.views import sitemap
 
 from blog.models import Blog
-from blog.views import blogs
+from blog.views import blogs, old_get_blog
 
 from root.sitemap import StaticViewSitemap, BlogSitemap
 
@@ -68,7 +68,8 @@ urlpatterns += [
     url(r'^idia/?$', TemplateView.as_view(template_name="idia.html"), name="idia"),
     url(r'^interface/?$', TemplateView.as_view(template_name="interface.html"), name="interface"),
     url(r'^blog/?$', blogs, name="blogs"),
-    url(r'^blog/(?P<blog_id>.*)/?$', blogs, name="blog"),
+    url(r'^blog/(?P<blog_id>\d+)/?$', old_get_blog, name="old_get_blog"),
+    url(r'^blog/(?P<blog_slug>.*)/?$', blogs, name="get_blog"),
 
     url(r'^googlef93e055d62dd30d6.html$', TemplateView.as_view(template_name="googlef93e055d62dd30d6.html")),
     url(r'^sitemap\.xml$', sitemap, {'sitemaps': staticsitemaps}),

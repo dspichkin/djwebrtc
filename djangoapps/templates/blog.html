@@ -26,10 +26,10 @@
             <nav style="clear: both;margin-top: 40px;">
                 <ul class="pager">
                     {% if prev_blog %}
-                        <li><a href="/blog/{{prev_blog.pk}}" rel="nofollow">Более новая заметка</a></li>
+                        <li><a href="/blog/{{prev_blog.slug}}" rel="nofollow">Более новая заметка</a></li>
                     {% endif %}
                     {% if next_blog %}
-                        <li><a href="/blog/{{next_blog.pk}}" rel="nofollow">Предыдущая заметка</a></li>
+                        <li><a href="/blog/{{next_blog.slug}}" rel="nofollow">Предыдущая заметка</a></li>
                     {% endif %}
                 </ul>
             </nav>

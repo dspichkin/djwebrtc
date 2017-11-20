@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from django.shortcuts import render
-from django.http import Http404
+from django.http import Http404, HttpResponseRedirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import get_object_or_404
 from django.core.urlresolvers import reverse
@@ -14,11 +14,11 @@ from blog.models import Blog
 from blog.serializers import BlogSerializer
 
 
-def blogs(request, blog_id=None):
+def blogs(request, blog_slug=None):
     paginate_by = 10
     blogs = Blog.objects.filter(is_published=True).order_by('-created_at')
 
-    if not blog_id:
+    if not blog_slug:
         page = request.GET.get('page', 1)
         paginator = Paginator(blogs, paginate_by)
 
@@ -42,7 +42,7 @@ def blogs(request, blog_id=None):
             "nextpage": nextpage
             })
     else:
-        blog = blogs.filter(pk=blog_id).first()
+        blog = blogs.filter(slug=blog_slug).first()
         if not blog:
             raise Http404
         next_blog = None
@@ -68,16 +68,16 @@ def blogs(request, blog_id=None):
 @api_view(['GET'])
 def old_get_blog(request, blog_id=None):
     blog = get_object_or_404(Blog, pk=blog_id)
-
-    return reverse('blog', blog.slug)
+    print "blog", blog
+    return HttpResponseRedirect(reverse('get_blog', args=[blog.slug]))
 
 
 @api_view(['GET'])
-def get_blog(request, blog_slug=None):
+def get_api_blog(request, blog_id=None):
     paginate_by = 2
     blogs = Blog.objects.filter(is_published=True).order_by('-created_at')
 
-    if not blog_slug:
+    if not blog_id:
         page = request.GET.get('page', 1)
         paginator = Paginator(blogs, paginate_by)
 
@@ -101,7 +101,7 @@ def get_blog(request, blog_slug=None):
             "nextpage": nextpage
             })
     else:
-        blog = blogs.filter(slug=blog_slug).first()
+        blog = blogs.filter(pk=blog_id).first()
         if not blog:
             raise Http404
         next_blog = None
@@ -109,7 +109,6 @@ def get_blog(request, blog_slug=None):
         if len(blogs) > 1:
             found = False
             for index, item in enumerate(blogs):
-                print "item", item
                 if found is True:
                     next_blog = item
                     break
