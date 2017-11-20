@@ -82,7 +82,7 @@ class Blog(models.Model):
             return self.title_image.url
 
     def get_absolute_url(self):
-        return "/blog/%s" % self.pk
+        return "/blog/%s" % self.slug
 
 
 
