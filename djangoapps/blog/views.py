@@ -68,13 +68,12 @@ def blogs(request, blog_slug=None):
 @api_view(['GET'])
 def old_get_blog(request, blog_id=None):
     blog = get_object_or_404(Blog, pk=blog_id)
-    print "blog", blog
     return HttpResponseRedirect(reverse('get_blog', args=[blog.slug]))
 
 
 @api_view(['GET'])
 def get_api_blog(request, blog_id=None):
-    paginate_by = 2
+    paginate_by = 10
     blogs = Blog.objects.filter(is_published=True).order_by('-created_at')
 
     if not blog_id:
