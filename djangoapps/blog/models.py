@@ -53,6 +53,7 @@ class Blog(models.Model):
 
     title = models.CharField(u'имя заметки', max_length=255)
     content = models.TextField(u'описание диалога', null=True, blank=True)
+    slug = models.CharField(u'слаг', max_length=255, unique=True)
     source_url = models.CharField(u'url источника', max_length=255, null=True, blank=True)
     source_author = models.CharField(u'автор', max_length=100, null=True, blank=True)
 

@@ -3,6 +3,8 @@
 from django.shortcuts import render
 from django.http import Http404
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.shortcuts import get_object_or_404
+from django.core.urlresolvers import reverse
 
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -64,11 +66,18 @@ def blogs(request, blog_id=None):
 
 
 @api_view(['GET'])
-def get_blog(request, blog_id=None):
+def old_get_blog(request, blog_id=None):
+    blog = get_object_or_404(Blog, pk=blog_id)
+
+    return reverse('blog', blog.slug)
+
+
+@api_view(['GET'])
+def get_blog(request, blog_slug=None):
     paginate_by = 2
     blogs = Blog.objects.filter(is_published=True).order_by('-created_at')
 
-    if not blog_id:
+    if not blog_slug:
         page = request.GET.get('page', 1)
         paginator = Paginator(blogs, paginate_by)
 
@@ -92,7 +101,7 @@ def get_blog(request, blog_id=None):
             "nextpage": nextpage
             })
     else:
-        blog = blogs.filter(pk=blog_id).first()
+        blog = blogs.filter(slug=blog_slug).first()
         if not blog:
             raise Http404
         next_blog = None
