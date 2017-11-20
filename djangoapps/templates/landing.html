@@ -181,30 +181,32 @@
                 -->
                     <hr class="bottom-line">
                   </div>
-                  {% for blog in blogs %}
-                  <div class="col-md-4 col-sm-6 col-xs-12">
-                    <div class="blog-sec">
-                      <div class="blog-img">
-                        <a href="/blog/{{blog.pk}}">
-                          <img src="{{ blog.get_title_image }}" class="img-responsive">
-                        </a>
-                      </div>
-                      <div class="blog-info">
-                        <h2>{{blog.title}}</h2>
-                        <!--
-                        <div class="blog-comment">
-                            <p>Posted In: <span>Legal Advice</span></p>
-                            <p>
-                              <span><a href="#"><i class="fa fa-comments"></i></a> 15</span>
-                              <span><a href="#"><i class="fa fa-eye"></i></a> 11</span></p>
-                        </div>
-                        -->
-                        <p>{{ blog.get_short_content | safe }}</p>
-                        <a href="/blog/{{blog.pk}}" class="read-more" style="color: black;">Читать дальше →</a>
-                      </div>
+                  <div style="width:100%;display: flex;flex-wrap: wrap;padding: 40px;justify-content: center;">
+                        {% for blog in blogs %}
+                          <div class="col-md-4 col-sm-6 col-xs-12">
+                            <div class="blog-sec">
+                              <div class="blog-img">
+                                <a href="/blog/{{blog.pk}}">
+                                  <img src="{{ blog.get_title_image }}" class="img-responsive">
+                                </a>
+                              </div>
+                              <div class="blog-info">
+                                <h2>{{blog.title}}</h2>
+                                <!--
+                                <div class="blog-comment">
+                                    <p>Posted In: <span>Legal Advice</span></p>
+                                    <p>
+                                      <span><a href="#"><i class="fa fa-comments"></i></a> 15</span>
+                                      <span><a href="#"><i class="fa fa-eye"></i></a> 11</span></p>
+                                </div>
+                                -->
+                                <p>{{ blog.get_short_content | safe }}</p>
+                                <a href="/blog/{{blog.pk}}" class="read-more" style="color: black;">Читать дальше →</a>
+                              </div>
+                            </div>
+                          </div>
+                        {% endfor %}
                     </div>
-                  </div>
-                  {% endfor %}
                 </div>
               </div>
             </section>
